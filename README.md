@@ -7,4 +7,4 @@
 ``tools/start_python_http_server.bat ``
 
 - Enter the URL:
-`` http://airconsole.com/#http://<your-local-ip-address/> ``
+`` http://airconsole.com/#http://<your-local-ip-address:12345/> ``
