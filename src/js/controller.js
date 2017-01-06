@@ -1,8 +1,17 @@
 
 /**
-  * Called when the DOM is loaded (Controller)
+  * @module Controller
   */
-function main()
-{
-    
-}
+var Controller = (function(){
+
+    /** @func init
+      * @desc Called when the DOM is loaded
+      */
+    function init()
+    {
+        
+    }
+
+    return { init : init };
+
+})();
