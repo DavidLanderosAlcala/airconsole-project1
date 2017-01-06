@@ -8,3 +8,6 @@
 
 - Enter the URL:
 `` http://airconsole.com/#http://<your-local-ip-address:12345/> ``
+
+##### Source code documentation
+- https://rawgit.com/DavidLanderosAlcala/airconsole-project1/master/doc/index.html
