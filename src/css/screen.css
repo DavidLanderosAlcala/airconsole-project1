@@ -9,12 +9,23 @@ canvas.main_container {
 	background-color: black;
 }
 
-img.airconsole_logo {
+img.main_logo {
+    position   : absolute;
+	width      : 202px;
+	height     : 167px;
+	left       : 50%;
+	top        : 50%;
+	margin     : -83px 0 0 -101px;
+	transition : all 1s;
+}
+
+label#subtitles_label {
+	color: white;
+	font-weight: bold;
     position : absolute;
-	width    : 202px;
-	height   : 167px;
+	width    : 640px;
 	left     : 50%;
 	top      : 50%;
-	margin   : -83px 0 0 -101px;
-	opacity  : 0.4;
+	margin   : 200px 0 0 -320px;
+	text-align: center;
 }
