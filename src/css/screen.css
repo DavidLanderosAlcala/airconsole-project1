@@ -1,0 +1,20 @@
+
+canvas.main_container {
+    position : absolute;
+	width    : 640px;
+	height   : 480px;
+	left     : 50%;
+	top      : 50%;
+	margin   : -240px 0 0 -320px;
+	background-color: black;
+}
+
+img.airconsole_logo {
+    position : absolute;
+	width    : 202px;
+	height   : 167px;
+	left     : 50%;
+	top      : 50%;
+	margin   : -83px 0 0 -101px;
+	opacity  : 0.4;
+}
