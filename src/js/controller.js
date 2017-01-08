@@ -4,20 +4,27 @@
   */
 var Controller = (function(){
   
-    var airConsole;
+    var airconsole;
   
     /** @func init
       * @desc Called when the DOM is loaded
       */
     function init()
     {
-        airConsole = new AirConsole();
-        DebugConsole.init(airConsole, DebugConsole.CONTROLLER);
-        DebugConsole.log("Hola mundo");
+        airconsole = new AirConsole();
+        DebugConsole.init(airconsole, false);
+
+        /* sending the first message after 1000 seconds to ensure that
+           the websocket is already connected. (looking for a better solution) */
+        setInterval(function() {
+            DebugConsole.log("Hola mundo");
+        }, 1000);
+
     }
 
     return { init : init };
 
 })();
-
 Controller.init();
+
+

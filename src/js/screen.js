@@ -4,7 +4,7 @@
   */
 var Screen = (function(){
   
-    var airConsole;
+    //var airconsole;
     var canvas;
     var context;
 
@@ -13,8 +13,8 @@ var Screen = (function(){
       */
     function init()
     {
-        airConsole = new AirConsole();
-        DebugConsole.init(airConsole, DebugConsole.SCREEN);
+        //airconsole = new AirConsole();
+        DebugConsole.init(airconsole, true);
         canvas = document.getElementById("main_canvas");
         context = canvas.getContext("2d");
     }
@@ -61,5 +61,5 @@ var Screen = (function(){
 
 })();
 
-
+airconsole = new AirConsole();
 Screen.init();
