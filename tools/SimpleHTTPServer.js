@@ -42,6 +42,8 @@ function getMimeType(filename)
         return "application/javascript; charset=utf-8";
     if(filename.endsWith(".json"))
         return "application/json; charset=utf-8";
+    if(filename.endsWith(".css"))
+        return "text/css; charset=utf-8";
     return "text/html; charset=utf-8";
 }
 
