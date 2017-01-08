@@ -3,7 +3,8 @@
   * @module Screen
   */
 var Screen = (function(){
-
+  
+    var airConsole;
     var canvas;
     var context;
 
@@ -12,6 +13,8 @@ var Screen = (function(){
       */
     function init()
     {
+        airConsole = new AirConsole();
+        DebugConsole.init(airConsole, DebugConsole.SCREEN);
         canvas = document.getElementById("main_canvas");
         context = canvas.getContext("2d");
     }
@@ -57,3 +60,6 @@ var Screen = (function(){
              setSubtitleText : setSubtitleText };
 
 })();
+
+
+Screen.init();
