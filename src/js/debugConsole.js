@@ -1,10 +1,18 @@
 
-
+/**
+  * @module DebugConsole
+  */
 var DebugConsole = (function(){
   
   var airconsole = null;
   var isScreen;
   
+  /** @func init
+    * @desc Called from Screen.init and Controller.init.
+    * It prepares everything to log events on the screen´s console
+    * @param {object} airconsole the AirConsole instance to be used
+    * @param {boolean} isScreen must be true for the screen and false for each controller
+    */  
   function init(_airconsole, _isScreen)
   {
       isScreen = _isScreen;
@@ -20,6 +28,10 @@ var DebugConsole = (function(){
       };
   }
   
+  /** @func log
+   * @desc Shows a message on the screen's console
+   * @param {string} message The message to be logged
+   */  
   function log(message)
   {
       if(isScreen)
