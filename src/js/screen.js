@@ -47,7 +47,7 @@ var Screen = (function(){
 
     }
 
-    /** @func updated
+    /** @func update
       * @desc called before each frame to update the scene
       */
     function update()
