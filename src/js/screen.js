@@ -4,7 +4,7 @@
   */
 var Screen = (function(){
   
-    //var airconsole;
+    var airconsole;
     var canvas;
     var context;
 
@@ -13,10 +13,11 @@ var Screen = (function(){
       */
     function init()
     {
-        //airconsole = new AirConsole();
+        airconsole = new AirConsole();
         DebugConsole.init(airconsole, true);
         canvas = document.getElementById("main_canvas");
         context = canvas.getContext("2d");
+        Sprite.init(canvas, context);
     }
 
     /** @func setLogoVisibility
@@ -61,5 +62,4 @@ var Screen = (function(){
 
 })();
 
-airconsole = new AirConsole();
 Screen.init();

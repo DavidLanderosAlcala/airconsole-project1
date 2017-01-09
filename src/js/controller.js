@@ -14,7 +14,7 @@ var Controller = (function(){
         airconsole = new AirConsole();
         DebugConsole.init(airconsole, false);
 
-        /* sending the first message after 1000 seconds to ensure that
+        /* sending the first message after 1 seconds to ensure that
            the websocket is already connected. (looking for a better solution) */
         setInterval(function() {
             DebugConsole.log("Hola mundo");
