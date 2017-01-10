@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: DebugConsole</title>
+    <title>JSDoc: Global</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: DebugConsole</h1>
+    <h1 class="page-title">Global</h1>
 
     
 
@@ -28,6 +28,7 @@
 
 <header>
     
+        <h2></h2>
         
     
 </header>
@@ -36,6 +37,45 @@
     <div class="container-overview">
     
         
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
 
         
     
@@ -61,14 +101,14 @@
 
     
 
-    <h4 class="name" id="~init"><span class="type-signature">(inner) </span>init<span class="signature">(airconsole, isScreen)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="init"><span class="type-signature"></span>init<span class="signature">(cnvas, ctx)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Called from Screen.init and Controller.init.It prepares everything to log events on the screen´s console
+    initialize the sprite module and its inner class
 </div>
 
 
@@ -104,15 +144,10 @@
 
         <tr>
             
-                <td class="name"><code>airconsole</code></td>
+                <td class="name"><code>cnvas</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
             
             </td>
 
@@ -120,22 +155,17 @@
 
             
 
-            <td class="description last">the AirConsole instance to be used</td>
+            <td class="description last">the main canvas to be used</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>isScreen</code></td>
+                <td class="name"><code>ctx</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
             
             </td>
 
@@ -143,7 +173,7 @@
 
             
 
-            <td class="description last">must be true for the screen and false for each controller</td>
+            <td class="description last">the 2D context already created</td>
         </tr>
 
     
@@ -184,7 +214,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="debugConsole.js.html">debugConsole.js</a>, <a href="debugConsole.js.html#line10">line 10</a>
+        <a href="sprite.js.html">sprite.js</a>, <a href="sprite.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -215,14 +245,14 @@
 
     
 
-    <h4 class="name" id="~log"><span class="type-signature">(inner) </span>log<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="newSprite"><span class="type-signature"></span>new Sprite<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Shows a message on the screen's console
+    creates a new sprite-based animation
 </div>
 
 
@@ -258,13 +288,13 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
             
@@ -274,7 +304,30 @@
 
             
 
-            <td class="description last">The message to be logged</td>
+            <td class="description last">object containing, filename, width, height, fps [, x_offset, y_offset, starting_frame]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function to be called when the resource are complete loaded</td>
         </tr>
 
     
@@ -315,7 +368,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="debugConsole.js.html">debugConsole.js</a>, <a href="debugConsole.js.html#line31">line 31</a>
+        <a href="sprite.js.html">sprite.js</a>, <a href="sprite.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -357,13 +410,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Screen.html">Screen</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Screen.html">Screen</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul><h3>Global</h3><ul><li><a href="global.html#init">init</a></li><li><a href="global.html#newSprite">new Sprite</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 10 2017 11:53:38 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 10 2017 11:26:58 GMT-0800 (Pacific Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
