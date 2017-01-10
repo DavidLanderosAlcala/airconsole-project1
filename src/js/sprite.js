@@ -1,41 +1,14 @@
 
-/**
-  * @module Sprite
-  */
-var Sprite = (function(){
 
-    var canvas;
-    var context;
-
-    /**
-      * @func init
-      * @desc initialize the sprite module and its inner class
-      * @param cnvas the main canvas to be used
-      * @param ctx the 2D context already created
-      */
-    function init(cnvas, ctx)
-    {
-        canvas = cnvas;
-        context = ctx;
-    }
-
+class Sprite {
+  
    /**
-     * @func createSprite
+     * @class Sprite
      * @desc creates a new sprite-based animation
      * @param {object} options object containing, filename, width, height, fps [, x_offset, y_offset, starting_frame]
      * @param {function} callback function to be called when the resource are complete loaded
-     * @return {object} returns an instance of the inner class Sprite
      */
-   function createSprite(options, callback)
-   {
-        return new SpriteClass(options, callback);
-   }
-
-   /**
-     * @func SpriteClass
-     * @desc contructor for Sprite's inner class, it is called from Sprite.createSprite(...)
-     */
-   function SpriteClass(options, callback)
+   constructor(options, callback)
    {
         this.callback = callback == undefined ? function(){ } : callback;
         this.filename = options.filename;
@@ -51,11 +24,26 @@ var Sprite = (function(){
         this.time_stamp = 0;
    }
 
+    /**
+      * @func init
+      * @memberof Sprite
+      * @desc initialize the sprite module and its inner class
+      * @param {object} canvas the main canvas to be used
+      * @param {object} context the 2D context already created
+      */
+    static init(canvas, context)
+    {
+        Sprite.canvas = canvas;
+        Sprite.context = context;
+    }
+
    /**
-     * @func reset
+     * @method reset
+     * @memberof Sprite
+     * @instance
      * @desc It resets the Sprite (time, and starting frame)
      */
-   SpriteClass.prototype.reset = function()
+   reset()
    {
         this.current_frame = this.starting_frame;
         this.time_stamp = 0;
@@ -64,13 +52,16 @@ var Sprite = (function(){
 
 
    /**
-     * @func render
+     * @method render
+     * @memberof Sprite
+     * @instance
      * @param {number} x Coordinates 
      * @param {number} y Coordinates 
+     * @desc Draws the sprite's current frame on the canvas
      */
-   SpriteClass.prototype.render = function(x, y)
+   render(x, y)
    {
 
    }
 
-})();
+}
