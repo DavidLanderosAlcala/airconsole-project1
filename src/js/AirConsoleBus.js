@@ -36,7 +36,7 @@ var AirConsoleBus = (function(){
     function on(evt, callback)
     {
         var e;
-        switch(event)
+        switch(evt)
         {
             case "message"    : e = ON_MESSAGE; break;
             case "connect"    : e = ON_CONNECT; break;
