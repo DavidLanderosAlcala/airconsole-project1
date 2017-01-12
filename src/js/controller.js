@@ -12,14 +12,10 @@ var Controller = (function(){
     function init()
     {
         airconsole = new AirConsole();
-        DebugConsole.init(airconsole, false);
-
-        /* sending the first message after 1 seconds to ensure that
-           the websocket is already connected. (looking for a better solution) */
-        setInterval(function() {
+        airconsole.onReady = function() {
+            DebugConsole.init(airconsole, false);
             DebugConsole.log("Hola mundo");
-        }, 1000);
-
+        };
     }
 
     return { init : init };
