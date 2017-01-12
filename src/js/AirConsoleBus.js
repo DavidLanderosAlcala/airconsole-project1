@@ -21,6 +21,9 @@ var AirConsoleBus = (function(){
     function init(airconsole_instance)
     {
         airconsole = airconsole_instance;
+        airconsole.onMessage = triggerOnMessage;
+        airconsole.onConnect = triggerOnConnect;
+        airconsole.onDisconnect = triggerOnDisconnect;
     }
 
     /**
@@ -53,19 +56,43 @@ var AirConsoleBus = (function(){
     	}
     }
 
+    /**
+      * @func triggerOnMessage(from, message)
+      * @desc private function in AirConsoleBus
+      */
     function triggerOnMessage(from, message)
     {
-
+        var i, l = callbacks[ON_MESSAGE].length;
+        for(i = 0; i < l; i++)
+        {
+        	callbacks[ON_MESSAGE][i](from, message);
+        }
     }
 
-    function triggerOnConnect(device)
+    /**
+      * @func triggerOnConnect(device_id)
+      * @desc private function in AirConsoleBus
+      */
+    function triggerOnConnect(device_id)
     {
-
+        var i, l = callbacks[ON_CONNECT].length;
+        for(i = 0; i < l; i++)
+        {
+        	callbacks[ON_CONNECT][i](device_id);
+        }
     }
 
-    function triggerOnDisconnect(device)
+    /**
+      * @func triggerOnDisconnect(device_id)
+      * @desc private function in AirConsoleBus
+      */
+    function triggerOnDisconnect(device_id)
     {
-
+        var i, l = callbacks[ON_DISCONNECT].length;
+        for(i = 0; i < l; i++)
+        {
+        	callbacks[ON_DISCONNECT][i](device_id);
+        }
     }
 
     return { init                : init,
