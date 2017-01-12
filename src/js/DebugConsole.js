@@ -3,8 +3,8 @@
   * @module DebugConsole
   */
 var DebugConsole = (function(){
-  
-  var airconsole = null;
+
+  var airconsole;
   var isScreen;
   
   /** @func init
@@ -17,15 +17,13 @@ var DebugConsole = (function(){
   {
       isScreen = _isScreen;
       airconsole = _airconsole;
-      airconsole.onMessage = function(from, data)
-      {
-
+      AirConsoleBus.on("message", function(from, data) {
           if(data.indexOf("DEBUG-CONSOLE") == 0)
           {
               var message = data.replace("DEBUG-CONSOLE: ","");
               console.log("CONTROLLER : " + message);
-          }
-      };
+          }        
+      });
   }
   
   /** @func log

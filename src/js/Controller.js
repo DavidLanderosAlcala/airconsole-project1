@@ -12,17 +12,14 @@ var Controller = (function(){
     function init()
     {
         airconsole = new AirConsole();
-        DebugConsole.init(airconsole, false);
+        AirConsoleBus.init(airconsole);
+        DebugConsole.init(airconsole, false); // false for controller
 
-        airconsole.onConnect = function(device_id) {
+        AirConsoleBus.on("connect", function(device_id) {
             DebugConsole.log("Hola mundo Connected");
-        };
+        });
 
-        airconsole.onReady = function(code) {
-            DebugConsole.log("Hola mundo Ready");
-        };
-
-        setTimeout(function(){
+        setTimeout(function() {
             DebugConsole.log("Hola mundo setTimeout");
         }, 1000);
     }

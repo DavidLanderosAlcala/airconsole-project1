@@ -14,12 +14,11 @@ var Screen = (function(){
     function init()
     {
         airconsole = new AirConsole();
-        DebugConsole.init(airconsole, true);
-        airconsole.onReady = function() {
-            canvas = document.getElementById("main_canvas");
-            context = canvas.getContext("2d");
-            Sprite.init(canvas, context);
-        };
+        AirConsoleBus.init(airconsole);
+        DebugConsole.init(airconsole, true); // true for screen
+        canvas = document.getElementById("main_canvas");
+        context = canvas.getContext("2d");
+        Sprite.init(canvas, context);
     }
 
     /** @func setLogoVisibility
