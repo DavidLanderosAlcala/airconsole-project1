@@ -1,0 +1,51 @@
+
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+div.main_container
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #333;
+	padding-right: -100px;
+}
+
+div.row_container
+{
+	width: 100%;
+	height: 50%;
+	padding-right: -100px;
+	overflow: hidden;
+}
+
+div.row_container:nth-child(1)
+{
+	border: 1px solid black;
+	border-width: 0 0 1px 0;
+	margin-bottom: -1px;
+}
+
+div.button:nth-child(1)
+{
+    border-right: 1px solid black;
+    margin-right: -5px;    
+}
+
+div.button
+{
+	width: 50%;
+	height: 100%;
+    display: inline-block;
+    text-align: center;
+    line-height: 100px;
+	color: #555;
+}
+
+div.pressed
+{
+	background-color: #222;
+}
