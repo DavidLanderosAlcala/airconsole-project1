@@ -12,5 +12,5 @@
 ##### Source code documentation
 - https://rawgit.com/DavidLanderosAlcala/airconsole-project1/master/doc/index.html
 
-##### Launch the top rev.
-- http://airconsole.com/#http://rawgit.com/DavidLanderosAlcala/airconsole-project1/master/src/
+##### Try a stable revision
+- http://airconsole.com/#http://rawgit.com/DavidLanderosAlcala/airconsole-project1/88abcd9886e5cd61464929ad48a61cacc3d865d6/src/
