@@ -6,10 +6,10 @@
   */
 var AirConsoleBus = (function(){
 
-	const ON_MESSAGE = 0;
-	const ON_CONNECT = 1;
-	const ON_DISCONNECT = 2;
-  const ON_READY   = 3;
+    const ON_MESSAGE = 0;
+    const ON_CONNECT = 1;
+    const ON_DISCONNECT = 2;
+    const ON_READY   = 3;
 
     var airconsole;
     var callbacks = [ [], [], [], [] ];
@@ -28,26 +28,12 @@ var AirConsoleBus = (function(){
     }
 
     /**
-      * @func addEventListener
-      * @param {eventType} event ON_MESSAGE, ON_CONNECT or ON_DISCONNECT
-      * @param {function} callback the callback to be executed
-      * @desc It adds a new event listener
-      * @example AirConsoleBus.addEventListener(AirConsoleBus.ON_MESSAGE, mycallback );
-      */
-    function addEventListener(event, callback)
-    {
-    	callbacks[event].push(callback);
-    }
-
-
-    /**
-      * @func on(event, callback)
+      * @func on
       * @param {string} event "message", "connect", "disconnect", "ready"
       * @param {function} callback the callback to be executed
       * @desc It adds a new event listener
-      * @example AirConsoleBus.on(AirConsoleBus.ON_MESSAGE, mycallback );
       */
-    function on(event, callback)
+    function on(evt, callback)
     {
         var e;
         switch(event)
@@ -58,6 +44,17 @@ var AirConsoleBus = (function(){
             case "ready"      : e = ON_READY; break;
         }
         addEventListener(e, callback);
+    }
+
+    /**
+      * @func addEventListener
+      * @param {eventType} event ON_MESSAGE, ON_CONNECT or ON_DISCONNECT
+      * @param {function} callback the callback to be executed
+      * @desc It adds a new event listener
+      */
+    function addEventListener(event, callback)
+    {
+    	callbacks[event].push(callback);
     }
 
     /**
