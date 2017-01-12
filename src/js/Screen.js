@@ -14,8 +14,8 @@ var Screen = (function(){
     function init()
     {
         airconsole = new AirConsole();
+        DebugConsole.init(airconsole, true);
         airconsole.onReady = function() {
-            DebugConsole.init(airconsole, true);
             canvas = document.getElementById("main_canvas");
             context = canvas.getContext("2d");
             Sprite.init(canvas, context);

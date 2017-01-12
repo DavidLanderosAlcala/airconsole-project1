@@ -12,8 +12,9 @@ var Controller = (function(){
     function init()
     {
         airconsole = new AirConsole();
-        airconsole.onReady = function() {
-            DebugConsole.init(airconsole, false);
+        DebugConsole.init(airconsole, false);
+        
+        airconsole.onConnect = function() {
             DebugConsole.log("Hola mundo");
         };
     }
