@@ -32,8 +32,15 @@ var Controller = (function(){
         var i, l = buttons.length;
         for(i = 0; i < l; i++)
         {
+            buttons[i].addEventListener("touchstart", function() {
+                //cleanUpAllButtons();
+                this.className += " pressed";
+                clicked = true;
+                navigator.vibrate(15);
+                DebugConsole.log("Pressed: " + this.id);
+            });          
             buttons[i].addEventListener("mousedown", function() {
-                cleanUpAllButtons();
+                //cleanUpAllButtons();
                 this.className += " pressed";
                 clicked = true;
             });
@@ -41,6 +48,11 @@ var Controller = (function(){
                 this.className = this.className.replace(" pressed","");
                 clicked = false;
             });
+            buttons[i].addEventListener("touchend", function(){
+                this.className = this.className.replace(" pressed","");
+                clicked = false;
+                DebugConsole.log("Released: " + this.id);
+            });            
 
             buttons[i].addEventListener("mouseenter", function() {
                 if(clicked)
@@ -49,7 +61,7 @@ var Controller = (function(){
                     this.className += " pressed";
                 }
             });
-            buttons[i].addEventListener("mousleave", function(){
+            buttons[i].addEventListener("mouseleave", function(){
                 this.className = this.className.replace(" pressed","");
             });
         }

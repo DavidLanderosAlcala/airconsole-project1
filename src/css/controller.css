@@ -35,6 +35,12 @@ div.button:nth-child(1)
     margin-right: -5px;    
 }
 
+div.button:nth-child(2)
+{
+    margin-right: -100px;
+}
+
+
 div.button
 {
 	width: 50%;
