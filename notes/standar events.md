@@ -29,7 +29,7 @@ AirConsoleBus.on("gamepadevent", function(event) {
 Nota : el tipo de dato de <strong>event.value</strong> depende del valor <strong>event.key</strong>, ya que los valores analogicos son flotantes, los valores digitales son enteros y los sticks son vectores.
 
 
-###### vibraterequest
+##### vibraterequest
 evento que llega a los dispositivos cuando la pantalla solicita una vibracion
 
 ```javascript
