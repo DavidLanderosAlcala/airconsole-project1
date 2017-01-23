@@ -36,7 +36,7 @@ evento que llega a los dispositivos cuando la pantalla solicita una vibracion
 AirConsoleBus.on("vibraterequest", function(request) {
   /*
    * El objeto request tiene los miembros:
-   *   event.pattern,
+   *   request.pattern,
    */
 });
 ```
