@@ -1,6 +1,6 @@
 
 
-  ###### debug
+##### debug
   evento que llega a la pantalla cuando algun dispositivo utiliza DebugConsole
 
 ```javascript
