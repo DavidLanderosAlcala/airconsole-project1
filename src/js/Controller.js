@@ -3,10 +3,10 @@
   * @module Controller
   */
 var Controller = (function(){
-  
+
     var airconsole;
     var clicked = false;
-  
+
     /** @func init
       * @desc Called when the DOM is loaded
       */
@@ -24,6 +24,8 @@ var Controller = (function(){
         setTimeout(function() {
             DebugConsole.log("Hola mundo setTimeout");
         }, 1000);
+
+        AirConsoleBus.on("vibraterequest", onVibrateRequest);
     }
 
     function setupButtons()
@@ -36,9 +38,17 @@ var Controller = (function(){
                 //cleanUpAllButtons();
                 this.className += " pressed";
                 clicked = true;
-                navigator.vibrate(15);
+                var pattern = 500;
+                switch(this.id)
+                {
+                    case "buttonA1" : pattern = 10; break;
+                    case "buttonA2" : pattern = 20; break;
+                    case "buttonB1" : pattern = 30; break;
+                    case "buttonB2" : pattern = 40; break;
+                }
+                navigator.vibrate(pattern);
                 DebugConsole.log("Pressed: " + this.id);
-            });          
+            });
             buttons[i].addEventListener("mousedown", function() {
                 //cleanUpAllButtons();
                 this.className += " pressed";
@@ -52,7 +62,7 @@ var Controller = (function(){
                 this.className = this.className.replace(" pressed","");
                 clicked = false;
                 DebugConsole.log("Released: " + this.id);
-            });            
+            });
 
             buttons[i].addEventListener("mouseenter", function() {
                 if(clicked)
@@ -75,6 +85,11 @@ var Controller = (function(){
         {
             buttons[i].className = buttons[i].className.replace("pressed","");
         }
+    }
+
+    function onVibrateRequest(data)
+    {
+        navigator.vibrate(data.pattern);
     }
 
     return { init : init };

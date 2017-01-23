@@ -19,6 +19,17 @@ var Screen = (function(){
         canvas = document.getElementById("main_canvas");
         context = canvas.getContext("2d");
         Sprite.init(canvas, context);
+
+        // example of vibrate request
+        var contador = 0;
+        setInterval(function(){
+          setSubtitleText("contador: " + contador % 5);
+          if(contador++ % 5 == 0)
+          {
+              var packet = { header : AirConsoleBus.ON_VIBRATE_REQUEST, pattern: [50, 10, 50, 10, 50] };
+              airconsole.broadcast(JSON.stringify(packet));
+          }
+        }, 1000);
     }
 
     /** @func setLogoVisibility
