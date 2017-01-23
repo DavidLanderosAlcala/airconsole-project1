@@ -14,7 +14,7 @@ AirConsoleBus.on("debug", function(info) {
 ```
 
 ##### gamepadevent
-evento que llega a la pantalla cuando un dispositivo presiona una boton del gamepad
+evento que llega a la pantalla cuando un dispositivo presiona un boton del gamepad
 
 ```javascript
 AirConsoleBus.on("gamepadevent", function(event) {
