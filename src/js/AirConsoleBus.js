@@ -6,13 +6,22 @@
   */
 var AirConsoleBus = (function(){
 
+    // airconsole raw events
     const ON_MESSAGE = 0;
     const ON_CONNECT = 1;
     const ON_DISCONNECT = 2;
-    const ON_READY   = 3;
+    const ON_READY = 3;
+
+    // standar events
+    const ON_DEBUG = 4;
+    const ON_GAMEPAD_EVENT = 5;
+    const ON_VIBRATE_REQUEST = 6;
+
+    // game specific events
+    // TBD
 
     var airconsole;
-    var callbacks = [ [], [], [], [] ];
+    var callbacks = [ [], [], [], [], [], [], [] ];
 
     /**
       * @func init
@@ -25,6 +34,7 @@ var AirConsoleBus = (function(){
         airconsole.onMessage = triggerOnMessage;
         airconsole.onConnect = triggerOnConnect;
         airconsole.onDisconnect = triggerOnDisconnect;
+        on("message", inner_OnMessage);
     }
 
     /**
@@ -38,10 +48,13 @@ var AirConsoleBus = (function(){
         var e;
         switch(evt)
         {
-            case "message"    : e = ON_MESSAGE; break;
-            case "connect"    : e = ON_CONNECT; break;
-            case "disconnect" : e = ON_DISCONNECT; break;
-            case "ready"      : e = ON_READY; break;
+            case "message"        : e = ON_MESSAGE; break;
+            case "connect"        : e = ON_CONNECT; break;
+            case "disconnect"     : e = ON_DISCONNECT; break;
+            case "ready"          : e = ON_READY; break;
+            case "debug"          : e = ON_DEBUG; break;
+            case "gamepadevent"   : e = ON_GAMEPAD_EVENT; break;
+            case "vibraterequest" : e = ON_VIBRATE_REQUEST; break;
         }
         addEventListener(e, callback);
     }
@@ -102,11 +115,53 @@ var AirConsoleBus = (function(){
         }
     }
 
+    function triggerOnDebug(data)
+    {
+        var i, l = callbacks[ON_DEBUG].length;
+        for(i = 0; i < l; i++)
+        {
+        	callbacks[ON_DEBUG][i](data);
+        }
+    }
+
+    function triggerOnGamepadEvent(event)
+    {
+        var i, l = callbacks[ON_GAMEPAD_EVENT].length;
+        for(i = 0; i < l; i++)
+        {
+          callbacks[ON_GAMEPAD_EVENT][i](event);
+        }
+    }
+
+    function triggerOnVibrateRequest(params)
+    {
+        var i, l = callbacks[ON_VIBRATE_REQUEST].length;
+        for(i = 0; i < l; i++)
+        {
+          callbacks[ON_VIBRATE_REQUEST][i](params);
+        }
+    }
+
+    function inner_OnMessage(from, message)
+    {
+        var packet = { };
+        try { packet = JSON.parse(message);  } catch(e) { }
+        switch(packet.header)
+        {
+            case ON_DEBUG : triggerOnDebug(packet); break;
+            case ON_GAMEPAD_EVENT : triggerOnGamepadEvent(packet); break;
+            case ON_VIBRATE_REQUEST : triggerOnVibrateRequest(packet); break;
+        }
+    }
+
     return { init                : init,
              on                  : on,
-             addEventListener    : addEventListener, 
+             addEventListener    : addEventListener,
              removeEventListener : removeEventListener,
              ON_MESSAGE          : ON_MESSAGE,
              ON_CONNECT          : ON_CONNECT,
-             ON_DISCONNECT       : ON_DISCONNECT };
+             ON_DISCONNECT       : ON_DISCONNECT,
+             ON_DEBUG            : ON_DEBUG,
+             ON_GAMEPAD_EVENT     : ON_GAMEPAD_EVENT,
+             ON_VIBRATE_REQUEST   : ON_VIBRATE_REQUEST };
 })();

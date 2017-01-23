@@ -3,7 +3,7 @@
   * @module Screen
   */
 var Screen = (function(){
-  
+
     var airconsole;
     var canvas;
     var context;

@@ -1,0 +1,24 @@
+
+
+  0 informacion de debug
+
+      AirConsoleBus.on("debug", function(info) {
+
+       info.origin
+       info.message
+
+      });
+
+  1  eventos del gamepad
+
+     AirConsoleBus.on("gamepadevent", function(event) {
+        event.origin
+        event.key
+        event.value
+     });
+
+  2 sonar/vibrar, avisar, alerta etc.
+
+      AirConsoleBus.on("vibraterequest", function(event) {
+         event.pattern
+      });
