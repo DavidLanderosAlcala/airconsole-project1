@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: DebugConsole</title>
+    <title>JSDoc: Module: Touch</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: DebugConsole</h1>
+    <h1 class="page-title">Module: Touch</h1>
 
     
 
@@ -61,14 +61,14 @@
 
     
 
-    <h4 class="name" id="~init"><span class="type-signature">(inner) </span>init<span class="signature">(airconsole, isScreen)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~button"><span class="type-signature">(inner) </span>button<span class="signature">(selector, callback)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Called from Screen.init and Controller.init.It prepares everything to log events on the screen´s console
+    converts DOM elements into buttons and installs an event listener
 </div>
 
 
@@ -104,13 +104,13 @@
 
         <tr>
             
-                <td class="name"><code>airconsole</code></td>
+                <td class="name"><code>selector</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">string</span>
 
 
             
@@ -120,20 +120,20 @@
 
             
 
-            <td class="description last">the AirConsole instance to be used</td>
+            <td class="description last">the CSS selector to hook the DOM elements</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>isScreen</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">function</span>
 
 
             
@@ -143,7 +143,7 @@
 
             
 
-            <td class="description last">must be true for the screen and false for each controller</td>
+            <td class="description last">called for each event ocurred with the buttons</td>
         </tr>
 
     
@@ -184,7 +184,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DebugConsole.js.html">DebugConsole.js</a>, <a href="DebugConsole.js.html#line10">line 10</a>
+        <a href="Touch.js.html">Touch.js</a>, <a href="Touch.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -215,14 +215,14 @@
 
     
 
-    <h4 class="name" id="~log"><span class="type-signature">(inner) </span>log<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~surface"><span class="type-signature">(inner) </span>surface<span class="signature">(selector, callback)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Shows a message on the screen's console
+    converts DOM elements into touch surfaces such as virtual sticks, touchpads etc, and installs an event listener
 </div>
 
 
@@ -258,7 +258,7 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>selector</code></td>
             
 
             <td class="type">
@@ -274,7 +274,30 @@
 
             
 
-            <td class="description last">The message to be logged</td>
+            <td class="description last">the CSS selector to hook the DOM elements</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">called for each event ocurred with the surfaces</td>
         </tr>
 
     
@@ -315,7 +338,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="DebugConsole.js.html">DebugConsole.js</a>, <a href="DebugConsole.js.html#line25">line 25</a>
+        <a href="Touch.js.html">Touch.js</a>, <a href="Touch.js.html#line23">line 23</a>
     </li></ul></dd>
     
 

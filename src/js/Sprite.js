@@ -84,7 +84,7 @@ class Sprite {
         Sprite.context.drawImage(this.img, sx, sy, sw, sh, dx, dy, dw, dh);
    }
 
-   /**
+   /** @private
      * @method calcCurrentFrame
      * @memberof Sprite
      * @instance
