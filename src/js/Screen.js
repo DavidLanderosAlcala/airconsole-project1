@@ -28,6 +28,9 @@ var Screen = (function(){
           {
               var packet = { header : AirConsoleBus.ON_VIBRATE_REQUEST, pattern: [50, 10, 50, 10, 50] };
               airconsole.broadcast(JSON.stringify(packet));
+
+              packet = { header : AirConsoleBus.ON_RING_REQUEST, pattern: [50, 10, 50, 10, 50] };
+              airconsole.broadcast(JSON.stringify(packet));
           }
         }, 1000);
     }

@@ -26,6 +26,7 @@ var Controller = (function(){
         }, 1000);
 
         AirConsoleBus.on("vibraterequest", onVibrateRequest);
+        AirConsoleBus.on("ringrequest", onRingRequest);
     }
 
     function setupButtons()
@@ -91,6 +92,12 @@ var Controller = (function(){
     {
         navigator.vibrate(data.pattern);
     }
+
+    function onRingRequest(data)
+    {
+        // TODO
+        DebugConsole.log("Sonando.. beeep!!");
+    }    
 
     return { init : init };
 
