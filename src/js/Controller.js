@@ -15,6 +15,7 @@ var Controller = (function(){
         airconsole = new AirConsole({"orientation":"landscape"});
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, false /* isScreen */);
+        
         AirConsoleBus.on("vibraterequest", onVibrateRequest);
         AirConsoleBus.on("ringrequest", onRingRequest);
         setupButtons();

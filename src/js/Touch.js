@@ -9,6 +9,10 @@ var Touch = (function() {
       * @desc converts DOM elements into buttons and installs an event listener
       * @param selector {string} the CSS selector to hook the DOM elements
       * @param callback {function} called for each event ocurred with the buttons
+      * @example
+      * Touch.button(".my-button", function(e) {
+      *     console.log("the button %s has been %s", e.sender.id, e.isPressed ? "pressed" : "released" );
+      * });
       */
     function button(selector, callback)
     {
