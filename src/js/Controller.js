@@ -27,16 +27,17 @@ var Controller = (function(){
 
             if(e.isPressed)
             {
-                navigator.vibrate(100);
+                navigator.vibrate(20);
                 e.sender.className += " pressed";
-                DebugConsole.log("Pressed: " + e.sender.id);
             }
             else
             {
                 e.sender.className = e.sender.className.replace(" pressed","");
-                DebugConsole.log("Released: " + e.sender.id);
             }
 
+            var packet = { header: AirConsoleBus.ON_GAMEPAD_EVENT, key : e.sender.id, value : e.isPressed };
+            airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
+            
         });
     }
 

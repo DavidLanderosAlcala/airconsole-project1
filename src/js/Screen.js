@@ -5,8 +5,7 @@
 var Screen = (function(){
 
     var airconsole;
-    var canvas;
-    var context;
+    var started = false;
 
     /** @func init
       * @desc Called when the DOM is loaded
@@ -16,23 +15,23 @@ var Screen = (function(){
         airconsole = new AirConsole();
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, true /* isScreen */);
-        canvas = document.getElementById("main_canvas");
-        context = canvas.getContext("2d");
-        Sprite.init(canvas, context);
+        PuzzleBobble.init("#canvas1", "#canvas2");
+        setLogoVisibility(false);
 
-        // example of vibrate request
-        var contador = 0;
-        setInterval(function(){
-          setSubtitleText("contador: " + contador % 5);
-          if(contador++ % 5 == 0)
-          {
-              var packet = { header : AirConsoleBus.ON_VIBRATE_REQUEST, pattern: [50, 10, 50, 10, 50] };
-              airconsole.broadcast(JSON.stringify(packet));
+        AirConsoleBus.on("gamepadevent", function(e) {
 
-              packet = { header : AirConsoleBus.ON_RING_REQUEST, pattern: [50, 10, 50, 10, 50] };
-              airconsole.broadcast(JSON.stringify(packet));
-          }
-        }, 1000);
+          DebugConsole.log("gamepad event: " + JSON.stringify(e));
+
+            if(!started)
+            {
+                started = true;
+                PuzzleBobble.start();
+                return;
+            }
+
+            PuzzleBobble.handleKeyEvent(e.key, e.value);
+
+        });
     }
 
     /** @func setLogoVisibility
@@ -53,22 +52,6 @@ var Screen = (function(){
     {
         document.getElementById("subtitles_label")
         .innerHTML = text;
-    }
-
-    /** @func render
-      * @desc It renders the scene, called from Screen.update
-      */
-    function render()
-    {
-
-    }
-
-    /** @func update
-      * @desc called before each frame to update the scene
-      */
-    function update()
-    {
-        render();
     }
 
     return { init : init,

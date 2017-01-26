@@ -1,0 +1,6 @@
+             #canvas1 { position: absolute; width: 200px; height:400px;);
+                        left: 50%; top:50%; margin: -250px 0 0 -100px;
+                        border: 0px solid; background-color: rgb(10,10,10); }
+             #canvas2 { position: absolute; width: 300px; height:600px;);
+                        left: 50%; top:50%; margin: -300px 0 0 -150px; border-radius: 20px;
+                        border: 0px solid; background-image: url(../res/img/fondo.jpg); border: 5px solid;}

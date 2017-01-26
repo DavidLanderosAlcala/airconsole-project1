@@ -2,13 +2,19 @@
 <html>
     <head>
         <link rel="stylesheet" href="./css/screen.css">
-        <title>Screen</title>
+        <link rel="stylesheet" href="./css/PuzzleBobble.css">
+        <title>Puzzle Bobble</title>
     </head>
     <body>
-    	<canvas width="640px" height="480px" class="main_container" id="main_canvas"> your browser does not support canvas :( </canvas>
-    	<img src="./img/logo.png" class="main_logo" id="main_logo"/>
-        <label id="subtitles_label"> Your text goes here </label>
+
+        <canvas id='canvas2' width='300' height='600'> </canvas>
+        <canvas id='canvas1' width='300' height='600'> </canvas>
+
+    	<img src="./res/img/logo.png" class="main_logo" id="main_logo"/>
+        <label id="subtitles_label"> Welcome to Puzzle Bobble </label>
+
         <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.4.0.js"></script>
+        <script type='text/javascript' src='./js/PuzzleBobble.js'></script>
         <script type="text/javascript" src="./js/AirConsoleBus.js"></script>
         <script type="text/javascript" src="./js/Sprite.js"></script>
         <script type="text/javascript" src="./js/DebugConsole.js"></script>
