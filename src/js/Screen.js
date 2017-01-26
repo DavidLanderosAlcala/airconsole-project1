@@ -79,9 +79,15 @@ var Screen = (function(){
         render();
     }
 
+    function getAirconsoleObject()
+    {
+        return airconsole;
+    }
+
     return { init : init,
              setLogoVisibility : setLogoVisibility,
-             setSubtitleText : setSubtitleText };
+             setSubtitleText : setSubtitleText,
+             getAirconsoleObject : getAirconsoleObject };
 
 })();
 

@@ -376,6 +376,13 @@ mygame.SpaceInvaders.prototype.enemyBulletTest = function() {
             Math.abs( this.enemyBullets[i].y - this.spaceShip.y ) <= mindiffy) {
             // LA BALA A TOCADO AL PERSONAJE
             this.sounds.dead.play();
+
+            // vibrate request
+            var packet = { header: AirConsoleBus.ON_VIBRATE_REQUEST, pattern : 200 };
+            Screen.getAirconsoleObject().broadcast(JSON.stringify(packet));
+            // -------------------------------------------
+
+
             this.spaceShip.alive = false;
             var self = this;
             self.explotion.x = self.spaceShip.x-25;
