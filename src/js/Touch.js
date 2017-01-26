@@ -53,7 +53,7 @@ var Touch = (function() {
 
         element.addEventListener("mousedown", function(e) {
             event.isPressed = true;
-            callback(event);
+            //callback(event);
         });
 
         element.addEventListener("touchend", function(e) {
@@ -63,12 +63,12 @@ var Touch = (function() {
 
         element.addEventListener("mouseup", function(e) {
             event.isPressed = false;
-            callback(event);
+            //callback(event);
         });
 
         element.addEventListener("mouseleave", function(e) {
             event.isPressed = false;
-            callback(event);
+            //callback(event);
         });
 
         element.addEventListener("touchcancel", function(e) {
