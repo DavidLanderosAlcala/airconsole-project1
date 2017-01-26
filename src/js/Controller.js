@@ -25,16 +25,16 @@ var Controller = (function(){
     {
         Touch.button(".button", function(e) {
 
+            DebugConsole.log("Button: " + e.sender.id + " has been " + (e.isPressed ? "pressed" : "released") );
+
             if(e.isPressed)
             {
                 navigator.vibrate(100);
                 e.sender.className += " pressed";
-                DebugConsole.log("Pressed: " + e.sender.id);
             }
             else
             {
                 e.sender.className = e.sender.className.replace(" pressed","");
-                DebugConsole.log("Released: " + e.sender.id);
             }
 
         });
