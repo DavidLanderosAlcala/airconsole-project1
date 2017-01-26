@@ -395,12 +395,6 @@ mygame.SpaceInvaders.prototype.enemyBulletTest = function() {
         var j; wl = this.walls.length;
         for(j = 0; j < wl; j++) {
 
-            console.log(i);
-            console.log(j);
-
-            console.log(this.enemyBullets[i]);
-            console.log(this.walls[j]);
-
             if(this.enemyBullets[i] == undefined)
                 continue;
 
