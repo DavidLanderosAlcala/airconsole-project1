@@ -45,36 +45,36 @@ var Touch = (function() {
             sender : element,
             isPressed : false,
         };
-
-        element.addEventListener("touchstart", function(e) {
-            event.isPressed = true;
-            callback(event);
-        });
-
-        element.addEventListener("mousedown", function(e) {
-            event.isPressed = true;
-            //callback(event);
-        });
-
-        element.addEventListener("touchend", function(e) {
-            event.isPressed = false;
-            callback(event);
-        });
-
-        element.addEventListener("mouseup", function(e) {
-            event.isPressed = false;
-            //callback(event);
-        });
-
-        element.addEventListener("mouseleave", function(e) {
-            event.isPressed = false;
-            //callback(event);
-        });
-
-        element.addEventListener("touchcancel", function(e) {
-            event.isPressed = false;
-            callback(event);
-        });
+        if(Utils.isMobileNavigator())
+        {
+            element.addEventListener("touchstart", function(e) {
+                event.isPressed = true;
+                callback(event);
+            });
+            element.addEventListener("touchend", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+            element.addEventListener("touchcancel", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+        }
+        else
+        {
+            element.addEventListener("mousedown", function(e) {
+                event.isPressed = true;
+                callback(event);
+            });
+            element.addEventListener("mouseup", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+            element.addEventListener("mouseleave", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+        }
     }
 
     function hookAllEventsForSurface(element, callback)
