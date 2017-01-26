@@ -25,18 +25,21 @@ var Controller = (function(){
     {
         Touch.button(".button", function(e) {
 
+            var packet = {
+                header : AirConsoleBus.ON_GAMEPAD_EVENT,
+                key : e.sender.id,
+                value : e.isPressed,
+            };
+            airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
             if(e.isPressed)
             {
-                navigator.vibrate(100);
                 e.sender.className += " pressed";
-                DebugConsole.log("Pressed: " + e.sender.id);
             }
             else
             {
                 e.sender.className = e.sender.className.replace(" pressed","");
-                DebugConsole.log("Released: " + e.sender.id);
             }
-
+            DebugConsole.log(e.sender.id + "pressed: " + e.isPressed);
         });
     }
 

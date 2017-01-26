@@ -8,6 +8,8 @@ var Screen = (function(){
     var canvas;
     var context;
 
+    var spaceInvadersInstance = null;
+
     /** @func init
       * @desc Called when the DOM is loaded
       */
@@ -20,19 +22,25 @@ var Screen = (function(){
         context = canvas.getContext("2d");
         Sprite.init(canvas, context);
 
-        // example of vibrate request
-        var contador = 0;
-        setInterval(function(){
-          setSubtitleText("contador: " + contador % 5);
-          if(contador++ % 5 == 0)
-          {
-              var packet = { header : AirConsoleBus.ON_VIBRATE_REQUEST, pattern: [50, 10, 50, 10, 50] };
-              airconsole.broadcast(JSON.stringify(packet));
+        // Space invaders
+        new mygame.SpaceInvaders({
+            modal : true,
+            open : function() {
+              setLogoVisibility(false);
+              setSubtitleText("");
+            }, 
+            close : function() {}
+        });
 
-              packet = { header : AirConsoleBus.ON_RING_REQUEST, pattern: [50, 10, 50, 10, 50] };
-              airconsole.broadcast(JSON.stringify(packet));
-          }
-        }, 1000);
+        AirConsoleBus.on("gamepadevent", function(e){
+            switch(e.key)
+            {
+                case "right" : mygame.SpaceInvadersSingleton.keys.right = e.value == 1; break;
+                case "left" : mygame.SpaceInvadersSingleton.keys.left = e.value == 1; break;
+                case "pad_a" : mygame.SpaceInvadersSingleton.keys.down = e.value == 1; break;
+            }
+            DebugConsole.log("gamepadevent: " + e.key + " = " + e.value);
+        });
     }
 
     /** @func setLogoVisibility
