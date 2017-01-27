@@ -79,7 +79,6 @@ var Touch = (function() {
 
     function hookAllEventsForSurface(element, callback)
     {
-        var isPressed = false;
         var event = {
             sender : element,
             type : "none",
@@ -92,51 +91,83 @@ var Touch = (function() {
             element.addEventListener("touchstart", function(e) {
                 e.preventDefault();
                 event.type = "touchstart";
-                event.x = e.changedTouches[0].clientX;
-                event.y = e.changedTouches[0].clientY;
+                var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                event.x = coords.x;
+                event.y = coords.y;
                 callback(event);
             }, false);
             element.addEventListener("touchend", function(e) {
                 e.preventDefault();
                 event.type = "touchend";
-                event.x = e.changedTouches[0].clientX;
-                event.y = e.changedTouches[0].clientY;
+                var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                event.x = coords.x;
+                event.y = coords.y;
                 callback(event);
             }, false);
             element.addEventListener("touchmove", function(e) {
                 e.preventDefault();
                 event.type = "touchmove";
-                event.x = e.changedTouches[0].clientX;
-                event.y = e.changedTouches[0].clientY;
+                var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                event.x = coords.x;
+                event.y = coords.y;
                 callback(event);
             }, false);
         }
         else
         {
+            var __isPressed = false;
             element.addEventListener("mousedown", function(e) {
-                isPressed = true;
+                e.preventDefault();
+                __isPressed = true;
                 event.type = "touchstart";
-                event.x = e.clientX;
-                event.y = e.clientY;
+                var coords = validateCoords(element, e.clientX, e.clientY);
+                event.x = coords.x;
+                event.y = coords.y;
                 callback(event);
             });
             element.addEventListener("mouseup", function(e) {
-                isPressed = false;
+                e.preventDefault();
+                __isPressed = false;
                 event.type = "touchend";
-                event.x = e.clientX;
-                event.y = e.clientY;
+                var coords = validateCoords(element, e.clientX, e.clientY);
+                event.x = coords.x;
+                event.y = coords.y;
                 callback(event);
             });
+            element.addEventListener("mouseleave", function(e) {
+                e.preventDefault();
+                if(__isPressed)
+                {
+                    __isPressed = false;
+                    event.type = "touchend";
+                    var coords = validateCoords(element, e.clientX, e.clientY);
+                    event.x = coords.x;
+                    event.y = coords.y;
+                    callback(event);
+                }
+            });
             element.addEventListener("mousemove", function(e) {
-                if(isPressed)
+                e.preventDefault();
+                if(__isPressed)
                 {
                     event.type = "touchmove";
-                    event.x = e.clientX;
-                    event.y = e.clientY;
+                    var coords = validateCoords(element, e.clientX, e.clientY);
+                    event.x = coords.x;
+                    event.y = coords.y;
                     callback(event);
                 }
             });
         }
+    }
+
+    function validateCoords(elem, x, y)
+    {
+        var rect = elem.getBoundingClientRect();
+        if(x < 0) x = 0;
+        if(y < 0) y = 0;
+        if(x > rect.width) x =  rect.width;
+        if(y > rect.height) y = rect.height;
+        return { x : x, y : y };
     }
 
 	return { button  : button,
