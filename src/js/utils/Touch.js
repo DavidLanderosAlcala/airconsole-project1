@@ -79,7 +79,64 @@ var Touch = (function() {
 
     function hookAllEventsForSurface(element, callback)
     {
-        // TO DO
+        var isPressed = false;
+        var event = {
+            sender : element,
+            type : "none",
+            x : 0,
+            y : 0,
+        }
+
+        if(Utils.isMobileNavigator())
+        {
+            element.addEventListener("touchstart", function(e) {
+                e.preventDefault();
+                event.type = "touchstart";
+                event.x = e.changedTouches[0].clientX;
+                event.y = e.changedTouches[0].clientY;
+                callback(event);
+            }, false);
+            element.addEventListener("touchend", function(e) {
+                e.preventDefault();
+                event.type = "touchend";
+                event.x = e.changedTouches[0].clientX;
+                event.y = e.changedTouches[0].clientY;
+                callback(event);
+            }, false);
+            element.addEventListener("touchmove", function(e) {
+                e.preventDefault();
+                event.type = "touchmove";
+                event.x = e.changedTouches[0].clientX;
+                event.y = e.changedTouches[0].clientY;
+                callback(event);
+            }, false);
+        }
+        else
+        {
+            element.addEventListener("mousedown", function(e) {
+                isPressed = true;
+                event.type = "touchstart";
+                event.x = e.clientX;
+                event.y = e.clientY;
+                callback(event);
+            });
+            element.addEventListener("mouseup", function(e) {
+                isPressed = false;
+                event.type = "touchend";
+                event.x = e.clientX;
+                event.y = e.clientY;
+                callback(event);
+            });
+            element.addEventListener("mousemove", function(e) {
+                if(isPressed)
+                {
+                    event.type = "touchmove";
+                    event.x = e.clientX;
+                    event.y = e.clientY;
+                    callback(event);
+                }
+            });
+        }
     }
 
 	return { button  : button,
