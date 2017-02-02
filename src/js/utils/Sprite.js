@@ -86,7 +86,7 @@ class Sprite {
         {
             Sprite.context.scale(-1,1);
             x = -x;
-            Sprite.context.translate(-0, 0);
+            Sprite.context.translate(-w, 0);
         }
         Sprite.context.drawImage(this.img, sx, sy, sw, sh, dx, dy, dw, dh);
         Sprite.context.restore();
