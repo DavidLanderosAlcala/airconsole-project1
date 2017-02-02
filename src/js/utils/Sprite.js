@@ -70,7 +70,7 @@ class Sprite {
      * @param {number} h height (optional)
      * @desc Draws the sprite's current frame on the canvas
      */
-   render(x, y, w, h)
+   render(x, y, w, h, inverted)
    {
         this.calcCurrentFrame();
         var sx = (this.current_frame * this.width) + this.x_offset;
@@ -81,7 +81,15 @@ class Sprite {
         var dy = y;
         var dw = w == undefined ? this.width : w;
         var dh = h == undefined ? this.height : h;
+        Sprite.context.save();
+        if(inverted)
+        {
+            Sprite.context.scale(-1,1);
+            x = -x;
+            Sprite.context.translate(-0, 0);
+        }
         Sprite.context.drawImage(this.img, sx, sy, sw, sh, dx, dy, dw, dh);
+        Sprite.context.restore();
    }
 
    /** @private
