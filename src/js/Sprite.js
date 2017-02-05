@@ -25,8 +25,17 @@ class Sprite {
         this.time_stamp = 0;
         this.img = new Image();
         this.img.src = this.filename;
+        var self = this;
         this.img.addEventListener("onload", function() {
             callback();
+            if(self.width == undefined)
+            {
+                selft.width = self.img.width / self.frame_count;
+            }
+            if(self.height == undefined)
+            {
+                self.height = self.img.height;
+            }
         });
         this.img.addEventListener("onerror", function() {
             callback({ message : "couldn't load the image" });
