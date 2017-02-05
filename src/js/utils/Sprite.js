@@ -25,20 +25,20 @@ class Sprite {
         this.time_stamp = 0;
         this.img = new Image();
         var self = this;
-        this.img.addEventListener("onload", function() {
-            callback();
+        this.img.onload = function() {
+            self.callback();
             if(self.width == undefined)
             {
-                selft.width = self.img.width / self.frame_count;
+                self.width = self.img.width / self.frame_count;
             }
             if(self.height == undefined)
             {
                 self.height = self.img.height;
             }
-        });
-        this.img.addEventListener("onerror", function() {
-            callback({ message : "couldn't load the image" });
-        });
+        };
+        this.img.onerror = function() {
+            self.callback({ message : "couldn't load the image" });
+        }
         this.img.src = this.filename;
    }
 
