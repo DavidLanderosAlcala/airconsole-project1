@@ -25,7 +25,6 @@ class Sprite {
         this.time_stamp = 0;
         this.img = new Image();
         this.img.src = this.filename;
-        var self = this;
         this.img.addEventListener("onload", function() {
             callback();
             if(self.width == undefined)
@@ -40,6 +39,7 @@ class Sprite {
         this.img.addEventListener("onerror", function() {
             callback({ message : "couldn't load the image" });
         });
+        var self = this;
    }
 
     /**
