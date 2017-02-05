@@ -5,8 +5,6 @@
 var Screen = (function(){
 
     var airconsole;
-    var canvas;
-    var context;
 
     /** @func init
       * @desc Called when the DOM is loaded
@@ -15,21 +13,7 @@ var Screen = (function(){
     {
         airconsole = new AirConsole();
         AirConsoleBus.init(airconsole);
-        DebugConsole.init(airconsole, true); // true for screen
-        canvas = document.getElementById("main_canvas");
-        context = canvas.getContext("2d");
-        Sprite.init(canvas, context);
-
-        // example of vibrate request
-        var contador = 0;
-        setInterval(function(){
-          setSubtitleText("contador: " + contador % 5);
-          if(contador++ % 5 == 0)
-          {
-              var packet = { header : AirConsoleBus.ON_VIBRATE_REQUEST, pattern: [50, 10, 50, 10, 50] };
-              airconsole.broadcast(JSON.stringify(packet));
-          }
-        }, 1000);
+        DebugConsole.init(airconsole, true /* isScreen */);
     }
 
     /** @func setLogoVisibility
@@ -50,22 +34,6 @@ var Screen = (function(){
     {
         document.getElementById("subtitles_label")
         .innerHTML = text;
-    }
-
-    /** @func render
-      * @desc It renders the scene, called from Screen.update
-      */
-    function render()
-    {
-
-    }
-
-    /** @func update
-      * @desc called before each frame to update the scene
-      */
-    function update()
-    {
-        render();
     }
 
     return { init : init,

@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: AirConsoleBus.js</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: AirConsoleBus.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>
 /**
   * @module AirConsoleBus
   * @desc since airconsole only allows to set one single listener for each event
@@ -34,13 +6,23 @@
   */
 var AirConsoleBus = (function(){
 
+    // airconsole raw events
     const ON_MESSAGE = 0;
     const ON_CONNECT = 1;
     const ON_DISCONNECT = 2;
-    const ON_READY   = 3;
+    const ON_READY = 3;
+
+    // standar events
+    const ON_DEBUG = 4;
+    const ON_GAMEPAD_EVENT = 5;
+    const ON_VIBRATE_REQUEST = 6;
+    const ON_RING_REQUEST = 7;
+
+    // game specific events
+    // TBD
 
     var airconsole;
-    var callbacks = [ [], [], [], [] ];
+    var callbacks = [ [], [], [], [], [], [], [], [] ];
 
     /**
       * @func init
@@ -53,6 +35,7 @@ var AirConsoleBus = (function(){
         airconsole.onMessage = triggerOnMessage;
         airconsole.onConnect = triggerOnConnect;
         airconsole.onDisconnect = triggerOnDisconnect;
+        on("message", inner_OnMessage);
     }
 
     /**
@@ -66,10 +49,14 @@ var AirConsoleBus = (function(){
         var e;
         switch(evt)
         {
-            case "message"    : e = ON_MESSAGE; break;
-            case "connect"    : e = ON_CONNECT; break;
-            case "disconnect" : e = ON_DISCONNECT; break;
-            case "ready"      : e = ON_READY; break;
+            case "message"        : e = ON_MESSAGE; break;
+            case "connect"        : e = ON_CONNECT; break;
+            case "disconnect"     : e = ON_DISCONNECT; break;
+            case "ready"          : e = ON_READY; break;
+            case "debug"          : e = ON_DEBUG; break;
+            case "gamepadevent"   : e = ON_GAMEPAD_EVENT; break;
+            case "vibraterequest" : e = ON_VIBRATE_REQUEST; break;
+            case "ringrequest"    : e = ON_RING_REQUEST; break;
         }
         addEventListener(e, callback);
     }
@@ -94,7 +81,7 @@ var AirConsoleBus = (function(){
     function removeEventListener(event, callback)
     {
     	var i, l = callbacks[event].length;
-    	for(i = 0; i &lt; l; i++)
+    	for(i = 0; i < l; i++)
     	{
             if(callbacks[event] == callback)
             {
@@ -106,7 +93,7 @@ var AirConsoleBus = (function(){
     function triggerOnMessage(from, message)
     {
         var i, l = callbacks[ON_MESSAGE].length;
-        for(i = 0; i &lt; l; i++)
+        for(i = 0; i < l; i++)
         {
         	callbacks[ON_MESSAGE][i](from, message);
         }
@@ -115,7 +102,7 @@ var AirConsoleBus = (function(){
     function triggerOnConnect(device_id)
     {
         var i, l = callbacks[ON_CONNECT].length;
-        for(i = 0; i &lt; l; i++)
+        for(i = 0; i < l; i++)
         {
         	callbacks[ON_CONNECT][i](device_id);
         }
@@ -124,39 +111,40 @@ var AirConsoleBus = (function(){
     function triggerOnDisconnect(device_id)
     {
         var i, l = callbacks[ON_DISCONNECT].length;
-        for(i = 0; i &lt; l; i++)
+        for(i = 0; i < l; i++)
         {
         	callbacks[ON_DISCONNECT][i](device_id);
         }
     }
 
+    function triggerCustomEvent(event, params)
+    {
+        var i, l = callbacks[event].length;
+        for(i = 0; i < l; i++)
+        {
+          callbacks[event][i](params);
+        }
+    }
+
+    function inner_OnMessage(from, message)
+    {
+        var packet = { };
+        try
+        {
+            packet = JSON.parse(message); 
+            triggerCustomEvent(packet.header, packet);
+        } catch(e) { }
+    }
+
     return { init                : init,
              on                  : on,
-             addEventListener    : addEventListener, 
+             addEventListener    : addEventListener,
              removeEventListener : removeEventListener,
              ON_MESSAGE          : ON_MESSAGE,
              ON_CONNECT          : ON_CONNECT,
-             ON_DISCONNECT       : ON_DISCONNECT };
-})();</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Screen.html">Screen</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 14 2017 11:48:32 GMT-0800 (Hora estándar Pacífico (México))
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>
+             ON_DISCONNECT       : ON_DISCONNECT,
+             ON_DEBUG            : ON_DEBUG,
+             ON_GAMEPAD_EVENT    : ON_GAMEPAD_EVENT,
+             ON_VIBRATE_REQUEST  : ON_VIBRATE_REQUEST,
+             ON_RING_REQUEST     : ON_RING_REQUEST };
+})();
