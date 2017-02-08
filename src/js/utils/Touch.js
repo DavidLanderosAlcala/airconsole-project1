@@ -163,6 +163,8 @@ var Touch = (function() {
     function validateCoords(elem, x, y)
     {
         var rect = elem.getBoundingClientRect();
+        x = x -rect.x;
+        y = x -rect.y;
         if(x < 0) x = 0;
         if(y < 0) y = 0;
         if(x > rect.width) x =  rect.width;
