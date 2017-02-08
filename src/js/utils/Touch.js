@@ -164,7 +164,7 @@ var Touch = (function() {
     {
         var rect = elem.getBoundingClientRect();
         x = x -rect.left;
-        y = x -rect.top;
+        y = y -rect.top;
         if(x < 0) x = 0;
         if(y < 0) y = 0;
         if(x > rect.width) x =  rect.width;
