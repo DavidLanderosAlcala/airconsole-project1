@@ -24,13 +24,22 @@ class Sprite {
         this.current_time = new Date().getTime();
         this.time_stamp = 0;
         this.img = new Image();
+        var self = this;
+        this.img.onload = function() {
+            self.callback();
+            if(self.width == undefined)
+            {
+                self.width = self.img.width / self.frame_count;
+            }
+            if(self.height == undefined)
+            {
+                self.height = self.img.height;
+            }
+        };
+        this.img.onerror = function() {
+            self.callback({ message : "couldn't load the image" });
+        }
         this.img.src = this.filename;
-        this.img.addEventListener("onload", function() {
-            callback();
-        });
-        this.img.addEventListener("onerror", function() {
-            callback({ message : "couldn't load the image" });
-        });
    }
 
     /**
