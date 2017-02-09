@@ -14,6 +14,11 @@ var Screen = (function(){
         airconsole = new AirConsole();
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, true /* isScreen */);
+        AirConsoleBus.on("gamepadevent", function(e){
+
+          console.log(e);
+
+        });
     }
 
     /** @func setLogoVisibility

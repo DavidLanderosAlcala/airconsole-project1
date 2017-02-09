@@ -5,7 +5,6 @@
 var Controller = (function(){
 
     var airconsole;
-    var clicked = false;
 
     /** @func init
       * @desc Called when the DOM is loaded
@@ -18,26 +17,29 @@ var Controller = (function(){
         
         AirConsoleBus.on("vibraterequest", onVibrateRequest);
         AirConsoleBus.on("ringrequest", onRingRequest);
-        setupButtons();
+
+        Touchpad.init("#touchpad", onTouchpadEvent);
+        Touch.button("#button", onButtonEvent);
     }
 
-    function setupButtons()
+    function onTouchpadEvent(e)
     {
-        Touch.button(".button", function(e) {
+        var packet = {
+            header: AirConsoleBus.ON_GAMEPAD_EVENT,
+            key : "touchpad",
+            value : e, // this is vector (x,y)
+        }
+        airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
+    }
 
-            DebugConsole.log("Button: " + e.sender.id + " has been " + (e.isPressed ? "pressed" : "released") );
-
-            if(e.isPressed)
-            {
-                navigator.vibrate(100);
-                e.sender.className += " pressed";
-            }
-            else
-            {
-                e.sender.className = e.sender.className.replace(" pressed","");
-            }
-
-        });
+    function onButtonEvent(e)
+    {
+        var packet = {
+            header: AirConsoleBus.ON_GAMEPAD_EVENT,
+            key : "pad_a",
+            value : e.isPressed ? 1 : 0,
+        }
+        airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
     }
 
     function onVibrateRequest(data)
