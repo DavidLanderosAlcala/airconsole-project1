@@ -4,6 +4,11 @@
   */
 var Screen = (function(){
 
+     var cursor = {
+       x : 0, y: 0,
+       isPressed : false,
+     }
+
     var airconsole;
 
     /** @func init
@@ -15,10 +20,43 @@ var Screen = (function(){
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, true /* isScreen */);
         AirConsoleBus.on("gamepadevent", function(e){
+            if(e.key == "touchpad")
+            {
+                cursor.x += e.value.x;
+                cursor.y += e.value.y;
+                CrayonPhysics.onMouseMove({clientX : cursor.x, clientY : cursor.y });
+                if(cursor.isPressed)
+                {
+                  CrayonPhysics.onTouchEvent({
+                      type :  "touchmove",
+                      x : cursor.x,
+                      y : cursor.y
+                  });
+                }
+            }
+            else if(e.key == "pad_a") {
 
-          console.log(e);
+              cursor.isPressed = e.value == 1 ? true : false;
+
+              CrayonPhysics.onTouchEvent({
+                  type :  e.value == 1 ? "touchstart" : "touchend",
+                  x : cursor.x,
+                  y : cursor.y
+              });
+            }
+
 
         });
+
+        var canvas = document.querySelector("canvas");
+        var context = canvas.getContext("2d");
+
+        CrayonPhysics.init({
+          canvas : canvas,
+          context : context,
+        });
+        //setLogoVisibility(false);
+        setSubtitleText("");
     }
 
     /** @func setLogoVisibility

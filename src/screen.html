@@ -5,14 +5,20 @@
         <title>Screen</title>
     </head>
     <body>
-    	<div width="640px" height="480px" class="main_container" >  </div>
-    	<img src="./res/img/logo.png" class="main_logo" id="main_logo"/>
+    	<!--<div width="640px" height="480px" class="main_container" >-->
+        <canvas width="800px" height="600px"> </canvas>
+      <!--</div> -->
+    	  <!-- <img src="./res/img/logo.png" class="main_logo" id="main_logo"/> -->
         <label id="subtitles_label"> Your text goes here </label>
+        <script src="https://rawgit.com/schteppe/poly-decomp.js/master/build/decomp.min.js"></script>
+        <script src="https://rawgit.com/liabru/matter-js/master/build/matter.min.js"></script>
         <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.4.0.js"></script>
         <script type="text/javascript" src="./js/utils/Utils.js"></script>
+        <script type="text/javascript" src="./js/utils/Touch.js"></script>
         <script type="text/javascript" src="./js/framework/AirConsoleBus.js"></script>
         <script type="text/javascript" src="./js/framework/DebugConsole.js"></script>
-        <script type="text/javascript" src="./js/utils/Sprite.js"></script>
+        <script type="text/javascript" src="./js/PolyCompressor.js"></script>
+        <script type="text/javascript" src="./js/CrayonPhysics.js"></script>
         <script type="text/javascript" src="./js/Screen.js"></script>
     </body>
 </html>

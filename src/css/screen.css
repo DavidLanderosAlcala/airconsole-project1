@@ -1,4 +1,14 @@
 
+canvas
+{
+    width: 800px;
+    height: 600px;
+    position: absolute;
+    left: 50%;
+    top : 50%;
+    margin: -300px 0 0 -400px;
+}
+
 div.main_container {
     position : absolute;
 	width    : 640px;

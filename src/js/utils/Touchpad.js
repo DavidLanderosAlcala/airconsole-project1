@@ -6,12 +6,12 @@ var Touchpad = (function(){
 
     var last_pos = null;
     var onmove_callback = null;
-    
+
     /** @func surface
       * @desc converts DOM elements into touchpad and installs an event listener
       * @param selector {string} the CSS selector to hook the DOM elements
       * @param callback {function} called for each event ocurred in the touchpad
-      */    
+      */
     function init(selector, callback)
     {
         onmove_callback = callback;
@@ -26,7 +26,7 @@ var Touchpad = (function(){
         if(r > 4) return 4;
         return r;
     }
-    
+
     function onTouchEvent(e)
     {
         if(e.type == "touchend")
@@ -48,9 +48,9 @@ var Touchpad = (function(){
                y : (e.y - last_pos.y)
             };
             var length = Math.sqrt(disp.x * disp.x + disp.y * disp.y);
-            var scale = f(length);
-            disp.x *= scale;
-            disp.y *= scale;
+            //var scale = f(length);
+            //disp.x *= scale;
+            //disp.y *= scale;
             onmove_callback(disp);
             last_pos.x = e.x;
             last_pos.y = e.y;

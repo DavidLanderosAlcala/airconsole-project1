@@ -88,10 +88,12 @@ var Touch = (function() {
 
         if(Utils.isMobileNavigator())
         {
+            var identifier = 0;
             element.addEventListener("touchstart", function(e) {
                 e.preventDefault();
                 event.type = "touchstart";
                 var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                identifier = e.changedTouches[0].identifier;
                 event.x = coords.x;
                 event.y = coords.y;
                 callback(event);
@@ -107,7 +109,8 @@ var Touch = (function() {
             element.addEventListener("touchmove", function(e) {
                 e.preventDefault();
                 event.type = "touchmove";
-                var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                var t = getTouchById(e.changedTouches, identifier);
+                var coords = validateCoords(element, t.clientX, t.clientY);
                 event.x = coords.x;
                 event.y = coords.y;
                 callback(event);
@@ -158,6 +161,16 @@ var Touch = (function() {
                 }
             });
         }
+    }
+
+    function getTouchById(array, id)
+    {
+       for(var i = 0; i < array.length; i++)
+       {
+          if(array[i].identifier == id)
+              return array[i];
+       }
+       return array[0];
     }
 
     function validateCoords(elem, x, y)
