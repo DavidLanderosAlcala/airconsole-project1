@@ -29,7 +29,7 @@ var Controller = (function(){
             key : "touchpad",
             value : e, // this is vector (x,y)
         }
-        var packet2 =  Packet.pack(packet);
+        var packet2 =  GamepadEventCompressor.compress(packet);
         airconsole.message(AirConsole.SCREEN, packet2);
     }
 
@@ -40,7 +40,7 @@ var Controller = (function(){
             key : "pad_a",
             value : e.isPressed ? 1 : 0,
         }
-        var packet2 =  Packet.pack(packet);
+        var packet2 =  GamepadEventCompressor.compress(packet);
         airconsole.message(AirConsole.SCREEN, packet2);
 
         // ~~~~~~~~ Visual Effect ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

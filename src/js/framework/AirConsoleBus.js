@@ -137,7 +137,8 @@ var AirConsoleBus = (function(){
             }
             else
             {
-                packet = Packet.parse(message);
+                DebugConsole.log(message);
+                packet = GamepadEventCompressor.uncompress(message);
             }
             triggerCustomEvent(packet.header, packet);
         } catch(e) { }
