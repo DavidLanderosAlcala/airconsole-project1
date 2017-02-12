@@ -24,6 +24,13 @@ var Screen = (function(){
             {
                 cursor.x += e.value.x;
                 cursor.y += e.value.y;
+
+                if(cursor.x < 0 ) cursor.x = 0;
+                if(cursor.y < 0 ) cursor.y = 0;
+                if(cursor.x > 800 ) cursor.x = 800;
+                if(cursor.y > 600 ) cursor.y = 600;
+
+
                 CrayonPhysics.onMouseMove({clientX : cursor.x, clientY : cursor.y });
                 if(cursor.isPressed)
                 {

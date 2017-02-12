@@ -29,7 +29,8 @@ var Controller = (function(){
             key : "touchpad",
             value : e, // this is vector (x,y)
         }
-        airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
+        var packet2 =  Packet.pack(packet);
+        airconsole.message(AirConsole.SCREEN, packet2);
     }
 
     function onButtonEvent(e)
@@ -39,7 +40,8 @@ var Controller = (function(){
             key : "pad_a",
             value : e.isPressed ? 1 : 0,
         }
-        airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
+        var packet2 =  Packet.pack(packet);
+        airconsole.message(AirConsole.SCREEN, packet2);
 
         // ~~~~~~~~ Visual Effect ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
         if(e.isPressed)

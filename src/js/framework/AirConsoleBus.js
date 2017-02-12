@@ -131,7 +131,14 @@ var AirConsoleBus = (function(){
         var packet = { };
         try
         {
-            packet = JSON.parse(message); 
+            if(message[0] == '{') // is it a JSON ?
+            {
+                packet = JSON.parse(message); 
+            }
+            else
+            {
+                packet = Packet.parse(message);
+            }
             triggerCustomEvent(packet.header, packet);
         } catch(e) { }
     }
