@@ -18,13 +18,12 @@ var Touchpad = (function(){
         Touch.surface(selector, onTouchEvent);
     }
 
-    function f(x)
+    function normalize(value)
     {
-        var r = 1.0000000000000002e+000 * Math.pow(x,0)
-        + -7.4999999999999734e-002 * Math.pow(x,1)
-        +  3.7499999999999971e-002 * Math.pow(x,2);
-        if(r > 4) return 4;
-        return r;
+        var max = 100;
+        if(value > max) return 1.0;
+        if(value < -max) return -1.0;
+        return value / max;
     }
 
     function onTouchEvent(e)
@@ -47,10 +46,8 @@ var Touchpad = (function(){
                x : (e.x - last_pos.x),
                y : (e.y - last_pos.y)
             };
-            var length = Math.sqrt(disp.x * disp.x + disp.y * disp.y);
-            //var scale = f(length);
-            //disp.x *= scale;
-            //disp.y *= scale;
+            disp.x = normalize(disp.x);
+            disp.y = normalize(disp.y);
             onmove_callback(disp);
             last_pos.x = e.x;
             last_pos.y = e.y;

@@ -22,8 +22,8 @@ var Screen = (function(){
         AirConsoleBus.on("gamepadevent", function(e){
             if(e.key == "touchpad")
             {
-                cursor.x += e.value.x;
-                cursor.y += e.value.y;
+                cursor.x += e.value.x * 100;
+                cursor.y += e.value.y * 100;
 
                 if(cursor.x < 0 ) cursor.x = 0;
                 if(cursor.y < 0 ) cursor.y = 0;

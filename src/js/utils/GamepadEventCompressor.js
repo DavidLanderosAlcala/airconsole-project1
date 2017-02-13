@@ -54,15 +54,14 @@ var GamepadEventCompressor = (function(){
 
 	function floatToBuffer(floatValue)
 	{
-        var num = ((floatValue * 100) + 32768)|0;
-        return String.fromCharCode(num & 0xff00) +
-               String.fromCharCode(num & 0x00ff);
+        var num = ((floatValue * 100) + 100)|0;
+        return String.fromCharCode(num);
 	}
 
-	function bufferToFloat(char1, char2)
+	function bufferToFloat(char1)
 	{
-        var num = char1.charCodeAt(0) + char2.charCodeAt(0);
-        return parseFloat(((num - 32768) / 100).toFixed(2));
+        var num = char1.charCodeAt(0)
+        return parseFloat(((num - 100) / 100).toFixed(2));
 	}
 
 	function uncompress(buffer)
@@ -77,8 +76,8 @@ var GamepadEventCompressor = (function(){
         if(keycode >= 10) // analogic value
         {
             json.value = {
-            	x : bufferToFloat(buffer[1], buffer[2]),
-            	y : bufferToFloat(buffer[3], buffer[4]),
+            	x : bufferToFloat(buffer[1]),
+            	y : bufferToFloat(buffer[2])
             };
         }
 
