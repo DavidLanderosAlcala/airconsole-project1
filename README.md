@@ -13,4 +13,4 @@
 - https://rawgit.com/DavidLanderosAlcala/airconsole-project1/master/doc/index.html
 
 ##### Try a stable revision
-- http://airconsole.com/#http://rawgit.com/DavidLanderosAlcala/airconsole-project1/dc8396272598f1c144fc40de3fcef5f16344af85/src/
+- https://www.airconsole.com/#https://rawgit.com/DavidLanderosAlcala/airconsole-project1/09fe6476e49994f0af3c8afada8a5d479f484973/src/
