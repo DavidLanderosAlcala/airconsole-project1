@@ -1,12 +1,15 @@
 
 canvas
 {
+	background-image: url(http://paper-backgrounds.com/textureimages/2012/06/yellow-aged-paper-background-hd.jpg);
+	background-size: 800px 600px;
     width: 800px;
     height: 600px;
     position: absolute;
     left: 50%;
     top : 50%;
     margin: -300px 0 0 -400px;
+    cursor: none;
 }
 
 div.main_container {

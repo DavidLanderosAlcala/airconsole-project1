@@ -51,18 +51,14 @@ var Screen = (function(){
                   y : cursor.y
               });
             }
-
-
         });
-
-        var canvas = document.querySelector("canvas");
-        var context = canvas.getContext("2d");
 
         CrayonPhysics.init({
-          canvas : canvas,
-          context : context,
+            canvas : document.querySelector("canvas"),
+            width  : 800,
+            height : 600,
         });
-        //setLogoVisibility(false);
+
         setSubtitleText("");
     }
 
