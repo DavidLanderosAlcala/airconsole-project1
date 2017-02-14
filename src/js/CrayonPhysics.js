@@ -10,6 +10,8 @@ var CrayonPhysics = (function(){
   /* variables */
   var canvas;
   var context;
+  var canvas_left;
+  var canvas_top;
   var crayon_pos;
   var crayon_img;
   var engine;
@@ -29,6 +31,8 @@ var CrayonPhysics = (function(){
       canvas = options.canvas;
       canvas.width = options.width == undefined ? default_canvas_width : options.width;
       canvas.height = options.height == undefined ? default_canvas_height : options.height;
+      canvas_left = canvas.getBoundingClientRect().left;
+      canvas_top = canvas.getBoundingClientRect().top;
       context = canvas.getContext("2d");
 
       blue_crayon_pattern.img = new Image();
@@ -130,8 +134,7 @@ var CrayonPhysics = (function(){
 
   function onMouseMove(e)
   {
-      var rect = canvas.getBoundingClientRect();
-      updateCursorPosition(e.clientX - rect.left, e.clientY - rect.top);
+      updateCursorPosition(e.clientX - canvas_left, e.clientY - canvas_top);
   }
 
   function updateCursorPosition(x, y)
