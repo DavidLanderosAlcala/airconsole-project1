@@ -5,7 +5,7 @@
 var Screen = (function(){
 
      var cursor = {
-       x : 0, y: 0,
+       x : 400, y: 300,
        isPressed : false,
      }
 
@@ -30,8 +30,8 @@ var Screen = (function(){
                 if(cursor.x > 800 ) cursor.x = 800;
                 if(cursor.y > 600 ) cursor.y = 600;
 
+                CrayonPhysics.updateCursorPosition( cursor.x, cursor.y);
 
-                CrayonPhysics.onMouseMove({clientX : cursor.x, clientY : cursor.y });
                 if(cursor.isPressed)
                 {
                   CrayonPhysics.onTouchEvent({

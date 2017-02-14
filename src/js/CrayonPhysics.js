@@ -131,8 +131,13 @@ var CrayonPhysics = (function(){
   function onMouseMove(e)
   {
       var rect = canvas.getBoundingClientRect();
-      crayon_pos.x =  e.clientX - rect.left;
-      crayon_pos.y =  e.clientY - rect.top;
+      updateCursorPosition(e.clientX - rect.left, e.clientY - rect.top);
+  }
+
+  function updateCursorPosition(x, y)
+  {
+       crayon_pos.x = x;
+       crayon_pos.y = y;
   }
 
   function onTouchEvent(e)
@@ -174,6 +179,6 @@ var CrayonPhysics = (function(){
 
   return {  init : init,
             onTouchEvent : onTouchEvent,
-            onMouseMove : onMouseMove };
+            updateCursorPosition : updateCursorPosition };
 
 })();
