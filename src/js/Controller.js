@@ -35,13 +35,17 @@ var Controller = (function(){
 
     function onButtonEvent(e)
     {
+        var key = "pad_a";
+        if(e.sender.className.indexOf("selectButton") == 0) {
+            key = "pad_select";
+        }
         var packet = {
             header: AirConsoleBus.ON_GAMEPAD_EVENT,
-            key : "pad_a",
+            key : key,
             value : e.isPressed ? 1 : 0,
         }
-        var packet2 =  GamepadEventCompressor.compress(packet);
-        airconsole.message(AirConsole.SCREEN, packet2);
+        var compressed =  GamepadEventCompressor.compress(packet);
+        airconsole.message(AirConsole.SCREEN, compressed);
 
         // ~~~~~~~~ Visual Effect ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
         if(e.isPressed)
