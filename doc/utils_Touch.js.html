@@ -73,41 +73,144 @@ var Touch = (function() {
             sender : element,
             isPressed : false,
         };
-
-        element.addEventListener("touchstart", function(e) {
-            event.isPressed = true;
-            callback(event);
-        });
-
-        element.addEventListener("mousedown", function(e) {
-            event.isPressed = true;
-            //callback(event);
-        });
-
-        element.addEventListener("touchend", function(e) {
-            event.isPressed = false;
-            callback(event);
-        });
-
-        element.addEventListener("mouseup", function(e) {
-            event.isPressed = false;
-            //callback(event);
-        });
-
-        element.addEventListener("mouseleave", function(e) {
-            event.isPressed = false;
-            //callback(event);
-        });
-
-        element.addEventListener("touchcancel", function(e) {
-            event.isPressed = false;
-            callback(event);
-        });
+        if(Utils.isMobileNavigator())
+        {
+            element.addEventListener("touchstart", function(e) {
+                event.isPressed = true;
+                callback(event);
+            });
+            element.addEventListener("touchend", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+            element.addEventListener("touchcancel", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+        }
+        else
+        {
+            element.addEventListener("mousedown", function(e) {
+                event.isPressed = true;
+                callback(event);
+            });
+            element.addEventListener("mouseup", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+            element.addEventListener("mouseleave", function(e) {
+                event.isPressed = false;
+                callback(event);
+            });
+        }
     }
 
     function hookAllEventsForSurface(element, callback)
     {
-        // TO DO
+        var event = {
+            sender : element,
+            type : "none",
+            x : 0,
+            y : 0,
+        }
+
+        if(Utils.isMobileNavigator())
+        {
+            var identifier = 0;
+            element.addEventListener("touchstart", function(e) {
+                e.preventDefault();
+                event.type = "touchstart";
+                var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                identifier = e.changedTouches[0].identifier;
+                event.x = coords.x;
+                event.y = coords.y;
+                callback(event);
+            }, false);
+            element.addEventListener("touchend", function(e) {
+                e.preventDefault();
+                event.type = "touchend";
+                var coords = validateCoords(element, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                event.x = coords.x;
+                event.y = coords.y;
+                callback(event);
+            }, false);
+            element.addEventListener("touchmove", function(e) {
+                e.preventDefault();
+                event.type = "touchmove";
+                var t = getTouchById(e.changedTouches, identifier);
+                var coords = validateCoords(element, t.clientX, t.clientY);
+                event.x = coords.x;
+                event.y = coords.y;
+                callback(event);
+            }, false);
+        }
+        else
+        {
+            var __isPressed = false;
+            element.addEventListener("mousedown", function(e) {
+                e.preventDefault();
+                __isPressed = true;
+                event.type = "touchstart";
+                var coords = validateCoords(element, e.clientX, e.clientY);
+                event.x = coords.x;
+                event.y = coords.y;
+                callback(event);
+            });
+            element.addEventListener("mouseup", function(e) {
+                e.preventDefault();
+                __isPressed = false;
+                event.type = "touchend";
+                var coords = validateCoords(element, e.clientX, e.clientY);
+                event.x = coords.x;
+                event.y = coords.y;
+                callback(event);
+            });
+            element.addEventListener("mouseleave", function(e) {
+                e.preventDefault();
+                if(__isPressed)
+                {
+                    __isPressed = false;
+                    event.type = "touchend";
+                    var coords = validateCoords(element, e.clientX, e.clientY);
+                    event.x = coords.x;
+                    event.y = coords.y;
+                    callback(event);
+                }
+            });
+            element.addEventListener("mousemove", function(e) {
+                e.preventDefault();
+                if(__isPressed)
+                {
+                    event.type = "touchmove";
+                    var coords = validateCoords(element, e.clientX, e.clientY);
+                    event.x = coords.x;
+                    event.y = coords.y;
+                    callback(event);
+                }
+            });
+        }
+    }
+
+    function getTouchById(array, id)
+    {
+       for(var i = 0; i &lt; array.length; i++)
+       {
+          if(array[i].identifier == id)
+              return array[i];
+       }
+       return array[0];
+    }
+
+    function validateCoords(elem, x, y)
+    {
+        var rect = elem.getBoundingClientRect();
+        x = x -rect.left;
+        y = y -rect.top;
+        if(x &lt; 0) x = 0;
+        if(y &lt; 0) y = 0;
+        if(x > rect.width) x =  rect.width;
+        if(y > rect.height) y = rect.height;
+        return { x : x, y : y };
     }
 
 	return { button  : button,
@@ -123,13 +226,13 @@ var Touch = (function() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-PolyCompressor.html">PolyCompressor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 26 2017 14:47:07 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Feb 16 2017 12:39:47 GMT-0800 (Pacific Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

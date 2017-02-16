@@ -1,11 +1,17 @@
 
-
+/**
+  * @module PolyCompressor
+  */
 var PolyCompressor = (function(){
 
     var invalid_dot_product = -1.0;
     var umbral = 0.1;
 	var polygon;
 
+    /** @func compress
+      * @desc remove useless vertices and returns a new polygon (work in progress)
+      * @param _polygon {array} array of vertices { x : ?, y : ? }
+      */
 	function compress(_polygon)
 	{
 		polygon = _polygon;

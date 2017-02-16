@@ -1,5 +1,7 @@
 
-
+/**
+  * @module GamepadEventCompressor
+  */
 var GamepadEventCompressor = (function(){
 
 	var header_mask = 0xE0;  // 1110 0000 ~ 7
@@ -21,7 +23,7 @@ var GamepadEventCompressor = (function(){
 
 	    // analogics
 	    "left_stick",
-	    "right_stick",	    
+	    "right_stick",
 	    "touchpad",
 	];
 
@@ -36,7 +38,12 @@ var GamepadEventCompressor = (function(){
         return 0;
 	}
 
-	function compress(json)
+    /** @func compress
+      * @desc reduce a js object (representing a gamepad event) to a 1 byte length packet for digital
+      * input and 3 bytes length packet for analogic input.
+      * @param event {object} the gamepad event object
+      */
+	function compress(event)
 	{
         var i32_header = json.header << 5;
         var keyCode = getKeyCode(json.key);
@@ -64,6 +71,10 @@ var GamepadEventCompressor = (function(){
         return parseFloat(((num - 100) / 100).toFixed(2));
 	}
 
+    /** @func uncompress
+      * @desc produce a js object (representing a gamepad event) from a compressed packet
+      * @param buffer {string} the compressed packet
+      */
 	function uncompress(buffer)
 	{
         var json = {

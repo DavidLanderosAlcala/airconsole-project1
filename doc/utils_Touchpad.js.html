@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: framework/DebugConsole.js</title>
+    <title>JSDoc: Source: utils/Touchpad.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: framework/DebugConsole.js</h1>
+    <h1 class="page-title">Source: utils/Touchpad.js</h1>
 
     
 
@@ -28,47 +28,60 @@
         <article>
             <pre class="prettyprint source linenums"><code>
 /**
-  * @module DebugConsole
+  * @Module Touchpad
   */
-var DebugConsole = (function(){
+var Touchpad = (function(){
 
-  var airconsole;
-  var isScreen;
+    var last_pos = null;
+    var onmove_callback = null;
 
-  /** @func init
-    * @desc Called from Screen.init and Controller.init.
-    * It prepares everything to log events on the screen´s console
-    * @param {object} airconsole the AirConsole instance to be used
-    * @param {boolean} isScreen must be true for the screen and false for each controller
-    */
-  function init(_airconsole, _isScreen)
-  {
-      isScreen = _isScreen;
-      airconsole = _airconsole;
-      AirConsoleBus.on("debug", function(info) {
-          console.log("CONTROLLER : " + info.message);
-      });
-  }
+    /** @func surface
+      * @desc converts DOM elements into touchpad and installs an event listener
+      * @param selector {string} the CSS selector to hook the DOM elements
+      * @param callback {function} called for each event ocurred in the touchpad
+      */
+    function init(selector, callback)
+    {
+        onmove_callback = callback;
+        Touch.surface(selector, onTouchEvent);
+    }
 
-  /** @func log
-   * @desc Shows a message on the screen's console
-   * @param {string} message The message to be logged
-   */
-  function log(message)
-  {
-      if(isScreen)
-      {
-          console.log("SCREEN : " + message);
-      }
-      else
-      {
-           var packet = { header: AirConsoleBus.ON_DEBUG, message : message };
-           airconsole.message(AirConsole.SCREEN, JSON.stringify(packet));
-      }
-  }
+    function normalize(value)
+    {
+        var max = 100;
+        if(value > max) return 1.0;
+        if(value &lt; -max) return -1.0;
+        return value / max;
+    }
 
-  return { init : init,
-           log  : log   };
+    function onTouchEvent(e)
+    {
+        if(e.type == "touchend")
+        {
+            last_pos = null;
+            return;
+        }
+        if(last_pos == null)
+        {
+            last_pos = {
+                x : e.x,
+                y : e.y
+            };
+        }
+        else
+        {
+            var disp = {
+               x : (e.x - last_pos.x),
+               y : (e.y - last_pos.y)
+            };
+            disp.x = normalize(disp.x);
+            disp.y = normalize(disp.y);
+            onmove_callback(disp);
+            last_pos.x = e.x;
+            last_pos.y = e.y;
+        }
+    }
+    return { init : init };
 })();
 </code></pre>
         </article>
