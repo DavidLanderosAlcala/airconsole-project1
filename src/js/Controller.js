@@ -49,7 +49,7 @@ var Controller = (function(){
             if(e.isPressed)
             {
                 changeTool();
-                navigator.vibrate(100);
+                navigator.vibrate(50);
             }
         }
         else
