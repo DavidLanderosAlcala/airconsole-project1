@@ -34,10 +34,7 @@ var ColorManager = (function(){
 
    function getRandomColorIndex()
    {
-       last_index++;
-       if(last_index >= urls.length)
-           last_index = 0;
-       return last_index;
+       return Math.floor((Math.random() * 4));
    }
 
    function onImageLoaded(img)
