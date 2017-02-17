@@ -180,6 +180,26 @@ var CrayonPhysics = (function(){
       }
   }
 
+  function moveTo(pos)
+  {
+    
+  }
+
+  function lineTo()
+  {
+    
+  }
+
+  function tack()
+  {
+    
+  }
+
+  function erease()
+  {
+
+  }
+
   return {  init : init,
             onTouchEvent : onTouchEvent,
             updateCursorPosition : updateCursorPosition };
