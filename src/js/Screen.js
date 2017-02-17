@@ -48,6 +48,7 @@ var Screen = (function(){
                     CrayonPhysics.closePath();
                 }
             }
+
         });
 
         CrayonPhysics.init({

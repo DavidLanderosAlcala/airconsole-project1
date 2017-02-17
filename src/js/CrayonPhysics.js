@@ -189,12 +189,32 @@ var CrayonPhysics = (function(){
 
   function tack()
   {
-    
+      
   }
 
   function erease()
   {
+       var _bodies = Matter.Composite.allBodies(engine.world);
+       var _bodies = Matter.Query.point(_bodies, crayon_pos);
+       var i, l = _bodies.length;
+       for(i = 0; i < l; i++)
+       {
+           removeBody(_bodies[i]);
+       }
+  }
 
+  function removeBody(body)
+  {
+      Matter.World.remove(engine.world, [body]);
+      var i, l = bodies.length;
+      for(i = 0; i < l; i++)
+      {
+          if(body.id == bodies[i].body.id)
+          {
+              bodies.splice(i,1);
+              return;
+          }
+      }      
   }
 
   return {  init         : init,
