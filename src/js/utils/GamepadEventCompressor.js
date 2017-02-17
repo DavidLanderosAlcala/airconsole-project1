@@ -45,18 +45,18 @@ var GamepadEventCompressor = (function(){
       */
 	function compress(event)
 	{
-        var i32_header = json.header << 5;
-        var keyCode = getKeyCode(json.key);
+        var i32_header = event.header << 5;
+        var keyCode = getKeyCode(event.key);
         i32_header |= (keyCode << 1);
 
         if(keyCode < 10) // it's a digital value
         {
-            i32_header |= (json.value & 0x01);
+            i32_header |= (event.value & 0x01);
             return String.fromCharCode(i32_header);
         }
         return String.fromCharCode(i32_header) +
-               floatToBuffer(json.value.x) + 
-               floatToBuffer(json.value.y);
+               floatToBuffer(event.value.x) + 
+               floatToBuffer(event.value.y);
 	}
 
 	function floatToBuffer(floatValue)

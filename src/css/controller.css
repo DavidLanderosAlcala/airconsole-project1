@@ -60,11 +60,20 @@ body
     background-image: url(http://oi68.tinypic.com/jsbqqu.jpg);
 }
 
-.actionHint
+.actionHint[data-tool="pencil"]
 {
 	background-image: url(http://oi65.tinypic.com/2enx4iu.jpg);
 }
 
+.actionHint[data-tool="ereaser"]
+{
+	background-image: url(http://oi67.tinypic.com/670aye.jpg);
+}
+
+.actionHint[data-tool="tack"]
+{
+	background-image: url(http://oi68.tinypic.com/2aezb03.jpg);
+}
 
 .touchHint
 {

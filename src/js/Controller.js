@@ -5,6 +5,8 @@
 var Controller = (function(){
 
     var airconsole;
+    var current_tool_index;
+    var tools = [];
 
     /** @func init
       * @desc Called when the DOM is loaded
@@ -19,7 +21,12 @@ var Controller = (function(){
         AirConsoleBus.on("ringrequest", onRingRequest);
 
         Touchpad.init("#touchpad", onTouchpadEvent);
-        Touch.button(".button", onButtonEvent);             
+        Touch.button(".button", onButtonEvent);
+
+        current_tool_index = 0;
+        tools.push("pencil");
+        tools.push("ereaser");
+        tools.push("tack");
     }
 
     function onTouchpadEvent(e)
@@ -35,28 +42,44 @@ var Controller = (function(){
 
     function onButtonEvent(e)
     {
-        var key = "pad_a";
-        if(e.sender.className.indexOf("selectButton") == 0) {
+        var key;
+        if(e.sender.className.indexOf("selectButton") == 0)
+        {
             key = "pad_select";
+            if(e.isPressed)
+                changeTool();
         }
-        var packet = {
+        else
+        {
+            key = "pad_a";
+        }
+
+        var packet =
+        {
             header: AirConsoleBus.ON_GAMEPAD_EVENT,
             key : key,
             value : e.isPressed ? 1 : 0,
         }
-        var compressed =  GamepadEventCompressor.compress(packet);
+        var compressed = GamepadEventCompressor.compress(packet);
         airconsole.message(AirConsole.SCREEN, compressed);
-
-        // ~~~~~~~~ Visual Effect ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-        if(e.isPressed)
-            e.sender.className += " pressed";
-        else
-            e.sender.className = e.sender.className.replace(" pressed","");        
+        if(e.isPressed) e.sender.className += " pressed";
+        else e.sender.className = e.sender.className.replace(" pressed","");
     }
 
     function onVibrateRequest(data)
     {
         navigator.vibrate(data.pattern);
+    }
+
+    function changeTool()
+    {
+        current_tool_index++;
+        if(current_tool_index >= tools.length)
+        {
+            current_tool_index = 0;
+        }
+        document.querySelector(".actionHint")
+        .dataset.tool = tools[current_tool_index];
     }
 
     function onRingRequest(data)
