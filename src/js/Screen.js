@@ -30,26 +30,23 @@ var Screen = (function(){
                 if(cursor.x > 800 ) cursor.x = 800;
                 if(cursor.y > 600 ) cursor.y = 600;
 
-                CrayonPhysics.updateCursorPosition( cursor.x, cursor.y);
-
                 if(cursor.isPressed)
                 {
-                  CrayonPhysics.onTouchEvent({
-                      type :  "touchmove",
-                      x : cursor.x,
-                      y : cursor.y
-                  });
+                    CrayonPhysics.lineTo( cursor );
                 }
+                else
+                {
+                    CrayonPhysics.moveTo( cursor );
+                }
+
             }
-            else if(e.key == "pad_a") {
-
-              cursor.isPressed = e.value == 1 ? true : false;
-
-              CrayonPhysics.onTouchEvent({
-                  type :  e.value == 1 ? "touchstart" : "touchend",
-                  x : cursor.x,
-                  y : cursor.y
-              });
+            else if(e.key == "pad_a")
+            {
+                cursor.isPressed = e.value == 1 ? true : false;
+                if(!e.value)
+                {
+                    CrayonPhysics.closePath();
+                }
             }
         });
 

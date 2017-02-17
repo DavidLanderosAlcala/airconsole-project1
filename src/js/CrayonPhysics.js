@@ -123,66 +123,68 @@ var CrayonPhysics = (function(){
 
   function onMouseMove(e)
   {
-      updateCursorPosition(e.clientX - canvas_left, e.clientY - canvas_top);
-  }
-
-  function updateCursorPosition(x, y)
-  {
-       crayon_pos.x = x;
-       crayon_pos.y = y;
+      var pos = { x : e.clientX - canvas_left, y: e.clientY - canvas_top};
+      moveTo(pos);
   }
 
   function onTouchEvent(e)
   {
       if(e.type == "touchmove")
       {
-      	   if(current_color_index == -1)
-      	   {
-      	       current_color_index = ColorManager.getRandomColorIndex();
-      	   }
-           current_polygon.push({
-               x : e.x,
-               y : e.y,
-           });
+          lineTo(e);
       }
       else if(e.type == "touchend")
       {
-          if(current_polygon.length == 0)
-              return;
-          console.log(current_polygon.length + " vertices");
-          current_polygon = PolyCompressor.compress(current_polygon);
-          console.log(current_polygon.length + " vertices - compressed");
-          var centroid = Matter.Vertices.centre(current_polygon);
-          var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, current_polygon);
-          if(body == undefined)
-          {
-              current_polygon = [];
-              return;
-          };
-          var diff = {
-              x : body.vertices[0].x - current_polygon[0].x,
-              y : body.vertices[0].y - current_polygon[0].y,
-          };
-          bodies.push({
-              body : body,
-              vertices : current_polygon,
-              centroid: centroid,
-              color_index : current_color_index,
-          });
-          Matter.World.add(engine.world, [body]);
-          current_polygon = [];
-          current_color_index = -1;
+          closePath();
       }
   }
 
   function moveTo(pos)
   {
-    
+      crayon_pos.x = pos.x;
+      crayon_pos.y = pos.y;
   }
 
-  function lineTo()
+  function lineTo(pos)
   {
-    
+      if(current_color_index == -1)
+      {
+          current_color_index = ColorManager.getRandomColorIndex();
+      }
+      current_polygon.push({
+          x : pos.x,
+          y : pos.y,
+      });
+      moveTo(pos);
+  }
+
+  function closePath()
+  {
+      if(current_polygon.length == 0)
+          return;
+      console.log(current_polygon.length + " vertices");
+      current_polygon = PolyCompressor.compress(current_polygon);
+      console.log(current_polygon.length + " vertices - compressed");
+      var centroid = Matter.Vertices.centre(current_polygon);
+      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, current_polygon);
+      if(body == undefined)
+      {
+          current_polygon = [];
+          return;
+      };
+      var diff = {
+          x : body.vertices[0].x - current_polygon[0].x,
+          y : body.vertices[0].y - current_polygon[0].y,
+      };
+      bodies.push({
+          body : body,
+          vertices : current_polygon,
+          centroid: centroid,
+          color_index : current_color_index,
+      });
+      Matter.World.add(engine.world, [body]);
+      current_polygon = [];
+      current_color_index = -1;
   }
 
   function tack()
@@ -195,8 +197,12 @@ var CrayonPhysics = (function(){
 
   }
 
-  return {  init : init,
+  return {  init         : init,
             onTouchEvent : onTouchEvent,
-            updateCursorPosition : updateCursorPosition };
+            moveTo       : moveTo,
+            lineTo       : lineTo,
+            closePath    : closePath,
+            tack         : tack,
+            erease       : erease };
 
 })();

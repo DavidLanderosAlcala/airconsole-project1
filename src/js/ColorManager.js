@@ -2,9 +2,9 @@
 
 var ColorManager = (function(){
 
-    var context = null;
-    var patterns = [];
-	var urls = [
+  var context = null;
+  var patterns = [];
+  var urls = [
 	    "http://oi67.tinypic.com/2ugcwaa.jpg",
 	    "http://oi68.tinypic.com/2zyftwh.jpg",
 	    "http://oi68.tinypic.com/35cpedy.jpg", // "http://oi63.tinypic.com/beesme.jpg",
