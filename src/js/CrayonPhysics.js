@@ -2,7 +2,6 @@
 var CrayonPhysics = (function(){
 
   /* constants */
-  const blue_crayon_url       = "http://oi68.tinypic.com/2zyftwh.jpg";
   const pencil_image_url      = "http://oi65.tinypic.com/122jamb.jpg";
   const default_canvas_width  = 640;
   const default_canvas_height = 480;  
@@ -17,14 +16,9 @@ var CrayonPhysics = (function(){
   var engine;
   var bodies = [];
   var current_polygon = [];
+  var current_color_index = -1;
   var ground_info;
   var ground;
-
-  var blue_crayon_pattern =
-  {
-      img     : null,
-      pattern : "black"
-  }
 
   function init(options)
   {
@@ -35,12 +29,7 @@ var CrayonPhysics = (function(){
       canvas_top = canvas.getBoundingClientRect().top;
       context = canvas.getContext("2d");
 
-      blue_crayon_pattern.img = new Image();
-      blue_crayon_pattern.img.onload = function(){
-        blue_crayon_pattern.pattern =
-            context.createPattern(blue_crayon_pattern.img, "repeat");
-      };
-      blue_crayon_pattern.img.src =  blue_crayon_url;
+      ColorManager.init(context);
 
       crayon_img = new Image();
       crayon_img.src = pencil_image_url;
@@ -81,7 +70,7 @@ var CrayonPhysics = (function(){
       context.save();
       if(current_polygon.length > 1)
       {
-          context.strokeStyle = blue_crayon_pattern.pattern;
+          context.strokeStyle = ColorManager.getColorAt(current_color_index);
           context.lineWidth = 5;
           context.beginPath();
           context.moveTo(current_polygon[0].x, current_polygon[0].y);
@@ -97,7 +86,7 @@ var CrayonPhysics = (function(){
       context.save();
       context.translate(ground.position.x, ground.position.y);
       context.lineWidth = 5;
-      context.fillStyle = blue_crayon_pattern.pattern;
+      context.fillStyle = ColorManager.getColorAt(0);
       context.fillRect(
           -ground_info.width>>1,
           -ground_info.height>>1,
@@ -114,7 +103,7 @@ var CrayonPhysics = (function(){
           context.translate(bodies[i].body.position.x, bodies[i].body.position.y);
           context.rotate(bodies[i].body.angle);
           context.translate(-bodies[i].centroid.x, -bodies[i].centroid.y);
-          context.strokeStyle = blue_crayon_pattern.pattern;
+          context.strokeStyle = ColorManager.getColorAt(bodies[i].color_index);
           context.beginPath();
           context.moveTo(bodies[i].vertices[0].x, bodies[i].vertices[0].y);
           for(var j = 1; j < bodies[i].vertices.length; j++)
@@ -147,6 +136,10 @@ var CrayonPhysics = (function(){
   {
       if(e.type == "touchmove")
       {
+      	   if(current_color_index == -1)
+      	   {
+      	       current_color_index = ColorManager.getRandomColorIndex();
+      	   }
            current_polygon.push({
                x : e.x,
                y : e.y,
@@ -174,9 +167,11 @@ var CrayonPhysics = (function(){
               body : body,
               vertices : current_polygon,
               centroid: centroid,
+              color_index : current_color_index,
           });
           Matter.World.add(engine.world, [body]);
           current_polygon = [];
+          current_color_index = -1;
       }
   }
 
