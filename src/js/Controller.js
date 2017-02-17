@@ -47,7 +47,10 @@ var Controller = (function(){
         {
             key = "pad_select";
             if(e.isPressed)
+            {
                 changeTool();
+                navigator.vibrate(100);
+            }
         }
         else
         {
