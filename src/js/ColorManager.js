@@ -7,7 +7,7 @@ var ColorManager = (function(){
   var urls = [
 	    "http://oi67.tinypic.com/2ugcwaa.jpg",
 	    "http://oi68.tinypic.com/2zyftwh.jpg",
-	    "http://oi68.tinypic.com/35cpedy.jpg", // "http://oi63.tinypic.com/beesme.jpg",
+	    "http://oi66.tinypic.com/2lwkcpw.jpg",
 	    "http://oi67.tinypic.com/11sywid.jpg",
 	];
 	var last_index = 0;
