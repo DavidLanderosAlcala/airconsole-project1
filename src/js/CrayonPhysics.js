@@ -205,6 +205,8 @@ var CrayonPhysics = (function(){
 
   function removeBody(body)
   {
+  	  if(body.id == ground.id)
+  	      return;
       Matter.World.remove(engine.world, [body]);
       var i, l = bodies.length;
       for(i = 0; i < l; i++)
