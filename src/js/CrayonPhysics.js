@@ -2,7 +2,9 @@
 var CrayonPhysics = (function(){
 
   /* constants */
-  const pencil_image_url      = "http://oi65.tinypic.com/122jamb.jpg";
+  const pencil_image_url  = "http://oi65.tinypic.com/122jamb.jpg";
+  const ereaser_image_url = "http://oi67.tinypic.com/670aye.jpg";
+  const tack_image_url    = "http://oi68.tinypic.com/2aezb03.jpg";
   const default_canvas_width  = 640;
   const default_canvas_height = 480;  
 
@@ -19,6 +21,8 @@ var CrayonPhysics = (function(){
   var current_color_index = -1;
   var ground_info;
   var ground;
+  var tools = [];
+  var current_tool = 0;
 
   function init(options)
   {
@@ -31,8 +35,33 @@ var CrayonPhysics = (function(){
 
       ColorManager.init(context);
 
-      crayon_img = new Image();
-      crayon_img.src = pencil_image_url;
+      current_tool = 0;
+      /* Pencil
+       */
+      var tmp_img = new Image();
+      tmp_img.src = pencil_image_url;
+      tools.push({
+          img : tmp_img,
+          contact_point : { x : -2 , y : -95 }
+      });
+
+      /* Ereaser
+       */
+      tmp_img = new Image();
+      tmp_img.src = ereaser_image_url;
+      tools.push({
+          img : tmp_img,
+          contact_point : { x : -2 , y : -95 }
+      });
+
+      /* Tack
+       */
+      tmp_img = new Image();
+      tmp_img.src = tack_image_url;
+      tools.push({
+          img : tmp_img,
+          contact_point : { x : -2 , y : -95 }
+      });      
 
       crayon_pos = {
           x : canvas.width>>1,
@@ -116,8 +145,8 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
-      // drawing the cursor
-      context.drawImage(crayon_img, crayon_pos.x - 2, crayon_pos.y - 95, 100,100);
+      var tool = tools[current_tool];
+      context.drawImage(tool.img, crayon_pos.x + tool.contact_point.x, crayon_pos.y + tool.contact_point.y, 100,100);
       window.requestAnimationFrame(render);
   }
 
@@ -203,6 +232,15 @@ var CrayonPhysics = (function(){
        }
   }
 
+  function changeTool()
+  {
+      current_tool++;
+      if(current_tool >= tools.length)
+      {
+          current_tool = 0;
+      }
+  }
+
   function removeBody(body)
   {
   	  if(body.id == ground.id)
@@ -225,6 +263,7 @@ var CrayonPhysics = (function(){
             lineTo       : lineTo,
             closePath    : closePath,
             tack         : tack,
-            erease       : erease };
+            erease       : erease,
+            changeTool   : changeTool };
 
 })();

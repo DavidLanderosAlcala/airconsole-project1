@@ -55,6 +55,13 @@ var Screen = (function(){
                     CrayonPhysics.erease();
                 }
             }
+            else if(e.key == "pad_select")
+            {
+                if(!e.value)
+                {
+                    CrayonPhysics.changeTool();
+                }
+            }
 
         });
 
