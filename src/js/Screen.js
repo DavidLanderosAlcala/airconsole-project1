@@ -48,6 +48,13 @@ var Screen = (function(){
                     CrayonPhysics.closePath();
                 }
             }
+            else if(e.key == "pad_b")
+            {
+                if(!e.value)
+                {
+                    CrayonPhysics.erease();
+                }
+            }
 
         });
 

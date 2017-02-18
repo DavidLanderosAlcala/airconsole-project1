@@ -55,6 +55,8 @@ var Controller = (function(){
         else
         {
             key = "pad_a";
+            if(current_tool_index != 0)
+                key = "pad_b";
         }
 
         var packet =
