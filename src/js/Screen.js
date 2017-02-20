@@ -71,7 +71,7 @@ var Screen = (function(){
             height : 600,
         });
 
-        setSubtitleText("");
+        //setSubtitleText("Hola mundo");
     }
 
     /** @func setLogoVisibility

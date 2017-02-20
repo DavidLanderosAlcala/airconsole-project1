@@ -1,4 +1,9 @@
 
+@font-face {
+    font-family: chalk;
+    src: url(../res/fonts/chalk.ttf);
+}
+
 canvas
 {
 	background-image: url(https://image.freepik.com/free-photo/blackboard-texture_1205-375.jpg);
@@ -34,12 +39,15 @@ img.main_logo {
 }
 
 label#subtitles_label {
+	font-family: chalk;
 	color: white;
-	font-weight: bold;
+	//font-weight: bold;
     position : absolute;
 	width    : 640px;
 	left     : 50%;
 	top      : 50%;
-	margin   : 200px 0 0 -320px;
+	margin   : -250px 0 0 -320px;
 	text-align: center;
+	font-size: 50px;
+	opacity: 0.9;
 }

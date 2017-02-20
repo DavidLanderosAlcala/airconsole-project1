@@ -195,7 +195,7 @@ var CrayonPhysics = (function(){
       current_polygon = PolyCompressor.compress(current_polygon);
       console.log(current_polygon.length + " vertices - compressed");
       var centroid = Matter.Vertices.centre(current_polygon);
-      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, current_polygon);
+      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, current_polygon, {friction: 0.5});
       if(body == undefined)
       {
           current_polygon = [];
