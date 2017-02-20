@@ -100,7 +100,7 @@ var CrayonPhysics = (function(){
       if(current_polygon.length > 1)
       {
           context.strokeStyle = ColorManager.getColorAt(current_color_index);
-          context.lineWidth = 5;
+          context.lineWidth = 8;
           context.beginPath();
           context.moveTo(current_polygon[0].x, current_polygon[0].y);
           for(var i = 0; i < current_polygon.length; i++)
@@ -114,7 +114,7 @@ var CrayonPhysics = (function(){
       // drawing the floor
       context.save();
       context.translate(ground.position.x, ground.position.y);
-      context.lineWidth = 5;
+      context.lineWidth = 8;
       context.fillStyle = ColorManager.getColorAt(0);
       context.fillRect(
           -ground_info.width>>1,
@@ -140,7 +140,7 @@ var CrayonPhysics = (function(){
               context.lineTo(bodies[i].vertices[j].x, bodies[i].vertices[j].y);
           }
           context.closePath();
-          context.lineWidth = 5;
+          context.lineWidth = 8;
           context.stroke();
           context.restore();
       }
