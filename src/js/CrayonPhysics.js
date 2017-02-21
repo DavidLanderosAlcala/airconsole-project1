@@ -2,7 +2,7 @@
 var CrayonPhysics = (function(){
 
   /* constants */
-  const pencil_image_url  = "http://oi65.tinypic.com/122jamb.jpg";
+  const pencil_image_url  = "http://oi63.tinypic.com/eupyfo.jpg";//http://oi65.tinypic.com/122jamb.jpg";
   const ereaser_image_url = "http://oi67.tinypic.com/670aye.jpg";
   const tack_image_url    = "http://oi68.tinypic.com/2aezb03.jpg";
   const default_canvas_width  = 640;
@@ -42,7 +42,8 @@ var CrayonPhysics = (function(){
       tmp_img.src = pencil_image_url;
       tools.push({
           img : tmp_img,
-          contact_point : { x : -2 , y : -95 }
+          //contact_point : { x : -2 , y : -95 }
+          contact_point : { x : -2 , y : -2 }
       });
 
       /* Ereaser
@@ -146,7 +147,7 @@ var CrayonPhysics = (function(){
       }
 
       var tool = tools[current_tool];
-      context.drawImage(tool.img, crayon_pos.x + tool.contact_point.x, crayon_pos.y + tool.contact_point.y, 100,100);
+      context.drawImage(tool.img, crayon_pos.x + tool.contact_point.x, crayon_pos.y + tool.contact_point.y, 50,50);
       window.requestAnimationFrame(render);
   }
 
