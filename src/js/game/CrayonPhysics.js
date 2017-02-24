@@ -2,9 +2,6 @@
 var CrayonPhysics = (function(){
 
   /* constants */
-  const pencil_image_url  = "http://oi63.tinypic.com/eupyfo.jpg";//http://oi65.tinypic.com/122jamb.jpg";
-  const ereaser_image_url = "http://oi67.tinypic.com/670aye.jpg";
-  const tack_image_url    = "http://oi68.tinypic.com/2aezb03.jpg";
   const default_canvas_width  = 640;
   const default_canvas_height = 480;  
 
@@ -13,16 +10,13 @@ var CrayonPhysics = (function(){
   var context;
   var canvas_left;
   var canvas_top;
-  var crayon_pos;
-  var crayon_img;
   var engine;
   var bodies = [];
   var current_polygon = [];
   var current_color_index = -1;
   var ground_info;
   var ground;
-  var tools = [];
-  var current_tool = 0;
+
 
   function init(options)
   {
@@ -34,40 +28,7 @@ var CrayonPhysics = (function(){
       context = canvas.getContext("2d");
 
       ColorManager.init(context);
-
-      current_tool = 0;
-      /* Pencil
-       */
-      var tmp_img = new Image();
-      tmp_img.src = pencil_image_url;
-      tools.push({
-          img : tmp_img,
-          //contact_point : { x : -2 , y : -95 }
-          contact_point : { x : -2 , y : -2 }
-      });
-
-      /* Ereaser
-       */
-      tmp_img = new Image();
-      tmp_img.src = ereaser_image_url;
-      tools.push({
-          img : tmp_img,
-          contact_point : { x : -2 , y : -95 }
-      });
-
-      /* Tack
-       */
-      tmp_img = new Image();
-      tmp_img.src = tack_image_url;
-      tools.push({
-          img : tmp_img,
-          contact_point : { x : -2 , y : -95 }
-      });      
-
-      crayon_pos = {
-          x : canvas.width>>1,
-          y : canvas.height>>1
-      };
+      PlayerCursor.init({ canvas : canvas, context : context });
 
       canvas.addEventListener("mousemove", onMouseMove);
       engine = Matter.Engine.create();
@@ -146,8 +107,7 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
-      var tool = tools[current_tool];
-      context.drawImage(tool.img, crayon_pos.x + tool.contact_point.x, crayon_pos.y + tool.contact_point.y, 50,50);
+      PlayerCursor.draw();
       window.requestAnimationFrame(render);
   }
 
@@ -171,8 +131,7 @@ var CrayonPhysics = (function(){
 
   function moveTo(pos)
   {
-      crayon_pos.x = pos.x;
-      crayon_pos.y = pos.y;
+      PlayerCursor.moveTo(pos);
   }
 
   function lineTo(pos)

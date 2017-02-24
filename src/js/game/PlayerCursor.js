@@ -30,8 +30,8 @@ var PlayerCursor = (function() {
         img.src = chalk_image_url;
         tools.push({
             img    : img,
-            offset : { x : -2 , y : -95 },
-            size   : { width : 100, height : 100 }
+            offset : { x : -5, y : -5 },
+            size   : { width : 183/4, height : 254/4 }
         });
 
         img = new Image();
@@ -56,22 +56,16 @@ var PlayerCursor = (function() {
         return position;
     }
 
-    function setPosition(x,y)
+    function moveTo( pos )
     {
-        position.x = x;
-        position.y = y;
+        position.x = pos.x;
+        position.y = pos.y;
     }
 
-    function move( disp )
-    {
-        position.x += x;
-        position.y += y;
-    }
-
-    function darw()
+    function draw()
     {
         var tool = tools[current_tool_index];
-        context.drawImage(tool.img, position.x + tool.offset.x, position.y + tool.offset.y, tool.width, tool.height);
+        context.drawImage(tool.img, position.x + tool.offset.x, position.y + tool.offset.y, tool.size.width, tool.size.height);
     }
 
     function changeTool()
@@ -89,8 +83,7 @@ var PlayerCursor = (function() {
     return { init        : init,
              changeTool  : changeTool,
              setTool     : setTool,
-             move        : move,
+             moveTo        : moveTo,
              draw        : draw,
-             setPosition : setPosition,
              getPosition : getPosition };
 })();
