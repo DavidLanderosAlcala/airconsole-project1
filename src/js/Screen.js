@@ -19,6 +19,16 @@ var Screen = (function(){
         airconsole = new AirConsole();
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, true /* isScreen */);
+
+        if(Utils.isRunningOnAirConsole())
+        {
+            DebugConsole.log("running on airconsole");
+        }
+        else
+        {
+            DebugConsole.log("running as normal webapp");
+        }
+
         AirConsoleBus.on("gamepadevent", function(e){
             if(e.key == "touchpad")
             {

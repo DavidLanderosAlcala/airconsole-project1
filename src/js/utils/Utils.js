@@ -20,7 +20,18 @@ var Utils = (function(){
         }
 	}
 
+    function isRunningOnAirConsole()
+    {
+        try
+        {
+            return window.self !== window.top;
+        } catch (e)
+        {
+            return true;
+        }
+    }
 
-	return { isMobileNavigator : isMobileNavigator };
+	return { isMobileNavigator : isMobileNavigator,
+             isRunningOnAirConsole : isRunningOnAirConsole };
 
 })();
