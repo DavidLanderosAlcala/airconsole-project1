@@ -47,7 +47,7 @@ var CrayonPhysics = (function(){
           { isStatic : true }
       )
       Matter.World.add(engine.world, [ground]);
-      Touch.surface("canvas", onTouchEvent);
+      Touch.surface("div.main_container", onTouchEvent);
 
       window.requestAnimationFrame(render);
   }

@@ -81,7 +81,8 @@ var Screen = (function(){
             height : 600,
         });
 
-        //setSubtitleText("Hola mundo");
+        setSubtitleText("Hola mundo");
+        setLogoVisibility(false);
     }
 
     /** @func setLogoVisibility

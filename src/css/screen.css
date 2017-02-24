@@ -6,6 +6,11 @@
 
 canvas
 {
+    width: 800px;
+    height: 600px;
+}
+
+div.main_container {
 	background-image: url(https://image.freepik.com/free-photo/blackboard-texture_1205-375.jpg);
 	//background-image: url(http://paper-backgrounds.com/textureimages/2012/06/yellow-aged-paper-background-hd.jpg);
 	background-size: 800px 600px;
@@ -16,16 +21,6 @@ canvas
     top : 50%;
     margin: -300px 0 0 -400px;
     cursor: none;
-}
-
-div.main_container {
-    position : absolute;
-	width    : 640px;
-	height   : 480px;
-	left     : 50%;
-	top      : 50%;
-	margin   : -240px 0 0 -320px;
-	background-color: black;
 }
 
 img.main_logo {
