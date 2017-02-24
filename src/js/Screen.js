@@ -81,8 +81,9 @@ var Screen = (function(){
             height : 600,
         });
 
-        setSubtitleText("Hola mundo");
+        setSubtitleText("Your text goes here");
         setLogoVisibility(false);
+
     }
 
     /** @func setLogoVisibility
@@ -103,6 +104,16 @@ var Screen = (function(){
     {
         document.getElementById("subtitles_label")
         .innerHTML = text;
+    }
+
+    function requestFullScreen()
+    {
+        var el = document.documentElement,
+          rfs = el.requestFullscreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullscreen;
+        rfs.call(el);
     }
 
     return { init : init,
