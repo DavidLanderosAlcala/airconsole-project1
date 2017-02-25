@@ -10,15 +10,27 @@ var Screen = (function(){
      }
 
     var airconsole;
+    var width;
+    var height;
 
     /** @func init
       * @desc Called when the DOM is loaded
       */
     function init()
     {
+        adjustToViewPort();
+        disableContextMenu();
         airconsole = new AirConsole();
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, true /* isScreen */);
+        if(isInFullScreen())
+        {
+            DebugConsole.log("Fullscreen!!!!");
+        }
+        else
+        {
+            DebugConsole.log("Normal screen");
+        }
 
         if(Utils.isRunningOnAirConsole())
         {
@@ -76,9 +88,9 @@ var Screen = (function(){
         });
 
         CrayonPhysics.init({
-            canvas : document.querySelector("canvas"),
-            width  : 800,
-            height : 600,
+            canvas : document.querySelector("#main_canvas"),
+            width  : width,
+            height : height,
         });
 
         setSubtitleText("Your text goes here");
@@ -116,9 +128,45 @@ var Screen = (function(){
         rfs.call(el);
     }
 
-    return { init : init,
+    function isInFullScreen()
+    {
+        return (window.fullScreen) ||
+               (window.innerWidth == screen.width &&
+               window.innerHeight == screen.height);
+    }
+
+
+    function adjustToViewPort()
+    {
+        var canvas = document.querySelector("#main_canvas");
+        var rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        width = rect.width;
+        height = rect.height;
+    }
+
+    function disableContextMenu()
+    {
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    }
+
+    function getWidth()
+    {
+        return width;
+    }
+
+    function getHeight()
+    {
+        return height;
+    }
+
+    return { init              : init,
              setLogoVisibility : setLogoVisibility,
-             setSubtitleText : setSubtitleText };
+             setSubtitleText   : setSubtitleText,
+             getWidth          : getWidth,
+             getHeight         : getHeight,
+             isInFullScreen    : isInFullScreen };
 
 })();
 

@@ -30,7 +30,7 @@ var CrayonPhysics = (function(){
       ColorManager.init(context);
       PlayerCursor.init({ canvas : canvas, context : context });
 
-      canvas.addEventListener("mousemove", onMouseMove);
+      document.querySelector(".main_container").addEventListener("mousemove", onMouseMove);
       engine = Matter.Engine.create();
       Matter.Engine.run(engine);
       ground_info = {

@@ -3,23 +3,19 @@
     font-family: chalk;
     src: url(../res/fonts/chalk.ttf);
 }
-
+body,html{ margin: 0; overflow: hidden;}
 canvas
 {
-    width: 800px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
 }
 
 div.main_container {
 	background-image: url(https://image.freepik.com/free-photo/blackboard-texture_1205-375.jpg);
-	//background-image: url(http://paper-backgrounds.com/textureimages/2012/06/yellow-aged-paper-background-hd.jpg);
-	background-size: 800px 600px;
-    width: 800px;
-    height: 600px;
+	background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    left: 50%;
-    top : 50%;
-    margin: -300px 0 0 -400px;
     cursor: none;
 }
 
@@ -36,7 +32,6 @@ img.main_logo {
 label#subtitles_label {
 	font-family: chalk;
 	color: white;
-	//font-weight: bold;
     position : absolute;
 	width    : 640px;
 	left     : 50%;
@@ -45,4 +40,5 @@ label#subtitles_label {
 	text-align: center;
 	font-size: 50px;
 	opacity: 0.9;
+	cursor: none;
 }
