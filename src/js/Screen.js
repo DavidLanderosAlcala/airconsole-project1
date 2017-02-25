@@ -79,7 +79,7 @@ var Screen = (function(){
             }
             else if(e.key == "pad_select")
             {
-                if(!e.value)
+                if(e.value == 0)
                 {
                     CrayonPhysics.changeTool();
                 }

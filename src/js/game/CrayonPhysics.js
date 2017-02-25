@@ -194,11 +194,7 @@ var CrayonPhysics = (function(){
 
   function changeTool()
   {
-      current_tool++;
-      if(current_tool >= tools.length)
-      {
-          current_tool = 0;
-      }
+      PlayerCursor.changeTool();
   }
 
   function removeBody(body)
