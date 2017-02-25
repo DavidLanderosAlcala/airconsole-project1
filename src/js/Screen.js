@@ -49,8 +49,8 @@ var Screen = (function(){
 
                 if(cursor.x < 0 ) cursor.x = 0;
                 if(cursor.y < 0 ) cursor.y = 0;
-                if(cursor.x > 800 ) cursor.x = 800;
-                if(cursor.y > 600 ) cursor.y = 600;
+                if(cursor.x > width ) cursor.x = width;
+                if(cursor.y > height ) cursor.y = height;
 
                 if(cursor.isPressed)
                 {
