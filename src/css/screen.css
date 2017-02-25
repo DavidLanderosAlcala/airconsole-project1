@@ -29,16 +29,16 @@ img.main_logo {
 	transition : all 1s;
 }
 
-label#subtitles_label {
-	font-family: chalk;
-	color: white;
+label#title_label {
+	font-family : chalk;
+	color       : white;
     position : absolute;
 	width    : 640px;
 	left     : 50%;
-	top      : 50%;
-	margin   : -250px 0 0 -320px;
-	text-align: center;
-	font-size: 50px;
-	opacity: 0.9;
-	cursor: none;
+	top      : 5%;
+	margin   : 0px 0 0 -320px;
+	text-align : center;
+	font-size  : 50px;
+	opacity    : 0.9;
+	cursor     : none;
 }

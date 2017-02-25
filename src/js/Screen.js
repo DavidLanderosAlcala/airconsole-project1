@@ -93,7 +93,7 @@ var Screen = (function(){
             height : height,
         });
 
-        setSubtitleText("Your text goes here");
+        setTitleText("Your text goes here");
         setLogoVisibility(false);
 
     }
@@ -108,13 +108,13 @@ var Screen = (function(){
         .style.opacity = visible ? 1.0 : 0.0;
     }
 
-    /** @func setSubtitleText
-      * @desc It sets the subtitles
+    /** @func setTitleText
+      * @desc It sets the title
       * @param text {string} the text to be shown
       */
-    function setSubtitleText(text)
+    function setTitleText(text)
     {
-        document.getElementById("subtitles_label")
+        document.getElementById("title_label")
         .innerHTML = text;
     }
 
@@ -163,7 +163,7 @@ var Screen = (function(){
 
     return { init              : init,
              setLogoVisibility : setLogoVisibility,
-             setSubtitleText   : setSubtitleText,
+             setTitleText      : setTitleText,
              getWidth          : getWidth,
              getHeight         : getHeight,
              isInFullScreen    : isInFullScreen };
