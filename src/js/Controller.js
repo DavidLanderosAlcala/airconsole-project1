@@ -49,7 +49,7 @@ var Controller = (function(){
             if(e.isPressed)
             {
                 changeTool();
-                navigator.vibrate(50);
+                vibrate(50);
             }
         }
         else
@@ -73,7 +73,15 @@ var Controller = (function(){
 
     function onVibrateRequest(data)
     {
-        navigator.vibrate(data.pattern);
+        vibrate(data);
+    }
+
+    function vibrate(pattern)
+    {
+        if(Utils.isMobileNavigator())
+        {
+            navigator.vibrate(data.pattern);
+        }
     }
 
     function changeTool()
