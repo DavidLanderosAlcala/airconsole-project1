@@ -114,6 +114,10 @@ var Screen = (function(){
 
     function exitFullscreen()
     {
+        document.exitFullscreen = document.exitFullscreen ||
+                                  document.mozCancelFullScreen ||
+                                  document.webkitExitFullscreen ||
+                                  document.msExitFullscreen;
         document.exitFullscreen();
     }
 
