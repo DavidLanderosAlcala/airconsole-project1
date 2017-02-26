@@ -18,6 +18,7 @@ var Screen = (function(){
       */
     function init()
     {
+        window.addEventListener("resize", onResize);
         adjustToViewPort();
         disableContextMenu();
         airconsole = new AirConsole();
@@ -108,6 +109,7 @@ var Screen = (function(){
             || el.mozRequestFullScreen
             || el.msRequestFullscreen;
         rfs.call(el);
+        onResize();
     }
 
     function exitFullscreen()
@@ -146,6 +148,11 @@ var Screen = (function(){
     function getHeight()
     {
         return height;
+    }
+
+    function onResize()
+    {
+        adjustToViewPort();
     }
 
     return { init              : init,
