@@ -49,6 +49,28 @@ var CrayonPhysics = (function(){
       Matter.World.add(engine.world, [ground]);
       Touch.surface("div.main_container", onTouchEvent);
 
+      if(Utils.isRunningOnAirConsole())
+      {
+          // AirConsole Mode
+          document.querySelector("#fullscreen_option").style.position = "absolute";
+          document.querySelector("#fullscreen_option").style.top = "-500px";
+      }
+      else
+      {
+          // Normal web browser mode
+          Touch.checkbox("#fullscreen_checkbox", function(e){
+              e.sender.dataset.checked = e.checked ? "true" : "false";
+              if(e.checked)
+              {
+                  Screen.requestFullscreen();
+              }
+              else
+              {
+                  Screen.exitFullscreen();
+              }
+          });
+      }
+
       window.requestAnimationFrame(render);
   }
 

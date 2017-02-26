@@ -23,25 +23,7 @@ var Screen = (function(){
         airconsole = new AirConsole();
         AirConsoleBus.init(airconsole);
         DebugConsole.init(airconsole, true /* isScreen */);
-        if(isInFullScreen())
-        {
-            DebugConsole.log("Fullscreen!!!!");
-        }
-        else
-        {
-            DebugConsole.log("Normal screen");
-        }
-
-        if(Utils.isRunningOnAirConsole())
-        {
-            DebugConsole.log("running on airconsole");
-        }
-        else
-        {
-            DebugConsole.log("running as normal webapp");
-        }
-
-        AirConsoleBus.on("gamepadevent", function(e){
+        AirConsoleBus.on("gamepadevent", function(e) {
             if(e.key == "touchpad")
             {
                 cursor.x += e.value.x * 100;
@@ -118,7 +100,7 @@ var Screen = (function(){
         .innerHTML = text;
     }
 
-    function requestFullScreen()
+    function requestFullscreen()
     {
         var el = document.documentElement,
           rfs = el.requestFullscreen
@@ -128,7 +110,12 @@ var Screen = (function(){
         rfs.call(el);
     }
 
-    function isInFullScreen()
+    function exitFullscreen()
+    {
+        document.exitFullscreen();
+    }
+
+    function isInFullscreen()
     {
         return (window.fullScreen) ||
                (window.innerWidth == screen.width &&
@@ -166,7 +153,9 @@ var Screen = (function(){
              setTitleText      : setTitleText,
              getWidth          : getWidth,
              getHeight         : getHeight,
-             isInFullScreen    : isInFullScreen };
+             isInFullscreen    : isInFullscreen,
+             exitFullscreen    : exitFullscreen,
+             requestFullscreen : requestFullscreen };
 
 })();
 

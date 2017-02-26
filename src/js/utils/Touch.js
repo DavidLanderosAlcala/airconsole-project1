@@ -39,6 +39,30 @@ var Touch = (function() {
         }
     }
 
+    /** @func checkbox
+      * @desc converts DOM elements into checkboxes and installs an event listener
+      * @param selector {string} the CSS selector to hook the DOM elements
+      * @param callback {function} called when the value changes
+      */
+    function checkbox(selector, callback)
+    {
+        button(selector, function(e){
+            if(!e.isPressed)
+            {
+                if(e.sender.__checkbox_checked == undefined)
+                {
+                    e.sender.__checkbox_checked = true;
+                    callback({ sender: e.sender, checked : true});
+                }
+                else
+                {
+                    e.sender.__checkbox_checked = !e.sender.__checkbox_checked;
+                    callback({ sender: e.sender, checked : e.sender.__checkbox_checked});
+                }
+            }
+        });
+    }
+
     function hookAllEventsForButton(element, callback)
     {
         var event = {
@@ -71,8 +95,11 @@ var Touch = (function() {
                 callback(event);
             });
             element.addEventListener("mouseleave", function(e) {
-                event.isPressed = false;
-                callback(event);
+                if(isPressed)
+                {
+                    event.isPressed = false;
+                    callback(event);
+                }
             });
         }
     }
@@ -185,6 +212,7 @@ var Touch = (function() {
         return { x : x, y : y };
     }
 
-	return { button  : button,
-	         surface : surface };
+	return { button   : button,
+	         surface  : surface,
+             checkbox : checkbox };
 })();
