@@ -20,6 +20,7 @@ var CrayonPhysics = (function(){
 
   function init(options)
   {
+      MenuManager.hide();
       canvas = options.canvas;
       canvas.width = options.width == undefined ? default_canvas_width : options.width;
       canvas.height = options.height == undefined ? default_canvas_height : options.height;
@@ -155,6 +156,7 @@ var CrayonPhysics = (function(){
 
   function onTouchEvent(e)
   {
+      MenuManager.show();
       if(e.type == "touchmove")
       {
           lineTo(e);
