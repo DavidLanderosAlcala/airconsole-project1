@@ -26,28 +26,12 @@ var CrayonPhysics = (function(){
       canvas_left = canvas.getBoundingClientRect().left;
       canvas_top = canvas.getBoundingClientRect().top;
       context = canvas.getContext("2d");
-
       ColorManager.init(context);
       PlayerCursor.init({ canvas : canvas, context : context });
-
       document.querySelector(".main_container").addEventListener("mousemove", onMouseMove);
+      Touch.surface("div.main_container", onTouchEvent);
       engine = Matter.Engine.create();
       Matter.Engine.run(engine);
-      ground_info = {
-          x : canvas.width>>1,
-          y : canvas.height - 25,
-          width  : canvas.width,
-          height : 50,
-      };
-      ground = Matter.Bodies.rectangle(
-          ground_info.x,
-          ground_info.y,
-          ground_info.width,
-          ground_info.height,
-          { isStatic : true }
-      )
-      Matter.World.add(engine.world, [ground]);
-      Touch.surface("div.main_container", onTouchEvent);
 
       if(Utils.isRunningOnAirConsole())
       {
@@ -71,7 +55,37 @@ var CrayonPhysics = (function(){
           });
       }
 
+      restartEngine();
+
       window.requestAnimationFrame(render);
+  }
+
+  function restartEngine()
+  {
+      // remove all bodies
+      var _bodies = Matter.Composite.allBodies(engine.world);
+      Matter.World.remove(engine.world, _bodies);
+
+      // Reset some variables
+      bodies = [];
+      current_polygon = [];
+      current_color_index = -1;
+
+      // create initial objects / load level, etc.
+      ground_info = {
+          x : canvas.width>>1,
+          y : canvas.height - 25,
+          width  : canvas.width,
+          height : 50,
+      };
+      ground = Matter.Bodies.rectangle(
+          ground_info.x,
+          ground_info.y,
+          ground_info.width,
+          ground_info.height,
+          { isStatic : true }
+      )
+      Matter.World.add(engine.world, [ground]);      
   }
 
   function render()
@@ -242,6 +256,7 @@ var CrayonPhysics = (function(){
             closePath    : closePath,
             tack         : tack,
             erease       : erease,
-            changeTool   : changeTool };
+            changeTool   : changeTool,
+            restartEngine : restartEngine };
 
 })();
