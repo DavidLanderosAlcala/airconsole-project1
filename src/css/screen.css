@@ -83,3 +83,16 @@ span.checkbox[data-checked=true]
 {
     background-image : url("../res/img/checkbox_checked.png");
 }
+
+#player_cursor
+{
+	pointer-events: none;
+	z-index: 10;
+    background-image : url(http://oi63.tinypic.com/eupyfo.jpg);
+    background-size: 45px 63px;
+    position : absolute;
+    width    : 45px;
+    height   : 63px;
+    margin-left: -5px;
+    margin-top: -5px;
+}

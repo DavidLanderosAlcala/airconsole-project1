@@ -143,7 +143,6 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
-      PlayerCursor.draw();
       window.requestAnimationFrame(render);
   }
 
