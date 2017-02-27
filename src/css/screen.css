@@ -60,10 +60,10 @@ label#title_label {
     font-size   : 40px;
     //border: 10px dotted red;
 
-    border: 15px solid transparent;
+    border: 10px solid transparent;
     padding: 15px;
-    border-image-source: url(../res/img/checkbox_unchecked.png);
-    border-image-repeat: stretch;
+    border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg); //url(../res/img/checkbox_unchecked.png);
+    border-image-repeat: repeat;
     border-image-slice: 30; 
 }
 
