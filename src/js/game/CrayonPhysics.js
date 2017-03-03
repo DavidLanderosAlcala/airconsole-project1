@@ -143,7 +143,27 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
+      debugRender();
       window.requestAnimationFrame(render);
+  }
+
+  function debugRender()
+  {
+      context.save();
+      var bodies = Matter.Composite.allBodies(engine.world);
+      context.beginPath();
+      for (var i = 0; i < bodies.length; i += 1) {
+          var vertices = bodies[i].vertices;
+          context.moveTo(vertices[0].x, vertices[0].y);
+          for (var j = 1; j < vertices.length; j += 1) {
+              context.lineTo(vertices[j].x, vertices[j].y);
+          }
+          context.lineTo(vertices[0].x, vertices[0].y);
+      }
+      context.lineWidth = 3;
+      context.strokeStyle = '#0f0';
+      context.stroke();
+      context.restore();
   }
 
   function onMouseMove(e)
