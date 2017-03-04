@@ -65,7 +65,8 @@ label#title_label {
     padding: 15px;
     border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg); //url(../res/img/checkbox_unchecked.png);
     border-image-repeat: repeat;
-    border-image-slice: 30; 
+    border-image-slice: 30;
+    z-index: -1;
 }
 
 span.checkbox
