@@ -3,6 +3,7 @@
 var MenuSettings = (function(){
 
     var menu_layer = null;
+    var visible = false;
 
     function init(container)
     {
@@ -41,6 +42,7 @@ var MenuSettings = (function(){
         menu_layer.style.width = "30%";
         menu_layer.style.left = "35%";
         menu_layer.style.zIndex = "1";
+        visible = true;
     }
 
 	function clear()
@@ -68,7 +70,21 @@ var MenuSettings = (function(){
         },1);
 	}
 
+	function isVisible()
+	{
+		return visible;
+	}
+
+	function hide()
+	{
+		clear();
+		menu_layer.style.zIndex = "-1";
+		visible = false;
+	}
+
 
     return { init : init,
-             show : show };
+             show : show,
+             hide : hide,
+             isVisible : isVisible };
 })();

@@ -22,7 +22,6 @@ var CrayonPhysics = (function(){
   function init(options)
   {
       MenuManager.init();
-      MenuManager.showSettings();
       canvas = options.canvas;
       canvas.width = options.width == undefined ? default_canvas_width : options.width;
       canvas.height = options.height == undefined ? default_canvas_height : options.height;
@@ -36,6 +35,8 @@ var CrayonPhysics = (function(){
       engine = Matter.Engine.create();
       Matter.Engine.run(engine);
       restartEngine();
+      window.addEventListener("keydown", onKeyDown);
+      window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(render);
   }
 
@@ -146,6 +147,27 @@ var CrayonPhysics = (function(){
       context.strokeStyle = '#0f0';
       context.stroke();
       context.restore();
+  }
+
+  function onKeyDown(e)
+  {
+      
+  }
+
+  function onKeyUp(e)
+  {
+      console.log(e.keyCode);
+      if(e.keyCode == 80) // P key
+      {
+          if(MenuSettings.isVisible())
+          {
+              MenuSettings.hide();
+          }
+          else
+          {
+              MenuSettings.show();
+          }
+      }
   }
 
   function onMouseMove(e)
