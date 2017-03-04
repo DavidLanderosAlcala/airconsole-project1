@@ -17,6 +17,8 @@ var CrayonPhysics = (function(){
   var ground_info;
   var ground;
 
+  var useDebugRenderer = false;
+
 
   function init(options)
   {
@@ -56,6 +58,7 @@ var CrayonPhysics = (function(){
       }
 
       restartEngine();
+      MenuManager.showSettings();
 
       window.requestAnimationFrame(render);
   }
@@ -143,7 +146,10 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
-      debugRender();
+      if(useDebugRenderer)
+      {
+          debugRender();
+      }
       window.requestAnimationFrame(render);
   }
 
@@ -268,14 +274,26 @@ var CrayonPhysics = (function(){
       }      
   }
 
-  return {  init         : init,
-            onTouchEvent : onTouchEvent,
-            moveTo       : moveTo,
-            lineTo       : lineTo,
-            closePath    : closePath,
-            tack         : tack,
-            erease       : erease,
-            changeTool   : changeTool,
-            restartEngine : restartEngine };
+  function enableDebugRenderer()
+  {
+      useDebugRenderer = true;
+  }
+
+  function disableDebugRenderer()
+  {
+      useDebugRenderer = false;
+  }
+
+  return {  init          : init,
+            onTouchEvent  : onTouchEvent,
+            moveTo        : moveTo,
+            lineTo        : lineTo,
+            closePath     : closePath,
+            tack          : tack,
+            erease        : erease,
+            changeTool    : changeTool,
+            restartEngine : restartEngine,
+            enableDebugRenderer  : enableDebugRenderer,
+            disableDebugRenderer : disableDebugRenderer };
 
 })();

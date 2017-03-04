@@ -17,6 +17,7 @@ div.main_container {
     height           : 100%;
     position         : absolute;
     cursor: none;
+    text-align: center;
 }
 
 img.main_logo {
