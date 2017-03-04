@@ -16,12 +16,13 @@ var CrayonPhysics = (function(){
   var current_color_index = -1;
   var ground_info;
   var ground;
-
   var useDebugRenderer = false;
-
+  var seconds = 0;
 
   function init(options)
   {
+      MenuManager.init();
+      MenuManager.showSettings();
       canvas = options.canvas;
       canvas.width = options.width == undefined ? default_canvas_width : options.width;
       canvas.height = options.height == undefined ? default_canvas_height : options.height;
@@ -34,32 +35,7 @@ var CrayonPhysics = (function(){
       Touch.surface("div.main_container", onTouchEvent);
       engine = Matter.Engine.create();
       Matter.Engine.run(engine);
-
-      if(Utils.isRunningOnAirConsole())
-      {
-          // AirConsole Mode
-          document.querySelector("#fullscreen_option").style.position = "absolute";
-          document.querySelector("#fullscreen_option").style.top = "-500px";
-      }
-      else
-      {
-          // Normal web browser mode
-          Touch.checkbox("#fullscreen_checkbox", function(e){
-              e.sender.dataset.checked = e.checked ? "true" : "false";
-              if(e.checked)
-              {
-                  Screen.requestFullscreen();
-              }
-              else
-              {
-                  Screen.exitFullscreen();
-              }
-          });
-      }
-
       restartEngine();
-      MenuManager.showSettings();
-
       window.requestAnimationFrame(render);
   }
 

@@ -2,38 +2,55 @@
 
 var MenuManager = (function(){
 
+	var menu_layer = null;
+
+	function init()
+	{
+	    menu_layer = document.querySelector(".menu_layer");
+	}
+
 	function showLevelSelector()
 	{
-        
+        clear();   
+        menu_layer.style.zIndex = "1";
 	}
 
 	function showSettings()
 	{
-		var menu_layer = document.querySelector(".menu_layer");
-		menu_layer.appendChild(createCheckBox("full screen","fullscreen_checkbox"));
-		menu_layer.appendChild(createCheckBox("debug renderer","debug_renderer_checkbox"));
-        Touch.checkbox("#fullscreen_checkbox", function(e){
+		clear();
+
+		addCheckBox("full screen","fullscreen_checkbox", function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
-            if(e.checked)
-            {
+            if(e.checked) {
                 Screen.requestFullscreen();
             }
-            else
-            {
+            else {
                 Screen.exitFullscreen();
             }
-        });
-        Touch.checkbox("#debug_renderer_checkbox", function(e){
+		});
+
+		addCheckBox("debug renderer","debug_renderer_checkbox", function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
-            if(e.checked)
-            {
+            if(e.checked) {
                 CrayonPhysics.enableDebugRenderer();
             }
-            else
-            {
+            else {
                 CrayonPhysics.disableDebugRenderer();
             }
-        });
+		});
+
+		addButton("restart world","restart_world", function(e){
+            e.sender.dataset.pressed = e.isPressed ? "true" : "false";
+            if(!e.isPressed)
+            {
+            	CrayonPhysics.restartEngine();
+            }
+		});
+
+		addButton("click me","dummy_button", function(e){
+            e.sender.dataset.pressed = e.isPressed ? "true" : "false";
+		});
+
         menu_layer.style.width = "30%";
         menu_layer.style.left = "35%";
         menu_layer.style.zIndex = "1";
@@ -44,15 +61,33 @@ var MenuManager = (function(){
         document.querySelector(".menu_layer").style.zIndex = "-1";
 	}
 
-	function createCheckBox(text, id)
+	function clear()
+	{
+		menu_layer.innerHTML = "";
+	}
+
+	function addButton(text, id, callback)
+	{
+		var button = "<span id='" + id + "' class='button' >" + text + "</span><br>";
+        menu_layer.innerHTML += button;
+        setTimeout(function(){
+        	Touch.button("#" + id, callback);
+        },1);
+	}
+
+	function addCheckBox(text, id, callback)
 	{
         var span = document.createElement("span");
         span.innerHTML = text + " <span id='" + id +
         "' class='checkbox' data-checked='false'></span><br>";
-        return span;
+        menu_layer.appendChild(span);
+        setTimeout(function(){
+        	Touch.checkbox("#" + id, callback);
+        },1);
 	}
 
-	return { showSettings      : showSettings,
+	return { init              : init,
+		     showSettings      : showSettings,
 		     showLevelSelector : showLevelSelector,
 	         hide              : hide };
 })();

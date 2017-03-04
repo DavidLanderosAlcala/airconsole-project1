@@ -63,11 +63,33 @@ label#title_label {
 
     border: 10px solid transparent;
     padding: 15px;
-    border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg); //url(../res/img/checkbox_unchecked.png);
+    border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg);
     border-image-repeat: repeat;
     border-image-slice: 30;
     z-index: -1;
 }
+
+span.button
+{
+	border: 5px solid transparent;
+    border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg);
+    border-image-repeat: repeat;
+    border-image-slice: 30;
+    line-height: 80px;
+    padding: 5px 10px 5px 10px;
+}
+
+span.button[data-pressed="true"]
+{
+	background-image: url(http://oi65.tinypic.com/2e1gbpc.jpg);
+	border: 5px solid transparent;
+    border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg);
+    border-image-repeat: repeat;
+    border-image-slice: 30;
+    line-height: 80px;
+    padding: 5px 10px 5px 10px;
+}
+
 
 span.checkbox
 {
