@@ -95,7 +95,7 @@ var Touch = (function() {
                 callback(event);
             });
             element.addEventListener("mouseleave", function(e) {
-                if(isPressed)
+                if(event.isPressed)
                 {
                     event.isPressed = false;
                     callback(event);
