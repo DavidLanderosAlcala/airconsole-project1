@@ -282,6 +282,11 @@ var CrayonPhysics = (function(){
       useDebugRenderer = false;
   }
 
+  function isDebugRendererEnabled()
+  {
+      return useDebugRenderer;
+  }
+
   return {  init          : init,
             onTouchEvent  : onTouchEvent,
             moveTo        : moveTo,
@@ -292,6 +297,7 @@ var CrayonPhysics = (function(){
             changeTool    : changeTool,
             restartEngine : restartEngine,
             enableDebugRenderer  : enableDebugRenderer,
-            disableDebugRenderer : disableDebugRenderer };
+            disableDebugRenderer : disableDebugRenderer,
+            isDebugRendererEnabled : isDebugRendererEnabled };
 
 })();

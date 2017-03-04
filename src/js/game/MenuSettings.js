@@ -13,7 +13,8 @@ var MenuSettings = (function(){
     function show()
     {
         clear();
-		addCheckBox("full screen","fullscreen_checkbox", function(e){
+        var value = Screen.isInFullscreen();
+		addCheckBox("full screen","fullscreen_checkbox", value , function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
             if(e.checked) {
                 Screen.requestFullscreen();
@@ -22,7 +23,9 @@ var MenuSettings = (function(){
                 Screen.exitFullscreen();
             }
 		});
-		addCheckBox("debug renderer","debug_renderer_checkbox", function(e){
+
+		value = CrayonPhysics.isDebugRendererEnabled();
+		addCheckBox("debug renderer","debug_renderer_checkbox", value, function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
             if(e.checked) {
                 CrayonPhysics.enableDebugRenderer();
@@ -59,11 +62,11 @@ var MenuSettings = (function(){
         },1);
 	}
 
-	function addCheckBox(text, id, callback)
+	function addCheckBox(text, id, value, callback)
 	{
         var span = document.createElement("span");
         span.innerHTML = text + " <span id='" + id +
-        "' class='checkbox' data-checked='false'></span><br>";
+        "' class='checkbox' data-checked='" + (value ? "true" : "false") + "'></span><br>";
         menu_layer.appendChild(span);
         setTimeout(function(){
         	Touch.checkbox("#" + id, callback);

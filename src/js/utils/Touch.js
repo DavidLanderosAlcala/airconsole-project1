@@ -46,6 +46,11 @@ var Touch = (function() {
       */
     function checkbox(selector, callback)
     {
+        var selection = document.querySelectorAll(selector);
+        for(var i = 0; i < selection.length; i++)
+        {
+            selection[i].__checkbox_checked = selection[i].dataset.checked == "true" ? true : false;
+        }
         button(selector, function(e){
             if(!e.isPressed)
             {
