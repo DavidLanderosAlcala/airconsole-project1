@@ -7,57 +7,22 @@ var MenuManager = (function(){
 	function init()
 	{
 	    menu_layer = document.querySelector(".menu_layer");
+	    MenuSettings.init(menu_layer);
 	}
 
 	function showLevelSelector()
 	{
-        clear();   
-        menu_layer.style.zIndex = "1";
+        LevelSelector.show();
 	}
 
 	function showSettings()
 	{
-		clear();
-
-		addCheckBox("full screen","fullscreen_checkbox", function(e){
-            e.sender.dataset.checked = e.checked ? "true" : "false";
-            if(e.checked) {
-                Screen.requestFullscreen();
-            }
-            else {
-                Screen.exitFullscreen();
-            }
-		});
-
-		addCheckBox("debug renderer","debug_renderer_checkbox", function(e){
-            e.sender.dataset.checked = e.checked ? "true" : "false";
-            if(e.checked) {
-                CrayonPhysics.enableDebugRenderer();
-            }
-            else {
-                CrayonPhysics.disableDebugRenderer();
-            }
-		});
-
-		addButton("restart world","restart_world", function(e){
-            e.sender.dataset.pressed = e.isPressed ? "true" : "false";
-            if(!e.isPressed)
-            {
-            	CrayonPhysics.restartEngine();
-            }
-		});
-
-		addButton("click me","dummy_button", function(e){
-            e.sender.dataset.pressed = e.isPressed ? "true" : "false";
-		});
-
-        menu_layer.style.width = "30%";
-        menu_layer.style.left = "35%";
-        menu_layer.style.zIndex = "1";
+		MenuSettings.show();
 	}
 
-	function hide()
+	function hideAll()
 	{
+		clear();
         document.querySelector(".menu_layer").style.zIndex = "-1";
 	}
 
@@ -89,5 +54,5 @@ var MenuManager = (function(){
 	return { init              : init,
 		     showSettings      : showSettings,
 		     showLevelSelector : showLevelSelector,
-	         hide              : hide };
+	         hideAll           : hideAll };
 })();
