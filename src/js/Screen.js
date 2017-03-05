@@ -76,7 +76,7 @@ var Screen = (function(){
             height : height,
         });
 
-        setTitleText("Your text goes here");
+        setTitleText("");
         setLogoVisibility(false);
 
     }

@@ -12,6 +12,7 @@ var MenuSettings = (function(){
 
     function show()
     {
+        Screen.setTitleText("Settings");
         clear();
         var value = Screen.isInFullscreen();
 		addCheckBox("full screen","fullscreen_checkbox", value , function(e){

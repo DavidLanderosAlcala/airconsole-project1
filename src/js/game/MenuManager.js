@@ -8,6 +8,7 @@ var MenuManager = (function(){
 	{
 	    menu_layer = document.querySelector(".menu_layer");
 	    MenuSettings.init(menu_layer);
+	    LevelSelector.init(menu_layer);
 	}
 
 	function showLevelSelector()

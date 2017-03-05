@@ -168,6 +168,17 @@ var CrayonPhysics = (function(){
               MenuSettings.show();
           }
       }
+      if(e.keyCode == 76) // L key
+      {
+          if(LevelSelector.isVisible())
+          {
+              LevelSelector.hide();
+          }
+          else
+          {
+              LevelSelector.show();
+          }
+      }      
   }
 
   function onMouseMove(e)
