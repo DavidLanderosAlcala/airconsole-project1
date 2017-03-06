@@ -104,17 +104,40 @@ span.checkbox[data-checked=true]
 
 #player_cursor
 {
-	pointer-events: none;
-	z-index: 10;
+	pointer-events : none;
+	z-index  : 10;
+    position : absolute;
+}
+
+#player_cursor[data-tool="chalk"]
+{
     background-image : url(http://oi63.tinypic.com/eupyfo.jpg);
     background-size: 45px 63px;
-    position : absolute;
     width    : 45px;
     height   : 63px;
     margin-left: -5px;
     margin-top: -5px;
 }
 
+#player_cursor[data-tool="ereaser"]
+{
+    background-image : url("../res/img/ereaser.png");
+    background-size: 100px 100px;
+    width    : 100px;
+    height   : 100px;
+    margin-left: -20px;
+    margin-top: -20px;
+}
+
+#player_cursor[data-tool="tack"]
+{
+    background-image : url("../res/img/ereaser.png");
+    background-size: 100px 100px;
+    width    : 100px;
+    height   : 100px;
+    margin-left: -20px;
+    margin-top: -20px;	
+}
 
 span.level_button
 {

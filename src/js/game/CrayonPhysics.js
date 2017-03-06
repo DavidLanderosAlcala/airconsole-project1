@@ -178,7 +178,11 @@ var CrayonPhysics = (function(){
           {
               LevelSelector.show();
           }
-      }      
+      }
+      if(e.keyCode == 84) // T key
+      {
+          PlayerCursor.changeTool();
+      }
   }
 
   function onMouseMove(e)
@@ -195,7 +199,14 @@ var CrayonPhysics = (function(){
       }
       else if(e.type == "touchend")
       {
-          closePath();
+          if(PlayerCursor.getCurrentToolName() == "ereaser")
+          {
+              erease();
+          }
+          else
+          {
+              closePath();
+          }
       }
   }
 
@@ -254,7 +265,7 @@ var CrayonPhysics = (function(){
   function erease()
   {
        var _bodies = Matter.Composite.allBodies(engine.world);
-       var _bodies = Matter.Query.point(_bodies, crayon_pos);
+       var _bodies = Matter.Query.point(_bodies, PlayerCursor.getPosition());
        var i, l = _bodies.length;
        for(i = 0; i < l; i++)
        {
