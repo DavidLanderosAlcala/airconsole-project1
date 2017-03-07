@@ -142,10 +142,11 @@ span.checkbox[data-checked=true]
 span.level_button
 {
 	margin-top: 10px;
+    margin-right: 10px;
 	display: inline-block;
 	line-height: 100px;
-	width: 100px;
-	height: 100px;
+	width: 10%;
+	height: 20%;
 	border: 10px solid transparent;
     border-image-source: url(http://oi65.tinypic.com/2e1gbpc.jpg);
     border-image-repeat: repeat;

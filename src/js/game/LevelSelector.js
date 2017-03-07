@@ -14,8 +14,8 @@ var LevelSelector = (function(){
     {
     	Screen.setTitleText("Level selection");
     	clear();
-        var i; l = 16;
-        for(i = 1; i < 16; i++)
+        var i; l = 15;
+        for(i = 1; i < l; i++)
         {
         	createButton(i, "levelButton" + i, onLevelSelected);
         }

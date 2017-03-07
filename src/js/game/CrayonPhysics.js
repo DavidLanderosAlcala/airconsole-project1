@@ -30,7 +30,7 @@ var CrayonPhysics = (function(){
       context = canvas.getContext("2d");
       ColorManager.init(context);
       PlayerCursor.init({ canvas : canvas, context : context });
-      document.querySelector(".main_container").addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mousemove", onMouseMove);
       Touch.surface("div.main_container", onTouchEvent);
       engine = Matter.Engine.create();
       Matter.Engine.run(engine);
@@ -309,6 +309,11 @@ var CrayonPhysics = (function(){
       return useDebugRenderer;
   }
 
+  function loadLevel(level)
+  {
+      
+  }
+
   return {  init          : init,
             onTouchEvent  : onTouchEvent,
             moveTo        : moveTo,
@@ -320,6 +325,7 @@ var CrayonPhysics = (function(){
             restartEngine : restartEngine,
             enableDebugRenderer  : enableDebugRenderer,
             disableDebugRenderer : disableDebugRenderer,
-            isDebugRendererEnabled : isDebugRendererEnabled };
+            isDebugRendererEnabled : isDebugRendererEnabled,
+            loadLevel              : loadLevel };
 
 })();
