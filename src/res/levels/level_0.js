@@ -1,33 +1,36 @@
 
 LevelSelector.getLevels().push({
 
-	title : "Level 0",
-
+	title       : "Level 0",
 	description : "Draw a shape",
-
-    bodies : [
+    bodies      : [
         {
             label : "ground",
             isStatic : true,
-            position : {x : 0, y : 100 },
+            position : { x : 0, y : 100 },
             vertices: [
                 {x : -400, y : 0 },
                 {x : -400, y : 100 },
-                {x : 400, y : 100 },
-                {x : 400, y : 0 }
+                {x : 400,  y : 100 },
+                {x : 400,  y : 0 }
             ],
         },
     ],
 
-    setup : function(world)
+    setup : function(context, engine)
     {
-        var bodies = Matter.Composite.allBodies(world);
-        console.log(bodies[0]);
+    	context.game_over = false;
+        var bodies = Matter.Composite.allBodies(engine.world);
+        Matter.Events.on(engine, 'collisionActive', function(event) {
+            context.game_over = true;
+        });
     },
 
-    update : function()
+    update : function(context)
     {
-        return false;
+    	if(context.game_over)
+    		console.log("Winner!!!");
+        return context.game_over;
     }
 
 });

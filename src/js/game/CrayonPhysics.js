@@ -25,6 +25,8 @@ var CrayonPhysics = (function(){
   // Level related
   var current_level_index = 0;
   var current_update_function = null;
+  var current_level_context = {};
+  var game_over = false;
 
   function init(options)
   {
@@ -79,8 +81,13 @@ var CrayonPhysics = (function(){
 
   function render()
   {
-      if(current_update_function != null)
-          current_update_function();
+      if(!game_over && current_update_function != null)
+      {
+          game_over = current_update_function(current_level_context);
+          if(game_over)
+            Screen.setTitleText("You won!!");
+      }
+
       // clearing the screen
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
@@ -327,6 +334,8 @@ var CrayonPhysics = (function(){
   function loadLevel(level_index)
   {
       restartEngine();
+      game_over = false;
+      current_level_context = {};
       current_level_index = level_index;
       var level_data = LevelSelector.getLevels()[level_index];
       current_update_function = level_data.update;
@@ -358,7 +367,7 @@ var CrayonPhysics = (function(){
       Matter.World.add(engine.world, _bodies);
       Screen.setTitleText(level_data.description);
       if(level_data.setup != undefined)
-          level_data.setup(engine.world);
+          level_data.setup(current_level_context, engine);
   }
 
   function restartLevel()
