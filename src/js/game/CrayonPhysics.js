@@ -65,7 +65,7 @@ var CrayonPhysics = (function(){
           ground_info.height,
           { isStatic : true }
       )
-      Matter.World.add(engine.world, [ground]);      
+      Matter.World.add(engine.world, [ground]);
   }
 
   function render()
