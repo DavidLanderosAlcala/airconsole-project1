@@ -19,8 +19,10 @@ LevelSelector.getLevels().push({
 
     setup : function(context, engine)
     {
+	// agregamos una variable al contexto del nivel
     	context.game_over = false;
-        var bodies = Matter.Composite.allBodies(engine.world);
+
+	// si ocurre una colision cualquiera el nivel esta terminado
         Matter.Events.on(engine, 'collisionActive', function(event) {
             context.game_over = true;
         });
@@ -28,8 +30,7 @@ LevelSelector.getLevels().push({
 
     update : function(context)
     {
-    	if(context.game_over)
-    		console.log("Winner!!!");
+	// retornamos el estado actual del nivel
         return context.game_over;
     }
 
