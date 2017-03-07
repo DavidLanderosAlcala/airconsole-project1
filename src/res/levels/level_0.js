@@ -1,8 +1,8 @@
 
 LevelSelector.getLevels().push({
 
-	title       : "Level 0",
-	description : "Draw a shape",
+    title       : "Level 0",
+    description : "Draw a shape",
     bodies      : [
         {
             label : "ground",
