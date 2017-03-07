@@ -76,7 +76,6 @@ var Screen = (function(){
             height : height,
         });
 
-        setTitleText("");
         setLogoVisibility(false);
 
     }

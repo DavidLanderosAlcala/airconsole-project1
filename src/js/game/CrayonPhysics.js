@@ -19,6 +19,13 @@ var CrayonPhysics = (function(){
   var useDebugRenderer = false;
   var seconds = 0;
 
+  var global_x_offset = 0;
+  var global_y_offset = 0;
+
+  // Level related
+  var current_level_index = 0;
+  var current_success_function = null;
+
   function init(options)
   {
       MenuManager.init();
@@ -27,6 +34,8 @@ var CrayonPhysics = (function(){
       canvas.height = options.height == undefined ? default_canvas_height : options.height;
       canvas_left = canvas.getBoundingClientRect().left;
       canvas_top = canvas.getBoundingClientRect().top;
+      global_x_offset = canvas.width >> 1;
+      global_y_offset = canvas.height;
       context = canvas.getContext("2d");
       ColorManager.init(context);
       PlayerCursor.init({ canvas : canvas, context : context });
@@ -34,10 +43,10 @@ var CrayonPhysics = (function(){
       Touch.surface("div.main_container", onTouchEvent);
       engine = Matter.Engine.create();
       Matter.Engine.run(engine);
-      restartEngine();
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(render);
+      LevelSelector.show();
   }
 
   function restartEngine()
@@ -51,27 +60,29 @@ var CrayonPhysics = (function(){
       current_polygon = [];
       current_color_index = -1;
 
-      // create initial objects / load level, etc.
-      ground_info = {
-          x : canvas.width>>1,
-          y : canvas.height - 25,
-          width  : canvas.width,
-          height : 50,
-      };
-      ground = Matter.Bodies.rectangle(
-          ground_info.x,
-          ground_info.y,
-          ground_info.width,
-          ground_info.height,
-          { isStatic : true }
-      )
-      Matter.World.add(engine.world, [ground]);
+      //// create initial objects / load level, etc.
+      //ground_info = {
+      //    x : canvas.width>>1,
+      //    y : canvas.height - 25,
+      //    width  : canvas.width,
+      //    height : 50,
+      //};
+      //ground = Matter.Bodies.rectangle(
+      //    ground_info.x,
+      //    ground_info.y,
+      //    ground_info.width,
+      //    ground_info.height,
+      //    { isStatic : true }
+      //)
+      //Matter.World.add(engine.world, [ground]);
   }
 
   function render()
   {
       // clearing the screen
       context.clearRect(0,0, canvas.width, canvas.height);
+      context.save();
+      context.translate(global_x_offset, global_y_offset);
 
       // drawing the current polygon
       context.save();
@@ -89,18 +100,18 @@ var CrayonPhysics = (function(){
       }
       context.restore();
 
-      // drawing the floor
-      context.save();
-      context.translate(ground.position.x, ground.position.y);
-      context.lineWidth = 8;
-      context.fillStyle = ColorManager.getColorAt(0);
-      context.fillRect(
-          -ground_info.width>>1,
-          -ground_info.height>>1,
-          ground_info.width,
-          ground_info.height
-      );
-      context.restore();
+      //// drawing the floor
+      //context.save();
+      //context.translate(ground.position.x, ground.position.y);
+      //context.lineWidth = 8;
+      //context.fillStyle = ColorManager.getColorAt(0);
+      //context.fillRect(
+      //    -ground_info.width>>1,
+      //    -ground_info.height>>1,
+      //    ground_info.width,
+      //    ground_info.height
+      //);
+      //context.restore();
 
       // drawing polygons
       var i, l = bodies.length;
@@ -127,6 +138,8 @@ var CrayonPhysics = (function(){
       {
           debugRender();
       }
+
+      context.restore();
       window.requestAnimationFrame(render);
   }
 
@@ -222,8 +235,8 @@ var CrayonPhysics = (function(){
           current_color_index = ColorManager.getRandomColorIndex();
       }
       current_polygon.push({
-          x : pos.x,
-          y : pos.y,
+          x : pos.x - global_x_offset,
+          y : pos.y - global_y_offset,
       });
       moveTo(pos);
   }
@@ -309,9 +322,44 @@ var CrayonPhysics = (function(){
       return useDebugRenderer;
   }
 
-  function loadLevel(level)
+  function loadLevel(level_index)
   {
-      
+      restartEngine();
+      current_level_index = level_index;
+      var level_data = LevelSelector.getLevels()[level_index];
+      current_success_function = level_data.success;
+      var _bodies = [];
+      for(var i = 0; i < level_data.bodies.length; i++)
+      {
+          if(level_data.mapped == undefined)
+          {
+              level_data.bodies[i].position.y = -level_data.bodies[i].position.y;
+              for(var v = 0; v < level_data.bodies[i].vertices.length; v++)
+              {
+                  level_data.bodies[i].vertices[v].y = -level_data.bodies[i].vertices[v].y;
+              }
+              level_data.mapped = true;
+          }
+          var centroid = Matter.Vertices.centre(level_data.bodies[i].vertices);
+          var body = Matter.Bodies.fromVertices(level_data.bodies[i].position.x,
+                                                level_data.bodies[i].position.y,
+                                                level_data.bodies[i].vertices,
+                                                {isStatic : level_data.bodies[i].isStatic});
+          bodies.push({
+              body : body,
+              vertices : level_data.bodies[i].vertices,
+              centroid: centroid,
+              color_index : ColorManager.getRandomColorIndex(),
+          });
+          _bodies.push(body);
+      }
+      Matter.World.add(engine.world, _bodies);
+      Screen.setTitleText(level_data.description);
+  }
+
+  function restartLevel()
+  {
+      loadLevel(current_level_index);
   }
 
   return {  init          : init,
@@ -322,10 +370,10 @@ var CrayonPhysics = (function(){
             tack          : tack,
             erease        : erease,
             changeTool    : changeTool,
-            restartEngine : restartEngine,
             enableDebugRenderer  : enableDebugRenderer,
             disableDebugRenderer : disableDebugRenderer,
             isDebugRendererEnabled : isDebugRendererEnabled,
-            loadLevel              : loadLevel };
+            loadLevel              : loadLevel,
+            restartLevel : restartLevel };
 
 })();

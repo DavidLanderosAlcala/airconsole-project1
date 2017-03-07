@@ -39,7 +39,7 @@ var MenuSettings = (function(){
             e.sender.dataset.pressed = e.isPressed ? "true" : "false";
             if(!e.isPressed)
             {
-            	CrayonPhysics.restartEngine();
+            	CrayonPhysics.restartLevel();
             }
 		});
 

@@ -2,6 +2,8 @@
 
 var LevelSelector = (function(){
 
+    var levels = [];
+
     var menu_layer = null;
     var visible = false;
 
@@ -14,8 +16,8 @@ var LevelSelector = (function(){
     {
     	Screen.setTitleText("Level selection");
     	clear();
-        var i; l = 15;
-        for(i = 1; i < l; i++)
+        var i; l = levels.length;
+        for(i = 0; i < l; i++)
         {
         	createButton(i, "levelButton" + i, onLevelSelected);
         }
@@ -35,7 +37,7 @@ var LevelSelector = (function(){
     	else
     	{
             hide();
-            CrayonPhysics.restartEngine();
+            CrayonPhysics.loadLevel(parseInt(e.sender.innerHTML));
             Screen.setTitleText("Level " + e.sender.innerHTML);
     	}
     }
@@ -65,8 +67,14 @@ var LevelSelector = (function(){
     	return visible;
     }
 
+    function getLevels()
+    {
+        return levels;
+    }
+
     return { init : init,
              show : show,
              hide : hide,
-             isVisible : isVisible };
+             isVisible : isVisible,
+             getLevels : getLevels };
 })();
