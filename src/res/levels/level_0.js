@@ -7,6 +7,7 @@ LevelSelector.getLevels().push({
 
     bodies : [
         {
+            label : "ground",
             isStatic : true,
             position : {x : 0, y : 100 },
             vertices: [
@@ -18,7 +19,14 @@ LevelSelector.getLevels().push({
         },
     ],
 
-    success : function() {
+    setup : function(world)
+    {
+        var bodies = Matter.Composite.allBodies(world);
+        console.log(bodies[0]);
+    },
+
+    update : function()
+    {
         return false;
     }
 

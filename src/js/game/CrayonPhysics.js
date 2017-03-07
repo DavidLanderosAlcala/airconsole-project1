@@ -24,7 +24,7 @@ var CrayonPhysics = (function(){
 
   // Level related
   var current_level_index = 0;
-  var current_success_function = null;
+  var current_update_function = null;
 
   function init(options)
   {
@@ -79,6 +79,8 @@ var CrayonPhysics = (function(){
 
   function render()
   {
+      if(current_update_function != null)
+          current_update_function();
       // clearing the screen
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
@@ -327,7 +329,7 @@ var CrayonPhysics = (function(){
       restartEngine();
       current_level_index = level_index;
       var level_data = LevelSelector.getLevels()[level_index];
-      current_success_function = level_data.success;
+      current_update_function = level_data.update;
       var _bodies = [];
       for(var i = 0; i < level_data.bodies.length; i++)
       {
@@ -344,7 +346,7 @@ var CrayonPhysics = (function(){
           var body = Matter.Bodies.fromVertices(level_data.bodies[i].position.x,
                                                 level_data.bodies[i].position.y,
                                                 level_data.bodies[i].vertices,
-                                                {isStatic : level_data.bodies[i].isStatic});
+                                                { isStatic : level_data.bodies[i].isStatic, label : level_data.bodies[i].label });
           bodies.push({
               body : body,
               vertices : level_data.bodies[i].vertices,
@@ -355,6 +357,8 @@ var CrayonPhysics = (function(){
       }
       Matter.World.add(engine.world, _bodies);
       Screen.setTitleText(level_data.description);
+      if(level_data.setup != undefined)
+          level_data.setup(engine.world);
   }
 
   function restartLevel()
@@ -370,10 +374,10 @@ var CrayonPhysics = (function(){
             tack          : tack,
             erease        : erease,
             changeTool    : changeTool,
-            enableDebugRenderer  : enableDebugRenderer,
-            disableDebugRenderer : disableDebugRenderer,
+            enableDebugRenderer    : enableDebugRenderer,
+            disableDebugRenderer   : disableDebugRenderer,
             isDebugRendererEnabled : isDebugRendererEnabled,
-            loadLevel              : loadLevel,
-            restartLevel : restartLevel };
+            loadLevel     : loadLevel,
+            restartLevel  : restartLevel };
 
 })();
