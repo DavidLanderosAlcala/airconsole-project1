@@ -1,10 +1,6 @@
 
 var CrayonPhysics = (function(){
 
-  /* constants */
-  const default_canvas_width  = 640;
-  const default_canvas_height = 480;  
-
   /* variables */
   var canvas;
   var context;
@@ -14,10 +10,7 @@ var CrayonPhysics = (function(){
   var bodies = [];
   var current_polygon = [];
   var current_color_index = -1;
-  var ground_info;
-  var ground;
   var useDebugRenderer = false;
-  var seconds = 0;
 
   var global_x_offset = 0;
   var global_y_offset = 0;
@@ -32,8 +25,6 @@ var CrayonPhysics = (function(){
   {
       MenuManager.init();
       canvas = options.canvas;
-      canvas.width = options.width == undefined ? default_canvas_width : options.width;
-      canvas.height = options.height == undefined ? default_canvas_height : options.height;
       canvas_left = canvas.getBoundingClientRect().left;
       canvas_top = canvas.getBoundingClientRect().top;
       global_x_offset = canvas.width >> 1;
@@ -61,22 +52,6 @@ var CrayonPhysics = (function(){
       bodies = [];
       current_polygon = [];
       current_color_index = -1;
-
-      //// create initial objects / load level, etc.
-      //ground_info = {
-      //    x : canvas.width>>1,
-      //    y : canvas.height - 25,
-      //    width  : canvas.width,
-      //    height : 50,
-      //};
-      //ground = Matter.Bodies.rectangle(
-      //    ground_info.x,
-      //    ground_info.y,
-      //    ground_info.width,
-      //    ground_info.height,
-      //    { isStatic : true }
-      //)
-      //Matter.World.add(engine.world, [ground]);
   }
 
   function render()
@@ -108,19 +83,6 @@ var CrayonPhysics = (function(){
           context.stroke();
       }
       context.restore();
-
-      //// drawing the floor
-      //context.save();
-      //context.translate(ground.position.x, ground.position.y);
-      //context.lineWidth = 8;
-      //context.fillStyle = ColorManager.getColorAt(0);
-      //context.fillRect(
-      //    -ground_info.width>>1,
-      //    -ground_info.height>>1,
-      //    ground_info.width,
-      //    ground_info.height
-      //);
-      //context.restore();
 
       // drawing polygons
       var i, l = bodies.length;
@@ -239,27 +201,24 @@ var CrayonPhysics = (function(){
 
   function lineTo(pos)
   {
-    var new_pos = {
-      x : pos.x - global_x_offset,
-      y : pos.y - global_y_offset,
-    };
-    
-    if(current_polygon.length > 0){
-      var old_pos = current_polygon[current_polygon.length - 1];
-      distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
-      if(distance < 100)
-      {
-        return; 
+      var new_pos = {
+        x : pos.x - global_x_offset,
+        y : pos.y - global_y_offset,
+      };
+      if(current_polygon.length > 0){
+        var old_pos = current_polygon[current_polygon.length - 1];
+        distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
+        if(distance < 100)
+        {
+          return; 
+        }
       }
-    }
-    
-    if(current_color_index == -1)
-    {
-      current_color_index = ColorManager.getRandomColorIndex();
-    }     
-    
-    current_polygon.push(new_pos);
-    moveTo(pos);
+      if(current_color_index == -1)
+      {
+        current_color_index = ColorManager.getRandomColorIndex();
+      }     
+      current_polygon.push(new_pos);
+      moveTo(pos);
   }
 
   function closePath()
