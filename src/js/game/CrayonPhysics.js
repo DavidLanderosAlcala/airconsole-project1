@@ -286,16 +286,18 @@ var CrayonPhysics = (function(){
 
   function erease()
   {
-       var _bodies = Matter.Composite.allBodies(engine.world);
-       var cur_pos = PlayerCursor.getPosition();
-       cur_pos.x -= global_x_offset;
-       cur_pos.y -= global_y_offset;
-       var _bodies = Matter.Query.point(_bodies, cur_pos);
-       var i, l = _bodies.length;
-       for(i = 0; i < l; i++)
-       {
-           removeBody(_bodies[i]);
-       }
+      var _bodies = Matter.Composite.allBodies(engine.world);
+      var cur_pos = PlayerCursor.getPosition();
+      cur_pos.x -= global_x_offset;
+      cur_pos.y -= global_y_offset;
+      var _bodies = Matter.Query.point(_bodies, cur_pos);
+      var i, l = _bodies.length;
+      for(i = 0; i < l; i++)
+      {
+          removeBody(_bodies[i]);
+      }
+      current_polygon = [];
+      current_color_index = -1;
   }
 
   function changeTool()
