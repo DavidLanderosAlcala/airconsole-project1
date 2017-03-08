@@ -19,10 +19,10 @@ LevelSelector.getLevels().push({
 
     setup : function(context, engine)
     {
-	// agregamos una variable al contexto del nivel
+	    // agregamos una variable al contexto del nivel
     	context.game_over = false;
 
-	// si ocurre una colision cualquiera el nivel esta terminado
+	    // si ocurre una colision cualquiera el nivel esta terminado
         Matter.Events.on(engine, 'collisionActive', function(event) {
             context.game_over = true;
         });
@@ -30,7 +30,7 @@ LevelSelector.getLevels().push({
 
     update : function(context, engine)
     {
-	// retornamos el estado actual del nivel
+	    // retornamos el estado actual del nivel
         return context.game_over;
     }
 

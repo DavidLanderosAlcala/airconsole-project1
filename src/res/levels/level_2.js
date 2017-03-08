@@ -25,8 +25,8 @@ LevelSelector.getLevels().push({
                 {x : 100, y : 0 },
                 {x : 100, y : 300 },
                 {x : 80, y : 300 },
-                {x : 80, y : 50 },
-                {x : -80, y : 50 },
+                {x : 50, y : 50 },
+                {x : -50, y : 50 },
                 {x : -80, y : 300 },
             ],
         },
@@ -45,12 +45,29 @@ LevelSelector.getLevels().push({
 
     setup : function(context, engine)
     {
-
+        context.gameover = false;
+        // si ocurre una colision cualquiera el nivel esta terminado
+        Matter.Events.on(engine, 'collisionActive', function(event) {
+            var pairs = event.pairs;
+            var l = pairs.length;
+            for(var i = 0; i < l; i++)
+            {
+                if(pairs[i].bodyA.label == "ground" || pairs[i].bodyA.label == "ice")
+                {
+                    if(pairs[i].bodyB.label == "ground" || pairs[i].bodyB.label == "ice")
+                    {
+                        context.gameover = true;
+                    }
+                }
+                
+            }
+            console.log(event.pairs[0].bodyA.label + event.pairs[0].bodyB.label);
+        });
     },
 
     update : function(context, engine)
     {
-        return false;
+        return context.gameover;
     }
 
 });
