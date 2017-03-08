@@ -208,7 +208,7 @@ var CrayonPhysics = (function(){
       if(current_polygon.length > 0){
         var old_pos = current_polygon[current_polygon.length - 1];
         distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
-        if(distance < 100)
+        if(distance < 10)
         {
           return; 
         }
