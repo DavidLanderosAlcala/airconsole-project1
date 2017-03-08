@@ -342,14 +342,14 @@ var CrayonPhysics = (function(){
       var _bodies = [];
       for(var i = 0; i < level_data.bodies.length; i++)
       {
-          if(level_data.mapped == undefined)
+          if(level_data.bodies[i].mapped == undefined)
           {
               level_data.bodies[i].position.y = -level_data.bodies[i].position.y;
               for(var v = 0; v < level_data.bodies[i].vertices.length; v++)
               {
                   level_data.bodies[i].vertices[v].y = -level_data.bodies[i].vertices[v].y;
               }
-              level_data.mapped = true;
+              level_data.bodies[i].mapped = true;
           }
           var centroid = Matter.Vertices.centre(level_data.bodies[i].vertices);
           var body = Matter.Bodies.fromVertices(level_data.bodies[i].position.x,
