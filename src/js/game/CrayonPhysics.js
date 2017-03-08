@@ -287,7 +287,10 @@ var CrayonPhysics = (function(){
   function erease()
   {
        var _bodies = Matter.Composite.allBodies(engine.world);
-       var _bodies = Matter.Query.point(_bodies, PlayerCursor.getPosition());
+       var cur_pos = PlayerCursor.getPosition();
+       cur_pos.x -= global_x_offset;
+       cur_pos.y -= global_y_offset;
+       var _bodies = Matter.Query.point(_bodies, cur_pos);
        var i, l = _bodies.length;
        for(i = 0; i < l; i++)
        {
@@ -302,8 +305,6 @@ var CrayonPhysics = (function(){
 
   function removeBody(body)
   {
-  	  if(body.id == ground.id)
-  	      return;
       Matter.World.remove(engine.world, [body]);
       var i, l = bodies.length;
       for(i = 0; i < l; i++)
