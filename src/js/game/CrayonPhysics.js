@@ -239,15 +239,27 @@ var CrayonPhysics = (function(){
 
   function lineTo(pos)
   {
-      if(current_color_index == -1)
+    var new_pos = {
+      x : pos.x - global_x_offset,
+      y : pos.y - global_y_offset,
+    };
+    
+    if(current_polygon.length > 0){
+      var old_pos = current_polygon[current_polygon.length - 1];
+      distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
+      if(distance < 100)
       {
-          current_color_index = ColorManager.getRandomColorIndex();
+        return; 
       }
-      current_polygon.push({
-          x : pos.x - global_x_offset,
-          y : pos.y - global_y_offset,
-      });
-      moveTo(pos);
+    }
+    
+    if(current_color_index == -1)
+    {
+      current_color_index = ColorManager.getRandomColorIndex();
+    }     
+    
+    current_polygon.push(new_pos);
+    moveTo(pos);
   }
 
   function closePath()
