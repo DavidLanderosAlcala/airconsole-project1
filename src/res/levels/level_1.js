@@ -41,11 +41,14 @@ LevelSelector.getLevels().push({
 
     setup : function(context, engine)
     {
+    	context.time = new Date().getTime();
         bodies = Matter.Composite.allBodies(engine.world);
         for(var i = 0; i < bodies.length; i++)
         {
             if(bodies[i].label == "rock")
             {
+            	// Buscamos rock y guardamos una referencia
+            	// para no volver a buscarla en cada llamada a update
                 context.rock = bodies[i];
                 break;
             }
@@ -54,11 +57,21 @@ LevelSelector.getLevels().push({
 
     update : function(context, engine)
     {
-	    // retornamos el estado actual del nivel
+	    // si rock ha salido de la pantalla
         if(context.rock.position.y >= 0)
         {
+        	// la regresamos a su posicion inicial
             Matter.Body.setVelocity(context.rock, { x : 0, y : 0 });
             Matter.Body.setPosition(context.rock, { x : 0, y : -1000 });
+            context.time = new Date().getTime();
+        }
+        // si no
+        else
+        {
+            // si rock lleva mas de 3 segundos sin caer,
+            // el jugador ha ganado
+            if(new Date().getTime() - context.time > 3000)
+            	return true;
         }
         return false;
     }
