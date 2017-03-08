@@ -83,7 +83,7 @@ var CrayonPhysics = (function(){
   {
       if(!game_over && current_update_function != null)
       {
-          game_over = current_update_function(current_level_context);
+          game_over = current_update_function(current_level_context, engine);
           if(game_over)
             Screen.setTitleText("You won!!");
       }

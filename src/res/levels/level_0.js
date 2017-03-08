@@ -26,7 +26,7 @@ LevelSelector.getLevels().push({
         });
     },
 
-    update : function(context)
+    update : function(context, engine)
     {
     	if(context.game_over)
     		console.log("Winner!!!");
