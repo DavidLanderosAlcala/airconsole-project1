@@ -302,6 +302,7 @@ var CrayonPhysics = (function(){
 
   function checkForTacks(my_body)
   {
+      var count = 0;
       var _bodies = null;
       for(var tack_i = 0; tack_i < tacks.length; tack_i++)
       {
@@ -320,13 +321,19 @@ var CrayonPhysics = (function(){
                   var constraint = Matter.Constraint.create({
                       bodyA  : my_body.body,
                       pointA : diff,
-                      pointB : tacks[tack_i],
+                      pointB :  tacks[tack_i],
                       stiffness: 0.1,
                       length : 1,
                   });
+                  count++;
                   Matter.World.add(engine.world, [constraint]);
               }
           }
+      }
+      if(count > 1)
+      {
+          // si tiene 2 tacks entonces debe quedar completamente estatica
+          Matter.Body.setStatic(my_body.body,true);
       }
   }
 
