@@ -220,6 +220,22 @@ var CrayonPhysics = (function(){
             current_color_index = ColorManager.getRandomColorIndex();
           }     
           current_polygon.push(new_pos);
+
+          // cuando hay mas de 5 vertices
+          // calculamos la distancia entre el primero y el ultimo
+          if(current_polygon.length >= 5)
+          {
+              var diff_x = current_polygon[0].x - current_polygon[current_polygon.length-1].x;
+              var diff_y = current_polygon[0].y - current_polygon[current_polygon.length-1].y;
+              var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+
+              // si la distancia es menor a 30 pixeles damos por terminada la figura
+              if(head_to_tail_distance < 30)
+              {
+                  closePath();
+              }
+          }
+
       }
       moveTo(pos);
   }

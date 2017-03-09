@@ -12,7 +12,7 @@ var PlayerCursor = (function() {
     var tools = [
         "chalk",
         "ereaser",
-        //"tack"
+        "tack"
     ];
     var position = { x : 0, y : 0};
     var current_tool_index = 0;
