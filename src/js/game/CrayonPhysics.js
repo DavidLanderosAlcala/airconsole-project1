@@ -322,16 +322,9 @@ var CrayonPhysics = (function(){
                       pointA : diff,
                       pointB : tacks[tack_i],
                       stiffness: 0.1,
-                      length : 0,
+                      length : 1,
                   });
-                  var constraint2 = Matter.Constraint.create({
-                      bodyA  : my_body.body,
-                      pointA : diff,
-                      pointB : tacks[tack_i],
-                      stiffness: 0.1,
-                      length : 0,
-                  });
-                  Matter.World.add(engine.world, [constraint,constraint2]);
+                  Matter.World.add(engine.world, [constraint]);
               }
           }
       }
