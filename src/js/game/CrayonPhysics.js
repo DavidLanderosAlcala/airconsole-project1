@@ -21,6 +21,10 @@ var CrayonPhysics = (function(){
   var current_level_context = {};
   var game_over = false;
 
+
+  // testing
+  var tacks = [];
+
   function init(options)
   {
       MenuManager.init();
@@ -52,6 +56,9 @@ var CrayonPhysics = (function(){
       bodies = [];
       current_polygon = [];
       current_color_index = -1;
+
+      // testing
+      tacks = [];
   }
 
   function render()
@@ -104,6 +111,20 @@ var CrayonPhysics = (function(){
           context.stroke();
           context.restore();
       }
+
+      // drawing tacks
+      context.strokeStyle = ColorManager.getColorAt(0);
+      context.lineWidth = 8;
+      for(var i = 0; i < tacks.length; i++)
+      {
+          context.beginPath();
+          context.arc(tacks[i].x, tacks[i].y, 10, 0, Math.PI * 2);
+          context.stroke();
+      }
+
+          context.beginPath();
+          context.arc(0, 0, 10, 0, Math.PI * 2);
+          context.stroke();
 
       if(useDebugRenderer)
       {
@@ -187,6 +208,10 @@ var CrayonPhysics = (function(){
           {
               erease();
           }
+          if(PlayerCursor.getCurrentToolName() == "tack")
+          {
+              tack();
+          }
           else
           {
               closePath();
@@ -221,6 +246,10 @@ var CrayonPhysics = (function(){
           }     
           current_polygon.push(new_pos);
 
+
+
+          // El siguiente codigo podria ser el inicio para detectar
+          // cuando el dibujo debe ser un cuerpo solido o un "alambre"
           // cuando hay mas de 5 vertices
           // calculamos la distancia entre el primero y el ultimo
           if(current_polygon.length >= 5)
@@ -230,6 +259,7 @@ var CrayonPhysics = (function(){
               var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
 
               // si la distancia es menor a 30 pixeles damos por terminada la figura
+              // Esto es un cuerpo solido.
               if(head_to_tail_distance < 30)
               {
                   closePath();
@@ -265,13 +295,54 @@ var CrayonPhysics = (function(){
           color_index : current_color_index,
       });
       Matter.World.add(engine.world, [body]);
+      checkForTacks(bodies[bodies.length-1]);
       current_polygon = [];
       current_color_index = -1;
   }
 
+  function checkForTacks(my_body)
+  {
+      var _bodies = null;
+      for(var tack_i = 0; tack_i < tacks.length; tack_i++)
+      {
+          _bodies = Matter.Composite.allBodies(engine.world);
+          _bodies = Matter.Query.point(_bodies, {x : tacks[tack_i].x, y : tacks[tack_i].y} );
+          var i, l = _bodies.length;
+          for(i = 0; i < l; i++)
+          {
+              if(my_body.body.id == _bodies[i].id)
+              {
+                  var diff = {
+                      x : tacks[tack_i].x - my_body.body.position.x,
+                      y : tacks[tack_i].y - my_body.body.position.y,
+                  };
+                  // agregar restriccion
+                  var constraint = Matter.Constraint.create({
+                      bodyA  : my_body.body,
+                      pointA : diff,
+                      pointB : tacks[tack_i],
+                      stiffness: 0.1,
+                      length : 0,
+                  });
+                  var constraint2 = Matter.Constraint.create({
+                      bodyA  : my_body.body,
+                      pointA : diff,
+                      pointB : tacks[tack_i],
+                      stiffness: 0.1,
+                      length : 0,
+                  });
+                  Matter.World.add(engine.world, [constraint,constraint2]);
+              }
+          }
+      }
+  }
+
   function tack()
   {
-      
+      var cur_pos = PlayerCursor.getPosition();
+      cur_pos.x -= global_x_offset;
+      cur_pos.y -= global_y_offset; 
+      tacks.push({ x : cur_pos.x, y: cur_pos.y });
   }
 
   function erease()
