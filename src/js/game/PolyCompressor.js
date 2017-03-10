@@ -5,7 +5,7 @@
 var PolyCompressor = (function(){
 
     var invalid_dot_product = -1.0;
-    var umbral = 0.2;
+    var umbral = 0.1;
 	var polygon;
 
     /** @func compress
