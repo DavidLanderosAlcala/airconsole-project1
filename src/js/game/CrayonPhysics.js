@@ -1,45 +1,47 @@
 
 var CrayonPhysics = (function(){
 
-  /* canvas related variables */
+  /* module/local variables */
   var canvas;
   var context;
   var camera;
   var canvas_rect;
-
-  /* matter.js related variabels */
   var engine;
   var objects;
-
-  /* player related objects */
-  var current_polygon = [];
-  var current_color_index = -1;
-  var lock_touch_move = false;
-
-  /* Level related variables */
+  var drawing_data;
   var level_data;
 
   function init(options)
   {
       MenuManager.init();
       canvas = options.canvas;
+
       camera = {
           x : canvas.width >> 1,
           y : canvas.height
       };
+
       objects = {
           shapes : [],
           tacks  : [],
       };
+
       level_data = {
-        id          : -1,
-        game_over   : false,
-        update_fnc  : null,
-        setup_fnc   : null,
-        title       : "",
-        description : "",
-        context     : { },
+          id          : -1,
+          game_over   : false,
+          update_fnc  : null,
+          setup_fnc   : null,
+          title       : "",
+          description : "",
+          context     : { },
       };
+
+      drawing_data = {
+          current_polygon     : [],
+          current_color_index : -1,
+          is_lineto_locked    : false,
+      };
+
       canvas_rect = canvas.getBoundingClientRect();
       context = canvas.getContext("2d");
       ColorManager.init(context);
@@ -64,8 +66,8 @@ var CrayonPhysics = (function(){
       objects.shapes = [];
       objects.tacks  = [];
 
-      current_polygon = [];
-      current_color_index = -1;
+      drawing_data.current_polygon = [];
+      drawing_data.current_color_index = -1;
       
   }
 
@@ -90,15 +92,15 @@ var CrayonPhysics = (function(){
 
       // drawing the current polygon
       context.save();
-      if(current_polygon.length > 1)
+      if(drawing_data.current_polygon.length > 1)
       {
-          context.strokeStyle = ColorManager.getColorAt(current_color_index);
+          context.strokeStyle = ColorManager.getColorAt(drawing_data.current_color_index);
           context.lineWidth = 8;
           context.beginPath();
-          context.moveTo(current_polygon[0].x, current_polygon[0].y);
-          for(var i = 0; i < current_polygon.length; i++)
+          context.moveTo(drawing_data.current_polygon[0].x, drawing_data.current_polygon[0].y);
+          for(var i = 0; i < drawing_data.current_polygon.length; i++)
           {
-            context.lineTo(current_polygon[i].x, current_polygon[i].y);
+            context.lineTo(drawing_data.current_polygon[i].x, drawing_data.current_polygon[i].y);
           }
           context.stroke();
       }
@@ -206,13 +208,13 @@ var CrayonPhysics = (function(){
 
   function onTouchEvent(e)
   {
-      if(e.type == "touchmove" && lock_touch_move == false)
+      if(e.type == "touchmove")
       {
           lineTo(e);
       }
       else if(e.type == "touchend")
       {
-          lock_touch_move = false;
+          drawing_data.is_lineto_locked = false;
           if(PlayerCursor.getCurrentToolName() == "ereaser")
           {
               erease();
@@ -235,25 +237,26 @@ var CrayonPhysics = (function(){
 
   function lineTo(pos)
   {
+      if(drawing_data.is_lineto_locked) { return; }
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
           var new_pos = {
             x : pos.x - camera.x,
             y : pos.y - camera.y,
           };
-          if(current_polygon.length > 0){
-            var old_pos = current_polygon[current_polygon.length - 1];
+          if(drawing_data.current_polygon.length > 0){
+            var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
             distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
             if(distance < 10)
             {
               return; 
             }
           }
-          if(current_color_index == -1)
+          if(drawing_data.current_color_index == -1)
           {
-            current_color_index = ColorManager.getRandomColorIndex();
+            drawing_data.current_color_index = ColorManager.getRandomColorIndex();
           }     
-          current_polygon.push(new_pos);
+          drawing_data.current_polygon.push(new_pos);
 
 
 
@@ -261,10 +264,10 @@ var CrayonPhysics = (function(){
           // cuando el dibujo debe ser un cuerpo solido o un "alambre"
           // cuando hay mas de 5 vertices
           // calculamos la distancia entre el primero y el ultimo
-          if(current_polygon.length >= 5)
+          if(drawing_data.current_polygon.length >= 5)
           {
-              var diff_x = current_polygon[0].x - current_polygon[current_polygon.length-1].x;
-              var diff_y = current_polygon[0].y - current_polygon[current_polygon.length-1].y;
+              var diff_x = drawing_data.current_polygon[0].x - drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
+              var diff_y = drawing_data.current_polygon[0].y - drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
               var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
 
               // si la distancia es menor a 30 pixeles damos por terminada la figura
@@ -272,7 +275,7 @@ var CrayonPhysics = (function(){
               if(head_to_tail_distance < 30)
               {
                   closePath();
-                  lock_touch_move = true;
+                  drawing_data.is_lineto_locked = true;
               }
           }
 
@@ -282,32 +285,32 @@ var CrayonPhysics = (function(){
 
   function closePath()
   {
-      if(current_polygon.length == 0)
+      if(drawing_data.current_polygon.length == 0)
           return;
-      console.log(current_polygon.length + " vertices");
-      current_polygon = PolyCompressor.compress(current_polygon);
-      console.log(current_polygon.length + " vertices - compressed");
-      var centroid = Matter.Vertices.centre(current_polygon);
-      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, current_polygon, {friction: 0.5});
+      console.log(drawing_data.current_polygon.length + " vertices");
+      drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
+      console.log(drawing_data.current_polygon.length + " vertices - compressed");
+      var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
+      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5});
       if(body == undefined)
       {
-          current_polygon = [];
+          drawing_data.current_polygon = [];
           return;
       };
       var diff = {
-          x : body.vertices[0].x - current_polygon[0].x,
-          y : body.vertices[0].y - current_polygon[0].y,
+          x : body.vertices[0].x - drawing_data.current_polygon[0].x,
+          y : body.vertices[0].y - drawing_data.current_polygon[0].y,
       };
       objects.shapes.push({
           body : body,
-          vertices : current_polygon,
+          vertices : drawing_data.current_polygon,
           centroid: centroid,
-          color_index : current_color_index,
+          color_index : drawing_data.current_color_index,
       });
       Matter.World.add(engine.world, [body]);
       checkForTacks(objects.shapes[objects.shapes.length-1]);
-      current_polygon = [];
-      current_color_index = -1;
+      drawing_data.current_polygon = [];
+      drawing_data.current_color_index = -1;
   }
 
   function checkForTacks(my_body)
@@ -367,8 +370,8 @@ var CrayonPhysics = (function(){
       {
           removeBody(_bodies[i]);
       }
-      current_polygon = [];
-      current_color_index = -1;
+      drawing_data.current_polygon = [];
+      drawing_data.current_color_index = -1;
   }
 
   function changeTool()
