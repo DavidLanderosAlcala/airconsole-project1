@@ -463,9 +463,6 @@ var CrayonPhysics = (function(){
             tack          : tack,
             erease        : erease,
             changeTool    : changeTool,
-            enableDebugRenderer    : enableDebugRenderer,
-            disableDebugRenderer   : disableDebugRenderer,
-            isDebugRendererEnabled : isDebugRendererEnabled,
             loadLevel     : loadLevel,
             restartLevel  : restartLevel };
 })();

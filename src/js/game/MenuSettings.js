@@ -25,8 +25,7 @@ var MenuSettings = (function(){
             }
 		});
 
-		value = CrayonPhysics.isDebugRendererEnabled();
-		addCheckBox("debug renderer","debug_renderer_checkbox", value, function(e){
+		addCheckBox("debug renderer","debug_renderer_checkbox", ConfigOptions.use_debug_render, function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
             if(e.checked) {
                 ConfigOptions.use_debug_render = true;
