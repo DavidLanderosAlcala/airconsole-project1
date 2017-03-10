@@ -437,7 +437,6 @@ var CrayonPhysics = (function(){
   }
 
   return {  init          : init,
-            onTouchEvent  : onTouchEvent,
             moveTo        : moveTo,
             lineTo        : lineTo,
             closePath     : closePath,
