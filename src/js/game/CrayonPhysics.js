@@ -4,8 +4,6 @@ var CrayonPhysics = (function(){
   /* variables */
   var canvas;
   var context;
-  var canvas_left;
-  var canvas_top;
   var engine;
   var bodies = [];
   var current_polygon = [];
@@ -30,8 +28,6 @@ var CrayonPhysics = (function(){
   {
       MenuManager.init();
       canvas = options.canvas;
-      canvas_left = canvas.getBoundingClientRect().left;
-      canvas_top = canvas.getBoundingClientRect().top;
       global_x_offset = canvas.width >> 1;
       global_y_offset = canvas.height;
       context = canvas.getContext("2d");
@@ -189,7 +185,7 @@ var CrayonPhysics = (function(){
 
   function onMouseMove(e)
   {
-      var pos = { x : e.clientX - canvas_left, y: e.clientY - canvas_top};
+      var pos = { x : e.clientX, y: e.clientY};
       moveTo(pos);
   }
 
