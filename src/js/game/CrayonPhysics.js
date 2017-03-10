@@ -10,6 +10,7 @@ var CrayonPhysics = (function(){
   var bodies = [];
   var current_polygon = [];
   var current_color_index = -1;
+  var lock_touch_move = false;
   var useDebugRenderer = false;
 
   var global_x_offset = 0;
@@ -194,12 +195,13 @@ var CrayonPhysics = (function(){
 
   function onTouchEvent(e)
   {
-      if(e.type == "touchmove")
+      if(e.type == "touchmove" && lock_touch_move == false)
       {
           lineTo(e);
       }
       else if(e.type == "touchend")
       {
+          lock_touch_move = false;
           if(PlayerCursor.getCurrentToolName() == "ereaser")
           {
               erease();
@@ -259,6 +261,7 @@ var CrayonPhysics = (function(){
               if(head_to_tail_distance < 30)
               {
                   closePath();
+                  lock_touch_move = true;
               }
           }
 
