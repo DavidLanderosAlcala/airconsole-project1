@@ -9,22 +9,19 @@ var CrayonPhysics = (function(){
 
   /* matter.js related variabels */
   var engine;
-  var bodies = [];
+  var objects;
 
   /* player related objects */
   var current_polygon = [];
   var current_color_index = -1;
   var lock_touch_move = false;
 
-  /* Level related variables*/
+  /* Level related variables */
   var current_level_index = 0;
   var current_update_function = null;
   var current_level_context = {};
   var game_over = false;
 
-
-  // testing
-  var tacks = [];
 
   function init(options)
   {
@@ -33,6 +30,10 @@ var CrayonPhysics = (function(){
       camera = {
           x : canvas.width >> 1,
           y : canvas.height
+      };
+      objects = {
+          shapes : [],
+          tacks  : [],
       };
       canvas_rect = canvas.getBoundingClientRect();
       context = canvas.getContext("2d");
@@ -44,34 +45,39 @@ var CrayonPhysics = (function(){
       Matter.Engine.run(engine);
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
-      window.requestAnimationFrame(render);
+      window.requestAnimationFrame(update);
       LevelSelector.show();
   }
 
   function restartEngine()
   {
-      // remove all bodies
+      // remove all objects.shapes
       var _bodies = Matter.Composite.allBodies(engine.world);
       Matter.World.remove(engine.world, _bodies);
 
       // Reset some variables
-      bodies = [];
+      objects.shapes = [];
+      objects.tacks  = [];
+
       current_polygon = [];
       current_color_index = -1;
-
-      // testing
-      tacks = [];
+      
   }
 
-  function render()
+  function update()
   {
       if(!game_over && current_update_function != null)
       {
           game_over = current_update_function(current_level_context, engine);
           if(game_over)
-            Screen.setTitleText("You won!!");
+              Screen.setTitleText("You won!!");
       }
+      render();
+      window.requestAnimationFrame(update);
+  }
 
+  function render()
+  {
       // clearing the screen
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
@@ -94,19 +100,19 @@ var CrayonPhysics = (function(){
       context.restore();
 
       // drawing polygons
-      var i, l = bodies.length;
+      var i, l = objects.shapes.length;
       for(i = 0; i < l; i++)
       {
           context.save();
-          context.translate(bodies[i].body.position.x, bodies[i].body.position.y);
-          context.rotate(bodies[i].body.angle);
-          context.translate(-bodies[i].centroid.x, -bodies[i].centroid.y);
-          context.strokeStyle = ColorManager.getColorAt(bodies[i].color_index);
+          context.translate(objects.shapes[i].body.position.x, objects.shapes[i].body.position.y);
+          context.rotate(objects.shapes[i].body.angle);
+          context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
+          context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.beginPath();
-          context.moveTo(bodies[i].vertices[0].x, bodies[i].vertices[0].y);
-          for(var j = 1; j < bodies[i].vertices.length; j++)
+          context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+          for(var j = 1; j < objects.shapes[i].vertices.length; j++)
           {
-              context.lineTo(bodies[i].vertices[j].x, bodies[i].vertices[j].y);
+              context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
           }
           context.closePath();
           context.lineWidth = 8;
@@ -114,13 +120,13 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
-      // drawing tacks
+      // drawing objects.tacks
       context.strokeStyle = ColorManager.getColorAt(0);
       context.lineWidth = 8;
-      for(var i = 0; i < tacks.length; i++)
+      for(var i = 0; i < objects.tacks.length; i++)
       {
           context.beginPath();
-          context.arc(tacks[i].x, tacks[i].y, 10, 0, Math.PI * 2);
+          context.arc(objects.tacks[i].x, objects.tacks[i].y, 10, 0, Math.PI * 2);
           context.stroke();
       }
 
@@ -130,16 +136,15 @@ var CrayonPhysics = (function(){
       }
 
       context.restore();
-      window.requestAnimationFrame(render);
   }
 
   function debugRender()
   {
       context.save();
-      var bodies = Matter.Composite.allBodies(engine.world);
+      var _bodies = Matter.Composite.allBodies(engine.world);
       context.beginPath();
-      for (var i = 0; i < bodies.length; i += 1) {
-          var vertices = bodies[i].vertices;
+      for (var i = 0; i < _bodies.length; i += 1) {
+          var vertices = _bodies[i].vertices;
           context.moveTo(vertices[0].x, vertices[0].y);
           for (var j = 1; j < vertices.length; j += 1) {
               context.lineTo(vertices[j].x, vertices[j].y);
@@ -288,14 +293,14 @@ var CrayonPhysics = (function(){
           x : body.vertices[0].x - current_polygon[0].x,
           y : body.vertices[0].y - current_polygon[0].y,
       };
-      bodies.push({
+      objects.shapes.push({
           body : body,
           vertices : current_polygon,
           centroid: centroid,
           color_index : current_color_index,
       });
       Matter.World.add(engine.world, [body]);
-      checkForTacks(bodies[bodies.length-1]);
+      checkForTacks(objects.shapes[objects.shapes.length-1]);
       current_polygon = [];
       current_color_index = -1;
   }
@@ -304,24 +309,24 @@ var CrayonPhysics = (function(){
   {
       var count = 0;
       var _bodies = null;
-      for(var tack_i = 0; tack_i < tacks.length; tack_i++)
+      for(var tack_i = 0; tack_i < objects.tacks.length; tack_i++)
       {
           _bodies = Matter.Composite.allBodies(engine.world);
-          _bodies = Matter.Query.point(_bodies, {x : tacks[tack_i].x, y : tacks[tack_i].y} );
+          _bodies = Matter.Query.point(_bodies, {x : objects.tacks[tack_i].x, y : objects.tacks[tack_i].y} );
           var i, l = _bodies.length;
           for(i = 0; i < l; i++)
           {
               if(my_body.body.id == _bodies[i].id)
               {
                   var diff = {
-                      x : tacks[tack_i].x - my_body.body.position.x,
-                      y : tacks[tack_i].y - my_body.body.position.y,
+                      x : objects.tacks[tack_i].x - my_body.body.position.x,
+                      y : objects.tacks[tack_i].y - my_body.body.position.y,
                   };
                   // agregar restriccion
                   var constraint = Matter.Constraint.create({
                       bodyA  : my_body.body,
                       pointA : diff,
-                      pointB :  tacks[tack_i],
+                      pointB :  objects.tacks[tack_i],
                       stiffness: 0.1,
                       length : 1,
                   });
@@ -342,7 +347,7 @@ var CrayonPhysics = (function(){
       var cur_pos = PlayerCursor.getPosition();
       cur_pos.x -= camera.x;
       cur_pos.y -= camera.y; 
-      tacks.push({ x : cur_pos.x, y: cur_pos.y });
+      objects.tacks.push({ x : cur_pos.x, y: cur_pos.y });
   }
 
   function erease()
@@ -371,12 +376,12 @@ var CrayonPhysics = (function(){
       if(body.label != "Body")
         return;
       Matter.World.remove(engine.world, [body]);
-      var i, l = bodies.length;
+      var i, l = objects.shapes.length;
       for(i = 0; i < l; i++)
       {
-          if(body.id == bodies[i].body.id)
+          if(body.id == objects.shapes[i].body.id)
           {
-              bodies.splice(i,1);
+              objects.shapes.splice(i,1);
               return;
           }
       }      
@@ -422,7 +427,7 @@ var CrayonPhysics = (function(){
                                                 level_data.bodies[i].position.y,
                                                 level_data.bodies[i].vertices,
                                                 { isStatic : level_data.bodies[i].isStatic, label : level_data.bodies[i].label });
-          bodies.push({
+          objects.shapes.push({
               body : body,
               vertices : level_data.bodies[i].vertices,
               centroid: centroid,
@@ -453,5 +458,4 @@ var CrayonPhysics = (function(){
             isDebugRendererEnabled : isDebugRendererEnabled,
             loadLevel     : loadLevel,
             restartLevel  : restartLevel };
-
 })();
