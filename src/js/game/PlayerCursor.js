@@ -4,9 +4,6 @@
   */
 var PlayerCursor = (function() {
 
-    const ereaser_image_url = "http://oi67.tinypic.com/670aye.jpg";
-    const tack_image_url    = "http://oi68.tinypic.com/2aezb03.jpg";
-
     var element;
     var canvas = null;
     var tools = [
