@@ -29,10 +29,10 @@ var MenuSettings = (function(){
 		addCheckBox("debug renderer","debug_renderer_checkbox", value, function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
             if(e.checked) {
-                CrayonPhysics.enableDebugRenderer();
+                ConfigOptions.use_debug_render = true;
             }
             else {
-                CrayonPhysics.disableDebugRenderer();
+                ConfigOptions.use_debug_render = false;
             }
 		});
 		addButton("restart world","restart_world", function(e){

@@ -5,7 +5,6 @@
 var PlayerCursor = (function() {
 
     var element;
-    var canvas = null;
     var tools = [
         "chalk",
         "ereaser",
@@ -18,8 +17,10 @@ var PlayerCursor = (function() {
     {
         element = document.querySelector("#player_cursor");
         element.dataset.tool = tools[current_tool_index];
-        canvas = config.canvas;
-        moveTo(canvas.width>>1,canvas.height>>1);
+        if(Utils.isRunningOnAirConsole())
+        {
+            moveTo({x:config.canvas.width>>1,y:config.canvas.height>>1});
+        }
     }
 
     function getPosition()

@@ -1,20 +1,22 @@
 
 var CrayonPhysics = (function(){
 
-  /* variables */
+  /* canvas related variables */
   var canvas;
   var context;
+  var camera;
+  var canvas_rect;
+
+  /* matter.js related variabels */
   var engine;
   var bodies = [];
+
+  /* player related objects */
   var current_polygon = [];
   var current_color_index = -1;
   var lock_touch_move = false;
-  var useDebugRenderer = false;
 
-  var global_x_offset = 0;
-  var global_y_offset = 0;
-
-  // Level related
+  /* Level related variables*/
   var current_level_index = 0;
   var current_update_function = null;
   var current_level_context = {};
@@ -28,8 +30,11 @@ var CrayonPhysics = (function(){
   {
       MenuManager.init();
       canvas = options.canvas;
-      global_x_offset = canvas.width >> 1;
-      global_y_offset = canvas.height;
+      camera = {
+          x : canvas.width >> 1,
+          y : canvas.height
+      };
+      canvas_rect = canvas.getBoundingClientRect();
       context = canvas.getContext("2d");
       ColorManager.init(context);
       PlayerCursor.init({ canvas : canvas, context : context });
@@ -70,7 +75,7 @@ var CrayonPhysics = (function(){
       // clearing the screen
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
-      context.translate(global_x_offset, global_y_offset);
+      context.translate(camera.x, camera.y);
 
       // drawing the current polygon
       context.save();
@@ -119,7 +124,7 @@ var CrayonPhysics = (function(){
           context.stroke();
       }
 
-      if(useDebugRenderer)
+      if(ConfigOptions.use_debug_render)
       {
           debugRender();
       }
@@ -185,7 +190,7 @@ var CrayonPhysics = (function(){
 
   function onMouseMove(e)
   {
-      var pos = { x : e.clientX, y: e.clientY};
+      var pos = { x : e.clientX - canvas_rect.left, y: e.clientY - canvas_rect.top };
       moveTo(pos);
   }
 
@@ -223,8 +228,8 @@ var CrayonPhysics = (function(){
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
           var new_pos = {
-            x : pos.x - global_x_offset,
-            y : pos.y - global_y_offset,
+            x : pos.x - camera.x,
+            y : pos.y - camera.y,
           };
           if(current_polygon.length > 0){
             var old_pos = current_polygon[current_polygon.length - 1];
@@ -335,8 +340,8 @@ var CrayonPhysics = (function(){
   function tack()
   {
       var cur_pos = PlayerCursor.getPosition();
-      cur_pos.x -= global_x_offset;
-      cur_pos.y -= global_y_offset; 
+      cur_pos.x -= camera.x;
+      cur_pos.y -= camera.y; 
       tacks.push({ x : cur_pos.x, y: cur_pos.y });
   }
 
@@ -344,8 +349,8 @@ var CrayonPhysics = (function(){
   {
       var _bodies = Matter.Composite.allBodies(engine.world);
       var cur_pos = PlayerCursor.getPosition();
-      cur_pos.x -= global_x_offset;
-      cur_pos.y -= global_y_offset;
+      cur_pos.x -= camera.x;
+      cur_pos.y -= camera.y;
       var _bodies = Matter.Query.point(_bodies, cur_pos);
       var i, l = _bodies.length;
       for(i = 0; i < l; i++)
@@ -379,17 +384,17 @@ var CrayonPhysics = (function(){
 
   function enableDebugRenderer()
   {
-      useDebugRenderer = true;
+      ConfigOptions.use_debug_render = true;
   }
 
   function disableDebugRenderer()
   {
-      useDebugRenderer = false;
+      ConfigOptions.use_debug_render = false;
   }
 
   function isDebugRendererEnabled()
   {
-      return useDebugRenderer;
+      return ConfigOptions.use_debug_render;
   }
 
   function loadLevel(level_index)
