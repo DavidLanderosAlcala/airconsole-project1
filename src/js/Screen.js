@@ -21,54 +21,38 @@ var Screen = (function(){
         window.addEventListener("resize", onResize);
         adjustToViewPort();
         disableContextMenu();
-        airconsole = new AirConsole();
-        AirConsoleBus.init(airconsole);
-        DebugConsole.init(airconsole, true /* isScreen */);
-        AirConsoleBus.on("gamepadevent", function(e) {
-            if(e.key == "touchpad")
-            {
-                cursor.x += e.value.x * 100;
-                cursor.y += e.value.y * 100;
-
-                if(cursor.x < 0 ) cursor.x = 0;
-                if(cursor.y < 0 ) cursor.y = 0;
-                if(cursor.x > width ) cursor.x = width;
-                if(cursor.y > height ) cursor.y = height;
-
-                if(cursor.isPressed)
+        if(Utils.isRunningOnAirConsole())
+        {
+            airconsole = new AirConsole();
+            AirConsoleBus.init(airconsole);
+            DebugConsole.init(airconsole, true /* isScreen */);
+            AirConsoleBus.on("gamepadevent", function(e) {
+                if(e.key == "touchpad")
                 {
-                    CrayonPhysics.lineTo( cursor );
+                    cursor.x += e.value.x * 100;
+                    cursor.y += e.value.y * 100;
+                    if(cursor.x < 0 ) cursor.x = 0;
+                    if(cursor.y < 0 ) cursor.y = 0;
+                    if(cursor.x > width ) cursor.x = width;
+                    if(cursor.y > height ) cursor.y = height;
+                    if(cursor.isPressed) { CrayonPhysics.lineTo( cursor ); }
+                    else { CrayonPhysics.moveTo( cursor ); }
                 }
-                else
+                else if(e.key == "pad_a")
                 {
-                    CrayonPhysics.moveTo( cursor );
+                    cursor.isPressed = e.value == 1 ? true : false;
+                    if(!e.value) { CrayonPhysics.closePath(); }
                 }
-
-            }
-            else if(e.key == "pad_a")
-            {
-                cursor.isPressed = e.value == 1 ? true : false;
-                if(!e.value)
+                else if(e.key == "pad_b")
                 {
-                    CrayonPhysics.closePath();
+                    if(!e.value) { CrayonPhysics.erease(); }
                 }
-            }
-            else if(e.key == "pad_b")
-            {
-                if(!e.value)
+                else if(e.key == "pad_select")
                 {
-                    CrayonPhysics.erease();
+                    if(e.value == 0) { CrayonPhysics.changeTool(); }
                 }
-            }
-            else if(e.key == "pad_select")
-            {
-                if(e.value == 0)
-                {
-                    CrayonPhysics.changeTool();
-                }
-            }
-
-        });
+            });
+        }
 
         CrayonPhysics.init({
             canvas : document.querySelector("#main_canvas"),
