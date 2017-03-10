@@ -122,10 +122,6 @@ var CrayonPhysics = (function(){
           context.stroke();
       }
 
-          context.beginPath();
-          context.arc(0, 0, 10, 0, Math.PI * 2);
-          context.stroke();
-
       if(useDebugRenderer)
       {
           debugRender();
