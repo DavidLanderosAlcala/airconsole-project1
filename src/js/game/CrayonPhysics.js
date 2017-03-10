@@ -17,11 +17,7 @@ var CrayonPhysics = (function(){
   var lock_touch_move = false;
 
   /* Level related variables */
-  var current_level_index = 0;
-  var current_update_function = null;
-  var current_level_context = {};
-  var game_over = false;
-
+  var level_data;
 
   function init(options)
   {
@@ -34,6 +30,15 @@ var CrayonPhysics = (function(){
       objects = {
           shapes : [],
           tacks  : [],
+      };
+      level_data = {
+        id          : -1,
+        game_over   : false,
+        update_fnc  : null,
+        setup_fnc   : null,
+        title       : "",
+        description : "",
+        context     : { },
       };
       canvas_rect = canvas.getBoundingClientRect();
       context = canvas.getContext("2d");
@@ -66,10 +71,10 @@ var CrayonPhysics = (function(){
 
   function update()
   {
-      if(!game_over && current_update_function != null)
+      if(!level_data.game_over && level_data.update_fnc != null)
       {
-          game_over = current_update_function(current_level_context, engine);
-          if(game_over)
+          level_data.game_over = level_data.update_fnc(level_data.context, engine);
+          if(level_data.game_over)
               Screen.setTitleText("You won!!");
       }
       render();
@@ -405,45 +410,50 @@ var CrayonPhysics = (function(){
   function loadLevel(level_index)
   {
       restartEngine();
-      game_over = false;
-      current_level_context = {};
-      current_level_index = level_index;
-      var level_data = LevelSelector.getLevels()[level_index];
-      current_update_function = level_data.update;
+      level_data.game_over = false;
+      level_data.context = {};
+      level_data.id = level_index;
+      var level = LevelSelector.getLevels()[level_index];
+      level_data.update_fnc = level.update;
       var _bodies = [];
-      for(var i = 0; i < level_data.bodies.length; i++)
+      for(var i = 0; i < level.bodies.length; i++)
       {
-          if(level_data.bodies[i].mapped == undefined)
+          if(level.bodies[i].mapped == undefined)
           {
-              level_data.bodies[i].position.y = -level_data.bodies[i].position.y;
-              for(var v = 0; v < level_data.bodies[i].vertices.length; v++)
+              level.bodies[i].position.y = -level.bodies[i].position.y;
+              for(var v = 0; v < level.bodies[i].vertices.length; v++)
               {
-                  level_data.bodies[i].vertices[v].y = -level_data.bodies[i].vertices[v].y;
+                  level.bodies[i].vertices[v].y = -level.bodies[i].vertices[v].y;
               }
-              level_data.bodies[i].mapped = true;
+              level.bodies[i].mapped = true;
           }
-          var centroid = Matter.Vertices.centre(level_data.bodies[i].vertices);
-          var body = Matter.Bodies.fromVertices(level_data.bodies[i].position.x,
-                                                level_data.bodies[i].position.y,
-                                                level_data.bodies[i].vertices,
-                                                { isStatic : level_data.bodies[i].isStatic, label : level_data.bodies[i].label });
+          var centroid = Matter.Vertices.centre(level.bodies[i].vertices);
+          var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
+                                                level.bodies[i].position.y,
+                                                level.bodies[i].vertices,
+                                                { isStatic : level.bodies[i].isStatic, label : level.bodies[i].label });
           objects.shapes.push({
               body : body,
-              vertices : level_data.bodies[i].vertices,
+              vertices : level.bodies[i].vertices,
               centroid: centroid,
               color_index : ColorManager.getRandomColorIndex(),
           });
           _bodies.push(body);
       }
       Matter.World.add(engine.world, _bodies);
-      Screen.setTitleText(level_data.description);
-      if(level_data.setup != undefined)
-          level_data.setup(current_level_context, engine);
+
+      level_data.title       = level.title;
+      level_data.description = level.description;
+      level_data.setup_fnc   = level.setup;
+
+      Screen.setTitleText(level.description);
+      if(level_data.setup_fnc != undefined)
+          level_data.setup_fnc(level_data.context, engine);
   }
 
   function restartLevel()
   {
-      loadLevel(current_level_index);
+      loadLevel(level_data.id);
   }
 
   return {  init          : init,
