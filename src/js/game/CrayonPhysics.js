@@ -330,8 +330,9 @@ var CrayonPhysics = (function(){
                       x : objects.tacks[tack_i].x - my_body.body.position.x,
                       y : objects.tacks[tack_i].y - my_body.body.position.y,
                   };
-                  // agregar restriccion
-                  var constraint = Matter.Constraint.create({
+                  // agregar restriccion al mundo y conservar una referencia
+                  objects.tacks[tack_i].body_id = my_body.body.id;
+                  objects.tacks[tack_i].constraint = Matter.Constraint.create({
                       bodyA  : my_body.body,
                       pointA : diff,
                       pointB :  objects.tacks[tack_i],
@@ -339,7 +340,7 @@ var CrayonPhysics = (function(){
                       length : 1,
                   });
                   count++;
-                  Matter.World.add(engine.world, [constraint]);
+                  Matter.World.add(engine.world, [objects.tacks[tack_i].constraint]);
               }
           }
       }

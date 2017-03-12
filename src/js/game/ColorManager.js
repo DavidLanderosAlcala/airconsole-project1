@@ -6,10 +6,6 @@ var ColorManager = (function(){
   var patterns = [];
   var urls = [
       "http://oi65.tinypic.com/2e1gbpc.jpg",
-	    //"http://oi67.tinypic.com/2ugcwaa.jpg",
-	    //"http://oi68.tinypic.com/2zyftwh.jpg",
-	    //"http://oi66.tinypic.com/2lwkcpw.jpg",
-	    //"http://oi67.tinypic.com/11sywid.jpg",
 	];
 	var last_index = 0;
 
