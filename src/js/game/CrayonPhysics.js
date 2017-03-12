@@ -258,24 +258,28 @@ var CrayonPhysics = (function(){
           }     
           drawing_data.current_polygon.push(new_pos);
 
-
-
-          // El siguiente codigo podria ser el inicio para detectar
-          // cuando el dibujo debe ser un cuerpo solido o un "alambre"
-          // cuando hay mas de 5 vertices
-          // calculamos la distancia entre el primero y el ultimo
+          // El siguiente fragmento de codigo detecta
+          // si ya se formo un cuerpo cerrado y recorta
+          // aquellos vertices que queden fuera de dicho cuerpo.
           if(drawing_data.current_polygon.length >= 5)
           {
-              var diff_x = drawing_data.current_polygon[0].x - drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
-              var diff_y = drawing_data.current_polygon[0].y - drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
-              var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-
-              // si la distancia es menor a 30 pixeles damos por terminada la figura
-              // Esto es un cuerpo solido.
-              if(head_to_tail_distance < 30)
+              var vertex_i, l = drawing_data.current_polygon.length - 5;
+              for(var vertex_i = 0; vertex_i < l ; vertex_i++)
               {
-                  closePath();
-                  drawing_data.is_lineto_locked = true;
+                   var diff_x = drawing_data.current_polygon[vertex_i].x -
+                                drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
+                   var diff_y = drawing_data.current_polygon[vertex_i].y -
+                                drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
+                   var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+                   // si la distancia es menor a 30 pixeles damos por terminada la figura
+                   // Esto es un cuerpo solido.
+                   if(head_to_tail_distance < 30)
+                   {
+                       drawing_data.current_polygon = drawing_data.current_polygon.splice(vertex_i, l);
+                       closePath();
+                       drawing_data.is_lineto_locked = true;
+                       break;
+                   }
               }
           }
 
