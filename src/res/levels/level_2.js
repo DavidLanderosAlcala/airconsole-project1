@@ -1,8 +1,8 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "el hielo en el vaso",
-    description : "Saca el hielo del vaso",
+    title       : "La pelota en el vaso",
+    description : "Saca la pelota del vaso",
     bodies      : [
         {
             label : "ground",
@@ -31,15 +31,11 @@ LevelSelector.getLevels().push({
             ],
         },
         {
-            label : "ice",
+            label    : "ball",
+            type     : "circle",
+            radio    : 25,
             isStatic : false,
             position : { x : 0, y : 1000 },
-            vertices: [
-                {x : -25, y : 25 },
-                {x : -25, y : -25 },
-                {x : 25, y : -25 },
-                {x : 25, y : 25 },
-            ],
         },
     ],
 
@@ -52,9 +48,9 @@ LevelSelector.getLevels().push({
             var l = pairs.length;
             for(var i = 0; i < l; i++)
             {
-                if(pairs[i].bodyA.label == "ground" || pairs[i].bodyA.label == "ice")
+                if(pairs[i].bodyA.label == "ground" || pairs[i].bodyA.label == "ball")
                 {
-                    if(pairs[i].bodyB.label == "ground" || pairs[i].bodyB.label == "ice")
+                    if(pairs[i].bodyB.label == "ground" || pairs[i].bodyB.label == "ball")
                     {
                         context.gameover = true;
                     }

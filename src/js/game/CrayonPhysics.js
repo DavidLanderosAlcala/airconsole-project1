@@ -116,12 +116,20 @@ var CrayonPhysics = (function(){
           context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
           context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.beginPath();
-          context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
-          for(var j = 1; j < objects.shapes[i].vertices.length; j++)
+
+          if(objects.shapes[i].type == "polygon" )
           {
-              context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+              context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+              for(var j = 1; j < objects.shapes[i].vertices.length; j++)
+              {
+                  context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+              }
+              context.closePath();
           }
-          context.closePath();
+          else if(objects.shapes[i].type == "circle" )
+          {
+              context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
+          }
           context.lineWidth = 8;
           context.stroke();
           context.restore();
@@ -273,7 +281,7 @@ var CrayonPhysics = (function(){
                    var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
                    // si la distancia es menor a 30 pixeles damos por terminada la figura
                    // Esto es un cuerpo solido.
-                   if(head_to_tail_distance < 30)
+                   if(head_to_tail_distance < 20)
                    {
                        drawing_data.current_polygon = drawing_data.current_polygon.splice(vertex_i, l);
                        closePath();
@@ -307,6 +315,7 @@ var CrayonPhysics = (function(){
       };
       objects.shapes.push({
           body : body,
+          type : "polygon",
           vertices : drawing_data.current_polygon,
           centroid: centroid,
           color_index : drawing_data.current_color_index,
@@ -412,21 +421,6 @@ var CrayonPhysics = (function(){
       PlayerCursor.changeTool();
   }
 
-  function enableDebugRenderer()
-  {
-      ConfigOptions.use_debug_render = true;
-  }
-
-  function disableDebugRenderer()
-  {
-      ConfigOptions.use_debug_render = false;
-  }
-
-  function isDebugRendererEnabled()
-  {
-      return ConfigOptions.use_debug_render;
-  }
-
   function loadLevel(level_index)
   {
       restartEngine();
@@ -438,23 +432,43 @@ var CrayonPhysics = (function(){
       var _bodies = [];
       for(var i = 0; i < level.bodies.length; i++)
       {
-          if(level.bodies[i].mapped == undefined)
+          var type = level.bodies[i].type == "circle" ? "circle" : "polygon";
+          if(type == "polygon")
           {
-              level.bodies[i].position.y = -level.bodies[i].position.y;
-              for(var v = 0; v < level.bodies[i].vertices.length; v++)
+              if(level.bodies[i].mapped == undefined)
               {
-                  level.bodies[i].vertices[v].y = -level.bodies[i].vertices[v].y;
+                  level.bodies[i].position.y = -level.bodies[i].position.y;
+                  for(var v = 0; v < level.bodies[i].vertices.length; v++)
+                  {
+                      level.bodies[i].vertices[v].y = -level.bodies[i].vertices[v].y;
+                  }
+                  level.bodies[i].mapped = true;
               }
-              level.bodies[i].mapped = true;
+              var centroid = Matter.Vertices.centre(level.bodies[i].vertices);
+              var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
+                                                    level.bodies[i].position.y,
+                                                    level.bodies[i].vertices,
+                                                    { isStatic : level.bodies[i].isStatic, label : level.bodies[i].label });
           }
-          var centroid = Matter.Vertices.centre(level.bodies[i].vertices);
-          var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
-                                                level.bodies[i].position.y,
-                                                level.bodies[i].vertices,
-                                                { isStatic : level.bodies[i].isStatic, label : level.bodies[i].label });
+          else if(type == "circle")
+          {
+              if(level.bodies[i].mapped == undefined)
+              {
+                  level.bodies[i].position.y = -level.bodies[i].position.y;
+                  level.bodies[i].mapped = true;
+              }
+              var centroid = { x : 0, y: 0 };
+              var body = Matter.Bodies.circle( level.bodies[i].position.x,
+                                               level.bodies[i].position.y,
+                                               level.bodies[i].radio,
+                                               { isStatic : level.bodies[i].isStatic, label : level.bodies[i].label }
+              );
+          }
           objects.shapes.push({
               body : body,
+              type : type,
               vertices : level.bodies[i].vertices,
+              radio : level.bodies[i].radio,
               centroid: centroid,
               color_index : ColorManager.getRandomColorIndex(),
           });
