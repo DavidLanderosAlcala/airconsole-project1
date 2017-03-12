@@ -375,16 +375,12 @@ var CrayonPhysics = (function(){
       drawing_data.current_color_index = -1;
   }
 
-  function changeTool()
-  {
-      PlayerCursor.changeTool();
-  }
-
   function removeBody(body)
   {
       if(body.label != "Body")
         return;
       Matter.World.remove(engine.world, [body]);
+      removeTacksConnectedTo(body.id);
       var i, l = objects.shapes.length;
       for(i = 0; i < l; i++)
       {
@@ -394,6 +390,22 @@ var CrayonPhysics = (function(){
               return;
           }
       }      
+  }
+
+  function removeTacksConnectedTo(body_id)
+  {
+      for(var i = objects.tacks.length-1; i >= 0; i--)
+      {
+          if(objects.tacks[i].body_id == body_id)
+          {
+               objects.tacks.splice(i,1);
+          }
+      }
+  }
+
+  function changeTool()
+  {
+      PlayerCursor.changeTool();
   }
 
   function enableDebugRenderer()
