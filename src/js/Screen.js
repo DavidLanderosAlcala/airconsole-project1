@@ -140,7 +140,7 @@ var Screen = (function(){
     function onResize()
     {
         adjustToViewPort();
-        CrayonPhysics.restartEngine();
+        CrayonPhysics.restartLevel();
     }
 
     return { init              : init,

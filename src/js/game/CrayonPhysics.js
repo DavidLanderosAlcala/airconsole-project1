@@ -68,6 +68,11 @@ var CrayonPhysics = (function(){
 
       drawing_data.current_polygon = [];
       drawing_data.current_color_index = -1;
+
+      camera = {
+          x : canvas.width >> 1,
+          y : canvas.height
+      };
       
   }
 
