@@ -15,6 +15,8 @@ var CrayonPhysics = (function(){
   {
       MenuManager.init();
       canvas = options.canvas;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
       camera = {
           x : canvas.width >> 1,
@@ -69,6 +71,9 @@ var CrayonPhysics = (function(){
       drawing_data.current_polygon = [];
       drawing_data.current_color_index = -1;
 
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
       camera = {
           x : canvas.width >> 1,
           y : canvas.height
@@ -450,6 +455,10 @@ var CrayonPhysics = (function(){
                   level.bodies[i].mapped = true;
               }
               var centroid = Matter.Vertices.centre(level.bodies[i].vertices);
+              if(level.bodies[i].label == "cup")
+              {
+                  console.log("El centroide del vaso es: " + centroid.x + "," + centroid.y);
+              }
               var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
                                                     level.bodies[i].position.y,
                                                     level.bodies[i].vertices,
