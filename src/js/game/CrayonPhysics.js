@@ -377,9 +377,22 @@ var CrayonPhysics = (function(){
   function tack()
   {
       var cur_pos = PlayerCursor.getPosition();
-      cur_pos.x -= camera.x;
-      cur_pos.y -= camera.y; 
-      objects.tacks.push({ x : cur_pos.x, y: cur_pos.y });
+      tack_pos = {
+        x : cur_pos.x - camera.x,
+        y: cur_pos.y - camera.y
+      };
+      var i, l = objects.tacks.length;
+      for(var i = 0 ; i < l; i ++)
+      {
+          var diff_x = tack_pos.x - objects.tacks[i].x;
+          var diff_y = tack_pos.y - objects.tacks[i].y;
+          var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+          if(distance < ConfigOptions.min_distance_between_tacks)
+          {
+              return;
+          }
+      }
+      objects.tacks.push(tack_pos);
   }
 
   function erease()
