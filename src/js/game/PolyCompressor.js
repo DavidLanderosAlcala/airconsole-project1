@@ -5,7 +5,7 @@
 var PolyCompressor = (function(){
 
     var invalid_dot_product = -1.0;
-    var umbral = 0.1;
+    var umbral = 0.05;
 	var polygon;
 
     /** @func compress
@@ -15,7 +15,7 @@ var PolyCompressor = (function(){
 	function compress(_polygon)
 	{
 		polygon = _polygon;
-        if(polygon.length < 3)
+        if(polygon.length <= ConfigOptions.min_vertices_per_polygon)
         	return polygon;
         var i, l = polygon.length;
         for(i = 0; i < l; i++)

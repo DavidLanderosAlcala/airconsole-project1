@@ -307,8 +307,12 @@ var CrayonPhysics = (function(){
 
   function closePath()
   {
-      if(drawing_data.current_polygon.length == 0)
+      if(drawing_data.current_polygon.length < ConfigOptions.min_vertices_per_polygon)
+      {
+          drawing_data.current_polygon = [];
+          drawing_data.current_color_index = -1;
           return;
+      }
       console.log(drawing_data.current_polygon.length + " vertices");
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
       console.log(drawing_data.current_polygon.length + " vertices - compressed");
