@@ -265,7 +265,7 @@ var CrayonPhysics = (function(){
           if(drawing_data.current_polygon.length > 0){
             var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
             distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
-            if(distance < 10)
+            if(distance < ConfigOptions.vertex_min_distance)
             {
               return; 
             }
