@@ -279,9 +279,9 @@ var CrayonPhysics = (function(){
           // El siguiente fragmento de codigo detecta
           // si ya se formo un cuerpo cerrado y recorta
           // aquellos vertices que queden fuera de dicho cuerpo.
-          if(drawing_data.current_polygon.length >= 5)
+          if(drawing_data.current_polygon.length >= ConfigOptions.min_vertices_per_polygon)
           {
-              var vertex_i, l = drawing_data.current_polygon.length - 5;
+              var vertex_i, l = drawing_data.current_polygon.length - ConfigOptions.min_vertices_per_polygon;
               for(var vertex_i = 0; vertex_i < l ; vertex_i++)
               {
                    var diff_x = drawing_data.current_polygon[vertex_i].x -
