@@ -95,12 +95,12 @@ var CrayonPhysics = (function(){
 
   function render()
   {
-      // clearing the screen
+      /* Clearing the screen */
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
       context.translate(camera.x, camera.y);
 
-      // drawing the current polygon
+      /* Drawing the current polygon */
       context.save();
       if(drawing_data.current_polygon.length > 1)
       {
@@ -110,72 +110,53 @@ var CrayonPhysics = (function(){
           context.moveTo(drawing_data.current_polygon[0].x, drawing_data.current_polygon[0].y);
           for(var i = 0; i < drawing_data.current_polygon.length; i++)
           {
-            context.lineTo(drawing_data.current_polygon[i].x, drawing_data.current_polygon[i].y);
+              context.lineTo(drawing_data.current_polygon[i].x, drawing_data.current_polygon[i].y);
           }
           context.stroke();
       }
       context.restore();
 
-      // drawing polygons
+      /* Drawing polygons */
       var i, l = objects.shapes.length;
       for(i = 0; i < l; i++)
       {
-          context.save();
-          context.translate(objects.shapes[i].body.position.x, objects.shapes[i].body.position.y);
-          context.rotate(objects.shapes[i].body.angle);
-          context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
           context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
-          context.beginPath();
-
-          if(objects.shapes[i].type == "polygon" )
-          {
-              context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
-              for(var j = 1; j < objects.shapes[i].vertices.length; j++)
-              {
-                  context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+          context.lineWidth = 8;
+          context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
+          /* Drawing polygons */
+          context.save();
+              context.translate(objects.shapes[i].body.position.x, objects.shapes[i].body.position.y);
+              context.rotate(objects.shapes[i].body.angle);
+              context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
+              context.beginPath();
+              if(objects.shapes[i].type == "polygon" ) {
+                  context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+                  for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
+                      context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+                  }
+                  context.closePath();
               }
-              context.closePath();
-          }
-          else if(objects.shapes[i].type == "circle" )
-          {
-              context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
-          }
-          context.lineWidth = 8;
-          if(objects.shapes[i].deleted)
-          {
-              context.globalAlpha = 0.1;
-          }
-          context.stroke();
+              else if(objects.shapes[i].type == "circle" ) {
+                  context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
+              }
+              context.stroke();
           context.restore();
+          /* Drawing polygons (ghost mode) */
+          if(objects.shapes[i].body.label == "Body" ) {
+              context.save();
+                  context.beginPath();
+                  context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+                  for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
+                      context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+                  }
+                  context.closePath();
+                  context.globalAlpha = 0.1;
+                  context.stroke();
+              context.restore();
+          }
       }
 
-      // drawing polygon ghosts
-      var i, l = objects.shapes.length;
-      for(i = 0; i < l; i++)
-      {
-          if(objects.shapes[i].body.label != "Body")
-          {
-              continue;
-          }
-
-          context.save();
-          context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
-
-          context.beginPath();
-          context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
-          for(var j = 1; j < objects.shapes[i].vertices.length; j++)
-          {
-              context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
-          }
-
-          context.closePath();
-          context.lineWidth = 8;
-          context.globalAlpha = 0.1;
-          context.stroke();
-          context.restore();
-      }
-
-      // drawing objects.tacks
+      /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
       context.lineWidth = 8;
       for(var i = 0; i < objects.tacks.length; i++)
