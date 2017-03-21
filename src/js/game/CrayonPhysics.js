@@ -11,6 +11,9 @@ var CrayonPhysics = (function(){
   var drawing_data;
   var level_data;
 
+  var background = new Image();
+  background.src = "./res/img/background.jpg";
+
   function init(options)
   {
       MenuManager.init();
@@ -96,7 +99,10 @@ var CrayonPhysics = (function(){
   function render()
   {
       // clearing the screen
-      context.clearRect(0,0, canvas.width, canvas.height);
+      //context.clearRect(0,0, canvas.width, canvas.height);
+      context.globalAlpha = 0.1;
+      context.drawImage(background, 0,0, canvas.width, canvas.height);
+      context.globalAlpha = 1.0;
       context.save();
       context.translate(camera.x, camera.y);
 
