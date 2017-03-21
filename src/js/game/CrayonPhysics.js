@@ -11,9 +11,6 @@ var CrayonPhysics = (function(){
   var drawing_data;
   var level_data;
 
-  var background = new Image();
-  background.src = "./res/img/background.jpg";
-
   function init(options)
   {
       MenuManager.init();
@@ -99,10 +96,7 @@ var CrayonPhysics = (function(){
   function render()
   {
       // clearing the screen
-      //context.clearRect(0,0, canvas.width, canvas.height);
-      context.globalAlpha = 0.1;
-      context.drawImage(background, 0,0, canvas.width, canvas.height);
-      context.globalAlpha = 1.0;
+      context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
       context.translate(camera.x, camera.y);
 
@@ -147,6 +141,36 @@ var CrayonPhysics = (function(){
               context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
           }
           context.lineWidth = 8;
+          if(objects.shapes[i].deleted)
+          {
+              context.globalAlpha = 0.1;
+          }
+          context.stroke();
+          context.restore();
+      }
+
+      // drawing polygon ghosts
+      var i, l = objects.shapes.length;
+      for(i = 0; i < l; i++)
+      {
+          if(objects.shapes[i].body.label != "Body")
+          {
+              continue;
+          }
+
+          context.save();
+          context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
+
+          context.beginPath();
+          context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+          for(var j = 1; j < objects.shapes[i].vertices.length; j++)
+          {
+              context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+          }
+
+          context.closePath();
+          context.lineWidth = 8;
+          context.globalAlpha = 0.1;
           context.stroke();
           context.restore();
       }
@@ -432,7 +456,7 @@ var CrayonPhysics = (function(){
       {
           if(body.id == objects.shapes[i].body.id)
           {
-              objects.shapes.splice(i,1);
+              objects.shapes[i].deleted = true;
               return;
           }
       }      
