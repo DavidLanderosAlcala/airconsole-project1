@@ -161,9 +161,12 @@ var CrayonPhysics = (function(){
       context.lineWidth = 8;
       for(var i = 0; i < objects.tacks.length; i++)
       {
+          context.save();
           context.beginPath();
           context.arc(objects.tacks[i].x, objects.tacks[i].y, 10, 0, Math.PI * 2);
+          context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
           context.stroke();
+          context.restore();
       }
 
       if(ConfigOptions.use_debug_render)
@@ -357,6 +360,11 @@ var CrayonPhysics = (function(){
       var _bodies = null;
       for(var tack_i = 0; tack_i < objects.tacks.length; tack_i++)
       {
+          if(objects.tacks[tack_i].deleted)
+          {
+              continue;
+          }
+
           _bodies = Matter.Composite.allBodies(engine.world);
           _bodies = Matter.Query.point(_bodies, {x : objects.tacks[tack_i].x, y : objects.tacks[tack_i].y} );
           var i, l = _bodies.length;
@@ -449,7 +457,7 @@ var CrayonPhysics = (function(){
       {
           if(objects.tacks[i].body_id == body_id)
           {
-               objects.tacks.splice(i,1);
+               objects.tacks[i].deleted = true;
           }
       }
   }
