@@ -129,12 +129,13 @@ var CrayonPhysics = (function(){
               context.rotate(objects.shapes[i].body.angle);
               context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
               context.beginPath();
-              if(objects.shapes[i].type == "polygon" ) {
+              if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
                   context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
                   for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
                       context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
                   }
-                  context.closePath();
+                  if(objects.shapes[i].type == "polygon")
+                      context.closePath();
               }
               else if(objects.shapes[i].type == "circle" ) {
                   context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
@@ -149,7 +150,9 @@ var CrayonPhysics = (function(){
                   for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
                       context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
                   }
-                  context.closePath();
+
+                  if(objects.shapes[i].type == "polygon")
+                      context.closePath();
                   context.globalAlpha = 0.1;
                   context.stroke();
               context.restore();
@@ -305,10 +308,10 @@ var CrayonPhysics = (function(){
                    var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
                    // si la distancia es menor a 30 pixeles damos por terminada la figura
                    // Esto es un cuerpo solido.
-                   if(head_to_tail_distance < 20)
+                   if(head_to_tail_distance < ConfigOptions.polygon_autoclose_distance)
                    {
                        drawing_data.current_polygon = drawing_data.current_polygon.splice(vertex_i, l);
-                       closePath();
+                       closePath(true);
                        drawing_data.is_lineto_locked = true;
                        break;
                    }
@@ -319,7 +322,7 @@ var CrayonPhysics = (function(){
       moveTo(pos);
   }
 
-  function closePath()
+  function closePath(body)
   {
       if(drawing_data.current_polygon.length < ConfigOptions.min_vertices_per_polygon)
       {
@@ -327,6 +330,21 @@ var CrayonPhysics = (function(){
           drawing_data.current_color_index = -1;
           return;
       }
+
+      if(!body)
+      {
+          var diff_x = drawing_data.current_polygon[0].x -
+                       drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
+          var diff_y = drawing_data.current_polygon[0].y -
+                       drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
+          var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+          if(head_to_tail_distance > ConfigOptions.polygon_autoclose_distance)
+          {
+              closeAsWire();
+              return;
+          }
+      }
+
       console.log(drawing_data.current_polygon.length + " vertices");
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
       console.log(drawing_data.current_polygon.length + " vertices - compressed");
@@ -350,6 +368,60 @@ var CrayonPhysics = (function(){
       });
       Matter.World.add(engine.world, [body]);
       checkForTacks(objects.shapes[objects.shapes.length-1]);
+      drawing_data.current_polygon = [];
+      drawing_data.current_color_index = -1;
+  }
+
+  function createStick(pos1, pos2)
+  {
+      var pos = {
+          x : ((pos1.x + pos2.x) / 2),
+          y : ((pos1.y + pos2.y) / 2)
+      };
+      var height = 20;
+      var vector_x = pos2.x - pos1.x;
+      var vector_y = pos2.y - pos1.y;
+      var width = Math.sqrt( (vector_x * vector_x) + (vector_y * vector_y) );
+      var angle = Math.atan(vector_y / vector_x);
+      return Matter.Bodies.rectangle(pos.x, pos.y, width, height, {friction: 1.0, angle : angle});
+  }
+
+  function calcCentroidOfWire(vertices)
+  {
+       var centroid = { x : 0, y : 0 };
+       var i , l = vertices.length;
+       for(i = 0; i < l; i++)
+       {
+          centroid.x += vertices[i].x;
+          centroid.y += vertices[i].y;
+       }
+       centroid.x /= l;;
+       centroid.y /= l;
+       return centroid;
+  }
+
+  function closeAsWire()
+  {
+      var parts = [];
+      var i, l = drawing_data.current_polygon.length;
+      for(var i = 1 ; i < l; i++)
+      {
+          parts.push(createStick(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]));
+      }
+
+      var body = Matter.Body.create( {parts: parts});
+
+      var centroid2 = calcCentroidOfWire(drawing_data.current_polygon);
+
+      objects.shapes.push({
+          body : body,
+          type : "wire",
+          vertices : drawing_data.current_polygon,
+          centroid: centroid2,
+          color_index : drawing_data.current_color_index,
+      });
+
+      Matter.World.add(engine.world, [body]);
       drawing_data.current_polygon = [];
       drawing_data.current_color_index = -1;
   }
