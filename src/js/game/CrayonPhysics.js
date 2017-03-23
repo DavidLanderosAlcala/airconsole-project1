@@ -122,9 +122,9 @@ var CrayonPhysics = (function(){
       {
           context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.lineWidth = 8;
-          context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
           /* Drawing polygons */
           context.save();
+              context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
               context.translate(objects.shapes[i].body.position.x, objects.shapes[i].body.position.y);
               context.rotate(objects.shapes[i].body.angle);
               context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
