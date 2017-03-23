@@ -378,12 +378,12 @@ var CrayonPhysics = (function(){
           x : ((pos1.x + pos2.x) / 2),
           y : ((pos1.y + pos2.y) / 2)
       };
-      var height = 20;
+      var height = 10;
       var vector_x = pos2.x - pos1.x;
       var vector_y = pos2.y - pos1.y;
       var width = Math.sqrt( (vector_x * vector_x) + (vector_y * vector_y) );
       var angle = Math.atan(vector_y / vector_x);
-      return Matter.Bodies.rectangle(pos.x, pos.y, width, height, {friction: 1.0, angle : angle});
+      return Matter.Bodies.rectangle(pos.x, pos.y, width*2, height, {friction: 1.0, angle : angle});
   }
 
   function calcCentroidOfWire(vertices)
@@ -410,6 +410,7 @@ var CrayonPhysics = (function(){
       }
 
       var body = Matter.Body.create( {parts: parts});
+      Matter.Body.setInertia(body, body.inertia * 5);
 
       var centroid2 = calcCentroidOfWire(drawing_data.current_polygon);
 
