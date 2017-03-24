@@ -480,12 +480,15 @@ var CrayonPhysics = (function(){
       var i, l = objects.tacks.length;
       for(var i = 0 ; i < l; i ++)
       {
-          var diff_x = tack_pos.x - objects.tacks[i].x;
-          var diff_y = tack_pos.y - objects.tacks[i].y;
-          var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-          if(distance < ConfigOptions.min_distance_between_tacks)
+          if(!objects.tacks[i].deleted)
           {
-              return;
+              var diff_x = tack_pos.x - objects.tacks[i].x;
+              var diff_y = tack_pos.y - objects.tacks[i].y;
+              var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+              if(distance < ConfigOptions.min_distance_between_tacks)
+              {
+                  return;
+              }
           }
       }
       objects.tacks.push(tack_pos);
