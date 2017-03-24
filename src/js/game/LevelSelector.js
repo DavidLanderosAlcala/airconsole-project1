@@ -38,6 +38,7 @@ var LevelSelector = (function(){
     	{
             hide();
             CrayonPhysics.loadLevel(parseInt(e.sender.innerHTML));
+            Screen.requestFullscreen();
     	}
     }
 
