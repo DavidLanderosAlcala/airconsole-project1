@@ -24,7 +24,7 @@ LevelSelector.getLevels().push({
         },
         {
             label : "cup",
-            isStatic : false,
+            isStatic : true,
             position : { x : 500, y : 200 },
             vertices: [
                 {x : -100, y : 300 },
@@ -41,24 +41,12 @@ LevelSelector.getLevels().push({
 
     setup : function(context, engine)
     {
-        context.gameover = false;
-        bodies = Matter.Composite.allBodies(engine.world);
-        for(var i = 0; i < bodies.length; i++)
-        {
-            if(bodies[i].label == "cup")
-            {
-                // Buscamos cup y guardamos una referencia
-                // para no volver a buscarla en cada llamada a update
-                context.cup = bodies[i];
-                break;
-            }
-        }
+
     },
 
     update : function(context, engine)
     {
-        Matter.Body.setStatic(context.cup, true);
-        return context.gameover;
+        return false;
     }
 
 });

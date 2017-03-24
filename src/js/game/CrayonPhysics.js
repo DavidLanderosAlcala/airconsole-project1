@@ -85,6 +85,10 @@ var CrayonPhysics = (function(){
   {
       if(!level_data.game_over && level_data.update_fnc != null)
       {
+          if(level_data.pending_static)
+          {
+              setStaticForCurrentLevel();
+          }
           level_data.game_over = level_data.update_fnc(level_data.context, engine);
           if(level_data.game_over)
               Screen.setTitleText("You won!!");
@@ -338,7 +342,7 @@ var CrayonPhysics = (function(){
           var diff_y = drawing_data.current_polygon[0].y -
                        drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
           var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-          if(head_to_tail_distance > ConfigOptions.polygon_autoclose_distance)
+          if(head_to_tail_distance > ConfigOptions.polygon_autoclose_distance * 3)
           {
               closeAsWire();
               return;
@@ -549,6 +553,8 @@ var CrayonPhysics = (function(){
       level_data.game_over = false;
       level_data.context = {};
       level_data.id = level_index;
+      level_data.pending_static = true;
+      level_data.static_bodies = [];
       var level = LevelSelector.getLevels()[level_index];
       level_data.update_fnc = level.update;
       var _bodies = [];
@@ -571,10 +577,14 @@ var CrayonPhysics = (function(){
               {
                   console.log("El centroide del vaso es: " + centroid.x + "," + centroid.y);
               }
+              if(level.bodies[i].isStatic)
+              {
+                  level_data.static_bodies.push(level.bodies[i].label);
+              }
               var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
                                                     level.bodies[i].position.y,
                                                     level.bodies[i].vertices,
-                                                    { isStatic : level.bodies[i].isStatic, label : level.bodies[i].label });
+                                                    { label : level.bodies[i].label });
           }
           else if(type == "circle")
           {
@@ -609,6 +619,20 @@ var CrayonPhysics = (function(){
       Screen.setTitleText(level.description);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context, engine);
+  }
+
+  function setStaticForCurrentLevel()
+  {
+      bodies = Matter.Composite.allBodies(engine.world);
+      for(var i = 0; i < bodies.length; i++)
+      {
+          for(var j = 0; j < level_data.static_bodies.length; j++)
+          if(bodies[i].label == level_data.static_bodies[j])
+          {
+              Matter.Body.setStatic(bodies[i], true);
+          }
+      }
+      level_data.pending_static = false;
   }
 
   function restartLevel()
