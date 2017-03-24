@@ -29,7 +29,7 @@ var CrayonPhysics = (function(){
       };
 
       level_data = {
-          id          : -1,
+          id          : 0,
           game_over   : false,
           update_fnc  : null,
           setup_fnc   : null,
@@ -247,18 +247,22 @@ var CrayonPhysics = (function(){
 
   function onTouchEvent(e)
   {
+      if(e.button == 2 && e.type == "touchstart")
+      {
+          erease();
+          return;
+      }
       if(e.type == "touchmove")
       {
           lineTo(e);
       }
       else if(e.type == "touchend")
       {
-          drawing_data.is_lineto_locked = false;
           if(PlayerCursor.getCurrentToolName() == "ereaser")
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack")
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length == 0 && !drawing_data.is_lineto_locked))
           {
               tack();
           }
@@ -266,6 +270,7 @@ var CrayonPhysics = (function(){
           {
               closePath();
           }
+          drawing_data.is_lineto_locked = false;
       }
   }
 

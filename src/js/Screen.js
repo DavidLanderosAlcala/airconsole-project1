@@ -124,7 +124,7 @@ var Screen = (function(){
 
     function disableContextMenu()
     {
-        //document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('contextmenu', event => event.preventDefault());
     }
 
     function getWidth()

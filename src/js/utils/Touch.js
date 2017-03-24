@@ -92,16 +92,19 @@ var Touch = (function() {
         else
         {
             element.addEventListener("mousedown", function(e) {
+                event.button = e.button;
                 event.isPressed = true;
                 callback(event);
             });
             element.addEventListener("mouseup", function(e) {
+                event.button = e.button;
                 event.isPressed = false;
                 callback(event);
             });
             element.addEventListener("mouseleave", function(e) {
                 if(event.isPressed)
                 {
+                    event.button = e.button;
                     event.isPressed = false;
                     callback(event);
                 }
@@ -158,6 +161,7 @@ var Touch = (function() {
                 var coords = validateCoords(element, e.clientX, e.clientY);
                 event.x = coords.x;
                 event.y = coords.y;
+                event.button = e.button;
                 callback(event);
             });
             element.addEventListener("mouseup", function(e) {
@@ -167,6 +171,7 @@ var Touch = (function() {
                 var coords = validateCoords(element, e.clientX, e.clientY);
                 event.x = coords.x;
                 event.y = coords.y;
+                event.button = e.button;
                 callback(event);
             });
             element.addEventListener("mouseleave", function(e) {
@@ -178,6 +183,7 @@ var Touch = (function() {
                     var coords = validateCoords(element, e.clientX, e.clientY);
                     event.x = coords.x;
                     event.y = coords.y;
+                    event.button = e.button;
                     callback(event);
                 }
             });
@@ -189,6 +195,7 @@ var Touch = (function() {
                     var coords = validateCoords(element, e.clientX, e.clientY);
                     event.x = coords.x;
                     event.y = coords.y;
+                    event.button = e.button;
                     callback(event);
                 }
             });
