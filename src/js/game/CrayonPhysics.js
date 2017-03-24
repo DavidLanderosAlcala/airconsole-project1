@@ -359,10 +359,6 @@ var CrayonPhysics = (function(){
           drawing_data.current_polygon = [];
           return;
       };
-      var diff = {
-          x : body.vertices[0].x - drawing_data.current_polygon[0].x,
-          y : body.vertices[0].y - drawing_data.current_polygon[0].y,
-      };
       objects.shapes.push({
           body : body,
           type : "polygon",
