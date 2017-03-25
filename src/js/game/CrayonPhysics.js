@@ -457,13 +457,13 @@ var CrayonPhysics = (function(){
       var body = Matter.Body.create( {parts: parts});
       Matter.Body.setInertia(body, body.inertia * 5);
 
-      var centroid2 = calcCentroidOfWire(drawing_data.current_polygon);
+      var centroid = calcCentroidOfWire(drawing_data.current_polygon);
 
       objects.shapes.push({
           body : body,
           type : "wire",
           vertices : drawing_data.current_polygon,
-          centroid: centroid2,
+          centroid: centroid,
           color_index : drawing_data.current_color_index,
       });
 
@@ -474,6 +474,27 @@ var CrayonPhysics = (function(){
 
   function closeAsChain()
   {
+      var parts = [];
+      var i, l = drawing_data.current_polygon.length;
+      for(var i = 1 ; i < l; i++)
+      {
+          parts.push(createStick(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]));
+      }
+
+      var body = Matter.Body.create( {parts: parts});
+      Matter.Body.setInertia(body, body.inertia * 5);
+
+      var centroid = calcCentroidOfWire(drawing_data.current_polygon);
+
+      objects.shapes.push({
+          body : body,
+          type : "wire",
+          vertices : drawing_data.current_polygon,
+          centroid: centroid,
+          color_index : drawing_data.current_color_index,
+      });
+
+      Matter.World.add(engine.world, [body]);
       drawing_data.current_polygon = [];
       drawing_data.current_color_index = -1;
   }
@@ -507,7 +528,7 @@ var CrayonPhysics = (function(){
                       pointA : diff,
                       pointB :  objects.tacks[tack_i],
                       stiffness: 0.1,
-                      length : 1,
+                      length : 5,
                   });
                   count++;
                   Matter.World.add(engine.world, [objects.tacks[tack_i].constraint]);
