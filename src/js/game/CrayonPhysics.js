@@ -125,6 +125,7 @@ var CrayonPhysics = (function(){
       for(i = 0; i < l; i++)
       {
           context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
+          context.fillStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.lineWidth = 8;
           /* Drawing polygons */
           context.save();
@@ -144,7 +145,17 @@ var CrayonPhysics = (function(){
               else if(objects.shapes[i].type == "circle" ) {
                   context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
               }
-              context.stroke();
+              if(objects.shapes[i].type == "wire")
+              {
+                  context.stroke();
+              }
+              else
+              {
+                  context.globalAlpha = objects.shapes[i].deleted ? 0.05 : 0.2;
+                  context.fill();
+                  context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
+                  context.stroke(); 
+              }
           context.restore();
           /* Drawing polygons (ghost mode) */
           if(objects.shapes[i].body.label == "Body" ) {
