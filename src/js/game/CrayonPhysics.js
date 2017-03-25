@@ -342,50 +342,55 @@ var CrayonPhysics = (function(){
       moveTo(pos);
   }
 
-  function closePath(body)
+  function closePath(force_polygon)
   {
-      if(drawing_data.current_polygon.length < ConfigOptions.min_vertices_per_polygon)
+      var type = evalCurrentShape();
+
+      if(type == "invalid")
       {
           drawing_data.current_polygon = [];
           drawing_data.current_color_index = -1;
           return;
       }
 
-      if(!body)
+      if(type == "polygon" || force_polygon)
       {
-          var diff_x = drawing_data.current_polygon[0].x -
-                       drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
-          var diff_y = drawing_data.current_polygon[0].y -
-                       drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
-          var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-          if(head_to_tail_distance > ConfigOptions.polygon_autoclose_distance * 3)
-          {
-              closeAsWire();
-              return;
-          }
+          closeAsPolygon();
+          return;
       }
 
-      console.log(drawing_data.current_polygon.length + " vertices");
-      drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
-      console.log(drawing_data.current_polygon.length + " vertices - compressed");
-      var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
-      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5});
-      if(body == undefined)
+      if(type == "wire")
       {
-          drawing_data.current_polygon = [];
+          closeAsWire();
           return;
-      };
-      objects.shapes.push({
-          body : body,
-          type : "polygon",
-          vertices : drawing_data.current_polygon,
-          centroid: centroid,
-          color_index : drawing_data.current_color_index,
-      });
-      Matter.World.add(engine.world, [body]);
-      checkForTacks(objects.shapes[objects.shapes.length-1]);
-      drawing_data.current_polygon = [];
-      drawing_data.current_color_index = -1;
+      }
+
+      if(type == "chain")
+      {
+          closeAsChain();
+          return;
+      }
+  }
+
+  /*
+   * return "polygon", "wire", "chain" or "invalid"
+   */
+  function evalCurrentShape()
+  {
+      if(drawing_data.current_polygon.length < ConfigOptions.min_vertices_per_polygon)
+      {
+          return "invalid";
+      }
+
+      var diff_x = drawing_data.current_polygon[0].x - drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
+      var diff_y = drawing_data.current_polygon[0].y - drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
+      var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+      if(head_to_tail_distance > ConfigOptions.polygon_autoclose_distance * 3)
+      {
+          return "wire";
+      }
+
+      return "polygon"
   }
 
   function createStick(pos1, pos2)
@@ -416,6 +421,30 @@ var CrayonPhysics = (function(){
        return centroid;
   }
 
+  function closeAsPolygon()
+  {
+      drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
+      var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
+      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5});
+      if(body == undefined)
+      {
+          drawing_data.current_polygon = [];
+          drawing_data.current_color_index = -1;
+          return;
+      };
+      objects.shapes.push({
+          body : body,
+          type : "polygon",
+          vertices : drawing_data.current_polygon,
+          centroid: centroid,
+          color_index : drawing_data.current_color_index,
+      });
+      Matter.World.add(engine.world, [body]);
+      checkForTacks(objects.shapes[objects.shapes.length-1]);
+      drawing_data.current_polygon = [];
+      drawing_data.current_color_index = -1;
+  }
+
   function closeAsWire()
   {
       var parts = [];
@@ -439,6 +468,12 @@ var CrayonPhysics = (function(){
       });
 
       Matter.World.add(engine.world, [body]);
+      drawing_data.current_polygon = [];
+      drawing_data.current_color_index = -1;
+  }
+
+  function closeAsChain()
+  {
       drawing_data.current_polygon = [];
       drawing_data.current_color_index = -1;
   }
