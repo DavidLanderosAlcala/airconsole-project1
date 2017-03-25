@@ -578,6 +578,17 @@ var CrayonPhysics = (function(){
       {
           removeBody(_bodies[i]);
       }
+      l = objects.tacks.length;
+      for(var i = 0 ; i < l; i ++)
+      {
+          var diff_x = cur_pos.x - objects.tacks[i].x;
+          var diff_y = cur_pos.y - objects.tacks[i].y;
+          var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
+          if(distance < 20)
+          {
+              objects.tacks[i].deleted = true;
+          }
+      }
       drawing_data.current_polygon = [];
       drawing_data.current_color_index = -1;
   }
