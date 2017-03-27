@@ -184,7 +184,9 @@ var CrayonPhysics = (function(){
       {
           context.save();
           context.beginPath();
-          context.arc(objects.tacks[i].x, objects.tacks[i].y, 10, 0, Math.PI * 2);
+          var pos = calcTackAbsPos(i);
+          context.translate(pos.x,pos.y);
+          context.arc(0, 0, 10, 0, Math.PI * 2);
           context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
           context.stroke();
           context.restore();
@@ -224,7 +226,6 @@ var CrayonPhysics = (function(){
 
   function onKeyUp(e)
   {
-      console.log(e.keyCode);
       if(e.keyCode == 80) // P key
       {
           if(MenuSettings.isVisible())
@@ -427,13 +428,35 @@ var CrayonPhysics = (function(){
   {
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
       var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
-      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5});
+      var group = null;
+
+      var tack_indices = [];
+      var i, l = objects.tacks.length;
+      for(i = 0; i < l; i++)
+      {
+          if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+          {
+              if(objects.tacks[i].bodyB == null)
+              {
+                  group = objects.tacks[i].bodyA.collisionFilter.group;
+                  tack_indices.push(i);
+              }
+          }
+      }
+
+      if(group == null)
+      {
+          group = Matter.Body.nextGroup(true);
+      }
+
+      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5, collisionFilter: { group: group }});
+
       if(body == undefined)
       {
-          drawing_data.current_polygon = [];
-          drawing_data.current_color_index = -1;
+          drawing_data.clear();
           return;
       };
+
       objects.shapes.push({
           body : body,
           type : "polygon",
@@ -441,8 +464,23 @@ var CrayonPhysics = (function(){
           centroid: centroid,
           color_index : drawing_data.current_color_index,
       });
+
       Matter.World.add(engine.world, [body]);
-      checkForTacks(objects.shapes[objects.shapes.length-1]);
+      l = tack_indices.length;
+      for(i = 0; i < l; i++)
+      {
+          objects.tacks[tack_indices[i]].bodyB = body;
+          objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
+          objects.tacks[tack_indices[i]].contraint = Matter.Constraint.create({
+              bodyA  : objects.tacks[tack_indices[i]].bodyA,
+              pointA : objects.tacks[tack_indices[i]].offsetA,
+              bodyB  : objects.tacks[tack_indices[i]].bodyB,
+              pointB : objects.tacks[tack_indices[i]].offsetB,
+              stiffness : 0.02,
+              length : 5,
+          });
+          Matter.World.add(engine.world, [objects.tacks[tack_indices[i]].contraint]);
+      }
       drawing_data.clear();
   }
 
@@ -498,95 +536,70 @@ var CrayonPhysics = (function(){
       drawing_data.clear();
   }
 
-  function checkForTacks(my_body)
-  {
-      var count = 0;
-      var _bodies = null;
-      for(var tack_i = 0; tack_i < objects.tacks.length; tack_i++)
-      {
-          if(objects.tacks[tack_i].deleted)
-          {
-              continue;
-          }
-
-          _bodies = Matter.Composite.allBodies(engine.world);
-          _bodies = Matter.Query.point(_bodies, {x : objects.tacks[tack_i].x, y : objects.tacks[tack_i].y} );
-          var i, l = _bodies.length;
-          for(i = 0; i < l; i++)
-          {
-              if(my_body.body.id == _bodies[i].id)
-              {
-                  var diff = {
-                      x : objects.tacks[tack_i].x - my_body.body.position.x,
-                      y : objects.tacks[tack_i].y - my_body.body.position.y,
-                  };
-                  // agregar restriccion al mundo y conservar una referencia
-                  objects.tacks[tack_i].body_id = my_body.body.id;
-                  objects.tacks[tack_i].constraint = Matter.Constraint.create({
-                      bodyA  : my_body.body,
-                      pointA : diff,
-                      pointB :  objects.tacks[tack_i],
-                      stiffness: 0.1,
-                      length : 5,
-                  });
-                  count++;
-                  Matter.World.add(engine.world, [objects.tacks[tack_i].constraint]);
-              }
-          }
-      }
-      if(count > 1)
-      {
-          // si tiene 2 tacks entonces debe quedar completamente estatica
-          Matter.Body.setStatic(my_body.body,true);
-      }
-  }
-
   function tack()
   {
       var cur_pos = PlayerCursor.getPosition();
-      tack_pos = {
-        x : cur_pos.x - camera.x,
-        y: cur_pos.y - camera.y
+      cur_pos.x -= camera.x;
+      cur_pos.y -= camera.y;
+
+      var tack = {
+          bodyA     : null,
+          offsetA   : null,
+          bodyB     : null,
+          offsetB   : null,
+          contraint : null,
       };
-      var i, l = objects.tacks.length;
-      for(var i = 0 ; i < l; i ++)
+      var _bodies = Matter.Composite.allBodies(engine.world);
+      var _bodies = Matter.Query.point(_bodies, cur_pos);
+      if(_bodies.length == 0)
       {
-          if(!objects.tacks[i].deleted)
-          {
-              var diff_x = tack_pos.x - objects.tacks[i].x;
-              var diff_y = tack_pos.y - objects.tacks[i].y;
-              var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-              if(distance < ConfigOptions.min_distance_between_tacks)
-              {
-                  return;
-              }
-          }
+          console.log("You cannot put tacks in the air");
+          return;
       }
-      objects.tacks.push(tack_pos);
+
+      tack.bodyA = _bodies[0];
+      tack.offsetA = calcTackOffset(cur_pos, tack.bodyA);
+      objects.tacks.push(tack);
   }
 
   function erease()
   {
-      var _bodies = Matter.Composite.allBodies(engine.world);
+      // obtener la posicion del cursor
       var cur_pos = PlayerCursor.getPosition();
       cur_pos.x -= camera.x;
       cur_pos.y -= camera.y;
+
+      // buscar tacks para elminarlas
+      var i, l = objects.tacks.length;
+      for(i = 0 ; i < l; i ++)
+      {
+          if(!objects.tacks[i].deleted)
+          {
+              var tack_pos = calcTackAbsPos(i)
+              var diff_x = cur_pos.x - tack_pos.x;
+              var diff_y = cur_pos.y - tack_pos.y;
+              var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
+              if(distance < 20)
+              {
+                 // si se encuentra un tack, borrarla y terminar
+                  if(objects.tacks[i].contraint != null)
+                      Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
+                  objects.tacks[i].contraint = null;
+                  objects.tacks[i].deleted = true;
+                  drawing_data.clear();
+                  return;
+              }
+          }
+      }
+
+      // si no se encuentra tack, eliminar una figura que se encuentre bajo el cursor
+      var _bodies = Matter.Composite.allBodies(engine.world);
       var _bodies = Matter.Query.point(_bodies, cur_pos);
-      var i, l = _bodies.length;
+      l = _bodies.length;
       for(i = 0; i < l; i++)
       {
           removeBody(_bodies[i]);
-      }
-      l = objects.tacks.length;
-      for(var i = 0 ; i < l; i ++)
-      {
-          var diff_x = cur_pos.x - objects.tacks[i].x;
-          var diff_y = cur_pos.y - objects.tacks[i].y;
-          var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
-          if(distance < 20)
-          {
-              objects.tacks[i].deleted = true;
-          }
+          break;
       }
       drawing_data.clear();
   }
@@ -608,13 +621,57 @@ var CrayonPhysics = (function(){
       }      
   }
 
+  function calcTackAbsPos(index)
+  {
+      var tack = objects.tacks[index];
+
+      var x = tack.offsetA.x;
+      var y = tack.offsetA.y;
+      var r = tack.bodyA.angle;
+
+      // 2D Rotation 
+      var pos = {
+          x : (x  * Math.cos(r)) - (y * Math.sin(r)),
+          y : (y * Math.cos(r)) + (x * Math.sin(r)),
+      };
+
+      pos.x += tack.bodyA.position.x;
+      pos.y += tack.bodyA.position.y;
+      return pos;
+  }
+
+  function calcTackOffset(pos, body)
+  {
+      var x = pos.x - body.position.x;
+      var y = pos.y - body.position.y;
+      var radians = -body.angle;
+
+      // 2D Rotation 
+      offset = {
+          x : (x  * Math.cos(radians)) - (y * Math.sin(radians)),
+          y : (y * Math.cos(radians)) + (x * Math.sin(radians)),
+      };
+      return offset;
+  }
+
   function removeTacksConnectedTo(body_id)
   {
       for(var i = objects.tacks.length-1; i >= 0; i--)
       {
-          if(objects.tacks[i].body_id == body_id)
+          if(!objects.tacks[i].deleted)
           {
-               objects.tacks[i].deleted = true;
+              if(objects.tacks[i].bodyA.id == body_id)
+              {
+                   Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
+                   objects.tacks[i].contraint = null;
+                   objects.tacks[i].deleted = true;
+              }
+              if(objects.tacks[i].bodyB != null && objects.tacks[i].bodyB.id == body_id)
+              {
+                   Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
+                   objects.tacks[i].contraint = null;
+                   objects.tacks[i].deleted = true;
+              }
           }
       }
   }
@@ -657,7 +714,8 @@ var CrayonPhysics = (function(){
               var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
                                                     level.bodies[i].position.y,
                                                     level.bodies[i].vertices,
-                                                    { label : level.bodies[i].label });
+                                                    { label : level.bodies[i].label,
+                                                      collisionFilter: { group: Matter.Body.nextGroup(true) } });
           }
           else if(type == "circle")
           {
@@ -670,7 +728,9 @@ var CrayonPhysics = (function(){
               var body = Matter.Bodies.circle( level.bodies[i].position.x,
                                                level.bodies[i].position.y,
                                                level.bodies[i].radio,
-                                               { isStatic : level.bodies[i].isStatic, label : level.bodies[i].label }
+                                               { isStatic : level.bodies[i].isStatic,
+                                                 label : level.bodies[i].label,
+                                                 collisionFilter: { group: Matter.Body.nextGroup(true) } }
               );
           }
           objects.shapes.push({
@@ -712,6 +772,25 @@ var CrayonPhysics = (function(){
   function restartLevel()
   {
       loadLevel(level_data.id);
+  }
+
+  function itsInsideOf(pos, polygon)
+  {
+      var sides = polygon.length - 1;
+      var j = sides - 1;
+      var pointStatus = false;
+      for (var i = 0; i < sides; i++)
+      {
+          if (polygon[i].y < pos.y && polygon[j].y >= pos.y || polygon[j].y < pos.y && polygon[i].y >= pos.y)
+          {
+              if (polygon[i].x + (pos.y - polygon[i].y) /  (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < pos.x)
+              {
+                  pointStatus = !pointStatus ;                        
+              }
+          }
+          j = i;
+      }
+      return pointStatus;
   }
 
   return {  init          : init,
