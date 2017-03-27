@@ -42,6 +42,10 @@ var CrayonPhysics = (function(){
           current_polygon     : [],
           current_color_index : -1,
           is_lineto_locked    : false,
+          clear : function() {
+              drawing_data.current_polygon = [];
+              drawing_data.current_color_index = -1;
+          }
       };
 
       canvas_rect = canvas.getBoundingClientRect();
@@ -68,8 +72,7 @@ var CrayonPhysics = (function(){
       objects.shapes = [];
       objects.tacks  = [];
 
-      drawing_data.current_polygon = [];
-      drawing_data.current_color_index = -1;
+      drawing_data.clear();
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -348,8 +351,7 @@ var CrayonPhysics = (function(){
 
       if(type == "invalid")
       {
-          drawing_data.current_polygon = [];
-          drawing_data.current_color_index = -1;
+          drawing_data.clear();
           return;
       }
 
@@ -441,8 +443,7 @@ var CrayonPhysics = (function(){
       });
       Matter.World.add(engine.world, [body]);
       checkForTacks(objects.shapes[objects.shapes.length-1]);
-      drawing_data.current_polygon = [];
-      drawing_data.current_color_index = -1;
+      drawing_data.clear();
   }
 
   function closeAsWire()
@@ -468,8 +469,7 @@ var CrayonPhysics = (function(){
       });
 
       Matter.World.add(engine.world, [body]);
-      drawing_data.current_polygon = [];
-      drawing_data.current_color_index = -1;
+      drawing_data.clear();
   }
 
   function closeAsChain()
@@ -495,8 +495,7 @@ var CrayonPhysics = (function(){
       });
 
       Matter.World.add(engine.world, [body]);
-      drawing_data.current_polygon = [];
-      drawing_data.current_color_index = -1;
+      drawing_data.clear();
   }
 
   function checkForTacks(my_body)
@@ -589,8 +588,7 @@ var CrayonPhysics = (function(){
               objects.tacks[i].deleted = true;
           }
       }
-      drawing_data.current_polygon = [];
-      drawing_data.current_color_index = -1;
+      drawing_data.clear();
   }
 
   function removeBody(body)
@@ -652,10 +650,6 @@ var CrayonPhysics = (function(){
                   level.bodies[i].mapped = true;
               }
               var centroid = Matter.Vertices.centre(level.bodies[i].vertices);
-              if(level.bodies[i].label == "cup")
-              {
-                  console.log("El centroide del vaso es: " + centroid.x + "," + centroid.y);
-              }
               if(level.bodies[i].isStatic)
               {
                   level_data.static_bodies.push(level.bodies[i].label);
