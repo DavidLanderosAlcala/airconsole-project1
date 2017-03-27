@@ -705,6 +705,7 @@ var CrayonPhysics = (function(){
               Matter.Body.setStatic(bodies[i], true);
           }
       }
+      level_data.static_bodies = null;
       level_data.pending_static = false;
   }
 
