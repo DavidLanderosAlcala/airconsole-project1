@@ -352,7 +352,6 @@ var CrayonPhysics = (function(){
 
       if(type == "invalid")
       {
-          tack();
           drawing_data.clear();
           return;
       }
