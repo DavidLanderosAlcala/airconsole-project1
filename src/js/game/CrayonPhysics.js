@@ -352,6 +352,7 @@ var CrayonPhysics = (function(){
 
       if(type == "invalid")
       {
+          tack();
           drawing_data.clear();
           return;
       }
@@ -662,7 +663,8 @@ var CrayonPhysics = (function(){
           {
               if(objects.tacks[i].bodyA.id == body_id)
               {
-                   Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
+                   if(objects.tacks[i].contraint != null)
+                       Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
                    objects.tacks[i].contraint = null;
                    objects.tacks[i].deleted = true;
               }
