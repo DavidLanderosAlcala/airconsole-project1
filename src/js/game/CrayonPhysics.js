@@ -469,6 +469,7 @@ var CrayonPhysics = (function(){
 
       Matter.World.add(engine.world, [body]);
       l = tack_indices.length;
+      var static_connections = 0;
       for(i = 0; i < l; i++)
       {
           objects.tacks[tack_indices[i]].bodyB = body;
@@ -482,8 +483,17 @@ var CrayonPhysics = (function(){
               length : 5,
           });
 
+          if(objects.tacks[tack_indices[i]].bodyA.isStatic)
+          {
+              static_connections++;
+          }
+
           Matter.World.add(engine.world, [objects.tacks[tack_indices[i]].contraint]);
 
+      }
+      if(static_connections > 1)
+      {
+          Matter.Body.set(body, {isStatic : true });
       }
       drawing_data.clear();
   }
@@ -562,7 +572,11 @@ var CrayonPhysics = (function(){
       }
 
       tack.bodyA = _bodies[0];
-      tack.bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
+      if(!tack.bodyA.__Assigned)
+      {
+          tack.bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
+          tack.bodyA.__Assigned = true;
+      }
       tack.offsetA = calcTackOffset(cur_pos, tack.bodyA);
       objects.tacks.push(tack);
   }
@@ -720,8 +734,7 @@ var CrayonPhysics = (function(){
               var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
                                                     level.bodies[i].position.y,
                                                     level.bodies[i].vertices,
-                                                    { label : level.bodies[i].label,
-                                                      collisionFilter: { group: Matter.Body.nextGroup(true) } });
+                                                    { label : level.bodies[i].label });
           }
           else if(type == "circle")
           {
@@ -735,8 +748,7 @@ var CrayonPhysics = (function(){
                                                level.bodies[i].position.y,
                                                level.bodies[i].radio,
                                                { isStatic : level.bodies[i].isStatic,
-                                                 label : level.bodies[i].label,
-                                                 collisionFilter: { group: Matter.Body.nextGroup(true) } }
+                                                 label : level.bodies[i].label }
               );
           }
           objects.shapes.push({
