@@ -428,34 +428,32 @@ var CrayonPhysics = (function(){
   {
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
       var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
+      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5 });
+      if(body == undefined) {
+          drawing_data.clear();
+          return;
+      };
       var group = null;
-
       var tack_indices = [];
       var i, l = objects.tacks.length;
       for(i = 0; i < l; i++)
       {
-          if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+          if(objects.tacks[i].bodyB == null)
           {
-              if(objects.tacks[i].bodyB == null)
+              if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
-                  group = objects.tacks[i].bodyA.collisionFilter.group;
+                  if(group == null)
+                  {
+                      group = objects.tacks[i].bodyA.collisionFilter.group;
+                  }
+                  else
+                  {
+                      objects.tacks[i].bodyA.collisionFilter.group = group;
+                  }
                   tack_indices.push(i);
               }
           }
       }
-
-      if(group == null)
-      {
-          group = Matter.Body.nextGroup(true);
-      }
-
-      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5, collisionFilter: { group: group }});
-
-      if(body == undefined)
-      {
-          drawing_data.clear();
-          return;
-      };
 
       objects.shapes.push({
           body : body,
@@ -464,6 +462,10 @@ var CrayonPhysics = (function(){
           centroid: centroid,
           color_index : drawing_data.current_color_index,
       });
+
+      if(group != null) {
+          body.collisionFilter.group = group;
+      }
 
       Matter.World.add(engine.world, [body]);
       l = tack_indices.length;
@@ -476,10 +478,12 @@ var CrayonPhysics = (function(){
               pointA : objects.tacks[tack_indices[i]].offsetA,
               bodyB  : objects.tacks[tack_indices[i]].bodyB,
               pointB : objects.tacks[tack_indices[i]].offsetB,
-              stiffness : 0.02,
+              stiffness: 0.1,
               length : 5,
           });
+
           Matter.World.add(engine.world, [objects.tacks[tack_indices[i]].contraint]);
+
       }
       drawing_data.clear();
   }
@@ -558,6 +562,7 @@ var CrayonPhysics = (function(){
       }
 
       tack.bodyA = _bodies[0];
+      tack.bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
       tack.offsetA = calcTackOffset(cur_pos, tack.bodyA);
       objects.tacks.push(tack);
   }
@@ -802,5 +807,8 @@ var CrayonPhysics = (function(){
             erease        : erease,
             changeTool    : changeTool,
             loadLevel     : loadLevel,
-            restartLevel  : restartLevel };
+            restartLevel  : restartLevel,
+            restartEngien : function(){
+              Matter.Engine.run(engine);
+            } };
 })();
