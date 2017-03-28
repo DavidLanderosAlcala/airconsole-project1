@@ -38,6 +38,17 @@ LevelSelector.getLevels().push({
     setup : function(context, engine)
     {
         context.gameover = false;
+        var bodies = Matter.Composite.allBodies(engine.world);
+        for(var i = 0; i < bodies.length; i++)
+        {
+            if(bodies[i].label == "ball")
+            {
+                // Buscamos ball y guardamos una referencia
+                // para no volver a buscarla en cada llamada a update
+                context.ball = bodies[i];
+                break;
+            }
+        }
         Matter.Events.on(engine, 'collisionActive', function(event) {
             var pairs = event.pairs;
             var l = pairs.length;
@@ -58,6 +69,11 @@ LevelSelector.getLevels().push({
 
     update : function(context, engine)
     {
+        if(context.ball.position.y > 300)
+        {
+            Matter.Body.setVelocity(context.ball, { x : 0, y : 0 });
+            Matter.Body.setPosition(context.ball, { x : -300, y : -600 });
+        }
         return context.gameover;
     }
 
