@@ -379,3 +379,25 @@ OpenSCAD code:<br>
 </body>
 </html>
 
+<script>
+    var label = document.createElement("label");
+    label.innerHTML = "export area 2: ";
+    var textarea = document.createElement("textarea");
+    var container = document.querySelector("body > table > tbody > tr > td:nth-child(1)");
+    container.appendChild(label);
+    container.appendChild(textarea);
+    textarea.style.width = "100px";
+    textarea.style.height = "300px";
+
+    var exportArea = document.querySelector("#exportArea");
+    exportArea.addEventListener("change", function() {
+        var content = exportArea.value.replace("polygon(","").replace(");","");
+        var poly = eval(content);
+        var poly2 = [];
+        for(var i = 0; i < poly.length; i++)
+        {
+            poly2.push({x : poly[i][0] * 6, y : - poly[i][1] * 6, });
+        }
+        textarea.value = JSON.stringify(poly2,4,4);
+    });
+</script>
