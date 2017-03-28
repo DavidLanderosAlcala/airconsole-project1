@@ -433,7 +433,16 @@ var CrayonPhysics = (function(){
   {
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
       var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
-      var body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5 });
+      var body = undefined;
+      while(body == undefined && drawing_data.current_polygon.length > ConfigOptions.min_vertices_per_polygon)
+      {
+          body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5 });
+          if(body == undefined) {
+              // removing the last vertex
+              drawing_data.current_polygon.splice(drawing_data.current_polygon.length-1,1);
+          }
+      }
+
       if(body == undefined) {
           drawing_data.clear();
           return;
