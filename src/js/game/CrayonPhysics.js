@@ -148,7 +148,7 @@ var CrayonPhysics = (function(){
               else if(objects.shapes[i].type == "circle" ) {
                   context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
               }
-              if(objects.shapes[i].type == "wire")
+              if(objects.shapes[i].type == "wire" || objects.shapes[i].hint)
               {
                   context.stroke();
               }
@@ -489,6 +489,12 @@ var CrayonPhysics = (function(){
           }
 
           Matter.World.add(engine.world, [objects.tacks[tack_indices[i]].contraint]);
+          if(!objects.tacks[tack_indices[i]].bodyA.isStatic)
+          {
+              Matter.Body.setMass(body, body.mass * 5);
+              objects.tacks[tack_indices[i]].contraint.stiffness = 0.05;
+              objects.tacks[tack_indices[i]].contraint.length = 5;
+          }
 
       }
       if(static_connections > 1)
@@ -748,18 +754,21 @@ var CrayonPhysics = (function(){
                                                level.bodies[i].position.y,
                                                level.bodies[i].radio,
                                                { isStatic : level.bodies[i].isStatic,
-                                                 label : level.bodies[i].label }
+                                                 label : level.bodies[i].label } 
               );
           }
           objects.shapes.push({
               body : body,
+              deleted : level.bodies[i].hint,
+              hint : level.bodies[i].hint,
               type : type,
               vertices : level.bodies[i].vertices,
               radio : level.bodies[i].radio,
               centroid: centroid,
               color_index : ColorManager.getRandomColorIndex(),
           });
-          _bodies.push(body);
+          if(!level.bodies[i].hint)
+              _bodies.push(body);
       }
       Matter.World.add(engine.world, _bodies);
 
@@ -819,8 +828,5 @@ var CrayonPhysics = (function(){
             erease        : erease,
             changeTool    : changeTool,
             loadLevel     : loadLevel,
-            restartLevel  : restartLevel,
-            restartEngien : function(){
-              Matter.Engine.run(engine);
-            } };
+            restartLevel  : restartLevel };
 })();

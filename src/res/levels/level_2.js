@@ -18,7 +18,7 @@ LevelSelector.getLevels().push({
         {
             label : "cup",
             isStatic : false,
-            position : { x : -0, y : 500 },
+            position : { x : -0, y : 300 },
             vertices: [
                 {x : -100, y : 300 },
                 {x : -100, y : 0 },
@@ -36,6 +36,24 @@ LevelSelector.getLevels().push({
             radio    : 25,
             isStatic : false,
             position : { x : 0, y : 1000 },
+        },
+        {
+            hint : true,
+            label : "hint",
+
+            position : { x : 215, y : 570 },
+            vertices: [
+                {x : 10, y : -10 },
+                {x : 10, y : 100 },
+                {x : 70, y : 100 },
+                {x : 70, y : -10 },
+                {x : 110, y : 100 },
+                {x : 90, y : 150 },
+                {x : 400, y : 400 },
+                {x : 380, y : 450 },
+                {x : 10, y : 150 },
+                {x : -30, y : 100 },
+            ],
         },
     ],
 

@@ -37,6 +37,18 @@ LevelSelector.getLevels().push({
                 {x : 25, y : 25 },
             ],
         },
+        {
+            hint : true,
+            label : "line",
+            isStatic : true,
+            position : { x : 0, y : 500},
+            vertices: [
+                {x : -300, y : 0 },
+                {x : 300, y : 0 },
+                {x : 300, y : 1 },
+                {x : -300, y : 1 },
+            ],
+        }
     ],
 
     setup : function(context, engine)
