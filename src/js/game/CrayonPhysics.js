@@ -641,6 +641,8 @@ var CrayonPhysics = (function(){
       l = _bodies.length;
       for(i = 0; i < l; i++)
       {
+          if(_bodies[i].isSensor)
+              continue;
           removeBody(_bodies[i]);
           break;
       }
