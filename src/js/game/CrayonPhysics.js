@@ -94,7 +94,12 @@ var CrayonPhysics = (function(){
           }
           level_data.game_over = level_data.update_fnc(level_data.context, engine);
           if(level_data.game_over)
+          {
               Screen.setTitleText("You won!!");
+              setTimeout(function(){
+                LevelSelector.show();
+              }, 1000);
+          }
       }
       render();
       window.requestAnimationFrame(update);
@@ -320,27 +325,27 @@ var CrayonPhysics = (function(){
           // El siguiente fragmento de codigo detecta
           // si ya se formo un cuerpo cerrado y recorta
           // aquellos vertices que queden fuera de dicho cuerpo.
-          if(drawing_data.current_polygon.length >= ConfigOptions.min_vertices_per_polygon)
-          {
-              var vertex_i, l = drawing_data.current_polygon.length - ConfigOptions.min_vertices_per_polygon;
-              for(var vertex_i = 0; vertex_i < l ; vertex_i++)
-              {
-                   var diff_x = drawing_data.current_polygon[vertex_i].x -
-                                drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
-                   var diff_y = drawing_data.current_polygon[vertex_i].y -
-                                drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
-                   var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-                   // si la distancia es menor a 30 pixeles damos por terminada la figura
-                   // Esto es un cuerpo solido.
-                   if(head_to_tail_distance < ConfigOptions.polygon_autoclose_distance)
-                   {
-                       drawing_data.current_polygon = drawing_data.current_polygon.splice(vertex_i, l);
-                       closePath(true);
-                       drawing_data.is_lineto_locked = true;
-                       break;
-                   }
-              }
-          }
+          //if(drawing_data.current_polygon.length >= ConfigOptions.min_vertices_per_polygon)
+          //{
+          //    var vertex_i, l = drawing_data.current_polygon.length - ConfigOptions.min_vertices_per_polygon;
+          //    for(var vertex_i = 0; vertex_i < l ; vertex_i++)
+          //    {
+          //         var diff_x = drawing_data.current_polygon[vertex_i].x -
+          //                      drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
+          //         var diff_y = drawing_data.current_polygon[vertex_i].y -
+          //                      drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
+          //         var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+          //         // si la distancia es menor a 30 pixeles damos por terminada la figura
+          //         // Esto es un cuerpo solido.
+          //         if(head_to_tail_distance < ConfigOptions.polygon_autoclose_distance)
+          //         {
+          //             drawing_data.current_polygon = drawing_data.current_polygon.splice(vertex_i, l);
+          //             closePath(true);
+          //             drawing_data.is_lineto_locked = true;
+          //             break;
+          //         }
+          //    }
+          //}
 
       }
       moveTo(pos);
