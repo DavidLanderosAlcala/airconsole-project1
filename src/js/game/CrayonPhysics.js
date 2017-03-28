@@ -132,6 +132,10 @@ var CrayonPhysics = (function(){
       var i, l = objects.shapes.length;
       for(i = 0; i < l; i++)
       {
+          if(objects.shapes[i].body.isSensor)
+          {
+              continue;
+          }
           context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.fillStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.lineWidth = 8;
@@ -754,7 +758,7 @@ var CrayonPhysics = (function(){
               var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
                                                     level.bodies[i].position.y,
                                                     level.bodies[i].vertices,
-                                                    { label : level.bodies[i].label });
+                                                    { label : level.bodies[i].label, isSensor: level.bodies[i].isSensor });
           }
           else if(type == "circle")
           {
