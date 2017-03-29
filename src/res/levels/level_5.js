@@ -69,7 +69,12 @@ LevelSelector.getLevels().push({
                 // Buscamos ball y guardamos una referencia
                 // para no volver a buscarla en cada llamada a update
                 context.cup = bodies[i];
-                context.cup_pos_x = context.cup.position.x;
+            }
+            if(bodies[i].label == "sensor")
+            {
+                // Buscamos ball y guardamos una referencia
+                // para no volver a buscarla en cada llamada a update
+                context.sensor = bodies[i];
             }
         }
         Matter.Events.on(engine, 'collisionActive', function(event) {
@@ -94,6 +99,7 @@ LevelSelector.getLevels().push({
     {
         context.frame += 0.05;
         Matter.Body.translate(context.cup, {x: (Math.cos(context.frame) * 10), y: 0});
+        Matter.Body.translate(context.sensor, {x: (Math.cos(context.frame) * 10), y: 0});
         if(context.ball.position.y > 300)
         {
             Matter.Body.setVelocity(context.ball, { x : 0, y : 0 });
