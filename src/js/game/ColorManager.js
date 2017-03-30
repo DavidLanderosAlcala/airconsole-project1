@@ -5,7 +5,8 @@ var ColorManager = (function(){
   var context = null;
   var patterns = [];
   var urls = [
-      "http://oi65.tinypic.com/2e1gbpc.jpg",
+      //"http://oi65.tinypic.com/2e1gbpc.jpg",
+      "./res/img/chalk_pattern.png",
 	];
 	var last_index = 0;
 
