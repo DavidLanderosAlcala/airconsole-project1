@@ -536,6 +536,33 @@ var CrayonPhysics = (function(){
 
       var centroid = calcCentroidOfWire(drawing_data.current_polygon);
 
+// -------------------------------------------------------------------
+      var group = null;
+      var tack_indices = [];
+      var i, l = objects.tacks.length;
+      for(i = 0; i < l; i++)
+      {
+          if(objects.tacks[i].bodyB == null)
+          {
+              if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+              {
+                  if(group == null)
+                  {
+                      group = objects.tacks[i].bodyA.collisionFilter.group;
+                  }
+                  else
+                  {
+                      objects.tacks[i].bodyA.collisionFilter.group = group;
+                  }
+                  tack_indices.push(i);
+              }
+          }
+      }
+      if(group != null) {
+          body.collisionFilter.group = group;
+      }
+// =======================================================================      
+
       objects.shapes.push({
           body : body,
           type : "wire",
@@ -543,6 +570,43 @@ var CrayonPhysics = (function(){
           centroid: centroid,
           color_index : drawing_data.current_color_index,
       });
+
+// ======================================================================= 
+      l = tack_indices.length;
+      var static_connections = 0;
+      for(i = 0; i < l; i++)
+      {
+          objects.tacks[tack_indices[i]].bodyB = body;
+          objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
+          objects.tacks[tack_indices[i]].contraint = Matter.Constraint.create({
+              bodyA  : objects.tacks[tack_indices[i]].bodyA,
+              pointA : objects.tacks[tack_indices[i]].offsetA,
+              bodyB  : objects.tacks[tack_indices[i]].bodyB,
+              pointB : objects.tacks[tack_indices[i]].offsetB,
+              stiffness: 0.1,
+              length : 5,
+          });
+
+          if(objects.tacks[tack_indices[i]].bodyA.isStatic)
+          {
+              static_connections++;
+          }
+
+          Matter.World.add(engine.world, [objects.tacks[tack_indices[i]].contraint]);
+          if(!objects.tacks[tack_indices[i]].bodyA.isStatic)
+          {
+              Matter.Body.setMass(body, body.mass * 5);
+              objects.tacks[tack_indices[i]].contraint.stiffness = 0.05;
+              objects.tacks[tack_indices[i]].contraint.length = 5;
+          }
+
+      }
+      if(static_connections > 1)
+      {
+          Matter.Body.set(body, {isStatic : true });
+      }
+
+// ======================================================================= 
 
       Matter.World.add(engine.world, [body]);
       drawing_data.clear();
