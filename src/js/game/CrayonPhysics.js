@@ -55,6 +55,7 @@ var CrayonPhysics = (function(){
       window.addEventListener("mousemove", onMouseMove);
       Touch.surface("div.main_container", onTouchEvent);
       engine = Matter.Engine.create();
+      engine.timing.timeScale = ConfigOptions.time_scale;
       Matter.Engine.run(engine);
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
@@ -142,7 +143,8 @@ var CrayonPhysics = (function(){
           /* Drawing polygons */
           context.save();
               context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
-              context.translate(objects.shapes[i].body.position.x, objects.shapes[i].body.position.y);
+              var scaled_pos = matterToChalk(objects.shapes[i].body.position);
+              context.translate(scaled_pos.x, scaled_pos.y);
               context.rotate(objects.shapes[i].body.angle);
               context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
               context.beginPath();
@@ -193,7 +195,7 @@ var CrayonPhysics = (function(){
       {
           context.save();
           context.beginPath();
-          var pos = calcTackAbsPos(i);
+          var pos = matterToChalk(calcTackAbsPos(i));
           context.translate(pos.x,pos.y);
           context.arc(0, 0, 10, 0, Math.PI * 2);
           context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
@@ -216,6 +218,7 @@ var CrayonPhysics = (function(){
       context.beginPath();
       for (var i = 0; i < _bodies.length; i += 1) {
           var vertices = _bodies[i].vertices;
+          vertices = matterToChalk(vertices);
           context.moveTo(vertices[0].x, vertices[0].y);
           for (var j = 1; j < vertices.length; j += 1) {
               context.lineTo(vertices[j].x, vertices[j].y);
@@ -411,11 +414,13 @@ var CrayonPhysics = (function(){
           x : ((pos1.x + pos2.x) / 2),
           y : ((pos1.y + pos2.y) / 2)
       };
-      var height = 10;
+      var height = 8 * ConfigOptions.matter_scale;
       var vector_x = pos2.x - pos1.x;
       var vector_y = pos2.y - pos1.y;
       var width = Math.sqrt( (vector_x * vector_x) + (vector_y * vector_y) );
       var angle = Math.atan(vector_y / vector_x);
+
+      // this is a exception, createStick receive scaled vectors 
       return Matter.Bodies.rectangle(pos.x, pos.y, width*2, height, {friction: 1.0, angle : angle});
   }
 
@@ -438,9 +443,11 @@ var CrayonPhysics = (function(){
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
       var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
       var body = undefined;
+      var scaled_current_polygon = chalkToMatter(drawing_data.current_polygon);
+      var scaled_centroid = chalkToMatter(centroid);
       while(body == undefined && drawing_data.current_polygon.length > ConfigOptions.min_vertices_per_polygon)
       {
-          body = Matter.Bodies.fromVertices(centroid.x, centroid.y, drawing_data.current_polygon, {friction: 0.5 });
+          body = Matter.Bodies.fromVertices(scaled_centroid.x, scaled_centroid.y, scaled_current_polygon, {friction: 0.5 });
           if(body == undefined) {
               // removing the last vertex
               drawing_data.current_polygon.splice(drawing_data.current_polygon.length-1,1);
@@ -458,7 +465,7 @@ var CrayonPhysics = (function(){
       {
           if(objects.tacks[i].bodyB == null)
           {
-              if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+              if(itsInsideOf(matterToChalk(calcTackAbsPos(i)), drawing_data.current_polygon ))
               {
                   if(group == null)
                   {
@@ -491,14 +498,15 @@ var CrayonPhysics = (function(){
       for(i = 0; i < l; i++)
       {
           objects.tacks[tack_indices[i]].bodyB = body;
-          objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
+          objects.tacks[tack_indices[i]].offsetB = matterToChalk(calcTackOffset(calcTackAbsPos(tack_indices[i]), body));
+
           objects.tacks[tack_indices[i]].contraint = Matter.Constraint.create({
               bodyA  : objects.tacks[tack_indices[i]].bodyA,
-              pointA : objects.tacks[tack_indices[i]].offsetA,
+              pointA : chalkToMatter(objects.tacks[tack_indices[i]].offsetA),
               bodyB  : objects.tacks[tack_indices[i]].bodyB,
-              pointB : objects.tacks[tack_indices[i]].offsetB,
-              stiffness: 0.1,
-              length : 5,
+              pointB : chalkToMatter(objects.tacks[tack_indices[i]].offsetB),
+              stiffness: 0.1,// * ConfigOptions.matter_scale,
+              length : 5 * ConfigOptions.matter_scale,
           });
 
           if(objects.tacks[tack_indices[i]].bodyA.isStatic)
@@ -510,8 +518,8 @@ var CrayonPhysics = (function(){
           if(!objects.tacks[tack_indices[i]].bodyA.isStatic)
           {
               Matter.Body.setMass(body, body.mass * 5);
-              objects.tacks[tack_indices[i]].contraint.stiffness = 0.05;
-              objects.tacks[tack_indices[i]].contraint.length = 5;
+              objects.tacks[tack_indices[i]].contraint.stiffness = 0.05;// * ConfigOptions.matter_scale;
+              objects.tacks[tack_indices[i]].contraint.length = 2 * ConfigOptions.matter_scale;
           }
 
       }
@@ -528,7 +536,7 @@ var CrayonPhysics = (function(){
       var i, l = drawing_data.current_polygon.length;
       for(var i = 1 ; i < l; i++)
       {
-          parts.push(createStick(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]));
+          parts.push(createStick(chalkToMatter(drawing_data.current_polygon[i-1]), chalkToMatter(drawing_data.current_polygon[i])));
       }
 
       var body = Matter.Body.create( {parts: parts});
@@ -544,7 +552,7 @@ var CrayonPhysics = (function(){
       {
           if(objects.tacks[i].bodyB == null)
           {
-              if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+              if(itsInsideOf(matterToChalk(calcTackAbsPos(i)), drawing_data.current_polygon ))
               {
                   if(group == null)
                   {
@@ -580,11 +588,11 @@ var CrayonPhysics = (function(){
           objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
           objects.tacks[tack_indices[i]].contraint = Matter.Constraint.create({
               bodyA  : objects.tacks[tack_indices[i]].bodyA,
-              pointA : objects.tacks[tack_indices[i]].offsetA,
+              pointA : chalkToMatter(objects.tacks[tack_indices[i]].offsetA),
               bodyB  : objects.tacks[tack_indices[i]].bodyB,
-              pointB : objects.tacks[tack_indices[i]].offsetB,
+              pointB : chalkToMatter(objects.tacks[tack_indices[i]].offsetB),
               stiffness: 0.1,
-              length : 5,
+              length : 2,
           });
 
           if(objects.tacks[tack_indices[i]].bodyA.isStatic)
@@ -597,7 +605,7 @@ var CrayonPhysics = (function(){
           {
               Matter.Body.setMass(body, body.mass * 5);
               objects.tacks[tack_indices[i]].contraint.stiffness = 0.05;
-              objects.tacks[tack_indices[i]].contraint.length = 5;
+              objects.tacks[tack_indices[i]].contraint.length = 3;
           }
 
       }
@@ -614,6 +622,7 @@ var CrayonPhysics = (function(){
 
   function closeAsChain()
   {
+     /* A ESTE METODO LE FALTA LA ESCALA CHALKTOMATTER */
       var parts = [];
       var i, l = drawing_data.current_polygon.length;
       for(var i = 1 ; i < l; i++)
@@ -644,6 +653,8 @@ var CrayonPhysics = (function(){
       cur_pos.x -= camera.x;
       cur_pos.y -= camera.y;
 
+      var scaled_cur_pos = chalkToMatter(cur_pos);
+
       var tack = {
           bodyA     : null,
           offsetA   : null,
@@ -652,7 +663,7 @@ var CrayonPhysics = (function(){
           contraint : null,
       };
       var _bodies = Matter.Composite.allBodies(engine.world);
-      var _bodies = Matter.Query.point(_bodies, cur_pos);
+      var _bodies = Matter.Query.point(_bodies, scaled_cur_pos);
       if(_bodies.length == 0)
       {
           console.log("You cannot put tacks in the air");
@@ -665,16 +676,19 @@ var CrayonPhysics = (function(){
           tack.bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
           tack.bodyA.__Assigned = true;
       }
-      tack.offsetA = calcTackOffset(cur_pos, tack.bodyA);
+      tack.offsetA = matterToChalk(calcTackOffset(scaled_cur_pos, tack.bodyA));
       objects.tacks.push(tack);
   }
 
   function erease()
   {
+      /* AQUI VOY */
       // obtener la posicion del cursor
       var cur_pos = PlayerCursor.getPosition();
       cur_pos.x -= camera.x;
       cur_pos.y -= camera.y;
+
+      var scaled_cur_pos = chalkToMatter(cur_pos);
 
       // buscar tacks para elminarlas
       var i, l = objects.tacks.length;
@@ -683,8 +697,8 @@ var CrayonPhysics = (function(){
           if(!objects.tacks[i].deleted)
           {
               var tack_pos = calcTackAbsPos(i)
-              var diff_x = cur_pos.x - tack_pos.x;
-              var diff_y = cur_pos.y - tack_pos.y;
+              var diff_x = scaled_cur_pos.x - tack_pos.x;
+              var diff_y = scaled_cur_pos.y - tack_pos.y;
               var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
               if(distance < 20)
               {
@@ -701,11 +715,11 @@ var CrayonPhysics = (function(){
 
       // si no se encuentra tack, eliminar una figura que se encuentre bajo el cursor
       var _bodies = Matter.Composite.allBodies(engine.world);
-      var _bodies = Matter.Query.point(_bodies, cur_pos);
+      var _bodies = Matter.Query.point(_bodies, scaled_cur_pos);
       l = _bodies.length;
       for(i = 0; i < l; i++)
       {
-          if(_bodies[i].isSensor)
+          if(_bodies[i].isSensor || _bodies[i].label != "Body")
               continue;
           removeBody(_bodies[i]);
           break;
@@ -733,9 +747,9 @@ var CrayonPhysics = (function(){
   function calcTackAbsPos(index)
   {
       var tack = objects.tacks[index];
-
-      var x = tack.offsetA.x;
-      var y = tack.offsetA.y;
+      var scaled_offsetA = chalkToMatter(tack.offsetA);
+      var x = scaled_offsetA.x;
+      var y = scaled_offsetA.y;
       var r = tack.bodyA.angle;
 
       // 2D Rotation 
@@ -821,9 +835,10 @@ var CrayonPhysics = (function(){
               {
                   level_data.static_bodies.push(level.bodies[i].label);
               }
-              var body = Matter.Bodies.fromVertices(level.bodies[i].position.x,
-                                                    level.bodies[i].position.y,
-                                                    level.bodies[i].vertices,
+              var scaled_position = chalkToMatter(level.bodies[i].position);
+              var body = Matter.Bodies.fromVertices(scaled_position.x,
+                                                    scaled_position.y,
+                                                    chalkToMatter(level.bodies[i].vertices),
                                                     { label : level.bodies[i].label, isSensor: level.bodies[i].isSensor });
           }
           else if(type == "circle")
@@ -834,9 +849,10 @@ var CrayonPhysics = (function(){
                   level.bodies[i].mapped = true;
               }
               var centroid = { x : 0, y: 0 };
-              var body = Matter.Bodies.circle( level.bodies[i].position.x,
-                                               level.bodies[i].position.y,
-                                               level.bodies[i].radio,
+              var scaled_position = chalkToMatter(level.bodies[i].position);
+              var body = Matter.Bodies.circle( scaled_position.x,
+                                               scaled_position.y,
+                                               level.bodies[i].radio * ConfigOptions.matter_scale,
                                                { isStatic : level.bodies[i].isStatic,
                                                  label : level.bodies[i].label } 
               );
@@ -904,6 +920,51 @@ var CrayonPhysics = (function(){
       return pointStatus;
   }
 
+
+  /* It scales a vector/polygon from chalk to matter.js */
+  function chalkToMatter(vector_or_polygon)
+  {
+       if(Array.isArray(vector_or_polygon))
+       {
+            var scaled_poly = [];
+            var i, l = vector_or_polygon.length;
+            for(i = 0; i < l; i++)
+            {
+                 scaled_poly.push({
+                     x : vector_or_polygon[i].x * ConfigOptions.matter_scale,
+                     y : vector_or_polygon[i].y * ConfigOptions.matter_scale,
+                 });
+            }
+            return scaled_poly;
+       }
+       return {
+           x : vector_or_polygon.x * ConfigOptions.matter_scale,
+           y : vector_or_polygon.y * ConfigOptions.matter_scale,
+       };
+  }
+
+  /* It scales a vector/polygon from matter.js to chalk */
+  function matterToChalk(vector_or_polygon)
+  {
+       if(Array.isArray(vector_or_polygon))
+       {
+            var scaled_poly = [];
+            var i, l = vector_or_polygon.length;
+            for(i = 0; i < l; i++)
+            {
+                 scaled_poly.push({
+                     x : vector_or_polygon[i].x / ConfigOptions.matter_scale,
+                     y : vector_or_polygon[i].y / ConfigOptions.matter_scale,
+                 });
+            }
+            return scaled_poly;
+       }
+       return {
+           x : vector_or_polygon.x / ConfigOptions.matter_scale,
+           y : vector_or_polygon.y / ConfigOptions.matter_scale,
+       };
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -912,5 +973,7 @@ var CrayonPhysics = (function(){
             erease        : erease,
             changeTool    : changeTool,
             loadLevel     : loadLevel,
-            restartLevel  : restartLevel };
+            restartLevel  : restartLevel,
+            chalkToMatter : chalkToMatter,
+            matterToChalk : matterToChalk };
 })();
