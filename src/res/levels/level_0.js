@@ -34,10 +34,10 @@ LevelSelector.getLevels().push({
 	    // agregamos una variable al contexto del nivel
     	context.game_over = false;
 
-	    // si ocurre una colision cualquiera el nivel esta terminado
-        Matter.Events.on(engine, 'collisionActive', function(event) {
-            context.game_over = true;
-        });
+	    //// si ocurre una colision cualquiera el nivel esta terminado
+        //Matter.Events.on(engine, 'collisionActive', function(event) {
+        //    context.game_over = true;
+        //});
     },
 
     update : function(context, engine)
