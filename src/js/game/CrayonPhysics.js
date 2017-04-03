@@ -191,14 +191,9 @@ var CrayonPhysics = (function(){
           context.restore();
       }
 
-      if(ConfigOptions.use_debug_render)
-      {
-          debugRender();
-      }
-
       context.restore();
   }
-  
+
   function onKeyDown(e)
   {
       
