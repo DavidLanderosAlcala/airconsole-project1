@@ -693,7 +693,6 @@ var CrayonPhysics = (function(){
   {
       if(body.label != "Body")
         return;
-      //Matter.World.remove(engine.world, [body]);
       Physics.remove(body);
       removeTacksConnectedTo(body.id);
       var i, l = objects.shapes.length;
@@ -742,13 +741,13 @@ var CrayonPhysics = (function(){
       return offset;
   }
 
-  function removeTacksConnectedTo(body)
+  function removeTacksConnectedTo(body_id)
   {
       for(var i = objects.tacks.length-1; i >= 0; i--)
       {
           if(!objects.tacks[i].deleted)
           {
-              if(objects.tacks[i].bodyA == body)
+              if( Physics.getId(objects.tacks[i].bodyA) == body_id)
               {
                    if(objects.tacks[i].contraint != null)
                    {
@@ -758,7 +757,7 @@ var CrayonPhysics = (function(){
                    objects.tacks[i].contraint = null;
                    objects.tacks[i].deleted = true;
               }
-              if(objects.tacks[i].bodyB != null && objects.tacks[i].bodyB == body)
+              if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
               {
                    Physics.remove(objects.tacks[i].contraint);
                    //Matter.World.remove(engine.world, [objects.tacks[i].contraint]);

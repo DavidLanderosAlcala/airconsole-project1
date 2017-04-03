@@ -117,6 +117,12 @@ var Physics = (function(){
         return body_handler.isSensor;
     }
 
+    function getId(body_handler)
+    {
+        // matter.js
+        return body_handler.id;
+    }
+
     function getAllBodies()
     {
     	// Matter.js 
@@ -186,6 +192,7 @@ var Physics = (function(){
              getAllBodies     : getAllBodies,
              preventCollision : preventCollision,
              isSensor : isSensor,
-             createRevoluteJoint : createRevoluteJoint, };
+             createRevoluteJoint : createRevoluteJoint,
+             getId : getId };
 
 })();
