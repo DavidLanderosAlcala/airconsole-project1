@@ -104,6 +104,35 @@ var Physics = (function(){
         return body;
     }
 
+    function createWire(vertices)
+    {
+        var parts = [];
+        var i, l = vertices.length;
+        for(var i = 1 ; i < l; i++)
+        {
+            parts.push(createStick(vertices[i-1], vertices[i]));
+        }
+        var body = Matter.Body.create( {parts: parts} );
+        Matter.Body.setInertia(body, body.inertia * 5);
+        Matter.World.add(engine.world, [body]);
+        return body;
+    }
+
+    function createStick(pos1, pos2)
+    {
+        var pos = {
+            x : ((pos1.x + pos2.x) / 2),
+            y : ((pos1.y + pos2.y) / 2)
+        };
+        var height = 8;
+        var vector_x = pos2.x - pos1.x;
+        var vector_y = pos2.y - pos1.y;
+        var width = Math.sqrt( (vector_x * vector_x) + (vector_y * vector_y) );
+        var angle = Math.atan(vector_y / vector_x);
+        // this is a exception, createStick receive scaled vectors 
+        return Matter.Bodies.rectangle(pos.x, pos.y, width, height, {friction: 1.0, angle : angle});
+    }
+
     function createRectangle(options)
     {
 
@@ -187,6 +216,7 @@ var Physics = (function(){
              isSensor : isSensor,
              createRevoluteJoint : createRevoluteJoint,
              getId : getId,
-             getCentroid : getCentroid };
+             getCentroid : getCentroid,
+             createWire : createWire, };
 
 })();

@@ -344,23 +344,6 @@ var CrayonPhysics = (function(){
       return "polygon"
   }
 
-  function createStick(pos1, pos2)
-  {
-      var pos = {
-          x : ((pos1.x + pos2.x) / 2),
-          y : ((pos1.y + pos2.y) / 2)
-      };
-      var height = 8 * ConfigOptions.matter_scale;
-      var vector_x = pos2.x - pos1.x;
-      var vector_y = pos2.y - pos1.y;
-      var width = Math.sqrt( (vector_x * vector_x) + (vector_y * vector_y) );
-      var angle = Math.atan(vector_y / vector_x);
-
-      // this is a exception, createStick receive scaled vectors 
-      return Matter.Bodies.rectangle(pos.x, pos.y, width*2, height, {friction: 1.0, angle : angle});
-
-  }
-
   function calcCentroidOfWire(vertices)
   {
        var centroid = { x : 0, y : 0 };
@@ -472,17 +455,8 @@ var CrayonPhysics = (function(){
 
   function closeAsWire()
   {
-     /* Pendiente */
-      var parts = [];
-      var i, l = drawing_data.current_polygon.length;
-      for(var i = 1 ; i < l; i++)
-      {
-          parts.push(createStick(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]));
-      }
 
-      var body = Matter.Body.create( {parts: parts});
-      Matter.Body.setInertia(body, body.inertia * 5);
-
+      var body = Physics.createWire(drawing_data.current_polygon);
       var centroid = calcCentroidOfWire(drawing_data.current_polygon);
 
 // -------------------------------------------------------------------
@@ -497,18 +471,18 @@ var CrayonPhysics = (function(){
               {
                   if(group == null)
                   {
-                      group = objects.tacks[i].bodyA.collisionFilter.group;
+                      group = objects.tacks[i].bodyA;
                   }
                   else
                   {
-                      objects.tacks[i].bodyA.collisionFilter.group = group;
+                      Physics.preventCollision(group, objects.tacks[i].bodyA);
                   }
                   tack_indices.push(i);
               }
           }
       }
       if(group != null) {
-          body.collisionFilter.group = group;
+          Physics.preventCollision(group, body);
       }
 // =======================================================================      
 
@@ -527,26 +501,25 @@ var CrayonPhysics = (function(){
       {
           objects.tacks[tack_indices[i]].bodyB = body;
           objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
-          objects.tacks[tack_indices[i]].contraint = Matter.Constraint.create({
+
+          // it applies rotation
+          var offset = objects.tacks[tack_indices[i]].offsetA;
+          var angle = Physics.getAngle(objects.tacks[tack_indices[i]].bodyA);
+          var rotated_offset = {
+              x : (offset.x  * Math.cos(angle)) - (offset.y * Math.sin(angle)),
+              y : (offset.y * Math.cos(angle)) + (offset.x * Math.sin(angle)),
+          };
+
+          objects.tacks[tack_indices[i]].contraint = Physics.createRevoluteJoint({
               bodyA  : objects.tacks[tack_indices[i]].bodyA,
-              pointA : objects.tacks[tack_indices[i]].offsetA,
+              pointA : rotated_offset,
               bodyB  : objects.tacks[tack_indices[i]].bodyB,
               pointB : objects.tacks[tack_indices[i]].offsetB,
-              stiffness: 0.1,
-              length : 2,
           });
 
           if(objects.tacks[tack_indices[i]].bodyA.isStatic)
           {
               static_connections++;
-          }
-
-          Matter.World.add(engine.world, [objects.tacks[tack_indices[i]].contraint]);
-          if(!objects.tacks[tack_indices[i]].bodyA.isStatic)
-          {
-              Matter.Body.setMass(body, body.mass * 5);
-              objects.tacks[tack_indices[i]].contraint.stiffness = 0.05;
-              objects.tacks[tack_indices[i]].contraint.length = 3;
           }
 
       }
@@ -556,7 +529,6 @@ var CrayonPhysics = (function(){
       }
       // ======================================================================= 
 
-      Matter.World.add(engine.world, [body]);
       drawing_data.clear();
   }
 
