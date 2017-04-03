@@ -152,3 +152,9 @@ span.level_button
     border-image-repeat: repeat;
     border-image-slice: 30;
 }
+
+
+#debug_render
+{
+    //alpha : 0.2;
+}

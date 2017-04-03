@@ -8,6 +8,29 @@ var Physics = (function(){
     {
         engine = Matter.Engine.create();
         Matter.Engine.run(engine);
+        var debug_canvas = document.querySelector("#debug_render");
+        if(ConfigOptions.use_debug_render)
+        {
+            var render = Matter.Render.create({
+                element : debug_canvas,
+                engine  : engine,
+                    options: {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    background: 'rgba(0,0,0,0)',
+                    wireframeBackground : "#00000000",
+                }
+            });
+            Matter.Render.run(render);
+            debug_canvas.style.width = (window.innerWidth) + "px";
+            debug_canvas.style.height = (window.innerHeight) + "px";
+            debug_canvas.style.background = "rgba(0,0,0,0)"
+            debug_canvas.style.alpha = "0.2";
+        }
+        else
+        {
+            debug_canvas.style.zIndex = -1;
+        }
     }
 
     function clear()
@@ -19,7 +42,7 @@ var Physics = (function(){
     function getPosition(body_handler)
     {
     	// matter.js
-        return body_handler.position;
+        return Mapping.engineToCanvas(body_handler.position);
     }
 
     function getAngle(body_handler)
@@ -39,11 +62,14 @@ var Physics = (function(){
     	options.isSensor = options.isSensor == undefined ? false : options.isSensor;
         options.label = options.label == undefined ? "Body" : options.label;
     	// matter.js
-        var body = Matter.Bodies.fromVertices(options.x, options.y, options.vertices, {
+        var mapped_pos = Mapping.canvasToEngine(options);
+        var mapped_vertices = Mapping.canvasToEngine(options.vertices);
+        var body = Matter.Bodies.fromVertices(mapped_pos.x, mapped_pos.y, mapped_vertices, {
         	friction : options.friction,
         	isStatic : options.isStatic,
         	isSensor : options.isSensor,
         	label    : options.label,
+            render : { fillStyle: "#0a0", visible : true },
         });
         if(body != undefined)
         {
@@ -65,7 +91,9 @@ var Physics = (function(){
 
     function createCircle(options)
     {
-        var body = Matter.Bodies.circle( options.x, options.y, options.radio, {
+        var mapped_pos = Mapping.canvasToEngine(options);
+        var mapped_radio = options.radio / Mapping.getCanvasScale().x;
+        var body = Matter.Bodies.circle( mapped_pos.x, mapped_pos.y, mapped_radio, {
           	isStatic : options.isStatic,
             label : options.label,
         });
@@ -95,9 +123,9 @@ var Physics = (function(){
     {
         var constraint = Matter.Constraint.create({
               bodyA  : options.bodyA,
-              pointA : options.pointA,
+              pointA : Mapping.canvasToEngine(options.pointA),
               bodyB  : options.bodyB,
-              pointB : options.pointB,
+              pointB : Mapping.canvasToEngine(options.pointB),
               stiffness: 0.1,
               length : 5,
          });
@@ -132,13 +160,15 @@ var Physics = (function(){
     function getCentroid(vertices)
     {
         // Matter.js
+        // Maybe this is an exception, this function does not need mapping
         return Matter.Vertices.centre(vertices);
     }
 
     function getBodiesAtPoint(point)
     {
+        var mapped_point = Mapping.canvasToEngine(point);
         var _bodies = Physics.getAllBodies();
-        return Matter.Query.point(_bodies, point);
+        return Matter.Query.point(_bodies, mapped_point);
     }
 
     return { init            : init,

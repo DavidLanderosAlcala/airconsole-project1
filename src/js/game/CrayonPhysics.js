@@ -4,7 +4,6 @@ var CrayonPhysics = (function(){
   /* module/local variables */
   var canvas;
   var context;
-  var camera;
   var canvas_rect;
   var objects;
   var drawing_data;
@@ -13,14 +12,10 @@ var CrayonPhysics = (function(){
   function init(options)
   {
       MenuManager.init();
+      Mapping.init(options.canvas);
       canvas = options.canvas;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
-      camera = {
-          x : canvas.width >> 1,
-          y : canvas.height
-      };
 
       objects = {
           shapes : [],
@@ -59,7 +54,8 @@ var CrayonPhysics = (function(){
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(update);
-      LevelSelector.show();
+      //LevelSelector.show();
+      loadLevel(0);
   }
 
   function restartEngine()
@@ -75,11 +71,6 @@ var CrayonPhysics = (function(){
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      
-      camera = {
-          x : canvas.width >> 1,
-          y : canvas.height
-      };
       
   }
 
@@ -109,7 +100,6 @@ var CrayonPhysics = (function(){
       /* Clearing the screen */
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
-      context.translate(camera.x, camera.y);
 
       /* Drawing the current polygon */
       context.save();
@@ -310,8 +300,8 @@ var CrayonPhysics = (function(){
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
           var new_pos = {
-            x : pos.x - camera.x,
-            y : pos.y - camera.y,
+            x : pos.x,
+            y : pos.y,
           };
           if(drawing_data.current_polygon.length > 0){
             var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
@@ -617,8 +607,6 @@ var CrayonPhysics = (function(){
   function tack()
   {
       var cur_pos = PlayerCursor.getPosition();
-      cur_pos.x -= camera.x;
-      cur_pos.y -= camera.y;
 
       var tack = {
           bodyA     : null,
@@ -647,8 +635,6 @@ var CrayonPhysics = (function(){
       /* AQUI VOY */
       // obtener la posicion del cursor
       var cur_pos = PlayerCursor.getPosition();
-      cur_pos.x -= camera.x;
-      cur_pos.y -= camera.y;
 
       // buscar tacks para elminarlas
       var i, l = objects.tacks.length;
@@ -792,6 +778,8 @@ var CrayonPhysics = (function(){
               if(level.bodies[i].mapped == undefined)
               {
                   level.bodies[i].position.y = -level.bodies[i].position.y;
+                  level.bodies[i].position.x += canvas.width>>1;
+                  level.bodies[i].position.y += canvas.height;
                   for(var v = 0; v < level.bodies[i].vertices.length; v++)
                   {
                       level.bodies[i].vertices[v].y = -level.bodies[i].vertices[v].y;
@@ -820,6 +808,8 @@ var CrayonPhysics = (function(){
               if(level.bodies[i].mapped == undefined)
               {
                   level.bodies[i].position.y = -level.bodies[i].position.y;
+                  level.bodies[i].position.x += canvas.width>>1;
+                  level.bodies[i].position.y += canvas.height;
                   level.bodies[i].mapped = true;
               }
               var centroid = { x : 0, y: 0 };
