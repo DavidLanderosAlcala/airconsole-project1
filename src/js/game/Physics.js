@@ -41,7 +41,7 @@ var Physics = (function(){
     function getPosition(body_handler)
     {
     	// matter.js
-        return Mapping.engineToCanvas(body_handler.position);
+        return body_handler.position;
     }
 
     function getAngle(body_handler)
@@ -61,8 +61,10 @@ var Physics = (function(){
     	options.isSensor = options.isSensor == undefined ? false : options.isSensor;
         options.label = options.label == undefined ? "Body" : options.label;
     	// matter.js
-        var mapped_pos = Mapping.canvasToEngine(options);
-        var mapped_vertices = Mapping.canvasToEngine(options.vertices);
+
+        var mapped_pos = options;
+        var mapped_vertices = options.vertices;
+
         var body = Matter.Bodies.fromVertices(mapped_pos.x, mapped_pos.y, mapped_vertices, {
         	friction : options.friction,
         	isStatic : options.isStatic,
@@ -89,8 +91,8 @@ var Physics = (function(){
 
     function createCircle(options)
     {
-        var mapped_pos = Mapping.canvasToEngine(options);
-        var mapped_radio = options.radio / Mapping.getCanvasScale().x;
+        var mapped_pos = options;
+        var mapped_radio = options.radio;
         var body = Matter.Bodies.circle( mapped_pos.x, mapped_pos.y, mapped_radio, {
           	isStatic : options.isStatic,
             label : options.label,
@@ -121,9 +123,9 @@ var Physics = (function(){
     {
         var constraint = Matter.Constraint.create({
               bodyA  : options.bodyA,
-              pointA : Mapping.canvasToEngine(options.pointA),
+              pointA : options.pointA,
               bodyB  : options.bodyB,
-              pointB : Mapping.canvasToEngine(options.pointB),
+              pointB : options.pointB,
               stiffness: 0.1,
               length : 5,
          });
@@ -158,13 +160,12 @@ var Physics = (function(){
     function getCentroid(vertices)
     {
         // Matter.js
-        // Maybe this is an exception, this function does not need mapping
         return Matter.Vertices.centre(vertices);
     }
 
     function getBodiesAtPoint(point)
     {
-        var mapped_point = Mapping.canvasToEngine(point);
+        var mapped_point = point;
         var _bodies = Physics.getAllBodies();
         return Matter.Query.point(_bodies, mapped_point);
     }

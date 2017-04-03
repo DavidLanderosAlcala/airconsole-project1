@@ -12,7 +12,6 @@ var CrayonPhysics = (function(){
   function init(options)
   {
       MenuManager.init();
-      Mapping.init(options.canvas);
       canvas = options.canvas;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
