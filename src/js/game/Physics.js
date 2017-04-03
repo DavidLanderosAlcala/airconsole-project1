@@ -17,7 +17,6 @@ var Physics = (function(){
                     options: {
                     width: window.innerWidth,
                     height: window.innerHeight,
-                    background: 'rgba(0,0,0,0)',
                     wireframeBackground : "#00000000",
                 }
             });
@@ -69,7 +68,6 @@ var Physics = (function(){
         	isStatic : options.isStatic,
         	isSensor : options.isSensor,
         	label    : options.label,
-            render : { fillStyle: "#0a0", visible : true },
         });
         if(body != undefined)
         {
