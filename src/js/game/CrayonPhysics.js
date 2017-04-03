@@ -417,7 +417,6 @@ var CrayonPhysics = (function(){
           Physics.preventCollision(group, body);
       }
 
-      //Matter.World.add(engine.world, [body]);
       l = tack_indices.length;
       var static_connections = 0;
       for(i = 0; i < l; i++)
@@ -455,11 +454,8 @@ var CrayonPhysics = (function(){
 
   function closeAsWire()
   {
-
       var body = Physics.createWire(drawing_data.current_polygon);
       var centroid = calcCentroidOfWire(drawing_data.current_polygon);
-
-// -------------------------------------------------------------------
       var group = null;
       var tack_indices = [];
       var i, l = objects.tacks.length;
@@ -483,8 +479,7 @@ var CrayonPhysics = (function(){
       }
       if(group != null) {
           Physics.preventCollision(group, body);
-      }
-// =======================================================================      
+      } 
 
       objects.shapes.push({
           body : body,
@@ -494,7 +489,6 @@ var CrayonPhysics = (function(){
           color_index : drawing_data.current_color_index,
       });
 
-// ======================================================================= 
       l = tack_indices.length;
       var static_connections = 0;
       for(i = 0; i < l; i++)
@@ -521,13 +515,11 @@ var CrayonPhysics = (function(){
           {
               static_connections++;
           }
-
       }
       if(static_connections > 1)
       {
-          Matter.Body.set(body, {isStatic : true });
+          Physics.setStatic(body, true);
       }
-      // ======================================================================= 
 
       drawing_data.clear();
   }
@@ -541,8 +533,6 @@ var CrayonPhysics = (function(){
           parts.push(createStick(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]));
       }
 
-      var body = Matter.Body.create( {parts: parts});
-      Matter.Body.setInertia(body, body.inertia * 5);
 
       var centroid = calcCentroidOfWire(drawing_data.current_polygon);
 
@@ -554,7 +544,6 @@ var CrayonPhysics = (function(){
           color_index : drawing_data.current_color_index,
       });
 
-      Matter.World.add(engine.world, [body]);
       drawing_data.clear();
   }
 
@@ -691,7 +680,6 @@ var CrayonPhysics = (function(){
               {
                    if(objects.tacks[i].contraint != null)
                    {
-                       //Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
                        Physics.remove(objects.tacks[i].contraint);
                    }
                    objects.tacks[i].contraint = null;
@@ -700,7 +688,6 @@ var CrayonPhysics = (function(){
               if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
               {
                    Physics.remove(objects.tacks[i].contraint);
-                   //Matter.World.remove(engine.world, [objects.tacks[i].contraint]);
                    objects.tacks[i].contraint = null;
                    objects.tacks[i].deleted = true;
               }
