@@ -154,4 +154,3 @@ var Screen = (function(){
 
 })();
 
-Screen.init();

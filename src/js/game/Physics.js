@@ -37,6 +37,7 @@ var Physics = (function(){
     {
     	options.isStatic = options.isStatic == undefined ? false : options.isStatic;
     	options.isSensor = options.isSensor == undefined ? false : options.isSensor;
+        options.label = options.label == undefined ? "Body" : options.label;
     	// matter.js
         var body = Matter.Bodies.fromVertices(options.x, options.y, options.vertices, {
         	friction : options.friction,
