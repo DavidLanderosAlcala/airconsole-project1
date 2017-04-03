@@ -443,9 +443,17 @@ var CrayonPhysics = (function(){
           objects.tacks[tack_indices[i]].bodyB = body;
           objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
 
+          // it applies rotation
+          var offset = objects.tacks[tack_indices[i]].offsetA;
+          var angle = Physics.getAngle(objects.tacks[tack_indices[i]].bodyA);
+          var rotated_offset = {
+              x : (offset.x  * Math.cos(angle)) - (offset.y * Math.sin(angle)),
+              y : (offset.y * Math.cos(angle)) + (offset.x * Math.sin(angle)),
+          };
+
           objects.tacks[tack_indices[i]].contraint = Physics.createRevoluteJoint({
               bodyA  : objects.tacks[tack_indices[i]].bodyA,
-              pointA : objects.tacks[tack_indices[i]].offsetA,
+              pointA : rotated_offset,
               bodyB  : objects.tacks[tack_indices[i]].bodyB,
               pointB : objects.tacks[tack_indices[i]].offsetB,
           });
