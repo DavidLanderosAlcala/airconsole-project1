@@ -141,48 +141,6 @@ var Physics = (function(){
         return Matter.Query.point(_bodies, point);
     }
 
-    function engineToCanvas(vector_or_polygon)
-    {
-       if(Array.isArray(vector_or_polygon))
-       {
-            var scaled_poly = [];
-            var i, l = vector_or_polygon.length;
-            for(i = 0; i < l; i++)
-            {
-                 scaled_poly.push({
-                     x : vector_or_polygon[i].x * ConfigOptions.matter_scale,
-                     y : vector_or_polygon[i].y * ConfigOptions.matter_scale,
-                 });
-            }
-            return scaled_poly;
-       }
-       return {
-           x : vector_or_polygon.x * ConfigOptions.matter_scale,
-           y : vector_or_polygon.y * ConfigOptions.matter_scale,
-       };
-    }
-
-    function canvasToEngine(vector_or_polygon)
-    {
-       if(Array.isArray(vector_or_polygon))
-       {
-            var scaled_poly = [];
-            var i, l = vector_or_polygon.length;
-            for(i = 0; i < l; i++)
-            {
-                 scaled_poly.push({
-                     x : vector_or_polygon[i].x / ConfigOptions.matter_scale,
-                     y : vector_or_polygon[i].y / ConfigOptions.matter_scale,
-                 });
-            }
-            return scaled_poly;
-       }
-       return {
-           x : vector_or_polygon.x / ConfigOptions.matter_scale,
-           y : vector_or_polygon.y / ConfigOptions.matter_scale,
-       };
-    }
-
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
