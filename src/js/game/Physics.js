@@ -129,6 +129,12 @@ var Physics = (function(){
     	return Matter.Composite.allBodies(engine.world);
     }
 
+    function getCentroid(vertices)
+    {
+        // Matter.js
+        return Matter.Vertices.centre(vertices);
+    }
+
     function getBodiesAtPoint(point)
     {
         var _bodies = Physics.getAllBodies();
@@ -193,6 +199,7 @@ var Physics = (function(){
              preventCollision : preventCollision,
              isSensor : isSensor,
              createRevoluteJoint : createRevoluteJoint,
-             getId : getId };
+             getId : getId,
+             getCentroid : getCentroid };
 
 })();

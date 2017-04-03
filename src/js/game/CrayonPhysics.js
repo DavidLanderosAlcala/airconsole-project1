@@ -414,7 +414,7 @@ var CrayonPhysics = (function(){
   function closeAsPolygon()
   {
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
-      var centroid = Matter.Vertices.centre(drawing_data.current_polygon);
+      var centroid = Physics.getCentroid(drawing_data.current_polygon);
       var body = undefined;
 
       while(body == undefined && drawing_data.current_polygon.length > ConfigOptions.min_vertices_per_polygon)
@@ -798,7 +798,7 @@ var CrayonPhysics = (function(){
                   }
                   level.bodies[i].mapped = true;
               }
-              var centroid = Matter.Vertices.centre(level.bodies[i].vertices);
+              var centroid = Physics.getCentroid(level.bodies[i].vertices);
               if(level.bodies[i].isStatic)
               {
                   level_data.static_bodies.push(level.bodies[i].label);
