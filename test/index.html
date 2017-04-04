@@ -1,0 +1,100 @@
+
+<script src="https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/src/js/libs/poly-decomp/decomp.min.js"></script>
+<script src="https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/src/js/libs/matterjs/matter.min.js"></script>
+<script src="https://www.binarytides.com/labs/box2d_revolute_joint/Box2dWeb-2.1.a.3.js"></script>
+<canvas id="canvas" width="640" height="480" style="border: 1px solid black"></canvas>
+<div id="debug_render"></div>
+<script src="./matter.js/Physics.js"></script>
+<script>
+
+var canvas = document.querySelector("#canvas");
+var context = canvas.getContext("2d");
+
+var objects = [];
+
+function init()
+{
+	Physics.init();
+	objects.push({
+	    x : 220,
+	    y : 0,
+	    isStatic : false,
+	    label : "cup",
+        vertices : [
+            {x : -40, y: -20},
+            {x : 40, y: -20},
+            {x : 40, y: 100},
+            {x : 30, y: 100},
+            {x :  20, y: 0},
+            {x :  -20, y: 0},
+            {x : -30, y: 100},
+            {x : -40, y: 100},
+        ],
+	});
+
+	objects.push({
+        x : 320,
+        y : 10,
+        isStatic:false,
+        label : "rock",
+        vertices : [
+            {x : -20, y : -20},
+            {x :  20, y : -20},
+            {x :  20, y : 20},
+            {x : -20, y : 20},
+        ],
+	});
+
+	objects.push({
+        x : 320,
+        y : 480/2,
+        isStatic : true,
+        label    : "ground",
+        vertices : [
+            {x : -200, y : -20},
+            {x :  200, y : -20},
+            {x :  200, y : 20},
+            {x : -200, y : 20},
+        ],
+	});
+
+	for(var i = 0; i < objects.length; i++)
+	{
+		objects[i].handler = Physics.createBody(objects[i]);
+	}
+
+    window.requestAnimationFrame(render);
+}
+
+function render()
+{
+	Physics.update();
+	context.clearRect( 0, 0, canvas.width, canvas.height);
+	context.save();
+	for(var i = 0; i < objects.length; i++)
+	{
+		context.save();
+        var pos =  Physics.getPosition(objects[i].handler);
+        var centroid =  Physics.getCentroid(objects[i].vertices);
+        var angle = Physics.getAngle(objects[i].handler);
+        context.translate(pos.x, pos.y);
+        context.rotate(angle);
+        context.translate(-centroid.x, -centroid.y);
+        context.beginPath();
+        context.moveTo(objects[i].vertices[0].x, objects[i].vertices[0].y);
+        for(var j = 0; j < objects[i].vertices.length; j++)
+        {
+            context.lineTo(objects[i].vertices[j].x ,objects[i].vertices[j].y);
+        }
+        context.strokeStyle = "red";
+        context.closePath();
+        context.stroke();
+        context.restore();
+	}
+	context.restore();
+    window.requestAnimationFrame(render);
+}
+
+
+init();
+</script>
