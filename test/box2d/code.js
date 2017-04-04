@@ -7,11 +7,21 @@ var g_body = {
            vertices : [
                {x : -2, y: -1},
                {x : 2, y: -1},
-               {x : 2, y: 1},
-               {x : -1, y: 0.5},
-               {x : -2, y: 1},
+               {x : 2, y: 5},
+               {x : 1.5, y: 5},
+               {x :  1, y: 0},
+               {x :  -1, y: 0},
+               {x : -1.5, y: 5},
+               {x : -2, y: 5},
            ],
 }
+
+for(var i = 0; i < g_body.vertices.length; i++)
+{
+    g_body.vertices[i].x += 900;
+    g_body.vertices[i].y += -400;
+}
+
 
 var canvas2 = document.querySelector("#d");
 
@@ -61,13 +71,7 @@ var canvas2 = document.querySelector("#d");
            x : canvas.width/2/SCALE + 1,
            y : -5,
            isStatic:false,
-           vertices : [
-               {x : -2, y: -1},
-               {x : 2, y: -1},
-               {x : 2, y: 1},
-               {x : -1, y: 0.5},
-               {x : -2, y: 1},
-           ],
+           vertices : g_body.vertices,
        });
        console.log(g_body.body_handler);
        enableRenderer();
@@ -124,6 +128,22 @@ var canvas2 = document.querySelector("#d");
         bodyDef.position.x = options.x;
         bodyDef.position.y = options.y;
         var body = world.CreateBody(bodyDef);
+
+        //  Fix position to prevent centroid usage
+        var centroid = { x : 0, y : 0 };
+        for(var i = 0; i < options.vertices.length; i++)
+        {
+            centroid.x += options.vertices[i].x;
+            centroid.y += options.vertices[i].y;
+        }
+        centroid.x /= options.vertices.length;
+        centroid.y /= options.vertices.length;
+        for(var i = 0; i < options.vertices.length; i++)
+        {
+            options.vertices[i].x -= centroid.x;
+            options.vertices[i].y -= centroid.y;
+        }
+        // ----------------------------------------
         
         var concavePolygon = [];
         for(var i = 0; i < options.vertices.length; i++)
@@ -145,7 +165,8 @@ var canvas2 = document.querySelector("#d");
             fixture.shape.SetAsArray(points, points.length);
             body.CreateFixture(fixture);  
         }
-
+        // hack to do not change code that works in matter.js
+        body.centroid = {x : 0, y : 0};
         return body;
     }
     
@@ -168,10 +189,13 @@ var canvas2 = document.querySelector("#d");
         
         context.save();
             var pos =  g_body.body_handler.GetPosition();
+            var centroid =  g_body.body_handler.centroid;
             var angle = g_body.body_handler.GetAngle();
             context.translate(pos.x * 30, pos.y * 30);
             context.rotate(angle);
+            context.translate(centroid.x * 30, centroid.y * 30);
             context.beginPath();
+
             context.moveTo(g_body.vertices[0].x* 30,g_body.vertices[0].y* 30);
             for(var i = 0; i < g_body.vertices.length; i++)
             {
