@@ -408,7 +408,7 @@ var CrayonPhysics = (function(){
       objects.shapes.push({
           body : body,
           type : "polygon",
-          vertices : drawing_data.current_polygon,
+          vertices : Physics.processVertices(drawing_data.current_polygon),
           centroid: centroid,
           color_index : drawing_data.current_color_index,
       });
@@ -768,7 +768,7 @@ var CrayonPhysics = (function(){
               hint : level.bodies[i].hint,
               isSensor : level.bodies[i].isSensor,
               type : type,
-              vertices : level.bodies[i].vertices,
+              vertices : Physics.processVertices(level.bodies[i].vertices),
               radio : level.bodies[i].radio,
               centroid: centroid,
               color_index : ColorManager.getRandomColorIndex(),
