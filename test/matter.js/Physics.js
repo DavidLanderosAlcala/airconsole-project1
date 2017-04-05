@@ -89,7 +89,7 @@ var Physics = (function(){
         {
             Matter.World.add(engine.world, [body]);
         }
-        if(body.isStatic)
+        if(options.isStatic)
         {
         	static_objects.push(body);
             Matter.Body.setVelocity(body, { x : 0, y : 0});
@@ -119,7 +119,7 @@ var Physics = (function(){
         {
             Matter.World.add(engine.world, [body]);
         }
-        if(body.isStatic)
+        if(options.isStatic)
         {
         	static_objects.push(body);
             Matter.Body.setVelocity(body, { x : 0, y : 0});
