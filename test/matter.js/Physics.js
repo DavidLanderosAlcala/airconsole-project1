@@ -168,6 +168,7 @@ var Physics = (function(){
 
     function createRevoluteJoint(options)
     {
+        preventCollision(options.bodyA, options.bodyB);
         var constraint = Matter.Constraint.create({
               bodyA  : options.bodyA,
               pointA : options.pointA,
