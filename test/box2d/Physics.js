@@ -91,7 +91,8 @@ var Physics = (function(){
             fixture.shape.SetAsArray(points, points.length);
             body.CreateFixture(fixture);  
         }
-        //body.__id = count++;
+        body.__id = count++;
+        
         return body;
     }
 

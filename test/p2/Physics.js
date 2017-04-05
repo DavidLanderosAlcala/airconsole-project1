@@ -3,7 +3,7 @@
 var Physics = (function(){
 
     var world;
-    var scale = 80;
+    var scale = 30;
 
     function init()
     {
@@ -60,6 +60,7 @@ var Physics = (function(){
 
     function createBody(options)
     {
+        var vertices = processVertices(options.vertices);
         /*
         * Create a static or no-static object
         */
@@ -80,11 +81,43 @@ var Physics = (function(){
          * Build a compatible array from the game polygon
          */
         var poly = [];
-        for(var i = 0; i < options.vertices.length; i++)
+        for(var i = 0; i < vertices.length; i++)
         {
-            poly.push([options.vertices[i].x / scale, options.vertices[i].y / scale]);
+            poly.push([vertices[i].x / scale, vertices[i].y / scale]);
         }
+        var convexShape = new p2.Convex({ vertices : poly });
+        body.centroid = { x: convexShape.centerOfMass[0], y :  convexShape.centerOfMass[1]};
+        var max = { x : 0, y : 0 };
+        var min = { x : 0, y : 0 };
+        for(var i = 0; i < vertices.length; i++)
+        {
+            if(max.x < vertices[i].x)
+            {
+                max.x = vertices[i].x;
+            }
+            if(min.x > vertices[i].x)
+            {
+                min.x = vertices[i].x;
+            }
+
+            if(max.y < vertices[i].y)
+            {
+                max.y = vertices[i].y;
+            }
+            if(min.y > vertices[i].y)
+            {
+                min.y = vertices[i].y;
+            }
+        }
+
+        var centroid = {
+            x : (max.x + min.x) / 2,
+            y : (max.y + min.y) / 2,
+        };
+
+        //body.centroid = centroid;
         body.fromPolygon(poly);
+        body.adjustCenterOfMass();
         world.addBody(body);
 
         /*
@@ -199,6 +232,38 @@ var Physics = (function(){
     function processVertices(vertices)
     {
         return vertices;
+        var max = { x : 0, y : 0 };
+        var min = { x : 0, y : 0 };
+        for(var i = 0; i < vertices.length; i++)
+        {
+            if(max.x < vertices[i].x)
+            {
+                max.x = vertices[i].x;
+            }
+            if(min.x > vertices[i].x)
+            {
+                min.x = vertices[i].x;
+            }
+
+            if(max.y < vertices[i].y)
+            {
+                max.y = vertices[i].y;
+            }
+            if(min.y > vertices[i].y)
+            {
+                min.y = vertices[i].y;
+            }
+        }
+        var centroid = {
+            x : (max.x + min.x) / 2,
+            y : (max.y + min.y) / 2,
+        };
+        for(var i = 0; i < vertices.length; i++)
+        {
+            vertices[i].x -= centroid.x;
+            vertices[i].y -= centroid.y;
+        }
+        return vertices;
     }
 
     return { init            : init,
@@ -221,6 +286,7 @@ var Physics = (function(){
              getCentroid     : getCentroid,
              createWire      : createWire,
              processVertices : processVertices,
-             update : update };
+             update : update,
+             processVertices : processVertices, };
 
 })();

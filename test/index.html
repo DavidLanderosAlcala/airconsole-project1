@@ -2,7 +2,7 @@
 <script src="https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/src/js/libs/poly-decomp/decomp.min.js"></script>
 <script src="https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/src/js/libs/matterjs/matter.min.js"></script>
 <script src="https://schteppe.github.io/p2.js/build/p2.js"></script>
-  <script src="https://schteppe.github.io/p2.js/build/p2.renderer.js"></script>
+<script src="https://schteppe.github.io/p2.js/build/p2.renderer.js"></script>
 <script src="https://www.binarytides.com/labs/box2d_revolute_joint/Box2dWeb-2.1.a.3.js"></script>
 <canvas id="canvas" width="640" height="480" style="border: 1px solid black"></canvas>
 <div id="debug_render"></div>
@@ -23,6 +23,9 @@ function init()
 	    isStatic : false,
 	    label : "cup",
         vertices : [
+              ///{ x : 0, y : 100},
+              ///{ x : -25, y : 0},
+              ///{ x : 25, y : 0},
             {x : -40, y: -20},
             {x : 40, y: -20},
             {x : 40, y: 100},
@@ -62,6 +65,7 @@ function init()
 
 	for(var i = 0; i < objects.length; i++)
 	{
+        //objects[i].vertices = Physics.processVertices(objects[i].vertices);
 		objects[i].handler = Physics.createBody(objects[i]);
 	}
 
@@ -79,9 +83,12 @@ function render()
         var pos =  Physics.getPosition(objects[i].handler);
         var centroid =  Physics.getCentroid(objects[i].vertices);
         var angle = Physics.getAngle(objects[i].handler);
+
         context.translate(pos.x, pos.y);
+        context.fillStyle = "blue";
+        context.fillRect(-5,-5,10,10);
         context.rotate(angle);
-        context.translate(-centroid.x, -centroid.y);
+        context.translate(-objects[i].handler.centroid.x * 30, -objects[i].handler.centroid.y * 30);
         context.beginPath();
         context.moveTo(objects[i].vertices[0].x, objects[i].vertices[0].y);
         for(var j = 0; j < objects[i].vertices.length; j++)
