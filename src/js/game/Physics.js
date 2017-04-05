@@ -3,13 +3,15 @@
 var Physics = (function(){
 
 	var engine;
+	var static_objects;
 
     function init()
     {
+        console.log("Matter.js Implementation");
         engine = Matter.Engine.create();
         Matter.Engine.run(engine);
         var debug_canvas = document.querySelector("#debug_render");
-        if(ConfigOptions.use_debug_render)
+        if( typeof(ConfigOptions) != "undefined" && ConfigOptions.use_debug_render)
         {
             var render = Matter.Render.create({
                 element : debug_canvas,
@@ -29,6 +31,19 @@ var Physics = (function(){
         else
         {
             debug_canvas.style.zIndex = -1;
+        }
+        static_objects = [];
+    }
+
+    function update()
+    {
+        if(static_objects.length > 0)
+        {
+        	for(var i = 0; i < static_objects.length; i++)
+        	{
+        		Matter.Body.setStatic(static_objects[i], true);
+        	}
+        	static_objects = [];
         }
     }
 
@@ -67,13 +82,17 @@ var Physics = (function(){
 
         var body = Matter.Bodies.fromVertices(mapped_pos.x, mapped_pos.y, mapped_vertices, {
         	friction : options.friction,
-        	isStatic : options.isStatic,
         	isSensor : options.isSensor,
         	label    : options.label,
         });
         if(body != undefined)
         {
             Matter.World.add(engine.world, [body]);
+        }
+        if(options.isStatic)
+        {
+        	static_objects.push(body);
+            Matter.Body.setVelocity(body, { x : 0, y : 0});
         }
         return body;
     }
@@ -94,12 +113,16 @@ var Physics = (function(){
         var mapped_pos = options;
         var mapped_radio = options.radio;
         var body = Matter.Bodies.circle( mapped_pos.x, mapped_pos.y, mapped_radio, {
-          	isStatic : options.isStatic,
             label : options.label,
         });
         if(body != undefined)
         {
             Matter.World.add(engine.world, [body]);
+        }
+        if(options.isStatic)
+        {
+        	static_objects.push(body);
+            Matter.Body.setVelocity(body, { x : 0, y : 0});
         }
         return body;
     }
@@ -141,11 +164,6 @@ var Physics = (function(){
     function isStatic(body_handler)
     {
         return body_handler.isStatic;
-    }
-
-    function setStatic(body_handler, value)
-    {
-        Matter.Body.set(body_handler, {isStatic : value });
     }
 
     function createRevoluteJoint(options)
@@ -213,7 +231,6 @@ var Physics = (function(){
              createRectangle : createRectangle,
              createCircle    : createCircle,
              isStatic        : isStatic,
-             setStatic       : setStatic,
              remove          : remove,
              getBodiesAtPoint : getBodiesAtPoint,
              getAllBodies     : getAllBodies,
@@ -223,6 +240,7 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             processVertices : processVertices };
+             processVertices : processVertices,
+             update : update };
 
 })();

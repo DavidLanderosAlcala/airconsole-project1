@@ -75,12 +75,9 @@ var CrayonPhysics = (function(){
 
   function update()
   {
+      Physics.update();
       if(!level_data.game_over && level_data.update_fnc != null)
       {
-          if(level_data.pending_static)
-          {
-              setStaticForCurrentLevel();
-          }
           level_data.game_over = level_data.update_fnc(level_data.context);
           if(level_data.game_over)
           {
@@ -445,10 +442,6 @@ var CrayonPhysics = (function(){
           }
 
       }
-      if(static_connections > 1)
-      {
-          Physics.setStatic(body, true);
-      }
       drawing_data.clear();
   }
 
@@ -515,10 +508,6 @@ var CrayonPhysics = (function(){
           {
               static_connections++;
           }
-      }
-      if(static_connections > 1)
-      {
-          Physics.setStatic(body, true);
       }
 
       drawing_data.clear();
@@ -706,8 +695,6 @@ var CrayonPhysics = (function(){
       level_data.game_over = false;
       level_data.context = {};
       level_data.id = level_index;
-      level_data.pending_static = true;
-      level_data.static_bodies = [];
       var level = LevelSelector.getLevels()[level_index];
       level_data.update_fnc = level.update;
       var _bodies = [];
@@ -728,15 +715,12 @@ var CrayonPhysics = (function(){
                   level.bodies[i].mapped = true;
               }
               var centroid = Physics.getCentroid(level.bodies[i].vertices);
-              if(level.bodies[i].isStatic)
-              {
-                  level_data.static_bodies.push(level.bodies[i].label);
-              }
               var body = Physics.createBody({
                   x : level.bodies[i].position.x,
                   y : level.bodies[i].position.y,
                   vertices : level.bodies[i].vertices,
                   label : level.bodies[i].label,
+                  isStatic : level.bodies[i].isStatic,
                   isSensor: level.bodies[i].isSensor || level.bodies[i].hint,
               });
               if(level.bodies[i].hint)
@@ -784,21 +768,6 @@ var CrayonPhysics = (function(){
       Screen.setTitleText(level.description);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context);
-  }
-
-  function setStaticForCurrentLevel()
-  {
-      bodies = Physics.getAllBodies();
-      for(var i = 0; i < bodies.length; i++)
-      {
-          for(var j = 0; j < level_data.static_bodies.length; j++)
-          if(bodies[i].label == level_data.static_bodies[j])
-          {
-              Physics.setStatic(bodies[i], true);
-          }
-      }
-      level_data.static_bodies = null;
-      level_data.pending_static = false;
   }
 
   function restartLevel()

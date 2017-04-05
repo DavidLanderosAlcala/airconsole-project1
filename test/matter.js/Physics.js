@@ -3,6 +3,7 @@
 var Physics = (function(){
 
 	var engine;
+	var static_objects;
 
     function init()
     {
@@ -31,11 +32,19 @@ var Physics = (function(){
         {
             debug_canvas.style.zIndex = -1;
         }
+        static_objects = [];
     }
 
     function update()
     {
-
+        if(static_objects.length > 0)
+        {
+        	for(var i = 0; i < static_objects.length; i++)
+        	{
+        		Matter.Body.setStatic(static_objects[i], true);
+        	}
+        	static_objects = [];
+        }
     }
 
     function clear()
@@ -73,7 +82,6 @@ var Physics = (function(){
 
         var body = Matter.Bodies.fromVertices(mapped_pos.x, mapped_pos.y, mapped_vertices, {
         	friction : options.friction,
-        	isStatic : options.isStatic,
         	isSensor : options.isSensor,
         	label    : options.label,
         });
@@ -83,6 +91,7 @@ var Physics = (function(){
         }
         if(body.isStatic)
         {
+        	static_objects.push(body);
             Matter.Body.setVelocity(body, { x : 0, y : 0});
         }
         return body;
@@ -104,12 +113,16 @@ var Physics = (function(){
         var mapped_pos = options;
         var mapped_radio = options.radio;
         var body = Matter.Bodies.circle( mapped_pos.x, mapped_pos.y, mapped_radio, {
-          	isStatic : options.isStatic,
             label : options.label,
         });
         if(body != undefined)
         {
             Matter.World.add(engine.world, [body]);
+        }
+        if(body.isStatic)
+        {
+        	static_objects.push(body);
+            Matter.Body.setVelocity(body, { x : 0, y : 0});
         }
         return body;
     }
@@ -151,11 +164,6 @@ var Physics = (function(){
     function isStatic(body_handler)
     {
         return body_handler.isStatic;
-    }
-
-    function setStatic(body_handler, value)
-    {
-        Matter.Body.set(body_handler, {isStatic : value });
     }
 
     function createRevoluteJoint(options)
@@ -223,7 +231,6 @@ var Physics = (function(){
              createRectangle : createRectangle,
              createCircle    : createCircle,
              isStatic        : isStatic,
-             setStatic       : setStatic,
              remove          : remove,
              getBodiesAtPoint : getBodiesAtPoint,
              getAllBodies     : getAllBodies,
