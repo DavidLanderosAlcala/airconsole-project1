@@ -21,7 +21,7 @@ var Physics = (function(){
        //     this.frame(0, 1, 6, 8);
        //});
     }
-
+    var si = true;
     function update()
     {
         world.step(1/60);
@@ -149,12 +149,13 @@ var Physics = (function(){
 
     function createRevoluteJoint(options)
     {
-        var joint_def = new b2RevoluteJointDef();
-        joint_def.bodyA = options.bodyA;
-        joint_def.bodyB = options.bodyB;
-        joint_def.localAnchorA = new b2Vec2(options.pointA.x / SCALE, options.pointA.y / SCALE);
-        joint_def.localAnchorB = new b2Vec2(options.pointB.x / SCALE, options.pointB.y / SCALE);
-        return world.CreateJoint(joint_def);
+        var constraint = new p2.RevoluteConstraint(options.bodyA, options.bodyB, {
+            localPivotA: [options.pointA.x / scale, options.pointA.y / scale],
+            localPivotB: [options.pointB.x / scale, options.pointB.y / scale],
+            collideConnected : false,
+        });
+        world.addConstraint(constraint);
+        return constraint;
     }
 
     function remove(bodies)

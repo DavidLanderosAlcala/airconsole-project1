@@ -11,7 +11,7 @@ var Physics = (function(){
         engine = Matter.Engine.create();
         Matter.Engine.run(engine);
         var debug_canvas = document.querySelector("#debug_render");
-        if( typeof(ConfigOptions) != "undefined" && ConfigOptions.use_debug_render)
+        if(typeof(ConfigOptions) != "undefined" && ConfigOptions.use_debug_render)
         {
             var render = Matter.Render.create({
                 element : debug_canvas,

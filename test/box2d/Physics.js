@@ -99,13 +99,13 @@ var Physics = (function(){
 
     function preventCollision(bodyA, bodyB)
     {
-    	if(!bodyA.__groupAssigned)
-    	{
-    		bodyA.__groupAssigned = true;
-    		bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
-    	}
-    	bodyB.collisionFilter.group = bodyA.collisionFilter.group;
-    	bodyB.__groupAssigned = true;
+    	//if(!bodyA.__groupAssigned)
+    	//{
+    	//	bodyA.__groupAssigned = true;
+    	//	bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
+    	//}
+    	//bodyB.collisionFilter.group = bodyA.collisionFilter.group;
+    	//bodyB.__groupAssigned = true;
     }
 
     function createCircle(options)
