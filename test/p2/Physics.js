@@ -7,6 +7,7 @@ var Physics = (function(){
 
     function init()
     {
+    	console.log("P2.js Implementation");
         world = new p2.World({ gravity : [0,9.8]});
         world.setGlobalStiffness(1e4);
         world.solver.iterations = 20;

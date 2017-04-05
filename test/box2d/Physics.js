@@ -20,6 +20,7 @@ var Physics = (function(){
 
     function init()
     {
+        console.log("Box2Djs Implementation");
         count = 0;
         world = new b2World( new b2Vec2(0, 10) , true);
     }
