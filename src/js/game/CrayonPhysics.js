@@ -721,6 +721,7 @@ var CrayonPhysics = (function(){
                   vertices : level.bodies[i].vertices,
                   label : level.bodies[i].label,
                   isStatic : level.bodies[i].isStatic,
+                  friction : 0.5,
                   isSensor: level.bodies[i].isSensor || level.bodies[i].hint,
               });
               if(level.bodies[i].hint)
@@ -744,6 +745,7 @@ var CrayonPhysics = (function(){
                   radio    : level.bodies[i].radio,
                   label    : level.bodies[i].label,
                   isStatic : level.bodies[i].isStatic,
+                  friction : 0.5,
               });
           }
           objects.shapes.push({
