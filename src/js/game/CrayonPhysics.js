@@ -389,14 +389,6 @@ var CrayonPhysics = (function(){
           {
               if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
-                  if(group == null)
-                  {
-                      group = objects.tacks[i].bodyA;
-                  }
-                  else
-                  {
-                      Physics.preventCollision(group, objects.tacks[i].bodyA);
-                  }
                   tack_indices.push(i);
               }
           }
@@ -409,10 +401,6 @@ var CrayonPhysics = (function(){
           centroid: centroid,
           color_index : drawing_data.current_color_index,
       });
-
-      if(group != null) {
-          Physics.preventCollision(group, body);
-      }
 
       l = tack_indices.length;
       var static_connections = 0;
