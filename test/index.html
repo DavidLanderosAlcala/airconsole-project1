@@ -6,7 +6,7 @@
 <script src="https://www.binarytides.com/labs/box2d_revolute_joint/Box2dWeb-2.1.a.3.js"></script>
 <canvas id="canvas" width="640" height="480" style="border: 1px solid black"></canvas>
 <div id="debug_render"></div>
-<script src="./matter.js/Physics.js"></script>
+<script src="./p2/Physics.js"></script>
 <script>
 
 var canvas = document.querySelector("#canvas");
@@ -18,14 +18,11 @@ function init()
 {
 	Physics.init();
 	objects.push({
-	    x : 330,
-	    y : -100,
+	    x : 0,
+	    y : 0,
 	    isStatic : false,
 	    label : "cup",
         vertices : [
-              ///{ x : 0, y : 100},
-              ///{ x : -25, y : 0},
-              ///{ x : 25, y : 0},
             {x : -40, y: -20},
             {x : 40, y: -20},
             {x : 40, y: 100},
@@ -36,6 +33,12 @@ function init()
             {x : -40, y: 100},
         ],
 	});
+
+    // translate all vertices 200 in x
+    for(var i = 0; i < objects[0].vertices.length; i++)
+    {
+        objects[0].vertices[i].x += 200;
+    }
 
 	objects.push({
         x : 300,

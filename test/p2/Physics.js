@@ -61,7 +61,7 @@ var Physics = (function(){
 
     function createBody(options)
     {
-        var vertices = processVertices(options.vertices);
+        var vertices = options.vertices;
         /*
         * Create a static or no-static object
         */
