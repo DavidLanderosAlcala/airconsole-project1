@@ -65,7 +65,7 @@ function init()
 
 	for(var i = 0; i < objects.length; i++)
 	{
-        //objects[i].vertices = Physics.processVertices(objects[i].vertices);
+        objects[i].vertices = Physics.processVertices(objects[i].vertices);
 		objects[i].handler = Physics.createBody(objects[i]);
 	}
 
@@ -83,12 +83,11 @@ function render()
         var pos =  Physics.getPosition(objects[i].handler);
         var centroid =  Physics.getCentroid(objects[i].vertices);
         var angle = Physics.getAngle(objects[i].handler);
-
         context.translate(pos.x, pos.y);
         context.fillStyle = "blue";
         context.fillRect(-5,-5,10,10);
         context.rotate(angle);
-        context.translate(-objects[i].handler.centroid.x * 30, -objects[i].handler.centroid.y * 30);
+        context.translate(-centroid.x, -centroid.y);
         context.beginPath();
         context.moveTo(objects[i].vertices[0].x, objects[i].vertices[0].y);
         for(var j = 0; j < objects[i].vertices.length; j++)

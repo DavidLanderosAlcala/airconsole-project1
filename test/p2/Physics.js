@@ -3,22 +3,22 @@
 var Physics = (function(){
 
     var world;
-    var scale = 30;
+    var scale = 100;
 
     function init()
     {
-        world = new p2.World({ gravity : [0,10]});
+        world = new p2.World({ gravity : [0,9.8]});
         world.setGlobalStiffness(1e4);
         world.solver.iterations = 20;
         world.solver.tolerance = 0.01;
         world.islandSplit = true;
         world.solver.frictionIterations = 10;
 
-       var app = new p2.WebGLRenderer(function(){
-            this.setWorld(world);
-            this.setState(p2.Renderer.DRAWPOLYGON);
-            this.frame(0, 1, 6, 8);
-       });
+       //var app = new p2.WebGLRenderer(function(){
+       //     this.setWorld(world);
+       //     this.setState(p2.Renderer.DRAWPOLYGON);
+       //     this.frame(0, 1, 6, 8);
+       //});
     }
 
     function update()
@@ -85,39 +85,8 @@ var Physics = (function(){
         {
             poly.push([vertices[i].x / scale, vertices[i].y / scale]);
         }
-        var convexShape = new p2.Convex({ vertices : poly });
-        body.centroid = { x: convexShape.centerOfMass[0], y :  convexShape.centerOfMass[1]};
-        var max = { x : 0, y : 0 };
-        var min = { x : 0, y : 0 };
-        for(var i = 0; i < vertices.length; i++)
-        {
-            if(max.x < vertices[i].x)
-            {
-                max.x = vertices[i].x;
-            }
-            if(min.x > vertices[i].x)
-            {
-                min.x = vertices[i].x;
-            }
 
-            if(max.y < vertices[i].y)
-            {
-                max.y = vertices[i].y;
-            }
-            if(min.y > vertices[i].y)
-            {
-                min.y = vertices[i].y;
-            }
-        }
-
-        var centroid = {
-            x : (max.x + min.x) / 2,
-            y : (max.y + min.y) / 2,
-        };
-
-        //body.centroid = centroid;
         body.fromPolygon(poly);
-        body.adjustCenterOfMass();
         world.addBody(body);
 
         /*
@@ -161,10 +130,6 @@ var Physics = (function(){
     {
 
     }
-
-    // function createStick(pos1, pos2)
-    // {
-    // }
 
     function createRectangle(options)
     {
@@ -213,13 +178,18 @@ var Physics = (function(){
 
     function getAllBodies()
     {
-    	// Matter.js 
     	return world.bodies;
     }
 
     function getCentroid(vertices)
     {
-        return { x : 0, y : 0 };
+    	var poly = [];
+    	for(var i = 0; i < vertices.length; i++)
+    	{
+    	    poly.push([vertices[i].x, vertices[i].y]);
+    	}
+        var centroid = new p2.Convex({ vertices : poly }).centerOfMass;
+        return { x : centroid[0], y : centroid[1] };
     }
 
     function getBodiesAtPoint(point)
@@ -231,38 +201,6 @@ var Physics = (function(){
 
     function processVertices(vertices)
     {
-        return vertices;
-        var max = { x : 0, y : 0 };
-        var min = { x : 0, y : 0 };
-        for(var i = 0; i < vertices.length; i++)
-        {
-            if(max.x < vertices[i].x)
-            {
-                max.x = vertices[i].x;
-            }
-            if(min.x > vertices[i].x)
-            {
-                min.x = vertices[i].x;
-            }
-
-            if(max.y < vertices[i].y)
-            {
-                max.y = vertices[i].y;
-            }
-            if(min.y > vertices[i].y)
-            {
-                min.y = vertices[i].y;
-            }
-        }
-        var centroid = {
-            x : (max.x + min.x) / 2,
-            y : (max.y + min.y) / 2,
-        };
-        for(var i = 0; i < vertices.length; i++)
-        {
-            vertices[i].x -= centroid.x;
-            vertices[i].y -= centroid.y;
-        }
         return vertices;
     }
 
