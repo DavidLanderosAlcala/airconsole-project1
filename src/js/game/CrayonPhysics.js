@@ -338,6 +338,17 @@ var CrayonPhysics = (function(){
           return "wire";
       }
 
+      var poly = [];
+      for(var i = 0; i < drawing_data.current_polygon.length; i++)
+      {
+          poly.push([drawing_data.current_polygon[i].x, drawing_data.current_polygon[i].y]);
+      }
+
+      if(!decomp.isSimple(poly))
+      {
+          return "wire";
+      }
+
       return "polygon"
   }
 
