@@ -535,7 +535,7 @@ var CrayonPhysics = (function(){
                  // si se encuentra un tack, borrarla y terminar
                   if(objects.tacks[i].contraint != null)
                   {
-                      Physics.remove(objects.tacks[i].contraint);
+                      Physics.removeConstraint(objects.tacks[i].contraint);
                   }
                   objects.tacks[i].contraint = null;
                   objects.tacks[i].deleted = true;
@@ -563,7 +563,7 @@ var CrayonPhysics = (function(){
   {
       if(body.label != "Body")
         return;
-      Physics.remove(body);
+      Physics.removeBody(body);
       removeTacksConnectedTo(body.id);
       var i, l = objects.shapes.length;
       for(i = 0; i < l; i++)
@@ -621,14 +621,14 @@ var CrayonPhysics = (function(){
               {
                    if(objects.tacks[i].contraint != null)
                    {
-                       Physics.remove(objects.tacks[i].contraint);
+                       Physics.removeConstraint(objects.tacks[i].contraint);
                    }
                    objects.tacks[i].contraint = null;
                    objects.tacks[i].deleted = true;
               }
               if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
               {
-                   Physics.remove(objects.tacks[i].contraint);
+                   Physics.removeConstraint(objects.tacks[i].contraint);
                    objects.tacks[i].contraint = null;
                    objects.tacks[i].deleted = true;
               }
@@ -677,7 +677,7 @@ var CrayonPhysics = (function(){
               });
               if(level.bodies[i].hint)
               {
-                  Physics.remove(body);
+                  Physics.removeBody(body);
               }
               var centroid = Physics.getCentroid(body);
           }
