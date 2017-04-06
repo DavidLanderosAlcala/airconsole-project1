@@ -261,7 +261,6 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             processVertices : processVertices,
              update : update };
 
 })();

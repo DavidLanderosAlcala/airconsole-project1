@@ -205,11 +205,6 @@ var Physics = (function(){
         return Matter.Query.point(_bodies, mapped_point);
     }
 
-    function processVertices(vertices)
-    {
-        return vertices;
-    }
-
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
@@ -229,8 +224,6 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             processVertices : processVertices,
-             update : update,
-             processVertices : processVertices, };
+             update          : update };
 
 })();

@@ -183,11 +183,6 @@ var Physics = (function(){
         return constraint;
     }
 
-    function processVertices(vertices)
-    {
-        return vertices;
-    }
-
     function remove(bodies)
     {
     	if(!Array.isArray(bodies))
@@ -242,7 +237,6 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             processVertices : processVertices,
              update : update };
 
 })();
