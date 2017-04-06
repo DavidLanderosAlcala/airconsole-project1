@@ -34,7 +34,6 @@ var CrayonPhysics = (function(){
       drawing_data = {
           current_polygon     : [],
           current_color_index : -1,
-          is_lineto_locked    : false,
           clear : function() {
               drawing_data.current_polygon = [];
               drawing_data.current_color_index = -1;
@@ -248,15 +247,17 @@ var CrayonPhysics = (function(){
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length == 0 && !drawing_data.is_lineto_locked))
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length == 0))
           {
-              tack();
+              if(e.button != 2)
+              {
+                  tack();
+              }
           }
           else
           {
               closePath();
           }
-          drawing_data.is_lineto_locked = false;
       }
   }
 
@@ -267,7 +268,6 @@ var CrayonPhysics = (function(){
 
   function lineTo(pos)
   {
-      if(drawing_data.is_lineto_locked) { return; }
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
           var new_pos = {
