@@ -223,6 +223,11 @@ var Physics = (function(){
         return Matter.Query.point(_bodies, mapped_point);
     }
 
+    function translate(body_handler, disp)
+    {
+        Matter.Body.translate(body_handler, disp);
+    }
+
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
@@ -241,6 +246,7 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             update : update };
+             update : update,
+             translate : translate };
 
 })();

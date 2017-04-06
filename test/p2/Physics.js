@@ -205,6 +205,12 @@ var Physics = (function(){
         return Matter.Query.point(_bodies, mapped_point);
     }
 
+    function translate(body_handler, disp)
+    {
+        body_handler.position[0] += disp.x / scale;
+        body_handler.position[1] += disp.y / scale;
+    }
+
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
@@ -224,6 +230,7 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             update          : update };
+             update          : update,
+             translate : translate };
 
 })();
