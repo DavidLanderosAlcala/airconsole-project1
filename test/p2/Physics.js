@@ -29,10 +29,10 @@ var Physics = (function(){
 
     function clear()
     {
-        var contraints = world.contraints;
-        for(var i = 0; i < contraints.length; i++)
+        var constraints = world.constraints;
+        for(var i = 0; i < constraints.length; i++)
         {
-            world.removeBody(contraints[i]);
+            world.removeBody(constraints[i]);
         }
         var bodies = world.bodies;
         for(var i = 0; i < bodies.length; i++)
@@ -67,6 +67,7 @@ var Physics = (function(){
 
         for(var i = 0; i < vertices.length; i++)
         { poly.push([vertices[i].x, vertices[i].y]); }
+        decomp.makeCCW(poly);
 
         var centroid = new p2.Convex({ vertices : poly }).centerOfMass;
         centroid_obj = { x : centroid[0], y : centroid[1] };
@@ -79,7 +80,6 @@ var Physics = (function(){
         if(options.isStatic)
         {
             config.mass = 0; // static
-            console.log("El objeto " + options.label + " es estatico");
         }
         else
         {
@@ -90,12 +90,12 @@ var Physics = (function(){
         /*
          * Build a compatible array from the game polygon
          */
-        var poly = [];
-        for(var i = 0; i < vertices.length; i++)
+        for(var i = 0; i < poly.length; i++)
         {
-            poly.push([vertices[i].x / scale, vertices[i].y / scale]);
+            //poly.push([vertices[i].x / scale, vertices[i].y / scale]);
+            poly[i][0] /= scale;
+            poly[i][1] /= scale;
         }
-
         body.fromPolygon(poly);
         world.addBody(body);
 
