@@ -62,6 +62,15 @@ var Physics = (function(){
     function createBody(options)
     {
         var vertices = options.vertices;
+
+        var poly = [];
+
+        for(var i = 0; i < vertices.length; i++)
+        { poly.push([vertices[i].x, vertices[i].y]); }
+
+        var centroid = new p2.Convex({ vertices : poly }).centerOfMass;
+        centroid_obj = { x : centroid[0], y : centroid[1] };
+
         /*
         * Create a static or no-static object
         */
@@ -94,6 +103,7 @@ var Physics = (function(){
          * Add label property
          */
         body.label = options.label;
+        body.centroid = centroid_obj;
         return body;
     }
 
@@ -183,15 +193,9 @@ var Physics = (function(){
     	return world.bodies;
     }
 
-    function getCentroid(vertices)
+    function getCentroid(body_handler)
     {
-    	var poly = [];
-    	for(var i = 0; i < vertices.length; i++)
-    	{
-    	    poly.push([vertices[i].x, vertices[i].y]);
-    	}
-        var centroid = new p2.Convex({ vertices : poly }).centerOfMass;
-        return { x : centroid[0], y : centroid[1] };
+        return body_handler.centroid;
     }
 
     function getBodiesAtPoint(point)

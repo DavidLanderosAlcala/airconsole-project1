@@ -77,10 +77,11 @@ var Physics = (function(){
         options.label = options.label == undefined ? "Body" : options.label;
         options.friction = options.friction == undefined ? 0.5 : options.friction;
 
-        var mapped_pos = options;
-        var mapped_vertices = options.vertices;
+        var centroid = Matter.Vertices.centre(options.vertices);
+        options.x += centroid.x;
+        options.y += centroid.y;
 
-        var body = Matter.Bodies.fromVertices(mapped_pos.x, mapped_pos.y, mapped_vertices, {
+        var body = Matter.Bodies.fromVertices(options.x, options.y, options.vertices, {
         	friction : options.friction,
         	isSensor : options.isSensor,
         	label    : options.label,
@@ -94,6 +95,7 @@ var Physics = (function(){
         	static_objects.push(body);
             Matter.Body.setVelocity(body, { x : 0, y : 0});
         }
+        body.centroid = centroid;
         return body;
     }
 
@@ -210,10 +212,9 @@ var Physics = (function(){
     	return Matter.Composite.allBodies(engine.world);
     }
 
-    function getCentroid(vertices)
+    function getCentroid(body_handler)
     {
-        // Matter.js
-        return Matter.Vertices.centre(vertices);
+        return body_handler.centroid;
     }
 
     function getBodiesAtPoint(point)

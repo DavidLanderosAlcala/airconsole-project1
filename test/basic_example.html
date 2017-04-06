@@ -37,7 +37,7 @@ function init()
     // translate all vertices 200 in x
     for(var i = 0; i < objects[0].vertices.length; i++)
     {
-        objects[0].vertices[i].x += 200;
+        objects[0].vertices[i].x += 100;
     }
 
 	objects.push({
@@ -68,7 +68,6 @@ function init()
 
 	for(var i = 0; i < objects.length; i++)
 	{
-        objects[i].vertices = Physics.processVertices(objects[i].vertices);
 		objects[i].handler = Physics.createBody(objects[i]);
 	}
 
@@ -84,7 +83,7 @@ function render()
 	{
 		context.save();
         var pos =  Physics.getPosition(objects[i].handler);
-        var centroid =  Physics.getCentroid(objects[i].vertices);
+        var centroid =  Physics.getCentroid(objects[i].handler);
         var angle = Physics.getAngle(objects[i].handler);
         context.translate(pos.x, pos.y);
         context.fillStyle = "blue";

@@ -66,9 +66,21 @@ var Physics = (function(){
         fixture.friction = 0.5;
         fixture.restitution = 0.2;
         fixture.shape = new b2PolygonShape;
-        bodyDef.position.x = options.x / SCALE;
-        bodyDef.position.y = options.y / SCALE;
+
+        var centroid = { x : 0, y : 0 };
+        for(var i = 0; i < options.vertices.length; i++)
+        {
+            centroid.x += options.vertices[i].x;
+            centroid.y += options.vertices[i].y;
+        }
+        centroid.x /= options.vertices.length;
+        centroid.y /= options.vertices.length;
+
+        bodyDef.position.x = (options.x + centroid.x) / SCALE;
+        bodyDef.position.y = (options.y + centroid.y) / SCALE;
+
         var body = world.CreateBody(bodyDef);
+        body.centroid = centroid;
 
         options.vertices = processVertices(options.vertices);
         
@@ -218,7 +230,7 @@ var Physics = (function(){
     	return Matter.Composite.allBodies(engine.world);
     }
 
-    function getCentroid(vertices)
+    function getCentroid(body_handler)
     {
         return { x : 0, y : 0 };
     }
