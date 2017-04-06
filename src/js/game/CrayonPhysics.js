@@ -352,20 +352,6 @@ var CrayonPhysics = (function(){
       return "polygon"
   }
 
-  function calcCentroidOfWire(vertices)
-  {
-       var centroid = { x : 0, y : 0 };
-       var i , l = vertices.length;
-       for(i = 0; i < l; i++)
-       {
-          centroid.x += vertices[i].x;
-          centroid.y += vertices[i].y;
-       }
-       centroid.x /= l;;
-       centroid.y /= l;
-       return centroid;
-  }
-
   function closeAsPolygon()
   {
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
@@ -447,7 +433,10 @@ var CrayonPhysics = (function(){
   function closeAsWire()
   {
       var body = Physics.createWire(drawing_data.current_polygon);
-      var centroid = calcCentroidOfWire(drawing_data.current_polygon);
+      var centroid = {
+      	x: body.position.x,
+      	y: body.position.y,
+      };
       var group = null;
       var tack_indices = [];
       var i, l = objects.tacks.length;
@@ -508,29 +497,6 @@ var CrayonPhysics = (function(){
               static_connections++;
           }
       }
-
-      drawing_data.clear();
-  }
-
-  function closeAsChain()
-  {
-      var parts = [];
-      var i, l = drawing_data.current_polygon.length;
-      for(var i = 1 ; i < l; i++)
-      {
-          parts.push(createStick(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]));
-      }
-
-
-      var centroid = calcCentroidOfWire(drawing_data.current_polygon);
-
-      objects.shapes.push({
-          body : body,
-          type : "wire",
-          vertices : drawing_data.current_polygon,
-          centroid: centroid,
-          color_index : drawing_data.current_color_index,
-      });
 
       drawing_data.clear();
   }
