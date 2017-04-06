@@ -168,13 +168,23 @@ var Physics = (function(){
         return constraint;
     }
 
-    function remove(bodies)
+    function removeBody(bodies)
     {
         if(!Array.isArray(bodies))
             bodies = [bodies];
         for(var i = 0; i < bodies.length; i++)
         {
             world.removeBody(bodies[i]);
+        }
+    }
+
+    function removeConstraint(bodies)
+    {
+        if(!Array.isArray(bodies))
+            bodies = [bodies];
+        for(var i = 0; i < bodies.length; i++)
+        {
+            world.removeConstraint(bodies[i]);
         }
     }
 
@@ -219,7 +229,8 @@ var Physics = (function(){
              createCircle    : createCircle,
              isStatic        : isStatic,
              setStatic       : setStatic,
-             remove          : remove,
+             removeBody      : removeBody,
+             removeConstraint : removeConstraint,
              getBodiesAtPoint : getBodiesAtPoint,
              getAllBodies     : getAllBodies,
              preventCollision : preventCollision,

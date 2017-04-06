@@ -187,11 +187,16 @@ var Physics = (function(){
         return constraint;
     }
 
-    function remove(bodies)
+    function removeBody(bodies)
     {
     	if(!Array.isArray(bodies))
     		bodies = [bodies];
         Matter.World.remove(engine.world, bodies);
+    }
+
+    function removeConstraint(bodies)
+    {
+        removeBody(bodies);
     }
 
     function isSensor(body_handler)
@@ -237,7 +242,8 @@ var Physics = (function(){
              createRectangle : createRectangle,
              createCircle    : createCircle,
              isStatic        : isStatic,
-             remove          : remove,
+             removeBody      : removeBody,
+             removeConstraint : removeConstraint,
              getBodiesAtPoint : getBodiesAtPoint,
              getAllBodies     : getAllBodies,
              preventCollision : preventCollision,
