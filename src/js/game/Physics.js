@@ -75,7 +75,7 @@ var Physics = (function(){
     	options.isStatic = options.isStatic == undefined ? false : options.isStatic;
     	options.isSensor = options.isSensor == undefined ? false : options.isSensor;
         options.label = options.label == undefined ? "Body" : options.label;
-    	// matter.js
+        options.friction = options.friction == undefined ? 0.5 : options.friction;
 
         var mapped_pos = options;
         var mapped_vertices = options.vertices;
