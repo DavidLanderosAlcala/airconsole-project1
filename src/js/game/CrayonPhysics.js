@@ -291,7 +291,7 @@ var CrayonPhysics = (function(){
       moveTo(pos);
   }
 
-  function closePath(force_polygon)
+  function closePath()
   {
       var type = evalCurrentShape();
 
@@ -301,7 +301,7 @@ var CrayonPhysics = (function(){
           return;
       }
 
-      if(type == "polygon" || force_polygon)
+      if(type == "polygon")
       {
           closeAsPolygon();
           return;
@@ -310,12 +310,6 @@ var CrayonPhysics = (function(){
       if(type == "wire")
       {
           closeAsWire();
-          return;
-      }
-
-      if(type == "chain")
-      {
-          closeAsChain();
           return;
       }
   }
@@ -355,16 +349,13 @@ var CrayonPhysics = (function(){
   function closeAsPolygon()
   {
       drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
-      var centroid = Physics.getCentroid(drawing_data.current_polygon);
       var body = undefined;
 
       while(body == undefined && drawing_data.current_polygon.length > ConfigOptions.min_vertices_per_polygon)
       {
           body = Physics.createBody({
-              x : centroid.x,
-              y : centroid.y,
+              x : 0, y : 0,
               vertices : drawing_data.current_polygon,
-              friction : 0.5,
           });
 
           if(body == undefined) {
@@ -394,8 +385,8 @@ var CrayonPhysics = (function(){
       objects.shapes.push({
           body : body,
           type : "polygon",
-          vertices : Physics.processVertices(drawing_data.current_polygon),
-          centroid: centroid,
+          vertices : drawing_data.current_polygon,
+          centroid: Physics.getCentroid(body),
           color_index : drawing_data.current_color_index,
       });
 
@@ -433,10 +424,6 @@ var CrayonPhysics = (function(){
   function closeAsWire()
   {
       var body = Physics.createWire(drawing_data.current_polygon);
-      var centroid = {
-      	x: body.position.x,
-      	y: body.position.y,
-      };
       var group = null;
       var tack_indices = [];
       var i, l = objects.tacks.length;
@@ -466,7 +453,7 @@ var CrayonPhysics = (function(){
           body : body,
           type : "wire",
           vertices : drawing_data.current_polygon,
-          centroid: centroid,
+          centroid : Physics.getCentroid(body),
           color_index : drawing_data.current_color_index,
       });
 
@@ -679,7 +666,6 @@ var CrayonPhysics = (function(){
                   }
                   level.bodies[i].mapped = true;
               }
-              var centroid = Physics.getCentroid(level.bodies[i].vertices);
               var body = Physics.createBody({
                   x : level.bodies[i].position.x,
                   y : level.bodies[i].position.y,
@@ -693,6 +679,7 @@ var CrayonPhysics = (function(){
               {
                   Physics.remove(body);
               }
+              var centroid = Physics.getCentroid(body);
           }
           else if(type == "circle")
           {
@@ -719,7 +706,7 @@ var CrayonPhysics = (function(){
               hint : level.bodies[i].hint,
               isSensor : level.bodies[i].isSensor,
               type : type,
-              vertices : Physics.processVertices(level.bodies[i].vertices),
+              vertices : level.bodies[i].vertices,
               radio : level.bodies[i].radio,
               centroid: centroid,
               color_index : ColorManager.getRandomColorIndex(),

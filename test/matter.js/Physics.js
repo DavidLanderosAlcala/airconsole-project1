@@ -140,6 +140,10 @@ var Physics = (function(){
         var body = Matter.Body.create( {parts: parts} );
         Matter.Body.setInertia(body, body.inertia * 5);
         Matter.World.add(engine.world, [body]);
+        body.centroid = {
+            x : body.position.x,
+            y : body.position.y
+        };
         return body;
     }
 
