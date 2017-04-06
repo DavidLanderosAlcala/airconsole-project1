@@ -200,9 +200,7 @@ var Physics = (function(){
 
     function getBodiesAtPoint(point)
     {
-        var mapped_point = point;
-        var _bodies = Physics.getAllBodies();
-        return Matter.Query.point(_bodies, mapped_point);
+        return world.hitTest([point.x / scale, point.y / scale], world.bodies);
     }
 
     function translate(body_handler, disp)
