@@ -3,12 +3,12 @@
 var Physics = (function(){
 
     var world;
-    var scale = 100;
+    var scale = 200;
 
     function init()
     {
     	console.log("P2.js Implementation");
-        world = new p2.World({ gravity : [0,9.8]});
+        world = new p2.World({ gravity : [0,10]});
         world.setGlobalStiffness(1e4);
         world.solver.iterations = 20;
         world.solver.tolerance = 0.01;
@@ -69,8 +69,8 @@ var Physics = (function(){
         { poly.push([vertices[i].x, vertices[i].y]); }
         decomp.makeCCW(poly);
 
-        var centroid = new p2.Convex({ vertices : poly }).centerOfMass;
-        centroid_obj = { x : centroid[0], y : centroid[1] };
+        var aux_convex = new p2.Convex({ vertices : poly });
+        centroid_obj = { x : aux_convex.centerOfMass[0], y : aux_convex.centerOfMass[1] };
 
         /*
         * Create a static or no-static object
@@ -83,7 +83,7 @@ var Physics = (function(){
         }
         else
         {
-            config.mass = 1; // non-static
+            config.mass = aux_convex.area * 0.001;
         }
         body = new p2.Body(config);
 
@@ -198,10 +198,10 @@ var Physics = (function(){
         };
         var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
         var angle = Math.atan(vector.y / vector.x);
-        vertices.push({ x : 0, y : 3 / scale });
-        vertices.push({ x : length, y : 3 / scale });
-        vertices.push({ x : length, y : -3 / scale });
-        vertices.push({ x : 0, y : -3 / scale });
+        vertices.push({ x : 0, y : 2 / scale });
+        vertices.push({ x : length, y : 2 / scale });
+        vertices.push({ x : length, y : -2 / scale });
+        vertices.push({ x : 0, y : -2 / scale });
         var rotated_vertices = [];
         for(var i = 0; i < vertices.length; i++)
         {
