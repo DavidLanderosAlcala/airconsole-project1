@@ -62,7 +62,7 @@ var Physics = (function(){
     function createBody(options)
     {
         var vertices = options.vertices;
-
+        options.label = options.label == undefined ? "Body" : options.label;
         var poly = [];
 
         for(var i = 0; i < vertices.length; i++)
@@ -145,6 +145,8 @@ var Physics = (function(){
     {
         options.x = options.x == undefined ? 0 : options.x;
         options.y = options.y == undefined ? 0 : options.y;
+        options.label = options.label == undefined ? "Body" : options.label;
+
         /*
         * Create a static or no-static object
         */
@@ -198,10 +200,10 @@ var Physics = (function(){
         };
         var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
         var angle = Math.atan(vector.y / vector.x);
-        vertices.push({ x : 0, y : 2 / scale });
-        vertices.push({ x : length, y : 2 / scale });
-        vertices.push({ x : length, y : -2 / scale });
-        vertices.push({ x : 0, y : -2 / scale });
+        vertices.push({ x : 0, y : 3 / scale });
+        vertices.push({ x : length, y : 3 / scale });
+        vertices.push({ x : length, y : -3 / scale });
+        vertices.push({ x : 0, y : -3 / scale });
         var rotated_vertices = [];
         for(var i = 0; i < vertices.length; i++)
         {
