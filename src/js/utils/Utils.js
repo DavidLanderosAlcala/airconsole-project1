@@ -31,7 +31,27 @@ var Utils = (function(){
         }
     }
 
+    function removeCollinearPoints(polygon)
+    {
+        var polydecomp_flavor = [];
+        for(var i = 0; i < polygon.length; i++)
+        {
+            polydecomp_flavor.push([polygon[i].x, polygon[i].y]);
+        }
+        var matter_flavor = [];
+        decomp.removeCollinearPoints(polydecomp_flavor, 0.1);
+        for(var i = 0; i < polydecomp_flavor.length; i++)
+        {
+            matter_flavor.push({
+                x : polydecomp_flavor[i][0],
+                y : polydecomp_flavor[i][1],
+            });
+        }
+        return matter_flavor;
+    }
+
 	return { isMobileNavigator : isMobileNavigator,
-             isRunningOnAirConsole : isRunningOnAirConsole };
+             isRunningOnAirConsole : isRunningOnAirConsole,
+             removeCollinearPoints : removeCollinearPoints };
 
 })();

@@ -226,11 +226,6 @@ var Physics = (function(){
         return body_handler.mass == 0;
     }
 
-    function setStatic(body_handler, value)
-    {
-        console.log("Este metodo esta obsoleto");
-    }
-
     function createRevoluteJoint(options)
     {
         var constraint = new p2.RevoluteConstraint(options.bodyA, options.bodyB, {
@@ -302,7 +297,6 @@ var Physics = (function(){
              createRectangle : createRectangle,
              createCircle    : createCircle,
              isStatic        : isStatic,
-             setStatic       : setStatic,
              removeBody      : removeBody,
              removeConstraint : removeConstraint,
              getBodiesAtPoint : getBodiesAtPoint,

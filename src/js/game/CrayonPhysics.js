@@ -348,7 +348,7 @@ var CrayonPhysics = (function(){
 
   function closeAsPolygon()
   {
-      drawing_data.current_polygon = PolyCompressor.compress(drawing_data.current_polygon);
+      drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon);
       var body = undefined;
 
       while(body == undefined && drawing_data.current_polygon.length > ConfigOptions.min_vertices_per_polygon)
@@ -415,6 +415,7 @@ var CrayonPhysics = (function(){
 
   function closeAsWire()
   {
+      drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon);
       var body = Physics.createWire({vertices:drawing_data.current_polygon});
       var group = null;
       var tack_indices = [];

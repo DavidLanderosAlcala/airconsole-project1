@@ -162,7 +162,6 @@ var Physics = (function(){
         }
         body = new p2.Body(config);
         var cm = p2.vec2.create();
-        var total_area = 0;
         for(var i =1 ; i < options.vertices.length; i++)
         {
             var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
@@ -175,10 +174,8 @@ var Physics = (function(){
             }
             p2.vec2.copy(cm,c.centerOfMass);
             c = new p2.Convex({ vertices: c.vertices });
-            total_area += c.area;
             body.addShape(c,cm);
         }
-        body.mass = total_area * 0.001;
         body.adjustCenterOfMass();
         body.aabbNeedsUpdate = true;
         world.addBody(body);
@@ -227,11 +224,6 @@ var Physics = (function(){
     function isStatic(body_handler)
     {
         return body_handler.mass == 0;
-    }
-
-    function setStatic(body_handler, value)
-    {
-        console.log("Este metodo esta obsoleto");
     }
 
     function createRevoluteJoint(options)
@@ -305,7 +297,6 @@ var Physics = (function(){
              createRectangle : createRectangle,
              createCircle    : createCircle,
              isStatic        : isStatic,
-             setStatic       : setStatic,
              removeBody      : removeBody,
              removeConstraint : removeConstraint,
              getBodiesAtPoint : getBodiesAtPoint,
