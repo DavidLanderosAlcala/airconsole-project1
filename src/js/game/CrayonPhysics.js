@@ -52,8 +52,7 @@ var CrayonPhysics = (function(){
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(update);
-      //LevelSelector.show();
-      loadLevel(0);
+      LevelSelector.show();
   }
 
   function restartEngine()

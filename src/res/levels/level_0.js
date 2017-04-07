@@ -29,18 +29,18 @@ LevelSelector.getLevels().push({
         },
     ],
 
-    setup : function(context, engine)
+    setup : function(context)
     {
 	    // agregamos una variable al contexto del nivel
     	context.game_over = false;
 
 	    //// si ocurre una colision cualquiera el nivel esta terminado
-        //Matter.Events.on(engine, 'collisionActive', function(event) {
-        //    context.game_over = true;
-        //});
+        Physics.on("beginContact", function(event){
+            context.game_over = true;
+        });
     },
 
-    update : function(context, engine)
+    update : function(context)
     {
 	    // retornamos el estado actual del nivel
         return context.game_over;

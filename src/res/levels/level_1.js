@@ -51,40 +51,39 @@ LevelSelector.getLevels().push({
         }
     ],
 
-    setup : function(context, engine)
+    setup : function(context)
     {
-    	//context.time = new Date().getTime();
-        //bodies = Matter.Composite.allBodies(engine.world);
-        //for(var i = 0; i < bodies.length; i++)
-        //{
-        //    if(bodies[i].label == "rock")
-        //    {
-        //    	// Buscamos rock y guardamos una referencia
-        //    	// para no volver a buscarla en cada llamada a update
-        //        context.rock = bodies[i];
-        //        break;
-        //    }
-        //}
+    	context.time = new Date().getTime();
+        var bodies = Physics.getAllBodies();
+        for(var i = 0; i < bodies.length; i++)
+        {
+            if(Physics.getLabel(bodies[i]) == "rock")
+            {
+            	// Buscamos rock y guardamos una referencia
+            	// para no volver a buscarla en cada llamada a update
+                context.rock = bodies[i];
+                break;
+            }
+        }
     },
 
-    update : function(context, engine)
+    update : function(context)
     {
 	    // si rock ha salido de la pantalla
-        //if(context.rock.position.y >= 0)
-        //{
-        //	// la regresamos a su posicion inicial
-        //    Matter.Body.setVelocity(context.rock, { x : 0, y : 0 });
-        //    Matter.Body.setPosition(context.rock, { x : 0, y : -1000 });
-        //    context.time = new Date().getTime();
-        //}
-        //// si no
-        //else
-        //{
-        //    // si rock lleva mas de 3 segundos sin caer,
-        //    // el jugador ha ganado
-        //    if(new Date().getTime() - context.time > 3000)
-        //    	return true;
-        //}
+        if( Physics.getPosition(context.rock).y >= Screen.getHeight())
+        {
+        	// la regresamos a su posicion inicial
+            Physics.setVelocity(context.rock, { x : 0, y : 0 });
+            Physics.setPosition(context.rock, { x : Screen.getWidth()/2, y : 0 });
+            context.time = new Date().getTime();
+        }
+        else
+        {
+            // si rock lleva mas de 3 segundos sin caer,
+            // el jugador ha ganado
+            if(new Date().getTime() - context.time > 3000)
+            	return true;
+        }
         return false;
     }
 

@@ -87,29 +87,21 @@ LevelSelector.getLevels().push({
         },
     ],
 
-    setup : function(context, engine)
+    setup : function(context)
     {
         context.gameover = false;
-        // si ocurre una colision cualquiera el nivel esta terminado
-        //Matter.Events.on(engine, 'collisionActive', function(event) {
-        //    var pairs = event.pairs;
-        //    var l = pairs.length;
-        //    for(var i = 0; i < l; i++)
-        //    {
-        //        if(pairs[i].bodyA.label == "ground" || pairs[i].bodyA.label == "ball")
-        //        {
-        //            if(pairs[i].bodyB.label == "ground" || pairs[i].bodyB.label == "ball")
-        //            {
-        //                context.gameover = true;
-        //            }
-        //        }
-        //        
-        //    }
-        //    console.log(event.pairs[0].bodyA.label + event.pairs[0].bodyB.label);
-        //});
+        Physics.on("beginContact", function(event){
+            if( Physics.getLabel(event.bodyA) == "ground" || Physics.getLabel(event.bodyA) == "ball" )
+            {
+                if( Physics.getLabel(event.bodyB) == "ground" || Physics.getLabel(event.bodyB) == "ball" )
+                {
+                    context.gameover = true;
+                }
+            }
+        });
     },
 
-    update : function(context, engine)
+    update : function(context)
     {
         return context.gameover;
     }

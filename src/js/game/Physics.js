@@ -5,6 +5,8 @@ var Physics = (function(){
     var world;
     var scale = 200;
 
+    var listeners = [];
+
     function init()
     {
     	console.log("P2.js Implementation");
@@ -14,12 +16,35 @@ var Physics = (function(){
         world.solver.tolerance = 0.01;
         world.islandSplit = true;
         world.solver.frictionIterations = 10;
+        listeners = [];
 
        //var app = new p2.WebGLRenderer(function(){
        //     this.setWorld(world);
        //     this.setState(p2.Renderer.DRAWPOLYGON);
        //     this.frame(0, 1, 6, 8);
        //});
+
+       world.on("beginContact",function(event){
+           var callbacks = listeners["beginContact"];
+           if(callbacks)
+           {
+               for(var i = 0; i < callbacks.length; i++)
+               {
+                    callbacks[i](event);
+               }
+           }
+       });
+
+       world.on("endContact",function(event){
+           var callbacks = listeners["beginContact"];
+           if(callbacks)
+           {
+               for(var i = 0; i < callbacks.length; i++)
+               {
+                    callbacks[i](event);
+               }
+           }
+       });
     }
 
     function update()
@@ -27,8 +52,18 @@ var Physics = (function(){
         world.step(1/60);
     }
 
+    function on(type, callback)
+    {
+        if(!listeners[type])
+        {
+            listeners[type] = [];
+        }
+        listeners[type].push(callback);
+    }
+
     function clear()
     {
+        listeners = [];
         var constraints = world.constraints;
         for(var i = 0; i < constraints.length; i++)
         {
@@ -288,6 +323,18 @@ var Physics = (function(){
         body_handler.position[1] += disp.y / scale;
     }
 
+    function setVelocity(body_handler, velocity)
+    {
+        body_handler.velocity[0] = velocity.x / scale;
+        body_handler.velocity[1] = velocity.y / scale;
+    }
+
+    function setPosition(body_handler, pos)
+    {
+        body_handler.position[0] = pos.x / scale;
+        body_handler.position[1] = pos.y / scale;
+    }
+
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
@@ -308,6 +355,9 @@ var Physics = (function(){
              getCentroid     : getCentroid,
              createWire      : createWire,
              update          : update,
-             translate : translate };
+             on              : on,
+             translate       : translate,
+             setPosition     : setPosition,
+             setVelocity     : setVelocity, };
 
 })();

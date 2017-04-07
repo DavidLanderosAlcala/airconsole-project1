@@ -7,7 +7,7 @@ LevelSelector.getLevels().push({
         {
             label : "towerA",
             isStatic : true,
-            position : { x : -400, y : 100 },
+            position : { x : -600, y : 0 },
             vertices: [
                 {x : 0, y : 400 },
                 {x : 0, y : 0 },
@@ -18,7 +18,7 @@ LevelSelector.getLevels().push({
         {
             label : "towerB",
             isStatic : true,
-            position : { x : 400, y : 100 },
+            position : { x : 200, y : 0 },
             vertices: [
                 {x : 0, y : 400 },
                 {x : 0, y : 0 },
@@ -35,13 +35,13 @@ LevelSelector.getLevels().push({
         },
     ],
 
-    setup : function(context, engine)
+    setup : function(context)
     {
         context.gameover = false;
-        var bodies = Matter.Composite.allBodies(engine.world);
+        var bodies = Physics.getAllBodies();
         for(var i = 0; i < bodies.length; i++)
         {
-            if(bodies[i].label == "ball")
+            if(Physics.getLabel(bodies[i]) == "ball")
             {
                 // Buscamos ball y guardamos una referencia
                 // para no volver a buscarla en cada llamada a update
@@ -49,21 +49,15 @@ LevelSelector.getLevels().push({
                 break;
             }
         }
-        Matter.Events.on(engine, 'collisionActive', function(event) {
-            var pairs = event.pairs;
-            var l = pairs.length;
-            for(var i = 0; i < l; i++)
+
+        Physics.on("beginContact", function(event){
+            if( Physics.getLabel(event.bodyA) == "towerB" || Physics.getLabel(event.bodyA) == "ball" )
             {
-                if(pairs[i].bodyA.label == "towerB" || pairs[i].bodyA.label == "ball")
+                if( Physics.getLabel(event.bodyB) == "towerB" || Physics.getLabel(event.bodyB) == "ball" )
                 {
-                    if(pairs[i].bodyB.label == "towerB" || pairs[i].bodyB.label == "ball")
-                    {
-                        context.gameover = true;
-                    }
+                    context.gameover = true;
                 }
-                
             }
-            console.log(event.pairs[0].bodyA.label + event.pairs[0].bodyB.label);
         });
     },
 
@@ -71,8 +65,8 @@ LevelSelector.getLevels().push({
     {
         if(context.ball.position.y > 300)
         {
-            Matter.Body.setVelocity(context.ball, { x : 0, y : 0 });
-            Matter.Body.setPosition(context.ball, { x : -300, y : -600 });
+            Physics.setVelocity(context.ball, { x : 0, y : 0 });
+            Physics.setPosition(context.ball, { x : -300, y : -600 });
         }
         return context.gameover;
     }
