@@ -19,8 +19,8 @@ function init()
 	Physics.init();
 
 	objects.push({
-        x : 300,
-        y : 150,
+        x : 0,
+        y : 0,
         isStatic : false,
         label : "wall",
         vertices : [
@@ -30,6 +30,11 @@ function init()
             {x : -25, y : 25},
         ],
 	});
+
+    for(var i = 0; i < objects[0].vertices.length; i++)
+    {
+        objects[0].vertices[i].x += 300;
+    }
 
 	objects.push({
         x : 320,
@@ -45,16 +50,16 @@ function init()
 	});
 
     objects.push({
-        x : -50,
+        x : 0,
         y : 0,
         isStatic : false,
         label : "wire",
         type : "wire",
         vertices : [
             {x : 100, y : 50},
-            {x : 150, y : 100},
-            {x : 200, y : 50},
-            {x : 250, y : 100},
+            {x : 150, y : 50},
+            {x : 200, y : 100},
+            {x : 250, y : 50},
         ],
     });
 

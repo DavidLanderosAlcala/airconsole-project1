@@ -21,7 +21,7 @@ var Physics = (function(){
        //     this.frame(0, 1, 6, 8);
        //});
     }
-    var si = true;
+
     function update()
     {
         world.step(1/60);
@@ -123,6 +123,10 @@ var Physics = (function(){
         {
             config.mass = 0; // static
         }
+        else
+        {
+            config.mass = 1; // non-static
+        }
         body = new p2.Body(config);
         var circle = new p2.Circle({
             radius  : options.radio / scale,
@@ -137,9 +141,75 @@ var Physics = (function(){
         return body;
     }
 
-    function createWire(vertices)
+    function createWire(options)
     {
+        /*
+        * Create a static or no-static object
+        */
+        var body = null;
+        var config = {};
+        if(options.isStatic)
+        {
+            config.mass = 0; // static
+        }
+        else
+        {
+            config.mass = 1; // non-static
+        }
+        body = new p2.Body(config);
+        var cm = p2.vec2.create();
+        for(var i =1 ; i < options.vertices.length; i++)
+        {
+            var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
+            var pointB = { x : (options.vertices[i].x + options.x) / scale, y : (options.vertices[i].y + options.y) / scale };
+            var vertices = buildRect(pointA, pointB);
+            var c = new p2.Convex({vertices: vertices});
+            for(var j=0; j!==c.vertices.length; j++){
+                var v = c.vertices[j];
+                p2.vec2.sub(v,v,c.centerOfMass);
+            }
+            p2.vec2.copy(cm,c.centerOfMass);
+            c = new p2.Convex({ vertices: c.vertices });
+            body.addShape(c,cm);
+        }
+        body.adjustCenterOfMass();
+        body.aabbNeedsUpdate = true;
+        world.addBody(body);
+        console.log("Position of wire: " + body.position[0] + "," + body.position[1]);
+        /*
+         * Add label property
+         */
+         body.centroid = {
+            x : body.position[0] * scale,
+            y : body.position[1] * scale
+         };
+         body.label = options.label;
+        return body;
+    }
 
+    function buildRect(pointA, pointB)
+    {
+        var vertices = [];
+        var vector = {
+            x : pointB.x - pointA.x,
+            y : pointB.y - pointA.y,
+        };
+        var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+        var angle = Math.atan(vector.y / vector.x);
+        vertices.push({ x : 0, y : 3 / scale });
+        vertices.push({ x : length, y : 3 / scale });
+        vertices.push({ x : length, y : -3 / scale });
+        vertices.push({ x : 0, y : -3 / scale });
+        var rotated_vertices = [];
+        for(var i = 0; i < vertices.length; i++)
+        {
+            rotated_vertices.push(
+              [(vertices[i].x  * Math.cos(angle)) - (vertices[i].y * Math.sin(angle)) + pointA.x,
+              (vertices[i].y * Math.cos(angle)) + (vertices[i].x * Math.sin(angle)) + pointA.y]
+            );
+        }
+        decomp.makeCCW(rotated_vertices);
+        return rotated_vertices;
     }
 
     function createRectangle(options)
