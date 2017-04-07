@@ -423,7 +423,7 @@ var CrayonPhysics = (function(){
 
   function closeAsWire()
   {
-      var body = Physics.createWire(drawing_data.current_polygon);
+      var body = Physics.createWire({vertices:drawing_data.current_polygon});
       var group = null;
       var tack_indices = [];
       var i, l = objects.tacks.length;

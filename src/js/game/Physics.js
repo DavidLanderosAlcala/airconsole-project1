@@ -129,21 +129,27 @@ var Physics = (function(){
         return body;
     }
 
-    function createWire(vertices)
+    function createWire(options)
     {
+        var vertices = options.vertices;
+        options.label = options.label == undefined ? "Body" : options.label;
+        options.isStatic = options.isStatic == undefined ? false : options.isStatic;
+        options.x = options.x == undefined ? 0 : options.x;
+        options.y = options.y == undefined ? 0 : options.y;
         var parts = [];
         var i, l = vertices.length;
         for(var i = 1 ; i < l; i++)
         {
             parts.push(createStick(vertices[i-1], vertices[i]));
         }
-        var body = Matter.Body.create( {parts: parts} );
+        var body = Matter.Body.create( {parts: parts, label : options.label, isStatic : options.isStatic } );
         Matter.Body.setInertia(body, body.inertia * 5);
-        Matter.World.add(engine.world, [body]);
         body.centroid = {
             x : body.position.x,
-            y : body.position.y
+            y : body.position.y,
         };
+        Matter.Body.translate(body, {x : options.x, y : options.y});
+        Matter.World.add(engine.world, [body]);
         return body;
     }
 
