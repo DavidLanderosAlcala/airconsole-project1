@@ -143,6 +143,8 @@ var Physics = (function(){
 
     function createWire(options)
     {
+        options.x = options.x == undefined ? 0 : options.x;
+        options.y = options.y == undefined ? 0 : options.y;
         /*
         * Create a static or no-static object
         */

@@ -2,66 +2,55 @@
 
 var Physics = (function(){
 
-	var engine;
-	var static_objects;
+    var world;
+    var scale = 100;
 
     function init()
     {
-        console.log("Matter.js Implementation");
-        engine = Matter.Engine.create();
-        Matter.Engine.run(engine);
-        var debug_canvas = document.querySelector("#debug_render");
-        if(typeof(ConfigOptions) != "undefined" && ConfigOptions.use_debug_render)
-        {
-            var render = Matter.Render.create({
-                element : debug_canvas,
-                engine  : engine,
-                    options: {
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    wireframeBackground : "#00000000",
-                }
-            });
-            Matter.Render.run(render);
-            debug_canvas.style.width = (window.innerWidth) + "px";
-            debug_canvas.style.height = (window.innerHeight) + "px";
-            debug_canvas.style.background = "rgba(0,0,0,0)"
-            debug_canvas.style.alpha = "0.2";
-        }
-        else
-        {
-            debug_canvas.style.zIndex = -1;
-        }
-        static_objects = [];
+    	console.log("P2.js Implementation");
+        world = new p2.World({ gravity : [0,9.8]});
+        world.setGlobalStiffness(1e4);
+        world.solver.iterations = 20;
+        world.solver.tolerance = 0.01;
+        world.islandSplit = true;
+        world.solver.frictionIterations = 10;
+
+       //var app = new p2.WebGLRenderer(function(){
+       //     this.setWorld(world);
+       //     this.setState(p2.Renderer.DRAWPOLYGON);
+       //     this.frame(0, 1, 6, 8);
+       //});
     }
 
     function update()
     {
-        if(static_objects.length > 0)
-        {
-        	for(var i = 0; i < static_objects.length; i++)
-        	{
-        		Matter.Body.setStatic(static_objects[i], true);
-        	}
-        	static_objects = [];
-        }
+        world.step(1/60);
     }
 
     function clear()
     {
-        var _bodies = Matter.Composite.allBodies(engine.world);
-        Matter.World.remove(engine.world, _bodies);
+        var constraints = world.constraints;
+        for(var i = 0; i < constraints.length; i++)
+        {
+            world.removeBody(constraints[i]);
+        }
+        var bodies = world.bodies;
+        for(var i = 0; i < bodies.length; i++)
+        {
+            world.removeBody(bodies[i]);
+        }
     }
 
     function getPosition(body_handler)
     {
-    	// matter.js
-        return body_handler.position;
+        return {
+            x: body_handler.position[0] * scale,
+            y: body_handler.position[1] * scale,
+        };
     }
 
     function getAngle(body_handler)
     {
-        // matter.js
         return body_handler.angle;
     }
 
@@ -72,100 +61,157 @@ var Physics = (function(){
 
     function createBody(options)
     {
-    	options.isStatic = options.isStatic == undefined ? false : options.isStatic;
-    	options.isSensor = options.isSensor == undefined ? false : options.isSensor;
-        options.label = options.label == undefined ? "Body" : options.label;
-        options.friction = options.friction == undefined ? 0.5 : options.friction;
+        var vertices = options.vertices;
 
-        var centroid = Matter.Vertices.centre(options.vertices);
-        options.x += centroid.x;
-        options.y += centroid.y;
+        var poly = [];
 
-        var body = Matter.Bodies.fromVertices(options.x, options.y, options.vertices, {
-        	friction : options.friction,
-        	isSensor : options.isSensor,
-        	label    : options.label,
-        });
-        if(body != undefined)
-        {
-            Matter.World.add(engine.world, [body]);
-        }
+        for(var i = 0; i < vertices.length; i++)
+        { poly.push([vertices[i].x, vertices[i].y]); }
+        decomp.makeCCW(poly);
+
+        var centroid = new p2.Convex({ vertices : poly }).centerOfMass;
+        centroid_obj = { x : centroid[0], y : centroid[1] };
+
+        /*
+        * Create a static or no-static object
+        */
+        var body = null;
+        var config = { position : [options.x / scale, options.y / scale] };
         if(options.isStatic)
         {
-        	static_objects.push(body);
-            Matter.Body.setVelocity(body, { x : 0, y : 0});
+            config.mass = 0; // static
         }
-        body.centroid = centroid;
+        else
+        {
+            config.mass = 1; // non-static
+        }
+        body = new p2.Body(config);
+
+        /*
+         * Build a compatible array from the game polygon
+         */
+        for(var i = 0; i < poly.length; i++)
+        {
+            //poly.push([vertices[i].x / scale, vertices[i].y / scale]);
+            poly[i][0] /= scale;
+            poly[i][1] /= scale;
+        }
+        body.fromPolygon(poly);
+        world.addBody(body);
+
+        /*
+         * Add label property
+         */
+        body.label = options.label;
+        body.centroid = centroid_obj;
         return body;
     }
 
     function preventCollision(bodyA, bodyB)
     {
-    	if(!bodyA.__groupAssigned)
-    	{
-    		bodyA.__groupAssigned = true;
-    		bodyA.collisionFilter.group = Matter.Body.nextGroup(true);
-    	}
-    	bodyB.collisionFilter.group = bodyA.collisionFilter.group;
-    	bodyB.__groupAssigned = true;
+
     }
 
     function createCircle(options)
     {
-        var mapped_pos = options;
-        var mapped_radio = options.radio;
-        var body = Matter.Bodies.circle( mapped_pos.x, mapped_pos.y, mapped_radio, {
-            label : options.label,
-        });
-        if(body != undefined)
-        {
-            Matter.World.add(engine.world, [body]);
-        }
+        /*
+        * Create a static or no-static object
+        */
+        var body = null;
+        var config = { position : [options.x / scale, options.y / scale] };
         if(options.isStatic)
         {
-        	static_objects.push(body);
-            Matter.Body.setVelocity(body, { x : 0, y : 0});
+            config.mass = 0; // static
         }
+        else
+        {
+            config.mass = 1; // non-static
+        }
+        body = new p2.Body(config);
+        var circle = new p2.Circle({
+            radius  : options.radio / scale,
+        });
+        body.addShape(circle);
+        world.addBody(body);
+
+        /*
+         * Add label property
+         */
+        body.label = options.label;
         return body;
     }
 
     function createWire(options)
     {
-        var vertices = options.vertices;
-        options.label = options.label == undefined ? "Body" : options.label;
-        options.isStatic = options.isStatic == undefined ? false : options.isStatic;
         options.x = options.x == undefined ? 0 : options.x;
         options.y = options.y == undefined ? 0 : options.y;
-        var parts = [];
-        var i, l = vertices.length;
-        for(var i = 1 ; i < l; i++)
+        /*
+        * Create a static or no-static object
+        */
+        var body = null;
+        var config = {};
+        if(options.isStatic)
         {
-            parts.push(createStick(vertices[i-1], vertices[i]));
+            config.mass = 0; // static
         }
-        var body = Matter.Body.create( {parts: parts, label : options.label, isStatic : options.isStatic } );
-        Matter.Body.setInertia(body, body.inertia * 5);
-        body.centroid = {
-            x : body.position.x,
-            y : body.position.y,
-        };
-        Matter.Body.translate(body, {x : options.x, y : options.y});
-        Matter.World.add(engine.world, [body]);
+        else
+        {
+            config.mass = 1; // non-static
+        }
+        body = new p2.Body(config);
+        var cm = p2.vec2.create();
+        for(var i =1 ; i < options.vertices.length; i++)
+        {
+            var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
+            var pointB = { x : (options.vertices[i].x + options.x) / scale, y : (options.vertices[i].y + options.y) / scale };
+            var vertices = buildRect(pointA, pointB);
+            var c = new p2.Convex({vertices: vertices});
+            for(var j=0; j!==c.vertices.length; j++){
+                var v = c.vertices[j];
+                p2.vec2.sub(v,v,c.centerOfMass);
+            }
+            p2.vec2.copy(cm,c.centerOfMass);
+            c = new p2.Convex({ vertices: c.vertices });
+            body.addShape(c,cm);
+        }
+        body.adjustCenterOfMass();
+        body.aabbNeedsUpdate = true;
+        world.addBody(body);
+        console.log("Position of wire: " + body.position[0] + "," + body.position[1]);
+        /*
+         * Add label property
+         */
+         body.centroid = {
+            x : body.position[0] * scale,
+            y : body.position[1] * scale
+         };
+         body.label = options.label;
         return body;
     }
 
-    function createStick(pos1, pos2)
+    function buildRect(pointA, pointB)
     {
-        var pos = {
-            x : ((pos1.x + pos2.x) / 2),
-            y : ((pos1.y + pos2.y) / 2)
+        var vertices = [];
+        var vector = {
+            x : pointB.x - pointA.x,
+            y : pointB.y - pointA.y,
         };
-        var height = 8;
-        var vector_x = pos2.x - pos1.x;
-        var vector_y = pos2.y - pos1.y;
-        var width = Math.sqrt( (vector_x * vector_x) + (vector_y * vector_y) );
-        var angle = Math.atan(vector_y / vector_x);
-        // this is a exception, createStick receive scaled vectors 
-        return Matter.Bodies.rectangle(pos.x, pos.y, width, height, {friction: 1.0, angle : angle});
+        var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+        var angle = Math.atan(vector.y / vector.x);
+        vertices.push({ x : 0, y : 3 / scale });
+        vertices.push({ x : length, y : 3 / scale });
+        vertices.push({ x : length, y : -3 / scale });
+        vertices.push({ x : 0, y : -3 / scale });
+        var rotated_vertices = [];
+        for(var i = 0; i < vertices.length; i++)
+        {
+            rotated_vertices.push(
+              [(vertices[i].x  * Math.cos(angle)) - (vertices[i].y * Math.sin(angle)) + pointA.x,
+              (vertices[i].y * Math.cos(angle)) + (vertices[i].x * Math.sin(angle)) + pointA.y]
+            );
+        }
+        decomp.makeCCW(rotated_vertices);
+        return rotated_vertices;
     }
 
     function createRectangle(options)
@@ -175,34 +221,43 @@ var Physics = (function(){
 
     function isStatic(body_handler)
     {
-        return body_handler.isStatic;
+        return body_handler.mass == 0;
+    }
+
+    function setStatic(body_handler, value)
+    {
+        console.log("Este metodo esta obsoleto");
     }
 
     function createRevoluteJoint(options)
     {
-        preventCollision(options.bodyA, options.bodyB);
-        var constraint = Matter.Constraint.create({
-              bodyA  : options.bodyA,
-              pointA : options.pointA,
-              bodyB  : options.bodyB,
-              pointB : options.pointB,
-              stiffness: 0.1,
-              length : 5,
-         });
-        Matter.World.add(engine.world, [constraint]);
+        var constraint = new p2.RevoluteConstraint(options.bodyA, options.bodyB, {
+            localPivotA: [options.pointA.x / scale, options.pointA.y / scale],
+            localPivotB: [options.pointB.x / scale, options.pointB.y / scale],
+            collideConnected : false,
+        });
+        world.addConstraint(constraint);
         return constraint;
     }
 
     function removeBody(bodies)
     {
-    	if(!Array.isArray(bodies))
-    		bodies = [bodies];
-        Matter.World.remove(engine.world, bodies);
+        if(!Array.isArray(bodies))
+            bodies = [bodies];
+        for(var i = 0; i < bodies.length; i++)
+        {
+            world.removeBody(bodies[i]);
+        }
     }
 
     function removeConstraint(bodies)
     {
-        removeBody(bodies);
+        if(!Array.isArray(bodies))
+            bodies = [bodies];
+        for(var i = 0; i < bodies.length; i++)
+        {
+            world.removeConstraint(bodies[i]);
+        }
     }
 
     function isSensor(body_handler)
@@ -212,14 +267,12 @@ var Physics = (function(){
 
     function getId(body_handler)
     {
-        // matter.js
         return body_handler.id;
     }
 
     function getAllBodies()
     {
-    	// Matter.js 
-    	return Matter.Composite.allBodies(engine.world);
+    	return world.bodies;
     }
 
     function getCentroid(body_handler)
@@ -229,14 +282,13 @@ var Physics = (function(){
 
     function getBodiesAtPoint(point)
     {
-        var mapped_point = point;
-        var _bodies = Physics.getAllBodies();
-        return Matter.Query.point(_bodies, mapped_point);
+        return world.hitTest([point.x / scale, point.y / scale], world.bodies);
     }
 
     function translate(body_handler, disp)
     {
-        Matter.Body.translate(body_handler, disp);
+        body_handler.position[0] += disp.x / scale;
+        body_handler.position[1] += disp.y / scale;
     }
 
     return { init            : init,
@@ -248,6 +300,7 @@ var Physics = (function(){
              createRectangle : createRectangle,
              createCircle    : createCircle,
              isStatic        : isStatic,
+             setStatic       : setStatic,
              removeBody      : removeBody,
              removeConstraint : removeConstraint,
              getBodiesAtPoint : getBodiesAtPoint,
@@ -258,7 +311,7 @@ var Physics = (function(){
              getId           : getId,
              getCentroid     : getCentroid,
              createWire      : createWire,
-             update : update,
+             update          : update,
              translate : translate };
 
 })();
