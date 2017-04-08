@@ -193,6 +193,7 @@ var Physics = (function(){
             var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
             var pointB = { x : (options.vertices[i].x + options.x) / scale, y : (options.vertices[i].y + options.y) / scale };
             var vertices = buildRect(pointA, pointB);
+            decomp.makeCCW(vertices);
             var c = new p2.Convex({vertices: vertices});
             for(var j=0; j!==c.vertices.length; j++){
                 var v = c.vertices[j];
@@ -217,29 +218,36 @@ var Physics = (function(){
         return body;
     }
 
+
+    /*
+     * do you want to improve this algo ?
+     * use this jsfiddle test:
+     *     https://jsfiddle.net/dka92bzb/11/
+     */
     function buildRect(pointA, pointB)
     {
-        var vertices = [];
         var vector = {
             x : pointB.x - pointA.x,
             y : pointB.y - pointA.y,
         };
         var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
         var angle = Math.atan(vector.y / vector.x);
-        vertices.push({ x : 0, y : 3 / scale });
-        vertices.push({ x : length, y : 3 / scale });
-        vertices.push({ x : length, y : -3 / scale });
-        vertices.push({ x : 0, y : -3 / scale });
-        var rotated_vertices = [];
-        for(var i = 0; i < vertices.length; i++)
-        {
-            rotated_vertices.push(
-              [(vertices[i].x  * Math.cos(angle)) - (vertices[i].y * Math.sin(angle)) + pointA.x,
-              (vertices[i].y * Math.cos(angle)) + (vertices[i].x * Math.sin(angle)) + pointA.y]
-            );
-        }
-        decomp.makeCCW(rotated_vertices);
-        return rotated_vertices;
+        if( vector.x < 0 )
+        	angle += Math.PI;
+        var s_angle = Math.sin(angle);
+        var c_angle = Math.cos(angle);
+        var half_height = 3 / scale;
+        var vertices = [
+            [ - half_height * s_angle + pointA.x,
+              half_height * c_angle + pointA.y ],
+            [ (length  * c_angle) - (half_height * s_angle) + pointA.x,
+              (half_height * c_angle) + (length * s_angle) + pointA.y ],
+            [ (length * c_angle) - (-half_height * s_angle) + pointA.x,
+              (-half_height * c_angle) + (length * s_angle) + pointA.y ],
+            [ half_height * s_angle + pointA.x,
+              -half_height * c_angle + pointA.y],            
+        ];
+        return vertices;
     }
 
     function createRectangle(options)
