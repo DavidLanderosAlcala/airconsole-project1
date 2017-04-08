@@ -63,10 +63,10 @@ LevelSelector.getLevels().push({
 
     update : function(context, engine)
     {
-        if(context.ball.position.y > 300)
+        if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
             Physics.setVelocity(context.ball, { x : 0, y : 0 });
-            Physics.setPosition(context.ball, { x : -300, y : -600 });
+            Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 300, y : 0 });
         }
         return context.gameover;
     }
