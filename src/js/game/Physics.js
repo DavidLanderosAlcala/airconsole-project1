@@ -86,6 +86,7 @@ var Physics = (function(){
 
     function createBody(options)
     {
+    	options.isSensor = options.isSensor || false;
         options.label = options.label || "Body";
         options.x = options.x || 0;
         options.y = options.y || 0;
@@ -113,7 +114,6 @@ var Physics = (function(){
             config.mass = aux_convex.area * 0.001;
         }
         body = new p2.Body(config);
-
         /*
          * Build a compatible array from the game polygon
          */
@@ -123,6 +123,14 @@ var Physics = (function(){
             poly[i][1] /= scale;
         }
         body.fromPolygon(poly);
+        if(options.isSensor)
+        {
+        	var i, l = body.shapes.length;
+        	for(i = 0; i < l; i++)
+        	{
+        		body.shapes[i].sensor = true;
+        	}
+        }
         world.addBody(body);
 
         /*
@@ -206,7 +214,7 @@ var Physics = (function(){
         body.adjustCenterOfMass();
         body.aabbNeedsUpdate = true;
         world.addBody(body);
-        console.log("Position of wire: " + body.position[0] + "," + body.position[1]);
+        
         /*
          * Add label property
          */
