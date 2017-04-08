@@ -3,7 +3,7 @@
 var Physics = (function(){
 
     var world;
-    var scale = 200;
+    var scale = 100;
 
     var listeners = [];
 
@@ -86,12 +86,14 @@ var Physics = (function(){
 
     function createBody(options)
     {
-        var vertices = options.vertices;
-        options.label = options.label == undefined ? "Body" : options.label;
+        options.label = options.label || "Body";
+        options.x = options.x || 0;
+        options.y = options.y || 0;
+
         var poly = [];
 
-        for(var i = 0; i < vertices.length; i++)
-        { poly.push([vertices[i].x, vertices[i].y]); }
+        for(var i = 0; i < options.vertices.length; i++)
+        { poly.push([options.vertices[i].x, options.vertices[i].y]); }
         decomp.makeCCW(poly);
 
         var aux_convex = new p2.Convex({ vertices : poly });
@@ -117,7 +119,6 @@ var Physics = (function(){
          */
         for(var i = 0; i < poly.length; i++)
         {
-            //poly.push([vertices[i].x / scale, vertices[i].y / scale]);
             poly[i][0] /= scale;
             poly[i][1] /= scale;
         }
@@ -168,9 +169,9 @@ var Physics = (function(){
 
     function createWire(options)
     {
-        options.x = options.x == undefined ? 0 : options.x;
-        options.y = options.y == undefined ? 0 : options.y;
-        options.label = options.label == undefined ? "Body" : options.label;
+        options.label = options.label || "Body";
+        options.x = options.x || 0;
+        options.y = options.y || 0;
 
         /*
         * Create a static or no-static object
