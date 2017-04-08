@@ -51,13 +51,13 @@ LevelSelector.getLevels().push({
         },
     ],
 
-    setup : function(context, engine)
+    setup : function(context)
     {
         context.gameover = false;
-        var bodies = Matter.Composite.allBodies(engine.world);
+        var bodies = Physics.getAllBodies();
         for(var i = 0; i < bodies.length; i++)
         {
-            if(bodies[i].label == "ball")
+            if(Physics.getLabel(bodies[i]) == "ball")
             {
                 // Buscamos ball y guardamos una referencia
                 // para no volver a buscarla en cada llamada a update
@@ -65,30 +65,24 @@ LevelSelector.getLevels().push({
                 break;
             }
         }
-        Matter.Events.on(engine, 'collisionActive', function(event) {
-            var pairs = event.pairs;
-            var l = pairs.length;
-            for(var i = 0; i < l; i++)
+
+        Physics.on("beginContact", function(event){
+            if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyA) == "ball" )
             {
-                if(pairs[i].bodyA.label == "ball" || pairs[i].bodyA.label == "sensor")
+                if( Physics.getLabel(event.bodyB) == "sensor" || Physics.getLabel(event.bodyB) == "ball" )
                 {
-                    if(pairs[i].bodyB.label == "ball" || pairs[i].bodyB.label == "sensor")
-                    {
-                        context.gameover = true;
-                    }
+                    context.gameover = true;
                 }
-                
             }
-            console.log(event.pairs[0].bodyA.label + event.pairs[0].bodyB.label);
         });
     },
 
-    update : function(context, engine)
+    update : function(context)
     {
-        if(context.ball.position.y > 300)
+        if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
-            Matter.Body.setVelocity(context.ball, { x : 0, y : 0 });
-            Matter.Body.setPosition(context.ball, { x : -300, y : -600 });
+            Physics.setVelocity(context.ball, { x : 0, y : 0 });
+            Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
         }
         return context.gameover;
     }

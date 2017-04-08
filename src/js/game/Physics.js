@@ -63,17 +63,7 @@ var Physics = (function(){
 
     function clear()
     {
-        listeners = [];
-        var constraints = world.constraints;
-        for(var i = 0; i < constraints.length; i++)
-        {
-            world.removeBody(constraints[i]);
-        }
-        var bodies = world.bodies;
-        for(var i = 0; i < bodies.length; i++)
-        {
-            world.removeBody(bodies[i]);
-        }
+        init();
     }
 
     function getPosition(body_handler)
