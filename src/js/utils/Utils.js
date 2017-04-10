@@ -50,6 +50,16 @@ var Utils = (function(){
         return matter_flavor;
     }
 
+    function matterToP2Flavor(vertices)
+    {
+        var poly = [];
+        for(var i = 0; i < vertices.length; i++)
+        {
+            poly.push([vertices[i].x, vertices[i].y]);
+        }
+        return poly;
+    }
+
 	return { isMobileNavigator : isMobileNavigator,
              isRunningOnAirConsole : isRunningOnAirConsole,
              removeCollinearPoints : removeCollinearPoints };

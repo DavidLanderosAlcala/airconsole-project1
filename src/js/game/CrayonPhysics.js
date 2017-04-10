@@ -347,26 +347,58 @@ var CrayonPhysics = (function(){
           return "invalid";
       }
 
-      var diff_x = drawing_data.current_polygon[0].x - drawing_data.current_polygon[drawing_data.current_polygon.length-1].x;
-      var diff_y = drawing_data.current_polygon[0].y - drawing_data.current_polygon[drawing_data.current_polygon.length-1].y;
-      var head_to_tail_distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-      if(head_to_tail_distance > ConfigOptions.polygon_autoclose_distance * 3)
+      var h2t_vector = {
+          x : drawing_data.current_polygon[0].x - drawing_data.current_polygon[drawing_data.current_polygon.length-1].x,
+          y : drawing_data.current_polygon[0].y - drawing_data.current_polygon[drawing_data.current_polygon.length-1].y
+      };
+
+      var h2t_distance = Math.sqrt(h2t_vector.x * h2t_vector.x + h2t_vector.y * h2t_vector.y);
+      var h2t_angle = Math.atan( h2t_vector.y / h2t_vector.x );
+      if(h2t_vector.x < 0)
+        h2t_angle += Math.PI;
+
+      var tail_vector = {
+          x : drawing_data.current_polygon[drawing_data.current_polygon.length-1].x - drawing_data.current_polygon[drawing_data.current_polygon.length-3].x,
+          y : drawing_data.current_polygon[drawing_data.current_polygon.length-1].y - drawing_data.current_polygon[drawing_data.current_polygon.length-3].y
+      };
+
+      var tail_angle = Math.atan(tail_vector.y / tail_vector.x );
+      if(tail_vector.x < 0)
+        tail_angle += Math.PI;
+
+      if(Math.abs(tail_angle - h2t_angle) <= 0.7)
+      {
+          h2t_distance *= 0.5;
+      }
+
+
+      if(h2t_distance > ConfigOptions.polygon_autoclose_distance * 3)
       {
           return "wire";
       }
 
-      var poly = [];
-      for(var i = 0; i < drawing_data.current_polygon.length; i++)
+      var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
+      var removed_vertices = 0;
+      var isSimple = false;
+      
+      while(!isSimple && removed_vertices < 5)
       {
-          poly.push([drawing_data.current_polygon[i].x, drawing_data.current_polygon[i].y]);
+          isSimple = decomp.isSimple(poly);
+          if(!isSimple)
+          {
+              poly.splice(poly.length -1 , 1);
+              removed_vertices++;
+          }
       }
 
-      if(!decomp.isSimple(poly))
+      if(!isSimple)
       {
           return "wire";
       }
 
-      return "polygon"
+      drawing_data.current_polygon.splice(drawing_data.current_polygon.length - removed_vertices, removed_vertices);
+
+      return "polygon";
   }
 
   function closeAsPolygon()
