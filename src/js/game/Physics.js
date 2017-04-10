@@ -342,6 +342,14 @@ var Physics = (function(){
         body_handler.position[1] = pos.y / scale;
     }
 
+    function clearForces(body_handler)
+    {
+        body_handler.velocity[0] = 0;
+        body_handler.velocity[1] = 0;
+        body_handler.angularVelocity = 0;
+        console.log(body_handler);
+    }
+
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
@@ -365,6 +373,7 @@ var Physics = (function(){
              on              : on,
              translate       : translate,
              setPosition     : setPosition,
-             setVelocity     : setVelocity, };
+             setVelocity     : setVelocity,
+             clearForces     : clearForces };
 
 })();

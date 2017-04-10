@@ -37,11 +37,12 @@ LevelSelector.getLevels().push({
                 {x : 25, y : 25 },
             ],
         },
+    ],
+
+    hints: [
         {
-            hint : true,
-            label : "line",
-            isStatic : true,
-            position : { x : 0, y : 500},
+            label : "simple line",
+            position : { x : 0, y : 600},
             vertices: [
                 {x : -300, y : 0 },
                 {x : 300, y : 0 },

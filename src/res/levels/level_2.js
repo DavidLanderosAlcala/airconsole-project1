@@ -9,10 +9,10 @@ LevelSelector.getLevels().push({
             isStatic : true,
             position : { x : 0, y : 100 },
             vertices: [
-                {x : -500, y : 50 },
-                {x : -500, y : 0 },
-                {x : 500, y : 0 },
-                {x : 500, y : 50 },
+                {x : -600, y : 50 },
+                {x : -600, y : 0 },
+                {x : 600, y : 0 },
+                {x : 600, y : 50 },
             ],
         },
         {
@@ -37,11 +37,12 @@ LevelSelector.getLevels().push({
             isStatic : false,
             position : { x : 0, y : 1000 },
         },
-        {
-            hint : true,
-            label : "hint",
+    ],
 
-            position : { x : 195, y : 510 },
+    hints : [
+        {
+            label : "hint",
+            position : { x : 100, y : 500 },
             vertices: [
                 {
                     "x": -30,
@@ -82,7 +83,11 @@ LevelSelector.getLevels().push({
                 {
                     "x": -72,
                     "y": 0
-                }
+                },
+                {
+                    "x": -30,
+                    "y": 0
+                },
             ]
         },
     ],

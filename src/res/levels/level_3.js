@@ -5,33 +5,45 @@ LevelSelector.getLevels().push({
     description : "Haz cruzar la pelota",
     bodies      : [
         {
-            label : "towerA",
+            label    : "ball",
+            isStatic : false,
+            position : { x : -300, y : 800 },
+            type     : "circle",
+            radio    : 25,
+        },
+        {
+            label : "plattformA",
             isStatic : true,
             position : { x : -600, y : 0 },
             vertices: [
-                {x : 0, y : 400 },
-                {x : 0, y : 0 },
+                {x : -400, y : 400 },
+                {x : -400, y : 0 },
                 {x : 400, y : 0 },
                 {x : 400, y : 400 },
             ],
         },
         {
-            label : "towerB",
+            label : "plattformB",
             isStatic : true,
-            position : { x : 200, y : 0 },
+            position : { x : 600, y : 0 },
             vertices: [
-                {x : 0, y : 400 },
-                {x : 0, y : 0 },
+                {x : -400, y : 400 },
+                {x : -400, y : 0 },
                 {x : 400, y : 0 },
                 {x : 400, y : 400 },
             ],
         },
         {
-            label    : "ball",
-            isStatic : false,
-            position : { x : -300, y : 600 },
-            type     : "circle",
-            radio    : 25,
+            label : "sensor",
+            isStatic : true,
+            isSensor : true,
+            position : { x : 640, y : 300 },
+            vertices: [
+                {x : -400, y : 400 },
+                {x : -400, y : 0 },
+                {x : 400, y : 0 },
+                {x : 400, y : 400 },
+            ],
         },
     ],
 
@@ -51,9 +63,9 @@ LevelSelector.getLevels().push({
         }
 
         Physics.on("beginContact", function(event){
-            if( Physics.getLabel(event.bodyA) == "towerB" || Physics.getLabel(event.bodyA) == "ball" )
+            if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyB) == "sensor" )
             {
-                if( Physics.getLabel(event.bodyB) == "towerB" || Physics.getLabel(event.bodyB) == "ball" )
+                if( Physics.getLabel(event.bodyA) == "ball" || Physics.getLabel(event.bodyB) == "ball" )
                 {
                     context.gameover = true;
                 }
@@ -65,7 +77,7 @@ LevelSelector.getLevels().push({
     {
         if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
-            Physics.setVelocity(context.ball, { x : 0, y : 0 });
+            Physics.clearForces(context.ball);
             Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 300, y : 0 });
         }
         return context.gameover;
