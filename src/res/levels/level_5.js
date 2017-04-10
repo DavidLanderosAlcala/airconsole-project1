@@ -5,7 +5,7 @@ LevelSelector.getLevels().push({
     description : "Mete la pelota al vaso",
     bodies      : [
         {
-            label : "towerA",
+            label : "plattform",
             isStatic : true,
             position : { x : -400, y : 100 },
             vertices: [
@@ -89,10 +89,10 @@ LevelSelector.getLevels().push({
         context.frame += 0.05;
         Physics.translate(context.cup, {x: (Math.cos(context.frame) * 10), y: 0});
         Physics.translate(context.sensor, {x: (Math.cos(context.frame) * 10), y: 0});
-        Physics.setVelocity(context.cup, { x : 0, y : 0 });
+        Physics.clearForces(context.cup);
         if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
-            Physics.setVelocity(context.ball, { x : 0, y : 0 });
+            Physics.clearForces(context.ball);
             Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
         }
         return context.gameover;
