@@ -29,6 +29,7 @@ var CrayonPhysics = (function(){
           title       : "",
           description : "",
           context     : { },
+          hints       : [],
       };
 
       drawing_data = {
@@ -63,6 +64,8 @@ var CrayonPhysics = (function(){
       // Reset some variables
       objects.shapes = [];
       objects.tacks  = [];
+
+      level_data.hints = [];
 
       drawing_data.clear();
 
@@ -141,7 +144,7 @@ var CrayonPhysics = (function(){
               else if(objects.shapes[i].type == "circle" ) {
                   context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
               }
-              if(objects.shapes[i].type == "wire" || objects.shapes[i].hint)
+              if(objects.shapes[i].type == "wire")
               {
                   context.stroke();
               }
@@ -182,6 +185,27 @@ var CrayonPhysics = (function(){
           context.arc(0, 0, 10, 0, Math.PI * 2);
           context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
           context.stroke();
+          context.restore();
+      }
+
+      /* Drawing level.hints (ghost mode) */
+      var i, l = level_data.hints.length;
+      for(var i = 0; i < l; i++)
+      {
+          context.save();
+            context.translate(level_data.hints[i].position.x, level_data.hints[i].position.y);
+            context.beginPath();
+            var j, l2 = level_data.hints[i].vertices.length;
+            if(l2 > 1)
+            {
+                context.moveTo(level_data.hints[i].vertices[0].x, level_data.hints[i].vertices[0].y);
+                for(j = 0; j < l2; j++)
+                {
+                    context.lineTo(level_data.hints[i].vertices[j].x, level_data.hints[i].vertices[j].y);
+                }
+                context.globalAlpha = 0.1;
+                context.stroke();
+            }
           context.restore();
       }
 
@@ -634,22 +658,23 @@ var CrayonPhysics = (function(){
       var level = LevelSelector.getLevels()[level_index];
       level_data.update_fnc = level.update;
       var _bodies = [];
+      level_data.hints = level.hints || [];
+      for(var i = 0; i < level_data.hints.length;i++)
+      {
+          if(!level_data.hints[i].readyToUse)
+          {
+              level_data.hints[i] = prepareLevelShapes(level_data.hints[i]);
+          }
+      }
       for(var i = 0; i < level.bodies.length; i++)
       {
           var type = level.bodies[i].type == "circle" ? "circle" : "polygon";
+          if(!level.bodies[i].readyToUse)
+          {
+              level.bodies[i] = prepareLevelShapes(level.bodies[i]);
+          }
           if(type == "polygon")
           {
-              if(level.bodies[i].mapped == undefined)
-              {
-                  level.bodies[i].position.y = -level.bodies[i].position.y;
-                  level.bodies[i].position.x += canvas.width>>1;
-                  level.bodies[i].position.y += canvas.height;
-                  for(var v = 0; v < level.bodies[i].vertices.length; v++)
-                  {
-                      level.bodies[i].vertices[v].y = -level.bodies[i].vertices[v].y;
-                  }
-                  level.bodies[i].mapped = true;
-              }
               var body = Physics.createBody({
                   x : level.bodies[i].position.x,
                   y : level.bodies[i].position.y,
@@ -657,23 +682,12 @@ var CrayonPhysics = (function(){
                   label : level.bodies[i].label,
                   isStatic : level.bodies[i].isStatic,
                   friction : 0.5,
-                  isSensor: level.bodies[i].isSensor || level.bodies[i].hint,
+                  isSensor: level.bodies[i].isSensor,
               });
-              if(level.bodies[i].hint)
-              {
-                  Physics.removeBody(body);
-              }
               var centroid = Physics.getCentroid(body);
           }
           else if(type == "circle")
           {
-              if(level.bodies[i].mapped == undefined)
-              {
-                  level.bodies[i].position.y = -level.bodies[i].position.y;
-                  level.bodies[i].position.x += canvas.width>>1;
-                  level.bodies[i].position.y += canvas.height;
-                  level.bodies[i].mapped = true;
-              }
               var centroid = { x : 0, y: 0 };
               var body = Physics.createCircle({
                   x : level.bodies[i].position.x,
@@ -685,18 +699,16 @@ var CrayonPhysics = (function(){
               });
           }
           objects.shapes.push({
-              body : body,
-              deleted : level.bodies[i].hint,
-              hint : level.bodies[i].hint,
-              isSensor : level.bodies[i].isSensor,
-              type : type,
-              vertices : level.bodies[i].vertices,
-              radio : level.bodies[i].radio,
-              centroid: centroid,
+              body        : body,
+              deleted     : false,
+              isSensor    : level.bodies[i].isSensor,
+              type        : type,
+              vertices    : level.bodies[i].vertices,
+              radio       : level.bodies[i].radio,
+              centroid    : centroid,
               color_index : ColorManager.getRandomColorIndex(),
           });
-          if(!level.bodies[i].hint)
-              _bodies.push(body);
+          _bodies.push(body);
       }
 
       level_data.title       = level.title;
@@ -730,6 +742,23 @@ var CrayonPhysics = (function(){
           j = i;
       }
       return pointStatus;
+  }
+
+  function prepareLevelShapes(shape)
+  {
+      shape.position.y = -shape.position.y;
+      shape.position.x += Screen.getWidth()>>1;
+      shape.position.y += Screen.getHeight();
+      if(shape.vertices)
+      {
+          var v, l = shape.vertices.length;
+          for(v = 0; v < l; v++)
+          {
+              shape.vertices[v].y = -shape.vertices[v].y;
+          }
+      }
+      shape.readyToUse = true;
+      return shape;
   }
 
   return {  init          : init,

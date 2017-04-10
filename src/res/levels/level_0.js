@@ -3,7 +3,7 @@ LevelSelector.getLevels().push({
 
     title       : "Level 0",
     description : "Draw a shape",
-    bodies      : [
+    bodies : [
         {
             label : "ground",
             isStatic : true,
@@ -15,18 +15,20 @@ LevelSelector.getLevels().push({
                 {x : 400,  y : 0 }
             ],
         },
-        {
-            hint : true,
-            label : "hint",
-            isStatic : true,
-            position : { x : 0, y : 500 },
-            vertices: [
-                {x : -200, y : 0 },
-                {x : -200, y : 100 },
-                {x : 200,  y : 100 },
-                {x : 200,  y : 0 }
-            ],
-        },
+    ],
+
+    hints : [
+            {
+                /* possible shape */
+                position : { x : 0, y : 500 },
+                vertices : [
+                    {x : -200, y : 0 },
+                    {x : -200, y : 100 },
+                    {x : 200,  y : 100 },
+                    {x : 200,  y : 0 },
+                    {x : -200, y : 0 },
+                ],
+            }
     ],
 
     setup : function(context)
