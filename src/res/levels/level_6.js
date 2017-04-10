@@ -5,7 +5,7 @@ LevelSelector.getLevels().push({
     description : "Despata la coladera",
     bodies      : [
         {
-            label : "plattformA",
+            label : "pieceA",
             isStatic : true,
             position : { x : -500, y : 0 },
             vertices: [
@@ -17,7 +17,7 @@ LevelSelector.getLevels().push({
         },
 
         {
-            label : "plattformA",
+            label : "pieceB",
             isStatic : true,
             position : { x : 380, y : 0 },
             vertices: [
@@ -32,14 +32,18 @@ LevelSelector.getLevels().push({
         },
 
         {
-            label : "rock",
+            label : "slim-plug",
             isStatic : false,
             position : { x : -50, y : 400 },
             vertices: [
-                {x : -60, y  :  90 },
-                {x : -60, y  : -90 },
-                {x :  60, y  : -90 },
-                {x :  60, y  :  90 },
+                {x : -95, y  :  50 },
+                {x : -65, y  : -50 },
+                {x :  65, y  : -50 },
+                {x :  95, y  :  50 },
+                {x :  20, y  :  50 },   // handler
+                {x :  20, y  :   90 },  // handler
+                {x :  -20, y  :  90 },  // handler
+                {x :  -20, y  :  50 },  // handler
             ],
         },
 
@@ -49,55 +53,6 @@ LevelSelector.getLevels().push({
             radio    : 25,
             isStatic : false,
             position : { x : -430, y : 500 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : -380, y : 500 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : -400, y : 600 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : -400, y : 400 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : -500, y : 500 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : -400, y : 550 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : 300, y : 550 },
-        },
-        {
-            label    : "ball",
-            type     : "circle",
-            radio    : 25,
-            isStatic : false,
-            position : { x : 300, y : 500 },
         },
     ],
 
