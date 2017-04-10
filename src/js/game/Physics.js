@@ -12,6 +12,7 @@ var Physics = (function(){
     	console.log("P2.js Implementation");
         world = new p2.World({ gravity : [0,10]});
         world.setGlobalStiffness(1e6);
+        world.setGlobalRelaxation ( 10 );
         world.solver.iterations = 20;
         world.solver.tolerance = 0.01;
         world.islandSplit = true;
@@ -45,6 +46,7 @@ var Physics = (function(){
                }
            }
        });
+
     }
 
     function update()

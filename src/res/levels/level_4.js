@@ -18,7 +18,7 @@ LevelSelector.getLevels().push({
         {
             label    : "ball",
             isStatic : false,
-            position : { x : -300, y : 600 },
+            position : { x : -100, y : 600 },
             type     : "circle",
             radio    : 25,
         },
@@ -81,7 +81,7 @@ LevelSelector.getLevels().push({
     {
         if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
-            Physics.setVelocity(context.ball, { x : 0, y : 0 });
+            Physics.clearForces(context.ball);
             Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
         }
         return context.gameover;
