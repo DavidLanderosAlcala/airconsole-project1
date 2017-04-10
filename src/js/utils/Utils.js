@@ -62,6 +62,7 @@ var Utils = (function(){
 
 	return { isMobileNavigator : isMobileNavigator,
              isRunningOnAirConsole : isRunningOnAirConsole,
-             removeCollinearPoints : removeCollinearPoints };
+             removeCollinearPoints : removeCollinearPoints,
+             matterToP2Flavor      : matterToP2Flavor };
 
 })();
