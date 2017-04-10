@@ -18,7 +18,7 @@ LevelSelector.getLevels().push({
         {
             label    : "ball",
             isStatic : false,
-            position : { x : -300, y : 600 },
+            position : { x : -100, y : 600 },
             type     : "circle",
             radio    : 25,
         },
