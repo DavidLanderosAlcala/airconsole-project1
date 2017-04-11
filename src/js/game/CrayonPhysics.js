@@ -695,27 +695,22 @@ var CrayonPhysics = (function(){
       var level = LevelSelector.getLevels()[level_index];
       level_data.update_fnc = level.update;
       var _bodies = [];
-      level_data.hints = level.hints || [];
-      for(var i = 0; i < level_data.hints.length;i++)
+      level.hints = level.hints || [];
+      level_data.hints = [];
+      for(var i = 0; i < level.hints.length;i++)
       {
-          if(!level_data.hints[i].readyToUse)
-          {
-              level_data.hints[i] = prepareLevelShapes(level_data.hints[i]);
-          }
+          level_data.hints.push(prepareLevelShapes(level.hints[i]));
       }
       for(var i = 0; i < level.bodies.length; i++)
       {
           var type = level.bodies[i].type == "circle" ? "circle" : "polygon";
-          if(!level.bodies[i].readyToUse)
-          {
-              level.bodies[i] = prepareLevelShapes(level.bodies[i]);
-          }
+          var scaledBody = prepareLevelShapes(level.bodies[i]);
           if(type == "polygon")
           {
               var body = Physics.createBody({
-                  x : level.bodies[i].position.x,
-                  y : level.bodies[i].position.y,
-                  vertices : level.bodies[i].vertices,
+                  x : scaledBody.position.x,
+                  y : scaledBody.position.y,
+                  vertices : scaledBody.vertices,
                   label : level.bodies[i].label,
                   isStatic : level.bodies[i].isStatic,
                   friction : 0.5,
@@ -727,9 +722,9 @@ var CrayonPhysics = (function(){
           {
               var centroid = { x : 0, y: 0 };
               var body = Physics.createCircle({
-                  x : level.bodies[i].position.x,
-                  y : level.bodies[i].position.y,
-                  radio    : level.bodies[i].radio,
+                  x : scaledBody.position.x,
+                  y : scaledBody.position.y,
+                  radio    : scaledBody.radio,
                   label    : level.bodies[i].label,
                   isStatic : level.bodies[i].isStatic,
                   friction : 0.5,
@@ -740,8 +735,8 @@ var CrayonPhysics = (function(){
               deleted     : false,
               isSensor    : level.bodies[i].isSensor,
               type        : type,
-              vertices    : level.bodies[i].vertices,
-              radio       : level.bodies[i].radio,
+              vertices    : scaledBody.vertices,
+              radio       : scaledBody.radio,
               centroid    : centroid,
               color_index : ColorManager.getRandomColorIndex(),
           });
@@ -781,8 +776,11 @@ var CrayonPhysics = (function(){
       return pointStatus;
   }
 
-  function prepareLevelShapes(shape)
+  function prepareLevelShapes(const_shape)
   {
+      /* Fixme: improve this coping technique */
+      var shape = JSON.parse(JSON.stringify(const_shape));
+      
       shape.position.x *= Physics.getScale();
       shape.position.y *= Physics.getScale();
 
@@ -804,7 +802,7 @@ var CrayonPhysics = (function(){
       {
           shape.radio *= Physics.getScale();
       }
-      shape.readyToUse = true;
+      
       return shape;
   }
 
