@@ -2,13 +2,15 @@
 
 var Physics = (function(){
 
+    var world_width = 20;
     var world;
-    var scale = 100;
+    var scale;
 
     var listeners = [];
 
     function init()
     {
+        scale = (Screen.getWidth() / world_width)|0;
     	console.log("P2.js Implementation");
         world = new p2.World({ gravity : [0,10]});
         world.setGlobalStiffness(1e6);
@@ -25,7 +27,7 @@ var Physics = (function(){
        //     this.frame(0, 1, 6, 8);
        //});
 
-       world.on("beginContact",function(event){
+       world.on("beginContact", function(event){
            var callbacks = listeners["beginContact"];
            if(callbacks)
            {
@@ -352,6 +354,11 @@ var Physics = (function(){
         console.log(body_handler);
     }
 
+    function getScale()
+    {
+        return scale;
+    }
+
     return { init            : init,
     	     clear           : clear,
              getPosition     : getPosition,
@@ -376,6 +383,7 @@ var Physics = (function(){
              translate       : translate,
              setPosition     : setPosition,
              setVelocity     : setVelocity,
-             clearForces     : clearForces };
+             clearForces     : clearForces,
+             getScale        : getScale };
 
 })();

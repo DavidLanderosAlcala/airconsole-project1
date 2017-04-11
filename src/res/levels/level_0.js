@@ -7,27 +7,23 @@ LevelSelector.getLevels().push({
         {
             label : "ground",
             isStatic : true,
-            position : { x : 0, y : 100 },
-            vertices: [
-                {x : -400, y : 0 },
-                {x : -400, y : 100 },
-                {x : 400,  y : 100 },
-                {x : 400,  y : 0 }
-            ],
+            position : { x : 0, y : 1 },
+            vertices: [ { x: -4, y: 0 },
+                        { x: -4, y: 1 },
+                        { x: 4, y: 1 },
+                        { x: 4, y: 0 } ],
         },
     ],
 
     hints : [
             {
                 /* possible shape */
-                position : { x : 0, y : 500 },
-                vertices : [
-                    {x : -200, y : 0 },
-                    {x : -200, y : 100 },
-                    {x : 200,  y : 100 },
-                    {x : 200,  y : 0 },
-                    {x : -200, y : 0 },
-                ],
+                position : { x : 0, y : 5 },
+                vertices : [ { x: -2, y: 0 },
+                             { x: -2, y: 1 },
+                             { x: 2, y: 1 },
+                             { x: 2, y: 0 },
+                             { x: -2, y: 0 } ],
             }
     ],
 

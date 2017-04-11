@@ -94,6 +94,8 @@ var CrayonPhysics = (function(){
 
   function render()
   {
+      context.lineWidth = (8 / 96) * Physics.getScale();
+
       /* Clearing the screen */
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
@@ -103,7 +105,6 @@ var CrayonPhysics = (function(){
       if(drawing_data.current_polygon.length > 1)
       {
           context.strokeStyle = ColorManager.getColorAt(drawing_data.current_color_index);
-          context.lineWidth = 8;
           context.beginPath();
           context.moveTo(drawing_data.current_polygon[0].x, drawing_data.current_polygon[0].y);
           for(var i = 0; i < drawing_data.current_polygon.length; i++)
@@ -124,7 +125,6 @@ var CrayonPhysics = (function(){
           }
           context.strokeStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           context.fillStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
-          context.lineWidth = 8;
           /* Drawing polygons */
           context.save();
               context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
@@ -175,14 +175,14 @@ var CrayonPhysics = (function(){
 
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
-      context.lineWidth = 8;
+      var tack_radius = (10 / 96) * Physics.getScale();
       for(var i = 0; i < objects.tacks.length; i++)
       {
           context.save();
           context.beginPath();
           var pos = calcTackAbsPos(i);
           context.translate(pos.x,pos.y);
-          context.arc(0, 0, 10, 0, Math.PI * 2);
+          context.arc(0, 0, tack_radius, 0, Math.PI * 2);
           context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
           context.stroke();
           context.restore();
@@ -255,6 +255,10 @@ var CrayonPhysics = (function(){
 
   function onTouchEvent(e)
   {
+      if(e.type == "touchstart")
+      {
+        drawing_data.clear();
+      }
       if(e.button == 2 && e.type == "touchstart")
       {
           erease();
@@ -270,10 +274,11 @@ var CrayonPhysics = (function(){
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length < 2))
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length == 0))
           {
               if(e.button != 2)
               {
+                  drawing_data.clear();
                   tack();
               }
           }
@@ -778,6 +783,9 @@ var CrayonPhysics = (function(){
 
   function prepareLevelShapes(shape)
   {
+      shape.position.x *= Physics.getScale();
+      shape.position.y *= Physics.getScale();
+
       shape.position.y = -shape.position.y;
       shape.position.x += Screen.getWidth()>>1;
       shape.position.y += Screen.getHeight();
@@ -786,8 +794,15 @@ var CrayonPhysics = (function(){
           var v, l = shape.vertices.length;
           for(v = 0; v < l; v++)
           {
+              shape.vertices[v].x *= Physics.getScale();
+              shape.vertices[v].y *= Physics.getScale();
+
               shape.vertices[v].y = -shape.vertices[v].y;
           }
+      }
+      if(shape.radio)
+      {
+          shape.radio *= Physics.getScale();
       }
       shape.readyToUse = true;
       return shape;

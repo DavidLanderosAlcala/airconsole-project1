@@ -7,57 +7,57 @@ LevelSelector.getLevels().push({
         {
             label : "ground",
             isStatic : true,
-            position : { x : 0, y : 100 },
+            position : { x : 0, y : 1 },
             vertices: [
-                {x : -600, y : 0 },
-                {x : -600, y : 100 },
-                {x : 600,  y : 100 },
-                {x : 600,  y : 0 }
+                {x : -6, y : 0 },
+                {x : -6, y : 1 },
+                {x : 6,  y : 1 },
+                {x : 6,  y : 0 }
             ],
         },
         {
             label : "rock",
             isStatic : false,
-            position : { x : 0, y : 200 },
+            position : { x : 0, y : 2 },
             vertices: [
-                {x : -50, y : 0 },
-                {x : -50, y : 100 },
-                {x : 50,  y : 100 },
-                {x : 50,  y : 0 }
+                {x : -0.50, y : 0 },
+                {x : -0.50, y : 1 },
+                {x : 0.50,  y : 1 },
+                {x : 0.50,  y : 0 }
             ],
         },
         {
             label : "rock",
             isStatic : false,
-            position : { x : 0, y : 300 },
+            position : { x : 0, y : 3 },
             vertices: [
-                {x : -50, y : 0 },
-                {x : -50, y : 100 },
-                {x : 50,  y : 100 },
-                {x : 50,  y : 0 }
+                {x : -0.50, y : 0 },
+                {x : -0.50, y : 1 },
+                {x :  0.50,  y : 1 },
+                {x :  0.50,  y : 0 }
             ],
         },
         {
             label : "rock",
             isStatic : false,
-            position : { x : 0, y : 400 },
+            position : { x : 0, y : 4 },
             vertices: [
-                {x : -50, y : 0 },
-                {x : -50, y : 100 },
-                {x : 50,  y : 100 },
-                {x : 50,  y : 0 }
+                {x : -0.50, y : 0 },
+                {x : -0.50, y : 1 },
+                {x :  0.50,  y : 1 },
+                {x :  0.50,  y : 0 }
             ],
         },
 
         {
             label : "platform",
             isStatic : true,
-            position : { x : 0, y : 600 },
+            position : { x : 0, y : 6 },
             vertices: [
-                {x : -80, y : 0 },
-                {x : -80, y : 50 },
-                {x : 80,  y : 50 },
-                {x : 80,  y : 0 }
+                {x : -0.80, y : 0 },
+                {x : -0.80, y : 0.50 },
+                {x : 0.80,  y : 0.50 },
+                {x : 0.80,  y : 0 }
             ],
         },
     ],
