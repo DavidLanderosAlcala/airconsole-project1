@@ -21,6 +21,15 @@ var PlayerCursor = (function() {
         {
             moveTo({x:config.canvas.width>>1,y:config.canvas.height>>1});
         }
+        onResize();
+        window.addEventListener("resize", onResize);
+    }
+
+    function onResize()
+    {
+        element.style.width = (45 / 1920 * window.innerWidth) + "px";
+        element.style.height = (63 / 1920 * window.innerWidth) + "px";
+        element.style.backgroundSize = element.style.width + " " +  element.style.height;
     }
 
     function getPosition()
