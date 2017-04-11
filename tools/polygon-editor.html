@@ -380,7 +380,7 @@ OpenSCAD code:<br>
 </html>
 
 <script>
-    var imageContainer = document.createElement("img");
+    var imageContainer = document.createElement("div");
     var container = document.querySelector("body > table > tbody > tr > td:nth-child(1)");
     var div = document.createElement("div");
     div.id = "plugin";
@@ -463,7 +463,7 @@ OpenSCAD code:<br>
     div.appendChild(buttonLoadImage);
     buttonLoadImage.addEventListener("click", function(){
         var url = window.prompt("Insert URL from the image", "");
-        imageContainer.src = url;
+        imageContainer.style.backgroundImage = "url(" + url + ")";
     });
 
     container.style.textAlign = "center";
@@ -487,6 +487,8 @@ OpenSCAD code:<br>
         imageContainer.style.height = svg_rect.height + "px" ;
         imageContainer.style.top = (svg_rect.top -10) + "px";
         imageContainer.style.left = (svg_rect.left -10) + "px";
+        imageContainer.style.backgroundRepeat = "no-repeat";
+        
         imageContainer.style.position = "absolute";
         imageContainer.style.opacity = "0.3";
         imageParent.appendChild(imageContainer);
@@ -514,8 +516,8 @@ OpenSCAD code:<br>
         var poly = eval(content);
         for(var i = 0; i < poly.length; i++)
         {
-            poly[i][0] = parseFloat((poly[i][0] * scale).toFixed(2));
-            poly[i][1] = parseFloat((poly[i][1] * scale).toFixed(2));
+            poly[i][0] = (poly[i][0] * scale);
+            poly[i][1] = (poly[i][1] * scale);
         }
         var text = "polygon(" + JSON.stringify(poly) + ");";
         exportArea.value = text;
