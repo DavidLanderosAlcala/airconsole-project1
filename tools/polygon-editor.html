@@ -380,6 +380,7 @@ OpenSCAD code:<br>
 </html>
 
 <script>
+    var imageContainer = document.createElement("img");
     var container = document.querySelector("body > table > tbody > tr > td:nth-child(1)");
     var div = document.createElement("div");
     div.id = "plugin";
@@ -455,6 +456,16 @@ OpenSCAD code:<br>
     buttonExport.style.margin = "5px";
     div.appendChild(buttonExport);
 
+    var buttonLoadImage = document.createElement("button");
+    buttonLoadImage.innerHTML = "Load Image";
+    buttonLoadImage.style.width = "150px";
+    buttonLoadImage.style.margin = "5px";
+    div.appendChild(buttonLoadImage);
+    buttonLoadImage.addEventListener("click", function(){
+        var url = window.prompt("Insert URL from the image", "");
+        imageContainer.src = url;
+    });
+
     container.style.textAlign = "center";
     container.appendChild(div);
 
@@ -466,6 +477,22 @@ OpenSCAD code:<br>
     buttonExport.addEventListener("click", function() {
         exportShape();
     });
+
+    setTimeout(function(){
+        var svg = document.querySelector("#drawAreaSource > svg");
+        var imageParent = document.querySelector("body > table > tbody > tr > td:nth-child(1)");
+        imageContainer.style.zIndex = 10;
+        var svg_rect = svg.getBoundingClientRect();
+        imageContainer.style.width = svg_rect.width + "px" ;
+        imageContainer.style.height = svg_rect.height + "px" ;
+        imageContainer.style.top = (svg_rect.top -10) + "px";
+        imageContainer.style.left = (svg_rect.left -10) + "px";
+        imageContainer.style.position = "absolute";
+        imageContainer.style.opacity = "0.3";
+        imageParent.appendChild(imageContainer);
+    }, 1000);
+
+
 
     function translate(disp)
     {
