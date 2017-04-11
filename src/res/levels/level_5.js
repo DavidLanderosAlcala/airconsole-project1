@@ -25,6 +25,7 @@ LevelSelector.getLevels().push({
         {
             label : "cup",
             isStatic : true,
+            isKinematic : true,
             position : { x : 5, y : 2 },
             vertices: [
                 {x : -1, y : 3 },
@@ -79,6 +80,7 @@ LevelSelector.getLevels().push({
                 if( Physics.getLabel(event.bodyB) == "sensor" || Physics.getLabel(event.bodyB) == "ball" )
                 {
                     context.gameover = true;
+                    Physics.setVelocity(context.cup, {x: 200, y: 0});
                 }
             }
         });
@@ -86,14 +88,17 @@ LevelSelector.getLevels().push({
 
     update : function(context)
     {
-        context.frame += 0.05;
-        Physics.translate(context.cup, {x: (Math.cos(context.frame) * 10), y: 0});
-        Physics.translate(context.sensor, {x: (Math.cos(context.frame) * 10), y: 0});
-        Physics.clearForces(context.cup);
-        if(Physics.getPosition(context.ball).y > Screen.getHeight())
+        if(!context.gameover)
         {
-            Physics.clearForces(context.ball);
-            Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
+            context.frame += 0.05;
+            Physics.setVelocity(context.cup, {x: (Math.cos(context.frame) * 400), y: 0});
+            var cup_pos = Physics.getPosition(context.cup);
+            Physics.setPosition(context.sensor, { x : cup_pos.x, y: cup_pos.y - 30 });
+            if(Physics.getPosition(context.ball).y > Screen.getHeight())
+            {
+                Physics.clearForces(context.ball);
+                Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
+            }
         }
         return context.gameover;
     }

@@ -712,6 +712,7 @@ var CrayonPhysics = (function(){
                   y : scaledBody.position.y,
                   vertices : scaledBody.vertices,
                   label : level.bodies[i].label,
+                  isKinematic : level.bodies[i].isKinematic || false,
                   isStatic : level.bodies[i].isStatic,
                   friction : 0.5,
                   isSensor: level.bodies[i].isSensor,

@@ -117,6 +117,12 @@ var Physics = (function(){
         {
             config.mass = aux_convex.area * 0.001;
         }
+
+        if(options.isKinematic)
+        {
+            config.type = p2.Body.KINEMATIC;
+        }
+        
         body = new p2.Body(config);
         /*
          * Build a compatible array from the game polygon
