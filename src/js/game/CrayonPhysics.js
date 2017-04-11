@@ -270,7 +270,7 @@ var CrayonPhysics = (function(){
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length == 0))
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length < 2))
           {
               if(e.button != 2)
               {
@@ -380,7 +380,7 @@ var CrayonPhysics = (function(){
       var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
       var removed_vertices = 0;
       var isSimple = false;
-      
+
       while(!isSimple && removed_vertices < 5)
       {
           isSimple = decomp.isSimple(poly);
