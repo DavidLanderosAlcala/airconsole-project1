@@ -380,24 +380,130 @@ OpenSCAD code:<br>
 </html>
 
 <script>
-    var label = document.createElement("label");
-    label.innerHTML = "export area 2: ";
-    var textarea = document.createElement("textarea");
     var container = document.querySelector("body > table > tbody > tr > td:nth-child(1)");
-    container.appendChild(label);
-    container.appendChild(textarea);
-    textarea.style.width = "100px";
-    textarea.style.height = "300px";
+    var div = document.createElement("div");
+    div.id = "plugin";
+    div.style.width = "200px";
+    div.style.height = "400px";
+    div.style.border = "1px solid gray";
+    div.style.marginTop = "5px";
+    div.style.padding = "5px";
 
+    var buttonScaleDown = document.createElement("button");
+    buttonScaleDown.innerHTML = "Scale-";
+    buttonScaleDown.style.width = "50px";
+    buttonScaleDown.style.margin = "5px";
+    div.appendChild(buttonScaleDown);
+    buttonScaleDown.addEventListener("click", function(){
+    	setScale(0.9);
+    	exportShape();
+    });
+
+    var buttonUp = document.createElement("button");
+    buttonUp.innerHTML = "Up";
+    buttonUp.style.width = "50px";
+    buttonUp.style.margin = "5px";
+    div.appendChild(buttonUp);
+    buttonUp.addEventListener("click", function(){
+    	translate({x : 0, y : -1});
+    	exportShape();
+    });
+
+    var buttonScaleUp = document.createElement("button");
+    buttonScaleUp.innerHTML = "Scale+";
+    buttonScaleUp.style.width = "50px";
+    buttonScaleUp.style.margin = "5px";
+    div.appendChild(buttonScaleUp);
+    buttonScaleUp.addEventListener("click", function(){
+    	setScale(1.1);
+    	exportShape();
+    });
+
+    var buttonLeft = document.createElement("button");
+    buttonLeft.innerHTML = "Left";
+    buttonLeft.style.width = "50px";
+    buttonLeft.style.margin = "5px";
+    div.appendChild(buttonLeft);
+    buttonLeft.addEventListener("click", function(){
+    	translate({x : -1, y : 0});
+    	exportShape();
+    });
+
+    var buttonDown = document.createElement("button");
+    buttonDown.innerHTML = "Down";
+    buttonDown.style.width = "50px";
+    buttonDown.style.margin = "5px";
+    div.appendChild(buttonDown);
+    buttonDown.addEventListener("click", function(){
+    	translate({x : 0, y : 1});
+    	exportShape();
+    });
+
+    var buttonRight = document.createElement("button");
+    buttonRight.innerHTML = "Right";
+    buttonRight.style.width = "50px";
+    buttonRight.style.margin = "5px";
+    div.appendChild(buttonRight);
+    buttonRight.addEventListener("click", function(){
+    	translate({x : 1, y : 0});
+    	exportShape();
+    });
+
+    var buttonExport = document.createElement("button");
+    buttonExport.innerHTML = "Export";
+    buttonExport.style.width = "150px";
+    buttonExport.style.margin = "5px";
+    div.appendChild(buttonExport);
+
+    container.style.textAlign = "center";
+    container.appendChild(div);
+
+    var textarea = document.createElement("textarea");
+    div.appendChild(textarea);
+    textarea.style.width = "180px";
+    textarea.style.height = "300px";
     var exportArea = document.querySelector("#exportArea");
-    exportArea.addEventListener("change", function() {
+    buttonExport.addEventListener("click", function() {
+        exportShape();
+    });
+
+    function translate(disp)
+    {
+    	var content = exportArea.value.replace("polygon(","").replace(");","");
+        var poly = eval(content);
+        for(var i = 0; i < poly.length; i++)
+        {
+            poly[i][0] = (poly[i][0] + disp.x);
+            poly[i][1] = (poly[i][1] + disp.y);
+        }
+        var text = "polygon(" + JSON.stringify(poly) + ");";
+        exportArea.value = text;
+        exportArea.dispatchEvent(new Event('keyup'));
+    }
+
+    function setScale(scale)
+    {
+    	var content = exportArea.value.replace("polygon(","").replace(");","");
+        var poly = eval(content);
+        for(var i = 0; i < poly.length; i++)
+        {
+            poly[i][0] = parseFloat((poly[i][0] * scale).toFixed(2));
+            poly[i][1] = parseFloat((poly[i][1] * scale).toFixed(2));
+        }
+        var text = "polygon(" + JSON.stringify(poly) + ");";
+        exportArea.value = text;
+        exportArea.dispatchEvent(new Event('keyup'));
+    }
+
+    function exportShape()
+    {
         var content = exportArea.value.replace("polygon(","").replace(");","");
         var poly = eval(content);
         var poly2 = [];
         for(var i = 0; i < poly.length; i++)
         {
-            poly2.push({x : poly[i][0] * 10, y : - poly[i][1] * 10, });
+            poly2.push({x : parseFloat((poly[i][0] / 10).toFixed(2)), y : parseFloat((-poly[i][1] / 10).toFixed(2)), });
         }
         textarea.value = JSON.stringify(poly2,4,4);
-    });
+    }
 </script>
