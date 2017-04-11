@@ -7,6 +7,7 @@ var Physics = (function(){
     var scale;
 
     var listeners = [];
+    var id_count = 0;
 
     function init()
     {
@@ -39,7 +40,7 @@ var Physics = (function(){
        });
 
        world.on("endContact",function(event){
-           var callbacks = listeners["beginContact"];
+           var callbacks = listeners["endContact"];
            if(callbacks)
            {
                for(var i = 0; i < callbacks.length; i++)
@@ -147,6 +148,7 @@ var Physics = (function(){
          * Add label property
          */
         body.label = options.label;
+        body.id = id_count++;
         body.centroid = centroid_obj;
         return body;
     }
@@ -182,6 +184,7 @@ var Physics = (function(){
          * Add label property
          */
         body.label = options.label;
+        body.id = id_count++;
         return body;
     }
 
@@ -233,6 +236,7 @@ var Physics = (function(){
             y : body.position[1] * scale
          };
          body.label = options.label;
+         body.id = id_count++;
         return body;
     }
 
