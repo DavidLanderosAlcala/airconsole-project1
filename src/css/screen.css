@@ -67,6 +67,7 @@ label#title_label {
     border-image-repeat: repeat;
     border-image-slice: 30;
     z-index: -1;
+    cursor: none;
 }
 
 span.button
