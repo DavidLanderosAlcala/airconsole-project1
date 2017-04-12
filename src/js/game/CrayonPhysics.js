@@ -203,7 +203,7 @@ var CrayonPhysics = (function(){
                 {
                     context.lineTo(level_data.hints[i].vertices[j].x, level_data.hints[i].vertices[j].y);
                 }
-                context.globalAlpha = 0.1;
+                context.globalAlpha = level_data.hints[i].opacity;
                 context.stroke();
             }
           context.restore();
@@ -810,6 +810,8 @@ var CrayonPhysics = (function(){
       {
           shape.radio *= Physics.getScale();
       }
+
+      shape.opacity = shape.opacity || 0.1;
       
       return shape;
   }
