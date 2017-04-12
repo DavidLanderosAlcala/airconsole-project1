@@ -816,6 +816,11 @@ var CrayonPhysics = (function(){
       return shape;
   }
 
+  function getHints()
+  {
+      return level_data.hints;
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -824,5 +829,6 @@ var CrayonPhysics = (function(){
             erease        : erease,
             changeTool    : changeTool,
             loadLevel     : loadLevel,
-            restartLevel  : restartLevel};
+            restartLevel  : restartLevel,
+            getHints      : getHints };
 })();
