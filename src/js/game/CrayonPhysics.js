@@ -814,8 +814,11 @@ var CrayonPhysics = (function(){
       {
           shape.radio *= Physics.getScale();
       }
-
-      shape.opacity = shape.opacity || 0.1;
+      
+      if(shape.opacity != 0.0)
+      {
+          shape.opacity = shape.opacity || 0.1;
+      }
       
       return shape;
   }
