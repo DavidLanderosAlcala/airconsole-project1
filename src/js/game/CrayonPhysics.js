@@ -477,7 +477,7 @@ var CrayonPhysics = (function(){
           {
               static_connections++;
           }
-
+          onTackConnected();
       }
       drawing_data.clear();
   }
@@ -537,6 +537,7 @@ var CrayonPhysics = (function(){
           {
               static_connections++;
           }
+          onTackConnected();
       }
 
       drawing_data.clear();
@@ -836,6 +837,18 @@ var CrayonPhysics = (function(){
   function onTackAdded()
   {
       var callbacks = listeners["addTack"];
+      if(callbacks)
+      {
+          for(var i = 0; i < callbacks.length; i++)
+          {
+               callbacks[i](event);
+          }
+      }
+  }
+
+  function onTackConnected()
+  {
+      var callbacks = listeners["connectTack"];
       if(callbacks)
       {
           for(var i = 0; i < callbacks.length; i++)
