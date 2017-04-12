@@ -274,7 +274,7 @@ var CrayonPhysics = (function(){
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length == 0))
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length < 2))
           {
               if(e.button != 2)
               {
@@ -305,7 +305,7 @@ var CrayonPhysics = (function(){
           if(drawing_data.current_polygon.length > 0){
             var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
             distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
-            if(distance < ConfigOptions.vertex_min_distance)
+            if(distance < ConfigOptions.min_vertex_distance * Physics.getScale())
             {
               return; 
             }
