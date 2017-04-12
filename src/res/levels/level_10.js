@@ -2,7 +2,7 @@
 LevelSelector.getLevels().push({
 
     title       : "Que no caiga",
-    description : "Click At the point indicated",
+    description : "Click At the indicated point",
     bodies      : [
         {
             label : "towerA",
