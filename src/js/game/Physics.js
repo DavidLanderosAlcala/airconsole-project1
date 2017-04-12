@@ -50,6 +50,17 @@ var Physics = (function(){
            }
        });
 
+       world.on("addBody",function(event){
+           var callbacks = listeners["addBody"];
+           if(callbacks)
+           {
+               for(var i = 0; i < callbacks.length; i++)
+               {
+                    callbacks[i](event);
+               }
+           }
+       });
+
     }
 
     function update()

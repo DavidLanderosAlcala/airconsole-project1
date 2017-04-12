@@ -8,6 +8,7 @@ var CrayonPhysics = (function(){
   var objects;
   var drawing_data;
   var level_data;
+  var listeners = [];
 
   function init(options)
   {
@@ -60,6 +61,7 @@ var CrayonPhysics = (function(){
   {
       // remove all objects.shapes
       Physics.clear();
+      listeners = [];
 
       // Reset some variables
       objects.shapes = [];
@@ -564,6 +566,7 @@ var CrayonPhysics = (function(){
 
       tack.offsetA = calcTackOffset(cur_pos, tack.bodyA);
       objects.tacks.push(tack);
+      onTackAdded();
   }
 
   function erease()
@@ -821,6 +824,27 @@ var CrayonPhysics = (function(){
       return level_data.hints;
   }
 
+  function on(type, callback)
+  {
+      if(!listeners[type])
+      {
+          listeners[type] = [];
+      }
+      listeners[type].push(callback);
+  }
+
+  function onTackAdded()
+  {
+      var callbacks = listeners["addTack"];
+      if(callbacks)
+      {
+          for(var i = 0; i < callbacks.length; i++)
+          {
+               callbacks[i](event);
+          }
+      }
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -830,5 +854,6 @@ var CrayonPhysics = (function(){
             changeTool    : changeTool,
             loadLevel     : loadLevel,
             restartLevel  : restartLevel,
-            getHints      : getHints };
+            getHints      : getHints,
+            on            : on };
 })();
