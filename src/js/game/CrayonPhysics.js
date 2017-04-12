@@ -266,7 +266,14 @@ var CrayonPhysics = (function(){
       }
       if(e.type == "touchmove")
       {
-          lineTo(e);
+          if(e.button == 2)
+          {
+              erease();
+          }
+          else
+          {
+              lineTo(e);
+          }
       }
       else if(e.type == "touchend")
       {
