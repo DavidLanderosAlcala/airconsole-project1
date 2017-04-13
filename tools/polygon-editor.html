@@ -385,7 +385,7 @@ OpenSCAD code:<br>
     var div = document.createElement("div");
     div.id = "plugin";
     div.style.width = "200px";
-    div.style.height = "400px";
+    div.style.height = "500px";
     div.style.border = "1px solid gray";
     div.style.marginTop = "5px";
     div.style.padding = "5px";
@@ -455,6 +455,19 @@ OpenSCAD code:<br>
     buttonExport.style.width = "150px";
     buttonExport.style.margin = "5px";
     div.appendChild(buttonExport);
+    buttonExport.addEventListener("click", function() {
+        exportShape();
+    });
+
+    var buttonImport = document.createElement("button");
+    buttonImport.innerHTML = "Import";
+    buttonImport.style.width = "150px";
+    buttonImport.style.margin = "5px";
+    div.appendChild(buttonImport);
+    buttonImport.addEventListener("click", function() {
+        importShape();
+    });
+
 
     var buttonLoadImage = document.createElement("button");
     buttonLoadImage.innerHTML = "Load Image";
@@ -474,9 +487,6 @@ OpenSCAD code:<br>
     textarea.style.width = "180px";
     textarea.style.height = "300px";
     var exportArea = document.querySelector("#exportArea");
-    buttonExport.addEventListener("click", function() {
-        exportShape();
-    });
 
     setTimeout(function(){
         var svg = document.querySelector("#drawAreaSource > svg");
@@ -535,4 +545,20 @@ OpenSCAD code:<br>
         }
         textarea.value = JSON.stringify(poly2,4,4);
     }
+
+    function importShape()
+    {
+    	var array = JSON.parse(textarea.value);
+        var poly = [];
+        for(var  i = 0; i < array.length; i++)
+        {
+            poly.push([array[i].x * 10, array[i].y* -10]);
+        }
+        
+        var string = "polygon(" + JSON.stringify(poly) +  ");";
+        exportArea.value = string;
+        exportArea.dispatchEvent(new Event('keyup'));
+    }
+
+
 </script>
