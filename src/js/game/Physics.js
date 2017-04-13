@@ -70,6 +70,17 @@ var Physics = (function(){
 
     function update()
     {
+    	/* Destroy lost objects */
+    	for(var i = world.bodies.length -1 ; i >= 0; i--)
+    	{
+            if(world.bodies[i].position[1] > 100)
+            {
+            	console.log("Destroying object becouse it is out of the screen");
+            	world.removeBody(world.bodies[i]);
+            	/* only one per frame ;) */
+            	break;
+            }
+    	}
         world.step(1/60);
     }
 
