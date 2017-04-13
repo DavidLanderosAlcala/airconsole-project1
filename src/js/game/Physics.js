@@ -247,6 +247,11 @@ var Physics = (function(){
         body.adjustCenterOfMass();
         body.aabbNeedsUpdate = true;
         world.addBody(body);
+
+        if(!body)
+        {
+            console.log("Wow! body is invalid");
+        }        
         
         /*
          * Add label property
