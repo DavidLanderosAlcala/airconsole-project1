@@ -547,14 +547,21 @@ var CrayonPhysics = (function(){
       };
 
       var _bodies = Physics.getBodiesAtPoint(cur_pos);
+      
+      for(var i = 0; i < _bodies.length; i++)
+      {
+          if(!Physics.isSensor(_bodies[i]))
+          {
+              tack.bodyA = _bodies[i];
+              break;
+          }
+      }
 
-      if(_bodies.length == 0)
+      if(tack.bodyA == null)
       {
           console.log("You cannot put tacks in the air");
           return;
       }
-
-      tack.bodyA = _bodies[0];
 
       tack.offsetA = calcTackOffset(cur_pos, tack.bodyA);
       objects.tacks.push(tack);

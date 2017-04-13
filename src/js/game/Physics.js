@@ -368,7 +368,7 @@ var Physics = (function(){
 
     function isSensor(body_handler)
     {
-        return body_handler.isSensor;
+        return body_handler.shapes[0].sensor;
     }
 
     function getId(body_handler)
