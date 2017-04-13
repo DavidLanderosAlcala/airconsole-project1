@@ -484,7 +484,7 @@ var CrayonPhysics = (function(){
 
   function closeAsWire()
   {
-      drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon);
+      drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon, 0.2);
       var body = Physics.createWire({vertices:drawing_data.current_polygon});
       var group = null;
       var tack_indices = [];

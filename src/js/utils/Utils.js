@@ -31,15 +31,16 @@ var Utils = (function(){
         }
     }
 
-    function removeCollinearPoints(polygon)
+    function removeCollinearPoints(polygon, umbral)
     {
+        umbral = umbral || 0.1;
         var polydecomp_flavor = [];
         for(var i = 0; i < polygon.length; i++)
         {
             polydecomp_flavor.push([polygon[i].x, polygon[i].y]);
         }
         var matter_flavor = [];
-        decomp.removeCollinearPoints(polydecomp_flavor, 0.1);
+        decomp.removeCollinearPoints(polydecomp_flavor, umbral);
         for(var i = 0; i < polydecomp_flavor.length; i++)
         {
             matter_flavor.push({
