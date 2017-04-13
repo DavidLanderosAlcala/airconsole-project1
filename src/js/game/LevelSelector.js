@@ -14,8 +14,10 @@ var LevelSelector = (function(){
 
     function show()
     {
-    	Screen.setTitleText("Level selection");
+    	Screen.setTitleText("");
     	clear();
+        //menu_layer.innerHTML +=  "<img src='./res/img/text_header.png'><br>";
+        menu_layer.innerHTML += "<div style='font-size: 30px;background-position:center;background-repeat: no-repeat;height: 253px; background-image: url(\"./res/img/text_header.png\")'><br><br> Level selector </div>";
         var i; l = levels.length;
         for(i = 0; i < l; i++)
         {

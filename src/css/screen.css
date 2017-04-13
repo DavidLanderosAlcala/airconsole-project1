@@ -49,9 +49,9 @@ label#title_label {
 	background-image : url("../res/img/background.jpg");
 	background-size  : 100% 100%;
 	width       : 60%;
-	height      : 60%;
+	height      : 80%;
 	left        : 20%;
-	top         : 20%;
+	top         : 10%;
 	position    : absolute;
 	text-align  : center;
     opacity     : 0.9;

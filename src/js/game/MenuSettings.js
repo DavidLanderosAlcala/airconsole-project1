@@ -12,8 +12,9 @@ var MenuSettings = (function(){
 
     function show()
     {
-        Screen.setTitleText("Settings");
+        Screen.setTitleText("");
         clear();
+        menu_layer.innerHTML += "<div style='font-size: 30px;background-position:center;background-repeat: no-repeat;height: 253px; background-image: url(\"./res/img/text_header.png\")'><br><br> settings </div>";
         var value = Screen.isInFullscreen();
 		addCheckBox("full screen","fullscreen_checkbox", value , function(e){
             e.sender.dataset.checked = e.checked ? "true" : "false";
