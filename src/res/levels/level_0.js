@@ -2,7 +2,7 @@
 LevelSelector.getLevels().push({
 
     title       : "Level 0",
-    description : "Draw a shape",
+    description : "Dibuja una figura cualquiera",
     bodies : [
         {
             label : "ground",
@@ -15,27 +15,19 @@ LevelSelector.getLevels().push({
         },
     ],
 
-    hints : [
-            {
-                /* possible shape */
-                position : { x : 0, y : 5 },
-                vertices : [ { x: -2, y: 0 },
-                             { x: -2, y: 1 },
-                             { x: 2, y: 1 },
-                             { x: 2, y: 0 },
-                             { x: -2, y: 0 } ],
-            }
-    ],
-
     setup : function(context)
     {
 	    // agregamos una variable al contexto del nivel
     	context.game_over = false;
 
-	    //// si ocurre una colision cualquiera el nivel esta terminado
-        Physics.on("beginContact", function(event){
-            context.game_over = true;
+        Physics.on("addBody", function(){
+            Screen.setTitleText("Buen trabajo!, ahora intenta borrarla con click derecho");
         });
+
+        Physics.on("removeBody", function(){
+            Screen.setTitleText("Excelente!");
+            context.game_over = true;
+        });        
     },
 
     update : function(context)

@@ -2,7 +2,7 @@
 LevelSelector.getLevels().push({
 
     title       : "Que no caiga",
-    description : "dibuja una plataforma entre los pilares",
+    description : "dibuja una linea por encima de los pilares",
     bodies      : [
         {
             label : "towerA",
@@ -83,7 +83,10 @@ LevelSelector.getLevels().push({
             // si rock lleva mas de 3 segundos sin caer,
             // el jugador ha ganado
             if(new Date().getTime() - context.time > 3000)
+            {
+                Screen.setTitleText("Bien hecho ;)");
             	return true;
+            }
         }
         return false;
     }

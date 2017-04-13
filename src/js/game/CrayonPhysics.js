@@ -84,7 +84,6 @@ var CrayonPhysics = (function(){
           level_data.game_over = level_data.update_fnc(level_data.context);
           if(level_data.game_over)
           {
-              Screen.setTitleText("You won!!");
               setTimeout(function(){
                 LevelSelector.show();
               }, 1000);
@@ -396,30 +395,31 @@ var CrayonPhysics = (function(){
       }
 
       var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
-      var removed_vertices = 0;
-      var isSimple = false;
-
-      while(!isSimple && removed_vertices < 20)
-      {
-          isSimple = decomp.isSimple(poly);
-          if(!isSimple)
-          {
-                  poly.splice(poly.length -1 , 1);
-                  poly.splice(0, 1);
-                  removed_vertices+=2;
-          }
-      }
-
-      drawing_data.current_polygon = Utils.p2ToMatterFlavor(poly);
-
-      if(!isSimple)
+      if(!decomp.isSimple(poly))
       {
           return "wire";
       }
-      if(removed_vertices > 0)
-      {
-          console.log("removed_vertices: " + removed_vertices);
-      }
+      //var removed_vertices = 0;
+      //var isSimple = false;
+      //while(!isSimple && removed_vertices < 20)
+      //{
+      //    isSimple = decomp.isSimple(poly);
+      //    if(!isSimple)
+      //    {
+      //            poly.splice(poly.length -1 , 1);
+      //            poly.splice(0, 1);
+      //            removed_vertices+=2;
+      //    }
+      //}
+      //drawing_data.current_polygon = Utils.p2ToMatterFlavor(poly);
+      //if(!isSimple)
+      //{
+      //    return "wire";
+      //}
+      //if(removed_vertices > 0)
+      //{
+      //    console.log("removed_vertices: " + removed_vertices);
+      //}
 
       return "polygon";
   }

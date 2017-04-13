@@ -67,6 +67,17 @@ var Physics = (function(){
            }
        });
 
+       world.on("removeBody",function(event){
+           var callbacks = listeners["removeBody"];
+           if(callbacks)
+           {
+               for(var i = 0; i < callbacks.length; i++)
+               {
+                    callbacks[i](event);
+               }
+           }
+       });
+
     }
 
     function update()
@@ -124,14 +135,11 @@ var Physics = (function(){
         options.x = options.x || 0;
         options.y = options.y || 0;
 
-        var poly = [];
-
-        for(var i = 0; i < options.vertices.length; i++)
-        { poly.push([options.vertices[i].x, options.vertices[i].y]); }
+        var poly = Utils.matterToP2Flavor(options.vertices);
+        
         decomp.makeCCW(poly);
 
         var aux_convex = new p2.Convex({ vertices : poly });
-        centroid_obj = { x : aux_convex.centerOfMass[0], y : aux_convex.centerOfMass[1] };
 
         /*
         * Create a static or no-static object
@@ -180,12 +188,16 @@ var Physics = (function(){
         console.log("last object: ");
         console.log(body);
 
+        body.centroid = {
+           x : (body.position[0] * scale) - options.x,
+           y : (body.position[1] * scale) - options.y
+        };
+
         /*
          * Add label property
          */
         body.label = options.label;
         body.id = id_count++;
-        body.centroid = centroid_obj;
         return body;
     }
 

@@ -2,7 +2,7 @@
 LevelSelector.getLevels().push({
 
     title       : "Que no caiga",
-    description : "Click At the indicated point",
+    description : "Haz click en el punto señalado",
     bodies      : [
         {
             label : "towerA",
@@ -117,7 +117,7 @@ LevelSelector.getLevels().push({
     {
         context.gameover = false;
         CrayonPhysics.on("addTack", function(){
-            Screen.setTitleText("Great!, Now draw a shape overlapping the pin");
+            Screen.setTitleText("Perfecto!, ahora dibuja una figura encerrando la marca circular");
             CrayonPhysics.getHints()[0].opacity = 0.0;
             CrayonPhysics.getHints()[1].opacity = 0.3;
         });
@@ -127,6 +127,7 @@ LevelSelector.getLevels().push({
             {
                 if( Physics.getLabel(event.bodyB) == "sensor" || Physics.getLabel(event.bodyB) == "ball" )
                 {
+                    Screen.setTitleText("Lo lograste!");
                     context.gameover = true;
                 }
             }

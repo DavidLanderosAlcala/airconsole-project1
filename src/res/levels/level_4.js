@@ -67,6 +67,7 @@ LevelSelector.getLevels().push({
             {
                 if( Physics.getLabel(event.bodyA) == "ball" || Physics.getLabel(event.bodyB) == "ball" )
                 {
+                    Screen.setTitleText("Buen trabajo");
                     context.gameover = true;
                 }
             }

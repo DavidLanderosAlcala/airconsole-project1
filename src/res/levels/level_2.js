@@ -100,6 +100,7 @@ LevelSelector.getLevels().push({
             {
                 if( Physics.getLabel(event.bodyB) == "ground" || Physics.getLabel(event.bodyB) == "ball" )
                 {
+                    Screen.setTitleText("Bien hecho!");
                     context.gameover = true;
                 }
             }
