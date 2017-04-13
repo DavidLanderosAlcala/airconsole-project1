@@ -61,9 +61,20 @@ var Utils = (function(){
         return poly;
     }
 
+    function p2ToMatterFlavor(vertices)
+    {
+        var poly = [];
+        for(var i = 0; i < vertices.length; i++)
+        {
+            poly.push({x : vertices[i][0], y : vertices[i][1]});
+        }
+        return poly;
+    }
+
 	return { isMobileNavigator : isMobileNavigator,
              isRunningOnAirConsole : isRunningOnAirConsole,
              removeCollinearPoints : removeCollinearPoints,
-             matterToP2Flavor      : matterToP2Flavor };
+             matterToP2Flavor      : matterToP2Flavor,
+             p2ToMatterFlavor      : p2ToMatterFlavor };
 
 })();
