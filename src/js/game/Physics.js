@@ -154,6 +154,10 @@ var Physics = (function(){
         	}
         }
         world.addBody(body);
+        if(!body)
+        {
+            console.log("Wow! body is invalid");
+        }
 
         /*
          * Add label property
