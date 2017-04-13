@@ -331,6 +331,8 @@ var CrayonPhysics = (function(){
   function closePath()
   {
       var type = evalCurrentShape();
+      console.log("Last evaluation: " + type);
+      console.log(JSON.stringify(drawing_data.current_polygon));
 
       if(type == "invalid")
       {
@@ -410,7 +412,10 @@ var CrayonPhysics = (function(){
           return "wire";
       }
       if(removed_vertices > 0)
+      {
           removed_vertices += 5;
+          console.log("removed_vertices: " + removed_vertices);
+      }
 
       drawing_data.current_polygon.splice(drawing_data.current_polygon.length - removed_vertices, removed_vertices);
 
@@ -480,7 +485,11 @@ var CrayonPhysics = (function(){
   {
       drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon, 0.2);
       var body = Physics.createWire({vertices:drawing_data.current_polygon});
-      var group = null;
+      if(body == undefined)
+      {
+          drawing_data.clear();
+          return;
+      }
       var tack_indices = [];
       var i, l = objects.tacks.length;
       for(i = 0; i < l; i++)
@@ -489,21 +498,10 @@ var CrayonPhysics = (function(){
           {
               if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
-                  if(group == null)
-                  {
-                      group = objects.tacks[i].bodyA;
-                  }
-                  else
-                  {
-                      Physics.preventCollision(group, objects.tacks[i].bodyA);
-                  }
                   tack_indices.push(i);
               }
           }
       }
-      if(group != null) {
-          Physics.preventCollision(group, body);
-      } 
 
       objects.shapes.push({
           body : body,

@@ -22,7 +22,7 @@ var Physics = (function(){
         world.setGlobalStiffness(1e6);
         world.setGlobalRelaxation ( 10 );
         world.solver.iterations = 10;
-        world.solver.tolerance = 0.01;
+        //world.solver.tolerance = 0.01;
         world.islandSplit = true;
         world.solver.frictionIterations = 5;
         listeners = [];
@@ -119,7 +119,7 @@ var Physics = (function(){
 
     function createBody(options)
     {
-    	options.isSensor = options.isSensor || false;
+    	  options.isSensor = options.isSensor || false;
         options.label = options.label || "Body";
         options.x = options.x || 0;
         options.y = options.y || 0;
@@ -245,29 +245,35 @@ var Physics = (function(){
         }
         body = new p2.Body(config);
         var cm = p2.vec2.create();
-        for(var i =1 ; i < options.vertices.length; i++)
+        try
         {
-            var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
-            var pointB = { x : (options.vertices[i].x + options.x) / scale, y : (options.vertices[i].y + options.y) / scale };
-            var vertices = buildRect(pointA, pointB);
-            decomp.makeCCW(vertices);
-            var c = new p2.Convex({vertices: vertices});
-            for(var j=0; j!==c.vertices.length; j++){
-                var v = c.vertices[j];
-                p2.vec2.sub(v,v,c.centerOfMass);
+            for(var i =1 ; i < options.vertices.length; i++)
+            {
+                var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
+                var pointB = { x : (options.vertices[i].x + options.x) / scale, y : (options.vertices[i].y + options.y) / scale };
+                var vertices = buildRect(pointA, pointB);
+                decomp.makeCCW(vertices);
+                var c = new p2.Convex({vertices: vertices});
+                for(var j=0; j!==c.vertices.length; j++){
+                    var v = c.vertices[j];
+                    p2.vec2.sub(v,v,c.centerOfMass);
+                }
+                p2.vec2.copy(cm,c.centerOfMass);
+                c = new p2.Convex({ vertices: c.vertices });
+                body.addShape(c,cm);
             }
-            p2.vec2.copy(cm,c.centerOfMass);
-            c = new p2.Convex({ vertices: c.vertices });
-            body.addShape(c,cm);
+            body.adjustCenterOfMass();
+            body.aabbNeedsUpdate = true;
         }
-        body.adjustCenterOfMass();
-        body.aabbNeedsUpdate = true;
-        world.addBody(body);
-
-        if(!body)
-        {
-            console.log("Wow! body is invalid");
-        }        
+        catch(e){
+          // only add body when all shapes were succesfully created
+          console.log("Error al crear alambre: ");
+          console.log(e);
+          return undefined;
+        }
+        console.log("position of the last wire: ");
+        console.log(body.position);
+        world.addBody(body);    
         
         /*
          * Add label property
