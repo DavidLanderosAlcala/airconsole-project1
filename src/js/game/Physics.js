@@ -3,7 +3,7 @@
 var Physics = (function(){
 
     var world_width = 20;
-    var world;
+    var world = null;
     var scale;
 
     var listeners = [];
@@ -13,7 +13,12 @@ var Physics = (function(){
     {
         scale = (Screen.getWidth() / world_width)|0;
     	console.log("P2.js Implementation");
-        world = new p2.World({ gravity : [0,10]});
+    	if(world == null)
+    	{
+            world = new p2.World();
+    	}
+    	world.clear();
+        world.gravity = [0,10];
         world.setGlobalStiffness(1e6);
         world.setGlobalRelaxation ( 10 );
         world.solver.iterations = 20;
