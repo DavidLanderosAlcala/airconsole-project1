@@ -273,7 +273,9 @@ var Physics = (function(){
         }
         console.log("position of the last wire: ");
         console.log(body.position);
-        world.addBody(body);    
+        world.addBody(body);
+        console.log("last object: ");
+        console.log(body);
         
         /*
          * Add label property
