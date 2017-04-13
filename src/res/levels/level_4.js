@@ -1,52 +1,48 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Pelota al vaso",
-    description : "Mete la pelota al vaso",
+    title       : "Cruza el pozo",
+    description : "Haz cruzar la pelota",
     bodies      : [
-        {
-            label : "towerA",
-            isStatic : true,
-            position : { x : -4, y : 1 },
-            vertices: [
-                {x : 0, y : 3 },
-                {x : 0, y : 0 },
-                {x : 4, y : 0 },
-                {x : 4, y : 3 },
-            ],
-        },
         {
             label    : "ball",
             isStatic : false,
-            position : { x : -1, y : 6 },
+            position : { x : -3, y : 8 },
             type     : "circle",
             radio    : 0.25,
         },
         {
-            label : "cup",
+            label : "plattformA",
             isStatic : true,
-            position : { x : 5, y : 2 },
+            position : { x : -6, y : 0 },
             vertices: [
-                {x : -1, y : 3 },
-                {x : -1, y : 0 },
-                {x : 1, y : 0 },
-                {x : 1, y : 3 },
-                {x : 0.80, y : 3 },
-                {x : 0.50, y : 0.80 },
-                {x : -0.50, y : 0.80 },
-                {x : -0.80, y : 3 }
+                {x : -4, y : 4 },
+                {x : -4, y : 0 },
+                {x : 4, y : 0 },
+                {x : 4, y : 4 },
+            ],
+        },
+        {
+            label : "plattformB",
+            isStatic : true,
+            position : { x : 6, y : 0 },
+            vertices: [
+                {x : -4, y : 4 },
+                {x : -4, y : 0 },
+                {x : 4, y : 0 },
+                {x : 4, y : 4 },
             ],
         },
         {
             label : "sensor",
-            isSensor : true,
             isStatic : true,
-            position : { x : 5, y : 2.50 },
+            isSensor : true,
+            position : { x : 6.40, y : 3 },
             vertices: [
-                {x : 0, y : 0 },
-                {x : 0, y : 1 },
-                {x : 0.50, y : 1 },
-                {x : 0.50, y : 0 },
+                {x : -4, y : 4 },
+                {x : -4, y : 0 },
+                {x : 4, y : 0 },
+                {x : 4, y : 4 },
             ],
         },
     ],
@@ -67,9 +63,9 @@ LevelSelector.getLevels().push({
         }
 
         Physics.on("beginContact", function(event){
-            if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyA) == "ball" )
+            if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyB) == "sensor" )
             {
-                if( Physics.getLabel(event.bodyB) == "sensor" || Physics.getLabel(event.bodyB) == "ball" )
+                if( Physics.getLabel(event.bodyA) == "ball" || Physics.getLabel(event.bodyB) == "ball" )
                 {
                     context.gameover = true;
                 }
@@ -77,12 +73,12 @@ LevelSelector.getLevels().push({
         });
     },
 
-    update : function(context)
+    update : function(context, engine)
     {
         if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
             Physics.clearForces(context.ball);
-            Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
+            Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 300, y : 0 });
         }
         return context.gameover;
     }
