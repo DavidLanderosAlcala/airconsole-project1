@@ -12,20 +12,21 @@ var Physics = (function(){
     function init()
     {
         scale = (Screen.getWidth() / world_width)|0;
-    	console.log("P2.js Implementation");
-    	if(world == null)
-    	{
-            world = new p2.World();
-    	}
-    	world.clear();
+    	  console.log("P2.js Implementation");
+    	  if(world == null)
+    	  {
+              world = new p2.World();
+    	  }
+    	  world.clear();
         world.gravity = [0,10];
         world.setGlobalStiffness(1e6);
         world.setGlobalRelaxation ( 10 );
-        world.solver.iterations = 20;
+        world.solver.iterations = 10;
         world.solver.tolerance = 0.01;
         world.islandSplit = true;
-        world.solver.frictionIterations = 10;
+        world.solver.frictionIterations = 5;
         listeners = [];
+        console.log(world);
 
        //var app = new p2.WebGLRenderer(function(){
        //     this.setWorld(world);
@@ -70,17 +71,17 @@ var Physics = (function(){
 
     function update()
     {
-    	/* Destroy lost objects */
-    	for(var i = world.bodies.length -1 ; i >= 0; i--)
-    	{
-            if(world.bodies[i].position[1] > 100)
-            {
-            	console.log("Destroying object becouse it is out of the screen");
-            	world.removeBody(world.bodies[i]);
-            	/* only one per frame ;) */
-            	break;
-            }
-    	}
+    	  /* Destroy lost objects */
+    	  for(var i = world.bodies.length -1 ; i >= 0; i--)
+    	  {
+              if(world.bodies[i].position[1] > 100)
+              {
+              	console.log("Destroying object becouse it is out of the screen");
+              	world.removeBody(world.bodies[i]);
+              	/* only one per frame ;) */
+              	break;
+              }
+    	  }
         world.step(1/60);
     }
 
@@ -160,7 +161,13 @@ var Physics = (function(){
             poly[i][0] /= scale;
             poly[i][1] /= scale;
         }
-        body.fromPolygon(poly);
+        try
+        {
+            body.fromPolygon(poly);
+        }
+        catch(e){
+          return undefined;
+        }
         if(options.isSensor)
         {
         	var i, l = body.shapes.length;
@@ -170,10 +177,8 @@ var Physics = (function(){
         	}
         }
         world.addBody(body);
-        if(!body)
-        {
-            console.log("Wow! body is invalid");
-        }
+        console.log("last object: ");
+        console.log(body);
 
         /*
          * Add label property

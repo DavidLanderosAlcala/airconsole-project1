@@ -409,6 +409,8 @@ var CrayonPhysics = (function(){
       {
           return "wire";
       }
+      if(removed_vertices > 0)
+          removed_vertices += 5;
 
       drawing_data.current_polygon.splice(drawing_data.current_polygon.length - removed_vertices, removed_vertices);
 
@@ -420,18 +422,10 @@ var CrayonPhysics = (function(){
       drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon);
       var body = undefined;
 
-      while(body == undefined && drawing_data.current_polygon.length > ConfigOptions.min_vertices_per_polygon)
-      {
-          body = Physics.createBody({
-              x : 0, y : 0,
-              vertices : drawing_data.current_polygon,
-          });
-
-          if(body == undefined) {
-              // removing the last vertex
-              drawing_data.current_polygon.splice(drawing_data.current_polygon.length-1,1);
-          }
-      }
+      body = Physics.createBody({
+          x : 0, y : 0,
+          vertices : drawing_data.current_polygon,
+      });
 
       if(body == undefined) {
           drawing_data.clear();
