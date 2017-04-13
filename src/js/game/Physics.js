@@ -271,6 +271,10 @@ var Physics = (function(){
           console.log(e);
           return undefined;
         }
+        if(isNaN(body.position[0]))
+        {
+            return undefined;
+        }
         console.log("position of the last wire: ");
         console.log(body.position);
         world.addBody(body);

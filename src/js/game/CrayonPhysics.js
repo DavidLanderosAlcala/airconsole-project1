@@ -413,7 +413,6 @@ var CrayonPhysics = (function(){
       }
       if(removed_vertices > 0)
       {
-          removed_vertices += 5;
           console.log("removed_vertices: " + removed_vertices);
       }
 
