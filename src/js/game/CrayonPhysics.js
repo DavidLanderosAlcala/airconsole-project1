@@ -412,13 +412,13 @@ var CrayonPhysics = (function(){
                   removed_vertices+=2;
           }
       }
-      drawing_data.current_polygon = Utils.p2ToMatterFlavor(poly);
       if(!isSimple)
       {
           return "wire";
       }
       if(removed_vertices > 0)
       {
+          drawing_data.current_polygon = Utils.p2ToMatterFlavor(poly);
           console.log("removed_vertices: " + removed_vertices);
       }
 
