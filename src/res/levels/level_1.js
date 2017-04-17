@@ -7,34 +7,34 @@ LevelSelector.getLevels().push({
         {
             label : "towerA",
             isStatic : true,
-            position : { x : -2, y : 1 },
+            position : [ -2, 1 ],
             vertices: [
-                {x : 0.0, y : 4 },
-                {x : 0.0, y : 0 },
-                {x : 0.5, y : 0 },
-                {x : 0.5, y : 4 },
+                [ 0.0, 4 ],
+                [ 0.0, 0 ],
+                [ 0.5, 0 ],
+                [ 0.5, 4 ],
             ],
         },
         {
             label : "towerB",
             isStatic : true,
-            position : { x : 2, y : 1 },
+            position : [ 2, 1 ],
             vertices: [
-                {x : 0.0, y : 4 },
-                {x : 0.0, y : 0 },
-                {x : 0.5, y : 0 },
-                {x : 0.5, y : 4 },
+                [ 0.0, 4 ],
+                [ 0.0, 0 ],
+                [ 0.5, 0 ],
+                [ 0.5, 4 ],
             ],
         },
         {
             label : "rock",
             isStatic : false,
-            position : { x : 0, y : 10 },
+            position : [ 0, 10 ],
             vertices: [
-                {x : -0.25, y : 0.25 },
-                {x : -0.25, y : -0.25 },
-                {x : 0.25, y : -0.25 },
-                {x : 0.25, y : 0.25 },
+                [ -0.25,  0.25 ],
+                [ -0.25, -0.25 ],
+                [  0.25, -0.25 ],
+                [  0.25,  0.25 ],
             ],
         },
     ],
@@ -42,12 +42,12 @@ LevelSelector.getLevels().push({
     hints: [
         {
             label : "simple line",
-            position : { x : 0, y : 6},
+            position : [ 0, 6 ],
             vertices: [
-                {x : -3, y : 0 },
-                {x : 3, y : 0 },
-                {x : 3, y : 0.01 },
-                {x : -3, y : 0.01 },
+                [ -3, 0 ],
+                [  3, 0 ],
+                [  3, 0.01 ],
+                [ -3, 0.01 ],
             ],
         }
     ],
@@ -71,11 +71,11 @@ LevelSelector.getLevels().push({
     update : function(context)
     {
 	    // si rock ha salido de la pantalla
-        if( Physics.getPosition(context.rock).y >= Screen.getHeight())
+        if( Physics.getPosition(context.rock)[1] >= Screen.getHeight())
         {
         	// la regresamos a su posicion inicial
-            Physics.setVelocity(context.rock, { x : 0, y : 0 });
-            Physics.setPosition(context.rock, { x : Screen.getWidth()/2, y : 0 });
+            Physics.setVelocity(context.rock, new Float32Array(2));
+            Physics.setPosition(context.rock, [ Screen.getWidth()/2, 0 ]);
             context.time = new Date().getTime();
         }
         else

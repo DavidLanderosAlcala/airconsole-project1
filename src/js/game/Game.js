@@ -109,10 +109,10 @@ var Game = (function(){
       {
           context.strokeStyle = ColorManager.getColorAt(drawing_data.current_color_index);
           context.beginPath();
-          context.moveTo(drawing_data.current_polygon[0].x, drawing_data.current_polygon[0].y);
+          context.moveTo(drawing_data.current_polygon[0][0], drawing_data.current_polygon[0][1]);
           for(var i = 0; i < drawing_data.current_polygon.length; i++)
           {
-              context.lineTo(drawing_data.current_polygon[i].x, drawing_data.current_polygon[i].y);
+              context.lineTo(drawing_data.current_polygon[i][0], drawing_data.current_polygon[i][1]);
           }
           context.stroke();
       }
@@ -132,14 +132,14 @@ var Game = (function(){
           context.save();
               context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
               var position = Physics.getPosition(objects.shapes[i].body);
-              context.translate(position.x, position.y);
+              context.translate(position[0], position[1]);
               context.rotate(Physics.getAngle(objects.shapes[i].body));
-              context.translate(-objects.shapes[i].centroid.x, -objects.shapes[i].centroid.y);
+              context.translate(-objects.shapes[i].centroid[0], -objects.shapes[i].centroid[1]);
               context.beginPath();
               if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
-                  context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+                  context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
                   for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
-                      context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+                      context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
                   }
                   if(objects.shapes[i].type == "polygon")
                       context.closePath();
@@ -163,9 +163,9 @@ var Game = (function(){
           if( Physics.getLabel( objects.shapes[i].body) == "Body" ) {
               context.save();
                   context.beginPath();
-                  context.moveTo(objects.shapes[i].vertices[0].x, objects.shapes[i].vertices[0].y);
+                  context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
                   for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
-                      context.lineTo(objects.shapes[i].vertices[j].x, objects.shapes[i].vertices[j].y);
+                      context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
                   }
 
                   if(objects.shapes[i].type == "polygon")
@@ -184,7 +184,7 @@ var Game = (function(){
           context.save();
           context.beginPath();
           var pos = calcTackAbsPos(i);
-          context.translate(pos.x,pos.y);
+          context.translate(pos[0],pos[1]);
           context.arc(0, 0, tack_radius, 0, Math.PI * 2);
           context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
           context.stroke();
@@ -196,15 +196,15 @@ var Game = (function(){
       for(var i = 0; i < l; i++)
       {
           context.save();
-            context.translate(level_data.hints[i].position.x, level_data.hints[i].position.y);
+            context.translate(level_data.hints[i].position[0], level_data.hints[i].position[1]);
             context.beginPath();
             var j, l2 = level_data.hints[i].vertices.length;
             if(l2 > 1)
             {
-                context.moveTo(level_data.hints[i].vertices[0].x, level_data.hints[i].vertices[0].y);
+                context.moveTo(level_data.hints[i].vertices[0][0], level_data.hints[i].vertices[0][1]);
                 for(j = 0; j < l2; j++)
                 {
-                    context.lineTo(level_data.hints[i].vertices[j].x, level_data.hints[i].vertices[j].y);
+                    context.lineTo(level_data.hints[i].vertices[j][0], level_data.hints[i].vertices[j][1]);
                 }
                 context.globalAlpha = level_data.hints[i].opacity;
                 context.stroke();
@@ -252,7 +252,9 @@ var Game = (function(){
 
   function onMouseMove(e)
   {
-      var pos = { x : e.clientX - canvas_rect.left, y: e.clientY - canvas_rect.top };
+      var pos = new Float32Array(2);
+      pos[0] = e.clientX - canvas_rect.left;
+      pos[1] = e.clientY - canvas_rect.top;
       moveTo(pos);
   }
 
@@ -275,7 +277,7 @@ var Game = (function(){
           }
           else
           {
-              lineTo(e);
+              lineTo([e.x, e.y]);
           }
       }
       else if(e.type == "touchend")
@@ -315,13 +317,10 @@ var Game = (function(){
       }
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
-          var new_pos = {
-            x : pos.x,
-            y : pos.y,
-          };
+          var new_pos = pos.slice();
           if(drawing_data.current_polygon.length > 0){
             var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
-            distance = Math.sqrt((new_pos.x - old_pos.x) * (new_pos.x - old_pos.x) + (new_pos.y - old_pos.y) * (new_pos.y - old_pos.y));
+            var distance = Math.sqrt((new_pos[0] - old_pos[0]) * (new_pos[0] - old_pos[0]) + (new_pos[1] - old_pos[1]) * (new_pos[1] - old_pos[1]));
             if(distance < ConfigOptions.min_vertex_distance * Physics.getScale())
             {
               return; 
@@ -336,15 +335,13 @@ var Game = (function(){
           {
               var tail = drawing_data.current_polygon[drawing_data.current_polygon.length -1];
               var head = drawing_data.current_polygon[0];
-              var vec = {
-                  x : tail.x - head.x,
-                  y : tail.y - head.y,
-              };
-              var distance = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+              var vec = new Float32Array(2);
+              vec[0] = tail[0] - head[0];
+              vec[1] = tail[1] - head[1];
+              distance = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
               if(distance < (Physics.getScale() * ConfigOptions.polygon_autoclose_distance))
               {
-                  var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
-                  if(decomp.isSimple(poly))
+                  if(decomp.isSimple(drawing_data.current_polygon))
                   {
                       closePath();
                       drawing_data.is_linto_locked = true;
@@ -390,25 +387,23 @@ var Game = (function(){
           return "invalid";
       }
 
-      drawing_data.current_polygon = Utils.removeCollinearPoints(drawing_data.current_polygon, 0.2);
+      decomp.removeCollinearPoints(drawing_data.current_polygon, 0.2);
 
-      var h2t_vector = {
-          x : drawing_data.current_polygon[0].x - drawing_data.current_polygon[drawing_data.current_polygon.length-1].x,
-          y : drawing_data.current_polygon[0].y - drawing_data.current_polygon[drawing_data.current_polygon.length-1].y
-      };
+      var h2t_vector = new Float32Array(2);
+      h2t_vector[0] = drawing_data.current_polygon[0][0] - drawing_data.current_polygon[drawing_data.current_polygon.length-1][0];
+      h2t_vector[1] = drawing_data.current_polygon[0][1] - drawing_data.current_polygon[drawing_data.current_polygon.length-1][1];
 
-      var h2t_distance = Math.sqrt(h2t_vector.x * h2t_vector.x + h2t_vector.y * h2t_vector.y);
-      var h2t_angle = Math.atan( h2t_vector.y / h2t_vector.x );
-      if(h2t_vector.x < 0)
+      var h2t_distance = Math.sqrt(h2t_vector[0] * h2t_vector[0] + h2t_vector[1] * h2t_vector[1]);
+      var h2t_angle = Math.atan( h2t_vector[1] / h2t_vector[0] );
+      if(h2t_vector[0] < 0)
         h2t_angle += Math.PI;
 
-      var tail_vector = {
-          x : drawing_data.current_polygon[drawing_data.current_polygon.length-1].x - drawing_data.current_polygon[drawing_data.current_polygon.length-3].x,
-          y : drawing_data.current_polygon[drawing_data.current_polygon.length-1].y - drawing_data.current_polygon[drawing_data.current_polygon.length-3].y
-      };
+      var tail_vector = new Float32Array(2);
+      tail_vector[0] = drawing_data.current_polygon[drawing_data.current_polygon.length-1][0] - drawing_data.current_polygon[drawing_data.current_polygon.length-3][0];
+      tail_vector[1] = drawing_data.current_polygon[drawing_data.current_polygon.length-1][1] - drawing_data.current_polygon[drawing_data.current_polygon.length-3][1];
 
-      var tail_angle = Math.atan(tail_vector.y / tail_vector.x );
-      if(tail_vector.x < 0)
+      var tail_angle = Math.atan(tail_vector[1] / tail_vector[0] );
+      if(tail_vector[0] < 0)
         tail_angle += Math.PI;
 
       if(Math.abs(tail_angle - h2t_angle) <= 0.7)
@@ -422,8 +417,7 @@ var Game = (function(){
           return "wire";
       }
 
-      var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
-      if(!decomp.isSimple(poly))
+      if(!decomp.isSimple(drawing_data.current_polygon))
       {
           return "wire";
       }
@@ -436,7 +430,7 @@ var Game = (function(){
       var body = undefined;
 
       body = Physics.createBody({
-          x : 0, y : 0,
+          position : new Float32Array(2),
           vertices : drawing_data.current_polygon,
       });
 
@@ -589,8 +583,8 @@ var Game = (function(){
           if(!objects.tacks[i].deleted)
           {
               var tack_pos = calcTackAbsPos(i)
-              var diff_x = cur_pos.x - tack_pos.x;
-              var diff_y = cur_pos.y - tack_pos.y;
+              var diff_x = cur_pos[0] - tack_pos[0];
+              var diff_y = cur_pos[1] - tack_pos[1];
               var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
               if(distance < 20)
               {
@@ -642,34 +636,32 @@ var Game = (function(){
   {
       var tack = objects.tacks[index];
       var scaled_offsetA = tack.offsetA;
-      var x = scaled_offsetA.x;
-      var y = scaled_offsetA.y;
+      var x = scaled_offsetA[0];
+      var y = scaled_offsetA[1];
       var r = Physics.getAngle(tack.bodyA);
 
       // 2D Rotation 
-      var pos = {
-          x : (x  * Math.cos(r)) - (y * Math.sin(r)),
-          y : (y * Math.cos(r)) + (x * Math.sin(r)),
-      };
+      var pos = new Float32Array(2);
+      pos[0] = (x  * Math.cos(r)) - (y * Math.sin(r)); 
+      pos[1] = (y * Math.cos(r)) + (x * Math.sin(r));
       
       var body_pos = Physics.getPosition(tack.bodyA);
-      pos.x += body_pos.x;
-      pos.y += body_pos.y;
+      pos[0] += body_pos[0];
+      pos[1] += body_pos[1];
       return pos;
   }
 
   function calcTackOffset(pos, body)
   {
       var body_pos = Physics.getPosition(body);
-      var x = pos.x - body_pos.x;
-      var y = pos.y - body_pos.y;
+      var x = pos[0] - body_pos[0];
+      var y = pos[1] - body_pos[1];
       var angle = -Physics.getAngle(body);
 
       // 2D Rotation 
-      offset = {
-          x : (x  * Math.cos(angle)) - (y * Math.sin(angle)),
-          y : (y * Math.cos(angle)) + (x * Math.sin(angle)),
-      };
+      var offset = new Float32Array(2);
+      offset[0] = (x  * Math.cos(angle)) - (y * Math.sin(angle));
+      offset[1] = (y * Math.cos(angle)) + (x * Math.sin(angle));
       return offset;
   }
 
@@ -725,8 +717,7 @@ var Game = (function(){
           if(type == "polygon")
           {
               var body = Physics.createBody({
-                  x : scaledBody.position.x,
-                  y : scaledBody.position.y,
+                  position : scaledBody.position,
                   vertices : scaledBody.vertices,
                   label : level.bodies[i].label,
                   isKinematic : level.bodies[i].isKinematic || false,
@@ -738,15 +729,14 @@ var Game = (function(){
           }
           else if(type == "circle")
           {
-              var centroid = { x : 0, y: 0 };
               var body = Physics.createCircle({
-                  x : scaledBody.position.x,
-                  y : scaledBody.position.y,
+                  position : scaledBody.position,
                   radio    : scaledBody.radio,
                   label    : level.bodies[i].label,
                   isStatic : level.bodies[i].isStatic,
                   friction : 0.5,
               });
+              var centroid = new Float32Array(2);
           }
           objects.shapes.push({
               body        : body,
@@ -782,9 +772,9 @@ var Game = (function(){
       var pointStatus = false;
       for (var i = 0; i < sides; i++)
       {
-          if (polygon[i].y < pos.y && polygon[j].y >= pos.y || polygon[j].y < pos.y && polygon[i].y >= pos.y)
+          if (polygon[i][1] < pos[1] && polygon[j][1] >= pos[1] || polygon[j][1] < pos[1] && polygon[i][1] >= pos[1])
           {
-              if (polygon[i].x + (pos.y - polygon[i].y) /  (polygon[j].y - polygon[i].y) * (polygon[j].x - polygon[i].x) < pos.x)
+              if (polygon[i][0] + (pos[1] - polygon[i][1]) /  (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) < pos[0])
               {
                   pointStatus = !pointStatus ;                        
               }
@@ -799,21 +789,21 @@ var Game = (function(){
       /* Fixme: improve this coping technique */
       var shape = JSON.parse(JSON.stringify(const_shape));
       
-      shape.position.x *= Physics.getScale();
-      shape.position.y *= Physics.getScale();
+      shape.position[0] *= Physics.getScale();
+      shape.position[1] *= Physics.getScale();
 
-      shape.position.y = -shape.position.y;
-      shape.position.x += Screen.getWidth()>>1;
-      shape.position.y += Screen.getHeight();
+      shape.position[1] = -shape.position[1];
+      shape.position[0] += Screen.getWidth()>>1;
+      shape.position[1] += Screen.getHeight();
       if(shape.vertices)
       {
           var v, l = shape.vertices.length;
           for(v = 0; v < l; v++)
           {
-              shape.vertices[v].x *= Physics.getScale();
-              shape.vertices[v].y *= Physics.getScale();
+              shape.vertices[v][0] *= Physics.getScale();
+              shape.vertices[v][1] *= Physics.getScale();
 
-              shape.vertices[v].y = -shape.vertices[v].y;
+              shape.vertices[v][1] = -shape.vertices[v][1];
           }
       }
       if(shape.radio)
@@ -869,13 +859,8 @@ var Game = (function(){
 
   function DrawEvilShape(shape)
   {
-      // No se puede crear alambre con este dibujo
-      //drawing_data.current_polygon = [{"x":212,"y":475},{"x":209,"y":477},{"x":204,"y":481},{"x":198,"y":484},{"x":190,"y":486},{"x":180,"y":489},{"x":173,"y":489},{"x":168,"y":489},{"x":164,"y":489},{"x":158,"y":488},{"x":157,"y":488},{"x":151,"y":485},{"x":150,"y":483},{"x":146,"y":478},{"x":143,"y":474},{"x":140,"y":467},{"x":138,"y":458},{"x":132,"y":448},{"x":126,"y":440},{"x":123,"y":426},{"x":120,"y":415},{"x":114,"y":404},{"x":110,"y":395},{"x":108,"y":389},{"x":106,"y":379},{"x":105,"y":375},{"x":105,"y":367},{"x":105,"y":365},{"x":105,"y":356},{"x":105,"y":347},{"x":105,"y":339},{"x":106,"y":331},{"x":110,"y":324},{"x":113,"y":318},{"x":118,"y":312},{"x":125,"y":306},{"x":130,"y":304},{"x":137,"y":301},{"x":144,"y":300},{"x":150,"y":299},{"x":156,"y":298},{"x":163,"y":298},{"x":166,"y":298},{"x":170,"y":298},{"x":171,"y":298},{"x":176,"y":298},{"x":179,"y":301},{"x":186,"y":304},{"x":191,"y":308},{"x":197,"y":313},{"x":204,"y":317},{"x":209,"y":323},{"x":212,"y":326},{"x":215,"y":330},{"x":217,"y":334},{"x":217,"y":334},{"x":217,"y":334},{"x":217,"y":334},{"x":217,"y":334},{"x":217,"y":334},{"x":217,"y":334},{"x":217,"y":334},{"x":220,"y":338},{"x":220,"y":338},{"x":220,"y":338},{"x":220,"y":338},{"x":220,"y":338},{"x":220,"y":338},{"x":220,"y":338},{"x":220,"y":338},{"x":221,"y":341},{"x":224,"y":349},{"x":225,"y":352},{"x":225,"y":352},{"x":225,"y":352},{"x":225,"y":352},{"x":225,"y":352},{"x":225,"y":352},{"x":225,"y":356},{"x":227,"y":363},{"x":227,"y":367},{"x":227,"y":375},{"x":227,"y":380},{"x":227,"y":386},{"x":227,"y":389},{"x":227,"y":392},{"x":227,"y":392},{"x":227,"y":392},{"x":227,"y":396},{"x":227,"y":399},{"x":224,"y":402},{"x":224,"y":405},{"x":223,"y":410},{"x":220,"y":414},{"x":219,"y":419},{"x":217,"y":423},{"x":216,"y":425},{"x":216,"y":428},{"x":214,"y":431},{"x":213,"y":434},{"x":212,"y":438},{"x":211,"y":440},{"x":209,"y":443},{"x":207,"y":446},{"x":206,"y":449},{"x":205,"y":451},{"x":204,"y":453},{"x":204,"y":454},{"x":203,"y":457},{"x":202,"y":459},{"x":201,"y":461},{"x":200,"y":463},{"x":199,"y":464},{"x":198,"y":467},{"x":197,"y":468},{"x":197,"y":470},{"x":196,"y":471},{"x":196,"y":473},{"x":195,"y":476},{"x":194,"y":478},{"x":194,"y":478},{"x":194,"y":478},{"x":194,"y":478},{"x":194,"y":478},{"x":194,"y":478},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":480},{"x":194,"y":481},{"x":194,"y":483},{"x":194,"y":483},{"x":194,"y":483},{"x":194,"y":486},{"x":194,"y":488},{"x":194,"y":491},{"x":194,"y":495},{"x":196,"y":497},{"x":198,"y":499},{"x":200,"y":500},{"x":202,"y":501},{"x":204,"y":501},{"x":206,"y":501},{"x":207,"y":501},{"x":208,"y":501}];
-      // Este dibujo viaja hacia el origen
-      //drawing_data.current_polygon = [{"x":244,"y":599},{"x":245,"y":603},{"x":251,"y":611},{"x":265,"y":619},{"x":280,"y":622},{"x":288,"y":625},{"x":335,"y":619},{"x":344,"y":614},{"x":351,"y":612},{"x":355,"y":608},{"x":362,"y":597},{"x":362,"y":544},{"x":357,"y":527},{"x":345,"y":510},{"x":337,"y":498},{"x":332,"y":493},{"x":308,"y":478},{"x":299,"y":477},{"x":282,"y":471},{"x":274,"y":471},{"x":264,"y":468},{"x":196,"y":468},{"x":189,"y":470},{"x":187,"y":472},{"x":179,"y":477},{"x":177,"y":480},{"x":174,"y":481},{"x":172,"y":484},{"x":171,"y":484},{"x":171,"y":487},{"x":169,"y":489},{"x":169,"y":501},{"x":168,"y":505},{"x":168,"y":522},{"x":169,"y":526},{"x":170,"y":528},{"x":170,"y":529},{"x":174,"y":539},{"x":174,"y":541},{"x":177,"y":544},{"x":177,"y":547},{"x":178,"y":551},{"x":180,"y":555},{"x":182,"y":557},{"x":188,"y":567},{"x":191,"y":575},{"x":192,"y":576},{"x":193,"y":579},{"x":195,"y":579},{"x":197,"y":582},{"x":198,"y":582},{"x":200,"y":584},{"x":200,"y":585},{"x":202,"y":587},{"x":203,"y":587},{"x":203,"y":588},{"x":205,"y":589},{"x":206,"y":591},{"x":207,"y":591},{"x":208,"y":592},{"x":209,"y":594},{"x":210,"y":594},{"x":212,"y":596},{"x":214,"y":596},{"x":219,"y":598},{"x":222,"y":598},{"x":224,"y":599},{"x":227,"y":599},{"x":229,"y":600},{"x":245,"y":600},{"x":251,"y":597},{"x":252,"y":597},{"x":254,"y":596},{"x":255,"y":596},{"x":259,"y":592},{"x":260,"y":592},{"x":262,"y":590},{"x":263,"y":590},{"x":264,"y":588},{"x":265,"y":588},{"x":267,"y":587},{"x":268,"y":585},{"x":270,"y":584}];
-      // Esto es un fantasma
-      drawing_data.current_polygon = [{"x":581,"y":472},{"x":578,"y":475},{"x":577,"y":477},{"x":577,"y":481},{"x":576,"y":484},{"x":573,"y":487},{"x":574,"y":508},{"x":585,"y":538},{"x":588,"y":541},{"x":591,"y":546},{"x":597,"y":552},{"x":598,"y":552},{"x":602,"y":555},{"x":605,"y":556},{"x":647,"y":556},{"x":650,"y":555},{"x":651,"y":552},{"x":654,"y":547},{"x":656,"y":541},{"x":659,"y":536},{"x":660,"y":532},{"x":663,"y":528},{"x":663,"y":526},{"x":664,"y":523},{"x":665,"y":523},{"x":667,"y":518},{"x":667,"y":516},{"x":668,"y":513},{"x":670,"y":510},{"x":671,"y":507},{"x":671,"y":504},{"x":672,"y":500},{"x":672,"y":494},{"x":673,"y":492},{"x":674,"y":491},{"x":674,"y":488},{"x":675,"y":488},{"x":675,"y":484},{"x":678,"y":477},{"x":678,"y":465},{"x":677,"y":462},{"x":677,"y":460},{"x":675,"y":460},{"x":674,"y":459},{"x":665,"y":456},{"x":642,"y":454},{"x":636,"y":451},{"x":592,"y":454}];
-      closePath();
+      //drawing_data.current_polygon = [];
+      //closePath();
   }
 
   return {  init          : init,

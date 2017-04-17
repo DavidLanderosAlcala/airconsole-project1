@@ -10,7 +10,7 @@ var PlayerCursor = (function() {
         "ereaser",
         "tack"
     ];
-    var position = { x : 0, y : 0};
+    var position = new Float32Array(2);
     var current_tool_index = 0;
 
     function init(config)
@@ -39,10 +39,10 @@ var PlayerCursor = (function() {
 
     function moveTo( pos )
     {
-        position.x = pos.x;
-        position.y = pos.y;
-        element.style.left = pos.x + "px";
-        element.style.top = pos.y + "px";
+        position[0] = pos[0];
+        position[1] = pos[1];
+        element.style.left = pos[0] + "px";
+        element.style.top = pos[1] + "px";
     }
 
     function changeTool()

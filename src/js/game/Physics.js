@@ -125,10 +125,8 @@ var Physics = (function(){
 
     function getPosition(body_handler)
     {
-        return {
-            x: body_handler.position[0] * scale,
-            y: body_handler.position[1] * scale,
-        };
+        return [ body_handler.position[0] * scale,
+                 body_handler.position[1] * scale ];
     }
 
     function getAngle(body_handler)
@@ -145,10 +143,13 @@ var Physics = (function(){
     {
     	  options.isSensor = options.isSensor || false;
         options.label = options.label || "Body";
-        options.x = options.x || 0;
-        options.y = options.y || 0;
+        options.position = options.position || new Float32Array(2);
 
-        var poly = Utils.matterToP2Flavor(options.vertices);
+        var poly = [], l = options.vertices.length;
+        for(var i = 0; i < l; i++)
+        {
+            poly.push(options.vertices[i].slice());
+        }
         
         decomp.makeCCW(poly);
 
@@ -158,7 +159,7 @@ var Physics = (function(){
         * Create a static or no-static object
         */
         var body = null;
-        var config = { position : [options.x / scale, options.y / scale] };
+        var config = { position : [options.position[0] / scale, options.position[1] / scale] };
         if(options.isStatic)
         {
             config.mass = 0; // static
@@ -201,15 +202,20 @@ var Physics = (function(){
         console.log("last object: ");
         console.log(body);
 
-        body.centroid = {
-           x : (body.position[0] * scale) - options.x,
-           y : (body.position[1] * scale) - options.y
-        };
+        /*
+         * Add centroid
+         */
+        body.centroid = new Float32Array(2);
+        body.centroid[0] = (body.position[0] * scale) - options.position[0];
+        body.centroid[1] = (body.position[1] * scale) - options.position[1];
 
         /*
          * Add label property
          */
         body.label = options.label;
+        /*
+         * Add id
+         */
         body.id = id_count++;
         return body;
     }
@@ -224,8 +230,9 @@ var Physics = (function(){
         /*
         * Create a static or no-static object
         */
+        options.position = options.position || new Float32Array(2);
         var body = null;
-        var config = { position : [options.x / scale, options.y / scale] };
+        var config = { position : [options.position[0] / scale, options.position[1] / scale] };
         if(options.isStatic)
         {
             config.mass = 0; // static
@@ -245,6 +252,9 @@ var Physics = (function(){
          * Add label property
          */
         body.label = options.label;
+        /*
+         * Add id
+         */
         body.id = id_count++;
         return body;
     }
@@ -252,8 +262,7 @@ var Physics = (function(){
     function createWire(options)
     {
         options.label = options.label || "Body";
-        options.x = options.x || 0;
-        options.y = options.y || 0;
+        options.position = options.position || new Float32Array(2);
 
         /*
         * Create a static or no-static object
@@ -274,8 +283,14 @@ var Physics = (function(){
         {
             for(var i =1 ; i < options.vertices.length; i++)
             {
-                var pointA = { x : (options.vertices[i-1].x + options.x) / scale, y : (options.vertices[i-1].y + options.y) / scale };
-                var pointB = { x : (options.vertices[i].x + options.x) / scale, y : (options.vertices[i].y + options.y) / scale };
+                var pointA = new Float32Array(2);
+                pointA[0] = (options.vertices[i-1][0] + options.position[0]) / scale;
+                pointA[1] = (options.vertices[i-1][1] + options.position[1]) / scale;
+
+                var pointB = new Float32Array(2);
+                pointB[0] = (options.vertices[i][0] + options.position[0]) / scale;
+                pointB[1] = (options.vertices[i][1] + options.position[1]) / scale;
+
                 var vertices = buildRect(pointA, pointB);
                 decomp.makeCCW(vertices);
                 var c = new p2.Convex({vertices: vertices});
@@ -309,11 +324,16 @@ var Physics = (function(){
         /*
          * Add label property
          */
-         body.centroid = {
-            x : body.position[0] * scale,
-            y : body.position[1] * scale
-         };
          body.label = options.label;
+        /*
+         * Add centroid
+         */
+         body.centroid = new Float32Array(2);
+         body.centroid[0] = body.position[0] * scale;
+         body.centroid[1] = body.position[1] * scale;
+        /*
+         * Add id
+         */
          body.id = id_count++;
         return body;
     }
@@ -326,26 +346,25 @@ var Physics = (function(){
      */
     function buildRect(pointA, pointB)
     {
-        var vector = {
-            x : pointB.x - pointA.x,
-            y : pointB.y - pointA.y,
-        };
-        var length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-        var angle = Math.atan(vector.y / vector.x);
-        if( vector.x < 0 )
+        var vector = new Float32Array(2);
+        vector[0] = pointB[0] - pointA[0];
+        vector[1] = pointB[1] - pointA[1];
+        var length = Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+        var angle = Math.atan(vector[1] / vector[0]);
+        if( vector[0] < 0 )
         	angle += Math.PI;
         var s_angle = Math.sin(angle);
         var c_angle = Math.cos(angle);
         var half_height = 4 / scale;
         var vertices = [
-            [ - half_height * s_angle + pointA.x,
-              half_height * c_angle + pointA.y ],
-            [ (length  * c_angle) - (half_height * s_angle) + pointA.x,
-              (half_height * c_angle) + (length * s_angle) + pointA.y ],
-            [ (length * c_angle) - (-half_height * s_angle) + pointA.x,
-              (-half_height * c_angle) + (length * s_angle) + pointA.y ],
-            [ half_height * s_angle + pointA.x,
-              -half_height * c_angle + pointA.y],            
+            [ - half_height * s_angle + pointA[0],
+              half_height * c_angle + pointA[1] ],
+            [ (length  * c_angle) - (half_height * s_angle) + pointA[0],
+              (half_height * c_angle) + (length * s_angle) + pointA[1] ],
+            [ (length * c_angle) - (-half_height * s_angle) + pointA[0],
+              (-half_height * c_angle) + (length * s_angle) + pointA[1] ],
+            [ half_height * s_angle + pointA[0],
+              -half_height * c_angle + pointA[1]],            
         ];
         return vertices;
     }
@@ -363,8 +382,8 @@ var Physics = (function(){
     function createRevoluteJoint(options)
     {
         var constraint = new p2.RevoluteConstraint(options.bodyA, options.bodyB, {
-            localPivotA: [options.pointA.x / scale, options.pointA.y / scale],
-            localPivotB: [options.pointB.x / scale, options.pointB.y / scale],
+            localPivotA: [options.pointA[0] / scale, options.pointA[1] / scale],
+            localPivotB: [options.pointB[0] / scale, options.pointB[1] / scale],
             collideConnected : false,
         });
         world.addConstraint(constraint);
@@ -413,25 +432,25 @@ var Physics = (function(){
 
     function getBodiesAtPoint(point)
     {
-        return world.hitTest([point.x / scale, point.y / scale], world.bodies);
+        return world.hitTest([point[0] / scale, point[1] / scale], world.bodies);
     }
 
     function translate(body_handler, disp)
     {
-        body_handler.position[0] += disp.x / scale;
-        body_handler.position[1] += disp.y / scale;
+        body_handler.position[0] += disp[0] / scale;
+        body_handler.position[1] += disp[1] / scale;
     }
 
     function setVelocity(body_handler, velocity)
     {
-        body_handler.velocity[0] = velocity.x / scale;
-        body_handler.velocity[1] = velocity.y / scale;
+        body_handler.velocity[0] = velocity[0] / scale;
+        body_handler.velocity[1] = velocity[1] / scale;
     }
 
     function setPosition(body_handler, pos)
     {
-        body_handler.position[0] = pos.x / scale;
-        body_handler.position[1] = pos.y / scale;
+        body_handler.position[0] = pos[0] / scale;
+        body_handler.position[1] = pos[1] / scale;
     }
 
     function clearForces(body_handler)
@@ -448,7 +467,7 @@ var Physics = (function(){
     }
 
     return { init            : init,
-    	     clear           : clear,
+    	       clear           : clear,
              getPosition     : getPosition,
              getAngle        : getAngle,
              getLabel        : getLabel,

@@ -7,11 +7,11 @@ LevelSelector.getLevels().push({
         {
             label : "ground",
             isStatic : true,
-            position : { x : 0, y : 0 },
-            vertices: [ { x: -20, y: 0 },
-                        { x: -20, y: 1 },
-                        { x: 20, y: 1 },
-                        { x: 20, y: 0 } ],
+            position : [ 0.0, 0.0 ],
+            vertices : [[ -20.0, 0.0 ],
+                        [ -20.0, 1.0 ],
+                        [ 20.0,  1.0 ],
+                        [ 20.0,  0.0 ]],
         },
     ],
 
