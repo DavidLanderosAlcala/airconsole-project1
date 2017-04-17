@@ -420,31 +420,9 @@ var CrayonPhysics = (function(){
       }
 
       var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
-      //if(!decomp.isSimple(poly))
-      //{
-      //    return "wire";
-      //}
-
-      var removed_vertices = 0;
-      var isSimple = false;
-      while(!isSimple && removed_vertices < 10)
-      {
-          isSimple = decomp.isSimple(poly);
-          if(!isSimple)
-          {
-                  poly.splice(poly.length -1 , 1);
-                  poly.splice(0, 1);
-                  removed_vertices+=2;
-          }
-      }
-      if(!isSimple)
+      if(!decomp.isSimple(poly))
       {
           return "wire";
-      }
-      if(removed_vertices > 0)
-      {
-          drawing_data.current_polygon = Utils.p2ToMatterFlavor(poly);
-          console.log("removed_vertices: " + removed_vertices);
       }
 
       return "polygon";
