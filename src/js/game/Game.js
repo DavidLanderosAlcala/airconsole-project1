@@ -1,5 +1,5 @@
 
-var CrayonPhysics = (function(){
+var Game = (function(){
 
   /* module/local variables */
   var canvas;

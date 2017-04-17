@@ -116,10 +116,10 @@ LevelSelector.getLevels().push({
     setup : function(context)
     {
         context.gameover = false;
-        CrayonPhysics.on("addTack", function(){
+        Game.on("addTack", function(){
             Screen.setTitleText("Perfecto!, ahora dibuja una figura encerrando la marca circular");
-            CrayonPhysics.getHints()[0].opacity = 0.0;
-            CrayonPhysics.getHints()[1].opacity = 0.3;
+            Game.getHints()[0].opacity = 0.0;
+            Game.getHints()[1].opacity = 0.3;
         });
 
         Physics.on("beginContact", function(event){

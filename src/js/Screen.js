@@ -35,26 +35,26 @@ var Screen = (function(){
                     if(cursor.y < 0 ) cursor.y = 0;
                     if(cursor.x > width ) cursor.x = width;
                     if(cursor.y > height ) cursor.y = height;
-                    if(cursor.isPressed) { CrayonPhysics.lineTo( cursor ); }
-                    else { CrayonPhysics.moveTo( cursor ); }
+                    if(cursor.isPressed) { Game.lineTo( cursor ); }
+                    else { Game.moveTo( cursor ); }
                 }
                 else if(e.key == "pad_a")
                 {
                     cursor.isPressed = e.value == 1 ? true : false;
-                    if(!e.value) { CrayonPhysics.closePath(); }
+                    if(!e.value) { Game.closePath(); }
                 }
                 else if(e.key == "pad_b")
                 {
-                    if(!e.value) { CrayonPhysics.erease(); }
+                    if(!e.value) { Game.erease(); }
                 }
                 else if(e.key == "pad_select")
                 {
-                    if(e.value == 0) { CrayonPhysics.changeTool(); }
+                    if(e.value == 0) { Game.changeTool(); }
                 }
             });
         }
 
-        CrayonPhysics.init({
+        Game.init({
             canvas : document.querySelector("#main_canvas"),
             width  : width,
             height : height,
@@ -140,7 +140,7 @@ var Screen = (function(){
     function onResize()
     {
         adjustToViewPort();
-        CrayonPhysics.restartLevel();
+        Game.restartLevel();
     }
 
     return { init              : init,
