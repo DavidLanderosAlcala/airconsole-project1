@@ -7,18 +7,18 @@ LevelSelector.getLevels().push({
         {
             label : "plattform",
             isStatic : true,
-            position : { x : -4, y : 1 },
+            position : [-4, 1 ],
             vertices: [
-                {x : 0, y : 3 },
-                {x : 0, y : 0 },
-                {x : 4, y : 0 },
-                {x : 4, y : 3 },
+                [ 0, 3 ],
+                [ 0, 0 ],
+                [ 4, 0 ],
+                [ 4, 3 ],
             ],
         },
         {
             label    : "ball",
             isStatic : false,
-            position : { x : -1, y : 6 },
+            position : [ -1, 6 ],
             type     : "circle",
             radio    : 0.25,
         },
@@ -26,28 +26,28 @@ LevelSelector.getLevels().push({
             label : "cup",
             isStatic : true,
             isKinematic : true,
-            position : { x : 5, y : 2 },
+            position : [ 5, 2 ],
             vertices: [
-                {x : -1, y : 3 },
-                {x : -1, y : 0 },
-                {x : 1, y : 0 },
-                {x : 1, y : 3 },
-                {x : 0.80, y : 3 },
-                {x : 0.50, y : 0.80 },
-                {x : -0.50, y : 0.80 },
-                {x : -0.80, y : 3 }
+                [ -1,  3 ],
+                [ -1,  0 ],
+                [ 1,  0 ],
+                [ 1,  3 ],
+                [ 0.80,  3 ],
+                [ 0.50,  0.80 ],
+                [ -0.50,  0.80 ],
+                [ -0.80,  3 ],
             ],
         },
         {
             label : "sensor",
             isSensor : true,
             isStatic : true,
-            position : { x : 5, y : 2.50 },
+            position : [ 5, 2.50 ],
             vertices: [
-                {x : 0, y : 0 },
-                {x : 0, y : 1 },
-                {x : 0.50, y : 1 },
-                {x : 0.50, y : 0 },
+                [ 0, 0 ],
+                [ 0, 1 ],
+                [ 0.50, 1 ],
+                [ 0.50, 0 ],
             ],
         },
     ],
@@ -80,7 +80,7 @@ LevelSelector.getLevels().push({
                 if( Physics.getLabel(event.bodyB) == "sensor" || Physics.getLabel(event.bodyB) == "ball" )
                 {
                     context.gameover = true;
-                    Physics.setVelocity(context.cup, {x: 200, y: 0});
+                    Physics.setVelocity(context.cup, [200, 0]);
                 }
             }
         });
@@ -91,13 +91,13 @@ LevelSelector.getLevels().push({
         if(!context.gameover)
         {
             context.frame += 0.05;
-            Physics.setVelocity(context.cup, {x: (Math.cos(context.frame) * 400), y: 0});
+            Physics.setVelocity(context.cup, [ (Math.cos(context.frame) * 400), 0]);
             var cup_pos = Physics.getPosition(context.cup);
-            Physics.setPosition(context.sensor, { x : cup_pos.x, y: cup_pos.y - 30 });
-            if(Physics.getPosition(context.ball).y > Screen.getHeight())
+            Physics.setPosition(context.sensor, [ cup_pos[0], cup_pos[1] - 30 ]);
+            if(Physics.getPosition(context.ball)[1] > Screen.getHeight())
             {
                 Physics.clearForces(context.ball);
-                Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 100, y : 0 });
+                Physics.setPosition(context.ball, [ (Screen.getWidth()/2) - 100, 0 ]);
             }
         }
         return context.gameover;

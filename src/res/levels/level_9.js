@@ -7,96 +7,97 @@ LevelSelector.getLevels().push({
         {
             label : "lane",
             isStatic : true,
-            position : { x : -3, y : 1 },
-            vertices: [ { x: -4, y: 0 },
-                        { x: -4, y: 1 },
-                        { x: 4, y: 1 },
-                        { x: 4, y: 0 } ],
+            position : [ -3, 1 ],
+            vertices: [ [ -4, 0 ],
+                        [ -4, 1 ],
+                        [ 4, 1 ],
+                        [ 4, 0 ],
+                      ],
         },
         {
             label : "wheel",
             isStatic : true,
             type : "circle",
-            position : { x : 4.7, y : 2.5 },
+            position : [ 4.7, 2.5 ],
             radio : 0.4,
         },
         {
             label : "wheel",
             isStatic : true,
             type : "circle",
-            position : { x : 8.7, y : 2.5 },
+            position : [ 8.7, 2.5 ],
             radio : 0.4,
         },
         {
             label : "box",
             isStatic : false,
-            position : { x : -8, y : 10 },
+            position : [ -8, 10 ],
             vertices: [
-                {x : -0.30, y : 0.30 },
-                {x : -0.30, y : -0.30 },
-                {x : 0.30, y : -0.30 },
-                {x : 0.30, y : 0.30 },
+                [ -0.30, 0.30 ],
+                [ -0.30, -0.30 ],
+                [ 0.30, -0.30 ],
+                [ 0.30, 0.30 ],
             ],
         },
         {
             label : "base",
             isStatic : true,
-            position : { x : -10, y : 5 },
+            position : [ -10, 5 ],
             vertices : [
-                { "x" : 2.9, "y": 0 },
-                { "x" : 2.9, "y": 0.5 },
-                { "x" : 3.7, "y": 0.5 },
-                { "x" : 3.7, "y": -0.8 },
-                { "x" : -2.7, "y": -0.8 },
-                { "x" : -2.7, "y": 0 },
-                { "x" : -2.7, "y": 1.8 },
-                { "x" : 0, "y": 1.8 },
-                { "x" : 0, "y": 0 }
+                [ 2.9, 0 ],
+                [ 2.9, 0.5 ],
+                [ 3.7, 0.5 ],
+                [ 3.7, -0.8 ],
+                [ -2.7, -0.8 ],
+                [ -2.7, 0 ],
+                [ -2.7, 1.8 ],
+                [ 0, 1.8 ],
+                [ 0, 0 ]
             ]
         },
         {
             label : "sensor",
             isStatic : true,
             isSensor : true,
-            position : { x : 4.7, y : 4 },
+            position : [ 4.7, 4 ],
             vertices: [
-                {x : -1.5, y :  0.50 },
-                {x : -1.5, y : -0.50 },
-                {x :  1.5, y : -0.50 },
-                {x :  1.5, y :  0.50 },
+                [ -1.5,  0.50 ],
+                [ -1.5, -0.50 ],
+                [  1.5, -0.50 ],
+                [  1.5,  0.50 ],
             ],
         },
         {
             label : "pickup",
             isStatic : true,
-            position : { x : 6, y : 3 },
+            position : [ 6, 3 ],
             vertices: [
-                { "x": -3.2, "y": 0.6 },
-                { "x": -3.2, "y": -0.4 },
-                { "x": -1.8, "y": -0.4 },
-                { "x": -1.8, "y": -0.2 },
-                { "x": -1.6, "y": 0 },
-                { "x": -1.4, "y": 0 },
-                { "x": -1.2, "y": 0 },
-                { "x": -0.9, "y": -0.1 },
-                { "x": -0.8, "y": -0.4 },
-                { "x": 2.4, "y": -0.4 },
-                { "x": 2.4, "y": -0.2 },
-                { "x": 2.5, "y": 0 },
-                { "x": 2.8, "y": 0 },
-                { "x": 3, "y": 0 },
-                { "x": 3.2, "y": -0.2 },
-                { "x": 3.2, "y": -0.4 },
-                { "x": 4.2, "y": -0.4 },
-                { "x": 4.2, "y": 0.1 },
-                { "x": 4.2, "y": 0.4 },
-                { "x": 3.9, "y": 0.6 },
-                { "x": 2.5, "y": 0.6 },
-                { "x": 2.3, "y": 1 },
-                { "x": 2, "y": 1.4 },
-                { "x": 1.6, "y": 1.6 },
-                { "x": 0, "y": 1.6 },
-                { "x": 0, "y": 0.6 }
+                [ -3.2, 0.6 ],
+                [ -3.2, -0.4 ],
+                [ -1.8, -0.4 ],
+                [ -1.8, -0.2 ],
+                [ -1.6, 0 ],
+                [ -1.4, 0 ],
+                [ -1.2, 0 ],
+                [ -0.9, -0.1 ],
+                [ -0.8, -0.4 ],
+                [ 2.4, -0.4 ],
+                [ 2.4, -0.2 ],
+                [ 2.5, 0 ],
+                [ 2.8, 0 ],
+                [ 3, 0 ],
+                [ 3.2, -0.2 ],
+                [ 3.2, -0.4 ],
+                [ 4.2, -0.4 ],
+                [ 4.2, 0.1 ],
+                [ 4.2, 0.4 ],
+                [ 3.9, 0.6 ],
+                [ 2.5, 0.6 ],
+                [ 2.3, 1 ],
+                [ 2, 1.4 ],
+                [ 1.6, 1.6 ],
+                [ 0, 1.6 ],
+                [ 0, 0.6 ]
             ],
         },
     ],
@@ -104,25 +105,25 @@ LevelSelector.getLevels().push({
     hints: [
         {
             opacity : 1.0,
-            position : { x : -3 , y : 1.5 },
+            position : [ -3 , 1.5 ],
             vertices : [
-                { "x": -0.79, "y": 0 },
-                { "x": 0.74, "y": 0 },
-                { "x": 0.36, "y": 0.38 },
-                { "x": 0.74, "y": 0 },
-                { "x": 0.36, "y": -0.38 },
-                { "x": 0.74, "y": 0 }
+                [ -0.79,  0 ],
+                [ 0.74,  0 ],
+                [ 0.36,  0.38 ],
+                [ 0.74,  0 ],
+                [ 0.36,  -0.38 ],
+                [ 0.74,  0 ]
             ],
         },
         {
-            position : { x : 7.4 , y : 3.6 },
+            position : [ 7.4 ,  3.6 ],
             opacity : 1.0,
             vertices : [
-                { "x": -0.8, "y": 0.8 },
-                { "x": -0.8, "y": 0 },
-                { "x": 0.8, "y": 0 },
-                { "x": 0, "y": 0.8 },
-                { "x": -0.8, "y": 0.8 }
+                [ -0.8,  0.8 ],
+                [ -0.8,  0 ],
+                [ 0.8,  0 ],
+                [ 0,  0.8 ],
+                [ -0.8,  0.8 ]
             ]
         }
     ],
@@ -199,10 +200,10 @@ LevelSelector.getLevels().push({
         for(var i = 0; i < context.objects_over_lane.length; i++)
         {
             /* Se re-aplica en cada frame porque velocidad suele desaparecer por causa de la friccion */
-            Physics.setVelocity(context.objects_over_lane[i], {x: 100, y: 0});
+            Physics.setVelocity(context.objects_over_lane[i], [ 100, 0]);
         }
 
-        if( Physics.getPosition(context.box).y >= Screen.getHeight())
+        if( Physics.getPosition(context.box)[1] >= Screen.getHeight())
         {
             // la regresamos a su posicion inicial
             Physics.setPosition(context.box, context.box_start_position );

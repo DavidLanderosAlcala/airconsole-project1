@@ -7,40 +7,40 @@ LevelSelector.getLevels().push({
         {
             label : "towerA",
             isStatic : true,
-            position : { x : 2, y : 3 },
+            position : [ 2, 3 ],
             vertices: [
-                { "x": 0, "y": 2.4 },
-                { "x": 0, "y": 0 },
-                { "x": 3.2, "y": 0 },
-                { "x": 3.2, "y": 0.8 },
-                { "x": 0.8, "y": 0.8 },
-                { "x": 0.8, "y": 4.8 },
-                { "x": 0, "y": 4.8 }
+                [ 0, 2.4 ],
+                [ 0, 0 ],
+                [ 3.2, 0 ],
+                [ 3.2, 0.8 ],
+                [ 0.8, 0.8 ],
+                [ 0.8, 4.8 ],
+                [ 0, 4.8 ]
             ],
         },
         {
             label : "towerB",
             isStatic : true,
-            position : { x : -2, y : 3 },
+            position : [ -2, 3 ],
             vertices: [
-                { "x": 0, "y": 2.4 },
-                { "x": 0, "y": 0 },
-                { "x": -3.2, "y": 0 },
-                { "x": -3.2, "y": 0.8 },
-                { "x": -0.8, "y": 0.8 },
-                { "x": -0.8, "y": 4.8 },
-                { "x": 0, "y": 4.8 }
+                [ 0, 2.4 ],
+                [ 0, 0 ],
+                [ -3.2, 0 ],
+                [ -3.2, 0.8 ],
+                [ -0.8, 0.8 ],
+                [ -0.8, 4.8 ],
+                [ 0, 4.8 ]
             ],
         },
         {
             label : "ballA",
-            position : { x : -3.5, y : 10 },
+            position : [ -3.5, 10 ],
             type : "circle",
             radio : 0.25,
         },
         {
             label : "ballB",
-            position : { x : 3.5, y : 10 },
+            position : [ 3.5, 10 ],
             type : "circle",
             radio : 0.25,
         },
@@ -70,6 +70,7 @@ LevelSelector.getLevels().push({
             {
                 if( Physics.getLabel(event.bodyA) == "ballB" || Physics.getLabel(event.bodyB) == "ballB" )
                 {
+                    Screen.setTitleText("Buen trabajo!");
                     context.gameover = true;
                 }
             }
@@ -78,12 +79,12 @@ LevelSelector.getLevels().push({
 
     update : function(context)
     {
-        if(Physics.getPosition(context.ballA).y > Screen.getHeight())
+        if(Physics.getPosition(context.ballA)[1]> Screen.getHeight())
         {
             Physics.setPosition(context.ballA, context.ballAStartPos);
             Physics.clearForces(context.ballA);
         }
-        if(Physics.getPosition(context.ballB).y > Screen.getHeight())
+        if(Physics.getPosition(context.ballB)[1]> Screen.getHeight())
         {
             Physics.setPosition(context.ballB, context.ballBStartPos);
             Physics.clearForces(context.ballB);
