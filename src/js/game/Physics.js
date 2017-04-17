@@ -8,6 +8,8 @@ var Physics = (function(){
     var listeners = [];
     var id_count = 0;
     var timestamp = 0;
+    var fps = 0;
+    var title_bar = document.getElementsByTagName("title")[0];
 
     function init()
     {
@@ -99,6 +101,12 @@ var Physics = (function(){
         if(elapsedtime > 500)
             elapsedtime = 500;
         world.step(elapsedtime/1000);
+        var new_fps = 1 / (elapsedtime/1000)|0;
+        if(new_fps != fps)
+        {
+            fps = new_fps;
+            title_bar.innerHTML = "fps: " + fps;
+        }
     }
 
     function on(type, callback)
