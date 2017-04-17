@@ -288,8 +288,11 @@ var CrayonPhysics = (function(){
           {
               if(e.button != 2)
               {
+                  if(!drawing_data.is_linto_locked)
+                  {
+                      tack();
+                  }
                   drawing_data.clear();
-                  tack();
               }
           }
           else
