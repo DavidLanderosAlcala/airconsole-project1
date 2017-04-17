@@ -7,10 +7,7 @@ var Physics = (function(){
     var scale;
     var listeners = [];
     var id_count = 0;
-
-
     var timestamp = 0;
-    var last_elapsed_time = 0;
 
     function init()
     {
@@ -101,8 +98,7 @@ var Physics = (function(){
         timestamp = newtimestamp;
         if(elapsedtime > 500)
             elapsedtime = 500;
-        world.step(elapsedtime/1000, last_elapsed_time/1000);
-        last_elapsed_time = elapsedtime;
+        world.step(elapsedtime/1000);
     }
 
     function on(type, callback)
