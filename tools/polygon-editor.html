@@ -541,7 +541,7 @@ OpenSCAD code:<br>
         var poly2 = [];
         for(var i = 0; i < poly.length; i++)
         {
-            poly2.push({x : parseFloat((poly[i][0] / 10).toFixed(2)), y : parseFloat((-poly[i][1] / 10).toFixed(2)), });
+            poly2.push([ parseFloat((poly[i][0] / 10).toFixed(2)), parseFloat((-poly[i][1] / 10).toFixed(2)), ]);
         }
         textarea.value = JSON.stringify(poly2,4,4);
     }
@@ -552,7 +552,7 @@ OpenSCAD code:<br>
         var poly = [];
         for(var  i = 0; i < array.length; i++)
         {
-            poly.push([array[i].x * 10, array[i].y* -10]);
+            poly.push([array[i][0] * 10, array[i][1] * -10]);
         }
         
         var string = "polygon(" + JSON.stringify(poly) +  ");";
