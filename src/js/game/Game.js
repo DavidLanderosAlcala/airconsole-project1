@@ -840,7 +840,7 @@ var Game = (function(){
       {
           for(var i = 0; i < callbacks.length; i++)
           {
-               callbacks[i](event);
+               callbacks[i]();
           }
       }
   }
