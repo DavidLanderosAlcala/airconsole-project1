@@ -76,7 +76,7 @@ LevelSelector.getLevels().push({
 
     update : function(context, engine)
     {
-        if(Physics.getPosition(context.ball).y > Screen.getHeight())
+        if(Physics.getPosition(context.ball)[1] > Screen.getHeight())
         {
             Physics.clearForces(context.ball);
             Physics.setPosition(context.ball, [ (Screen.getWidth()/2) - 300, 0 ]);
