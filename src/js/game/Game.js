@@ -705,10 +705,16 @@ var Game = (function(){
       level_data.update_fnc = level.update;
       var _bodies = [];
       level.hints = level.hints || [];
+      level.tacks = level.tacks || [];
       level_data.hints = [];
+      level_data.tacks = [];
       for(var i = 0; i < level.hints.length;i++)
       {
           level_data.hints.push(prepareLevelShapes(level.hints[i]));
+      }
+      for(var i = 0; i < level.tacks.length;i++)
+      {
+          level_data.tacks.push(prepareLevelShapes(level.tacks[i]));
       }
       for(var i = 0; i < level.bodies.length; i++)
       {
@@ -749,6 +755,28 @@ var Game = (function(){
               color_index : ColorManager.getRandomColorIndex(),
           });
           _bodies.push(body);
+      }
+
+      for(var i = 0; i < level_data.tacks.length; i++)
+      {
+          /* Create level tacks */
+          var bodyA = Physics.getBodyByLabel(level_data.tacks[i].bodyA);
+          var bodyB = Physics.getBodyByLabel(level_data.tacks[i].bodyB);
+          var pos = level_data.tacks[i].position;
+          var tack = {
+              bodyA     : bodyA,
+              offsetA   : calcTackOffset(pos, bodyA),
+              bodyB     : bodyB,
+              offsetB   : calcTackOffset(pos, bodyB),
+              contraint : null,
+          };
+          tack.contraint = Physics.createRevoluteJoint({
+              bodyA  : tack.bodyA,
+              pointA : tack.offsetA,
+              bodyB  : tack.bodyB,
+              pointB : tack.offsetB,
+          });
+          objects.tacks.push(tack);
       }
 
       level_data.title       = level.title;
