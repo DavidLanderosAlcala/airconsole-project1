@@ -36,9 +36,11 @@ var CrayonPhysics = (function(){
       drawing_data = {
           current_polygon     : [],
           current_color_index : -1,
+          is_linto_locked     : false,
           clear : function() {
               drawing_data.current_polygon = [];
               drawing_data.current_color_index = -1;
+              drawing_data.is_linto_locked = false;
           }
       };
 
@@ -304,6 +306,10 @@ var CrayonPhysics = (function(){
 
   function lineTo(pos)
   {
+      if(drawing_data.is_linto_locked)
+      {
+          return;
+      }
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
           var new_pos = {
@@ -323,6 +329,25 @@ var CrayonPhysics = (function(){
             drawing_data.current_color_index = ColorManager.getRandomColorIndex();
           }     
           drawing_data.current_polygon.push(new_pos);
+          if(drawing_data.current_polygon.length > 20)
+          {
+              var tail = drawing_data.current_polygon[drawing_data.current_polygon.length -1];
+              var head = drawing_data.current_polygon[0];
+              var vec = {
+                  x : tail.x - head.x,
+                  y : tail.y - head.y,
+              };
+              var distance = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+              if(distance < (Physics.getScale() * ConfigOptions.polygon_autoclose_distance))
+              {
+                  var poly = Utils.matterToP2Flavor(drawing_data.current_polygon);
+                  if(decomp.isSimple(poly))
+                  {
+                      closePath();
+                      drawing_data.is_linto_locked = true;
+                  }
+              }
+          }
       }
       moveTo(pos);
   }
@@ -389,7 +414,7 @@ var CrayonPhysics = (function(){
       }
 
 
-      if(h2t_distance > ConfigOptions.polygon_autoclose_distance * 3)
+      if(h2t_distance > Physics.getScale() * ConfigOptions.polygon_autoclose_distance * 3)
       {
           return "wire";
       }
