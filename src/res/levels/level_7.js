@@ -50,20 +50,10 @@ LevelSelector.getLevels().push({
     {
     	context.time = new Date().getTime();
         context.gameover = false;
-        var bodies = Physics.getAllBodies();
-        for(var i = 0; i < bodies.length; i++)
-        {
-            if(Physics.getLabel(bodies[i]) == "ballA")
-            {
-                context.ballA = bodies[i];
-                context.ballAStartPos = Physics.getPosition(context.ballA);
-            }
-            if(Physics.getLabel(bodies[i]) == "ballB")
-            {
-                context.ballB = bodies[i];
-                context.ballBStartPos = Physics.getPosition(context.ballB);
-            }
-        }
+        context.ballA = Physics.getBodyByLabel("ballA");
+        context.ballAStartPos = Physics.getPosition(context.ballA);
+        context.ballB = Physics.getBodyByLabel("ballB");
+        context.ballBStartPos = Physics.getPosition(context.ballB);
 
         Physics.on("beginContact", function(event){
             if( Physics.getLabel(event.bodyA) == "ballA" || Physics.getLabel(event.bodyB) == "ballA" )

@@ -55,17 +55,7 @@ LevelSelector.getLevels().push({
     setup : function(context)
     {
     	context.time = new Date().getTime();
-        var bodies = Physics.getAllBodies();
-        for(var i = 0; i < bodies.length; i++)
-        {
-            if(Physics.getLabel(bodies[i]) == "rock")
-            {
-            	// Buscamos rock y guardamos una referencia
-            	// para no volver a buscarla en cada llamada a update
-                context.rock = bodies[i];
-                break;
-            }
-        }
+        context.rock = Physics.getBodyByLabel("rock");
     },
 
     update : function(context)

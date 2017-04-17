@@ -466,6 +466,19 @@ var Physics = (function(){
         return scale;
     }
 
+    function getBodyByLabel(label)
+    {
+        var bodies = getAllBodies();
+        for(var i = 0; i < bodies.length; i++)
+        {
+            if(getLabel(bodies[i]) == label)
+            {
+                return bodies[i];
+            }
+        }
+        return null;
+    }
+
     return { init            : init,
     	       clear           : clear,
              getPosition     : getPosition,
@@ -491,6 +504,7 @@ var Physics = (function(){
              setPosition     : setPosition,
              setVelocity     : setVelocity,
              clearForces     : clearForces,
-             getScale        : getScale };
+             getScale        : getScale,
+             getBodyByLabel  : getBodyByLabel };
 
 })();

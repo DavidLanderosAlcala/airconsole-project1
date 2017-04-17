@@ -50,17 +50,7 @@ LevelSelector.getLevels().push({
     setup : function(context)
     {
         context.gameover = false;
-        var bodies = Physics.getAllBodies();
-        for(var i = 0; i < bodies.length; i++)
-        {
-            if(Physics.getLabel(bodies[i]) == "ball")
-            {
-                // Buscamos ball y guardamos una referencia
-                // para no volver a buscarla en cada llamada a update
-                context.ball = bodies[i];
-                break;
-            }
-        }
+        context.ball = Physics.getBodyByLabel("ball");
 
         Physics.on("beginContact", function(event){
             if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyB) == "sensor" )

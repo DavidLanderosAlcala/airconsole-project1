@@ -134,17 +134,8 @@ LevelSelector.getLevels().push({
            el cual contiene los objetos que estan tocando la cinta transportadora */
         context.gameover = false;
         context.objects_over_lane = [];
-
-        var bodies = Physics.getAllBodies();
-        for(var i = 0; i < bodies.length; i++)
-        {
-            if(Physics.getLabel(bodies[i]) == "box")
-            {
-                context.box = bodies[i];
-                context.box_start_position = Physics.getPosition(context.box);
-                break;
-            }
-        }
+        context.box = Physics.getBodyByLabel("box");
+        context.box_start_position = Physics.getPosition(context.box);
 
 	    /* cuando INICIA una colision, revisamos si la cinta transportadora esta involucrada */
         Physics.on("beginContact", function(event){

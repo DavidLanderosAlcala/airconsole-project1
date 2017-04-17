@@ -56,23 +56,9 @@ LevelSelector.getLevels().push({
     {
         context.gameover = false;
         context.frame = 0;
-        var bodies = Physics.getAllBodies();
-        for(var i = 0; i < bodies.length; i++)
-        {
-            var label = Physics.getLabel(bodies[i]);
-            if(label == "ball")
-            {
-                context.ball = bodies[i];
-            }
-            if(label == "cup")
-            {
-                context.cup = bodies[i];
-            }
-            if(label == "sensor")
-            {
-                context.sensor = bodies[i];
-            }
-        }
+        context.ball = Physics.getBodyByLabel("ball");
+        context.cup = Physics.getBodyByLabel("cup");
+        context.sensor = Physics.getBodyByLabel("sensor");
 
         Physics.on("beginContact", function(event){
             if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyA) == "ball" )
