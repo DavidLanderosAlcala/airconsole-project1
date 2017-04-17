@@ -336,7 +336,7 @@ var Physics = (function(){
         	angle += Math.PI;
         var s_angle = Math.sin(angle);
         var c_angle = Math.cos(angle);
-        var half_height = 3 / scale;
+        var half_height = 4 / scale;
         var vertices = [
             [ - half_height * s_angle + pointA.x,
               half_height * c_angle + pointA.y ],
