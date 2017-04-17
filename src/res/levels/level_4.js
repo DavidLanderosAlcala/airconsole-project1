@@ -7,42 +7,42 @@ LevelSelector.getLevels().push({
         {
             label    : "ball",
             isStatic : false,
-            position : { x : -3, y : 8 },
+            position : [-3, 8 ],
             type     : "circle",
             radio    : 0.25,
         },
         {
             label : "plattformA",
             isStatic : true,
-            position : { x : -6, y : 0 },
+            position : [ -6, 0 ],
             vertices: [
-                {x : -4, y : 4 },
-                {x : -4, y : 0 },
-                {x : 4, y : 0 },
-                {x : 4, y : 4 },
+                [ -4, 4 ],
+                [ -4, 0 ],
+                [ 4, 0 ],
+                [ 4, 4 ],
             ],
         },
         {
             label : "plattformB",
             isStatic : true,
-            position : { x : 6, y : 0 },
+            position : [ 6, 0 ],
             vertices: [
-                {x : -4, y : 4 },
-                {x : -4, y : 0 },
-                {x : 4, y : 0 },
-                {x : 4, y : 4 },
+                [ -4, 4 ],
+                [ -4, 0 ],
+                [ 4, 0 ],
+                [ 4, 4 ],
             ],
         },
         {
             label : "sensor",
             isStatic : true,
             isSensor : true,
-            position : { x : 6.40, y : 3 },
+            position : [ 6.40, 3 ],
             vertices: [
-                {x : -4, y : 4 },
-                {x : -4, y : 0 },
-                {x : 4, y : 0 },
-                {x : 4, y : 4 },
+                [ -4, 4 ],
+                [ -4, 0 ],
+                [ 4, 0 ],
+                [ 4, 4 ],
             ],
         },
     ],
@@ -79,7 +79,7 @@ LevelSelector.getLevels().push({
         if(Physics.getPosition(context.ball).y > Screen.getHeight())
         {
             Physics.clearForces(context.ball);
-            Physics.setPosition(context.ball, { x : (Screen.getWidth()/2) - 300, y : 0 });
+            Physics.setPosition(context.ball, [ (Screen.getWidth()/2) - 300, 0 ]);
         }
         return context.gameover;
     }
