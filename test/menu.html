@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<style>
+        @font-face {
+            font-family : chalk;
+            src : url(../src/res/fonts/chalk.ttf);
+        }
+    	body, html
+    	{
+    		padding: 0;
+    		margin: 0px;
+    	}
+        div.chalk-menu-layer
+        {
+            position: absolute;
+            padding-left: 20%;
+            padding-right: 20%;
+            width: 60%;
+        }
+        div.chalk-menu-container
+        {
+	        background-image : url("../src/res/img/background.jpg");
+	        background-size  : 100% 100%;
+            width            : 100%;
+            height           : 100%;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            width: 100%;
+            min-width: 600px;
+            overflow: hidden;
+        }
+        div.chalk-menu-row:nth-child(1)
+        {
+        	//border: 1px dotted silver;
+        	width: 100%;
+        	height: 20%;
+        }
+        div.chalk-menu-row:nth-child(1) > label
+        {
+        	display: block;
+        	font-family: chalk;
+        	color: rgba(255,255,255,0.9);
+        }
+        div.chalk-menu-row:nth-child(2)
+        {
+        	position: relative;
+        	transition: all 0.5s linear;
+        	//border: 1px dotted silver;
+        	text-align: left;
+        	width: 500%;
+        	height: 50%;
+        }
+        div.chalk-menu-row:nth-child(3)
+        {
+        	position: relative;
+        	//border: 1px dotted silver;
+        	height: 30%;
+        }
+        div.chalk-level-button:hover
+        {
+        	background-color: rgba(0,0,0,0.5);
+        }
+        div.chalk-level-button
+        {
+        	background-image: url("../src/res/img/level_1_thumbnail.png");
+        	background-size: 50% 50%;
+        	background-position: 50% 20%;
+        	background-repeat: no-repeat;
+            display: inline-block;
+            background-color: rgba(0,0,0,0.3);
+            position: relative;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            font-family: chalk;
+        }
+        div.chalk-arrow-button
+        {
+        	background-size: 100% 100%;
+        	border-radius: 30px;
+        	display: inline-block;
+        	position: relative;
+        	top : 10%;
+        	height: 100%;
+        	width: 15%;
+        }
+        div.chalk-arrow-button:hover
+        {
+        	background-color: rgba(0,0,0,0.5);
+        }
+        div.chalk-arrow-button:nth-child(1)
+        {
+        	background-image: url("../src/res/img/left_arrow.png");;
+        }
+        div.chalk-arrow-button:nth-child(2)
+        {
+        	background-image: url("../src/res/img/right_arrow.png");;
+        }
+    	</style>
+    </head>
+    <body>
+    	<div class="chalk-menu-layer">
+    	    <div class="chalk-menu-container">
+    	    	<div class="chalk-menu-row">
+    	    	     <label class="chalk-menu-title"><br>Draw something</label>
+    	    	     <label class="chalk-menu-subtitle">level 1</label>
+    	    	</div>
+    	    	<div class="chalk-menu-row">
+    	    		<div class="chalk-level-button"> 1</div>
+    	    		<div class="chalk-level-button"> 2 </div>
+    	    		<div class="chalk-level-button"> 3</div>
+    	    		<div class="chalk-level-button"> 4 </div>
+    	    		<div class="chalk-level-button"> 5 </div>
+    	    		<div class="chalk-level-button"> 6 </div>
+    	    		<div class="chalk-level-button"> 7 </div>
+    	    		<div class="chalk-level-button"> 8 </div>
+    	    	</div>
+                <div class="chalk-menu-row">
+                	<div class="chalk-arrow-button"></div>
+                	<div class="chalk-arrow-button"></div>
+                </div>
+    	    </div>
+    	</div>
+    </body>
+
+
+    <script>
+        (function(){
+
+        var menu_container = document.querySelector(".chalk-menu-container");
+        var title          = document.querySelector(".chalk-menu-title");
+        var subtitle       = document.querySelector(".chalk-menu-subtitle");
+        var header         = document.querySelector("div.chalk-menu-row:nth-child(1)");
+        var body           = document.querySelector("div.chalk-menu-row:nth-child(2)");
+        var footer         = document.querySelector("div.chalk-menu-row:nth-child(3)");
+        var left_arrow     = document.querySelector("div.chalk-arrow-button:nth-child(1)");
+        var right_arrow     = document.querySelector("div.chalk-arrow-button:nth-child(2)");
+        var scrollpos = 0;
+        var buttons_count = 0;
+
+        window.addEventListener("resize", resize);
+        function resize()
+        {
+        	/* adjust container */
+            var rect = menu_container.getBoundingClientRect();
+            var height = (rect.width / 1.7);
+            menu_container.style.height = height + "px";
+            menu_container.style.top = ((window.innerHeight>>1) - (height>>1)) + "px";
+
+            /* adjust header */
+            rect = header.getBoundingClientRect();
+            title.style.fontSize = ((rect.height * 0.3)|0) + "px";
+            //title.style.marginTop = ((rect.height * 0.3)|0) + "px";
+            title.style.lineHeight = ((rect.height * 0.3)|0) + "px";
+            subtitle.style.fontSize = ((rect.height * 0.2)|0) + "px";
+            subtitle.style.lineHeight = ((rect.height * 0.3)|0) + "px";
+
+            /* adjust body */
+            rect = body.getBoundingClientRect();
+            var button_height = rect.height * 0.6;
+            var buttons = document.querySelectorAll(".chalk-level-button");
+            buttons_count = buttons.length;
+            for(var i = 0; i < buttons_count; i++)
+            {
+            	buttons[i].style.height = button_height + "px";
+            	buttons[i].style.lineHeight = (button_height*1.6) + "px";
+            	buttons[i].style.fontSize = title.style.fontSize;
+            	buttons[i].style.width = button_height + "px";
+            	buttons[i].style.marginLeft = (button_height*0.3) + "px";
+            	buttons[i].style.top = (rect.height>>1) - (button_height>>1) + "px";
+            }
+
+            /* adjust footer */
+            rect = footer.getBoundingClientRect();
+            footer.style.lineHeight = rect.height + "px";
+        }
+
+        left_arrow.addEventListener("click", function(){
+            rect = body.getBoundingClientRect();
+            var button_height = rect.height * 0.4;
+            scrollpos += button_height * 2;
+            if(scrollpos > 0)
+            	scrollpos = 0;
+            body.style.marginLeft = scrollpos + "px";            
+        });
+
+        right_arrow.addEventListener("click", function(){
+            rect = body.getBoundingClientRect();
+            var button_height = rect.height * 0.4;
+            scrollpos -= button_height * 2;
+            var width_and_margin = button_height * 1.3;
+            if(scrollpos < -width_and_margin * buttons_count)
+            	scrollpos = -width_and_margin * buttons_count;
+            body.style.marginLeft = scrollpos + "px";
+        });
+
+        resize();
+
+        })();
+    </script>
+</html>
