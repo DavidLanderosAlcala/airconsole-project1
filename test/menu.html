@@ -10,6 +10,9 @@
     	{
     		padding: 0;
     		margin: 0px;
+    		background-image : url("../src/res/img/background.jpg");
+    		background-repeat: no-repeat;
+    		background-size: 100%;
     	}
         div.chalk-menu-layer
         {
@@ -20,6 +23,11 @@
         }
         div.chalk-menu-container
         {
+        	border-radius: 20px;
+            border: 10px solid transparent;
+            border-image-source: url("..//src/res/img/chalk_pattern.png");
+            border-image-repeat: repeat;
+            border-image-slice: 30;
 	        background-image : url("../src/res/img/background.jpg");
 	        background-size  : 100% 100%;
             width            : 100%;
@@ -35,7 +43,11 @@
         {
         	//border: 1px dotted silver;
         	width: 100%;
-        	height: 20%;
+        	height: 30%;
+        	background-image: url("../src/res/img/text_header.png");
+        	background-repeat: no-repeat;
+        	background-size: 40%;
+        	background-position: 50% 90%;
         }
         div.chalk-menu-row:nth-child(1) > label
         {
@@ -56,7 +68,7 @@
         {
         	position: relative;
         	//border: 1px dotted silver;
-        	height: 30%;
+        	height: 20%;
         }
         div.chalk-level-button:hover
         {
@@ -82,9 +94,9 @@
         	border-radius: 30px;
         	display: inline-block;
         	position: relative;
-        	top : 10%;
+        	top : -20%;
         	height: 100%;
-        	width: 15%;
+        	width: 10%;
         }
         div.chalk-arrow-button:hover
         {
@@ -104,7 +116,7 @@
     	<div class="chalk-menu-layer">
     	    <div class="chalk-menu-container">
     	    	<div class="chalk-menu-row">
-    	    	     <label class="chalk-menu-title"><br>Draw something</label>
+    	    	     <label class="chalk-menu-title"> Draw something </label>
     	    	     <label class="chalk-menu-subtitle">level 1</label>
     	    	</div>
     	    	<div class="chalk-menu-row">
@@ -151,11 +163,10 @@
 
             /* adjust header */
             rect = header.getBoundingClientRect();
-            title.style.fontSize = ((rect.height * 0.3)|0) + "px";
-            //title.style.marginTop = ((rect.height * 0.3)|0) + "px";
+            title.style.fontSize = ((rect.height * 0.2)|0) + "px";
             title.style.lineHeight = ((rect.height * 0.3)|0) + "px";
-            subtitle.style.fontSize = ((rect.height * 0.2)|0) + "px";
-            subtitle.style.lineHeight = ((rect.height * 0.3)|0) + "px";
+            subtitle.style.fontSize = ((rect.height * 0.1)|0) + "px";
+            subtitle.style.lineHeight = ((rect.height * 0.55)|0) + "px";
 
             /* adjust body */
             rect = body.getBoundingClientRect();
@@ -177,19 +188,21 @@
             footer.style.lineHeight = rect.height + "px";
         }
 
-        left_arrow.addEventListener("click", function(){
+        left_arrow.addEventListener("click", function(e){
+        	e.preventDefault();
             rect = body.getBoundingClientRect();
             var button_height = rect.height * 0.4;
-            scrollpos += button_height * 2;
+            scrollpos += button_height * 4;
             if(scrollpos > 0)
             	scrollpos = 0;
             body.style.marginLeft = scrollpos + "px";            
         });
 
-        right_arrow.addEventListener("click", function(){
+        right_arrow.addEventListener("click", function(e){
+        	e.preventDefault();
             rect = body.getBoundingClientRect();
             var button_height = rect.height * 0.4;
-            scrollpos -= button_height * 2;
+            scrollpos -= button_height * 4;
             var width_and_margin = button_height * 1.3;
             if(scrollpos < -width_and_margin * buttons_count)
             	scrollpos = -width_and_margin * buttons_count;
