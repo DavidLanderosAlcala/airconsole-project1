@@ -580,7 +580,7 @@ var Game = (function(){
       var i, l = objects.tacks.length;
       for(i = 0 ; i < l; i ++)
       {
-          if(!objects.tacks[i].deleted)
+          if(!objects.tacks[i].deleted && !objects.tacks[i].indelible)
           {
               var tack_pos = calcTackAbsPos(i)
               var diff_x = cur_pos[0] - tack_pos[0];
@@ -769,6 +769,7 @@ var Game = (function(){
               bodyB     : bodyB,
               offsetB   : calcTackOffset(pos, bodyB),
               contraint : null,
+              indelible  : true,
           };
           tack.contraint = Physics.createRevoluteJoint({
               bodyA  : tack.bodyA,
