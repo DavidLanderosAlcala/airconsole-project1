@@ -443,7 +443,7 @@ var Game = (function(){
       var i, l = objects.tacks.length;
       for(i = 0; i < l; i++)
       {
-          if(objects.tacks[i].bodyB == null)
+          if(objects.tacks[i].bodyB == null && !objects.tacks[i].deleted)
           {
               if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
@@ -495,7 +495,7 @@ var Game = (function(){
       var i, l = objects.tacks.length;
       for(i = 0; i < l; i++)
       {
-          if(objects.tacks[i].bodyB == null)
+          if(objects.tacks[i].bodyB == null && !objects.tacks[i].deleted)
           {
               if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
