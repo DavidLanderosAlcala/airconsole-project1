@@ -18,8 +18,10 @@ LevelSelector.getLevels().push({
             vertices: [
                 [ -4, 4 ],
                 [ -4, 0 ],
-                [ 4, 0 ],
-                [ 4, 4 ],
+                [ 4,  0 ],
+                [ 4,   3.2 ],
+                [ 3.2, 3.2 ],
+                [ 3.2, 4 ]
             ],
         },
         {
@@ -31,6 +33,18 @@ LevelSelector.getLevels().push({
                 [ -4, 0 ],
                 [ 4, 0 ],
                 [ 4, 4 ],
+            ],
+        },
+
+        {
+            label : "bridge",
+            isStatic : false,
+            position : [ 2.5, 3.3 ],
+            vertices: [
+                [ -0.35, 5.5 ],
+                [ -0.35, 0 ],
+                [ 0.35, 0 ],
+                [ 0.35, 5.5 ],
             ],
         },
         {
@@ -45,6 +59,12 @@ LevelSelector.getLevels().push({
                 [ 4, 4 ],
             ],
         },
+    ],
+
+    tacks : [
+        { bodyA    : "plattformB",
+          bodyB    : "bridge",
+          position : [2.5,3.6] },
     ],
 
     setup : function(context)
