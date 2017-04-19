@@ -80,6 +80,7 @@ var Game = (function(){
 
   function update()
   {
+      removeLostBodies();
       Physics.update();
       if(!level_data.game_over && level_data.update_fnc != null)
       {
@@ -93,6 +94,19 @@ var Game = (function(){
       }
       render();
       window.requestAnimationFrame(update);
+  }
+
+  function removeLostBodies()
+  {
+      var bodies = Physics.getAllBodies();
+      for(var i = bodies.length -1 ; i >= 0; i--)
+      {
+          if(Physics.getPosition(bodies[i])[1] > Screen.getHeight() + 500 )
+          {
+              console.log("Destroying object because it is out of the screen");
+              removeBody(bodies[i], true);
+          }
+      }
   }
 
   function render()
@@ -131,32 +145,35 @@ var Game = (function(){
           /* Drawing polygons */
           context.save();
               context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
-              var position = Physics.getPosition(objects.shapes[i].body);
-              context.translate(position[0], position[1]);
-              context.rotate(Physics.getAngle(objects.shapes[i].body));
-              context.translate(-objects.shapes[i].centroid[0], -objects.shapes[i].centroid[1]);
-              context.beginPath();
-              if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
-                  context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
-                  for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
-                      context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
+              if(!objects.shapes[i].isOutOfTheScreen)
+              {
+                  var position = Physics.getPosition(objects.shapes[i].body);
+                  context.translate(position[0], position[1]);
+                  context.rotate(Physics.getAngle(objects.shapes[i].body));
+                  context.translate(-objects.shapes[i].centroid[0], -objects.shapes[i].centroid[1]);
+                  context.beginPath();
+                  if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
+                      context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
+                      for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
+                          context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
+                      }
+                      if(objects.shapes[i].type == "polygon")
+                          context.closePath();
                   }
-                  if(objects.shapes[i].type == "polygon")
-                      context.closePath();
-              }
-              else if(objects.shapes[i].type == "circle" ) {
-                  context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
-              }
-              if(objects.shapes[i].type == "wire")
-              {
-                  context.stroke();
-              }
-              else
-              {
-                  context.globalAlpha = objects.shapes[i].deleted ? 0.05 : 0.2;
-                  context.fill();
-                  context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
-                  context.stroke(); 
+                  else if(objects.shapes[i].type == "circle" ) {
+                      context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
+                  }
+                  if(objects.shapes[i].type == "wire")
+                  {
+                      context.stroke();
+                  }
+                  else
+                  {
+                      context.globalAlpha = objects.shapes[i].deleted ? 0.05 : 0.2;
+                      context.fill();
+                      context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
+                      context.stroke(); 
+                  }
               }
           context.restore();
           /* Drawing polygons (ghost mode) */
@@ -615,7 +632,7 @@ var Game = (function(){
       drawing_data.clear();
   }
 
-  function removeBody(body)
+  function removeBody(body, isOutOfTheScreen)
   {
       if(body.label != "Body")
         return;
@@ -626,6 +643,7 @@ var Game = (function(){
       {
           if(body == objects.shapes[i].body)
           {
+              objects.shapes[i].isOutOfTheScreen = isOutOfTheScreen;
               objects.shapes[i].deleted = true;
               return;
           }

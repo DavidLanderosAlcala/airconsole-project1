@@ -84,17 +84,6 @@ var Physics = (function(){
 
     function update()
     {
-    	  /* Destroy lost objects */
-    	  for(var i = world.bodies.length -1 ; i >= 0; i--)
-    	  {
-              if(world.bodies[i].position[1] > 100)
-              {
-              	console.log("Destroying object because it is out of the screen");
-              	world.removeBody(world.bodies[i]);
-              	/* only one per frame ;) */
-              	break;
-              }
-    	  }
         var newtimestamp = new Date().getTime();
         var elapsedtime = newtimestamp - timestamp;
         timestamp = newtimestamp;
