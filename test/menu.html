@@ -114,15 +114,15 @@
     	</style>
     </head>
     <body>
-    	<div class="chalk-menu-layer">
-    	</div>
+    <div class="chalk-menu-layer">
+    </div>
     </body>
 
 
     <script>
         var LevelSelector = (function(){
 
-         var levels = [0,1,2,3,4,5];
+         var levels = [{title: "Draw a shape"},1,2,3,4,5];
          var menu_container = null;
          var title          = null;
          var subtitle       = null;
@@ -184,6 +184,17 @@
                      scrollpos = -width_and_margin * buttons_count;
                  body.style.marginLeft = scrollpos + "px";
              });
+
+             on("preview", function(level_index){
+                 title.innerHTML = levels[level_index].title;
+                 subtitle.innerHTML = "Level " + (level_index + 1);
+             });
+
+             on("selected", function(level_index){
+                hide();
+                Game.loadLevel(level_index);
+             });
+
              resize();
          }
 
@@ -255,7 +266,13 @@
 
         function dispatch(event, arg)
         {
-            console.log("El usuario ha :" + event + ", sobre el nivel: " + arg);
+            if(listeners[event])
+            {
+                for(var i = 0; i < listeners[event].length; i++)
+                {
+                    listeners[event][i](arg);
+                }
+            }
         }
 
         return { init      : init,
