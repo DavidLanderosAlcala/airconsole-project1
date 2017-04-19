@@ -31,6 +31,18 @@ LevelSelector.getLevels().push({
             ],
         },
         {
+            label : "sensor",
+            isStatic : true,
+            isSensor : true,
+            position : [ -0, 3],
+            vertices: [
+                [-1, 3 ],
+                [-1, 0 ],
+                [1, 0 ],
+                [1, 3 ]
+            ],
+        },
+        {
             label    : "ball",
             type     : "circle",
             radio    : 0.25,
@@ -62,10 +74,13 @@ LevelSelector.getLevels().push({
     setup : function(context)
     {
         context.gameover = false;
-        Physics.on("beginContact", function(event){
-            if( Physics.getLabel(event.bodyA) == "ground" || Physics.getLabel(event.bodyA) == "ball" )
+        context.sensor = Physics.getBodyByLabel("sensor");
+        context.cup = Physics.getBodyByLabel("cup");
+
+        Physics.on("endContact", function(event){
+            if( Physics.getLabel(event.bodyA) == "sensor" || Physics.getLabel(event.bodyA) == "ball" )
             {
-                if( Physics.getLabel(event.bodyB) == "ground" || Physics.getLabel(event.bodyB) == "ball" )
+                if( Physics.getLabel(event.bodyB) == "sensor" || Physics.getLabel(event.bodyB) == "ball" )
                 {
                     Screen.setTitleText("Bien hecho!");
                     context.gameover = true;
@@ -76,6 +91,8 @@ LevelSelector.getLevels().push({
 
     update : function(context)
     {
+        Physics.setPosition(context.sensor, Physics.getPosition(context.cup));
+        Physics.setAngle(context.sensor, Physics.getAngle(context.cup))
         return context.gameover;
     }
 

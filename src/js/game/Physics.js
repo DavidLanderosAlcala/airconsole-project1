@@ -442,6 +442,11 @@ var Physics = (function(){
         body_handler.position[1] = pos[1] / scale;
     }
 
+    function setAngle(body_handler, angle)
+    {
+        body_handler.angle = angle;
+    }
+
     function clearForces(body_handler)
     {
         body_handler.velocity[0] = 0;
@@ -494,6 +499,7 @@ var Physics = (function(){
              setVelocity     : setVelocity,
              clearForces     : clearForces,
              getScale        : getScale,
-             getBodyByLabel  : getBodyByLabel };
+             getBodyByLabel  : getBodyByLabel,
+             setAngle        : setAngle };
 
 })();
