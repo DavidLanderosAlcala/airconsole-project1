@@ -387,7 +387,7 @@ var Game = (function(){
           return "invalid";
       }
 
-      decomp.removeCollinearPoints(drawing_data.current_polygon, 0.2);
+      decomp.removeCollinearPoints(drawing_data.current_polygon, 0.25);
 
       var h2t_vector = new Float32Array(2);
       h2t_vector[0] = drawing_data.current_polygon[0][0] - drawing_data.current_polygon[drawing_data.current_polygon.length-1][0];
