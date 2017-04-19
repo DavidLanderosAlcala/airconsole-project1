@@ -13,4 +13,4 @@
 - https://rawgit.com/DavidLanderosAlcala/airconsole-project1/crayon/doc/index.html
 
 ##### Try a stable revision
-- https://rawgit.com/DavidLanderosAlcala/airconsole-project1/582f2e348ed58a3541ccbf94158ec872c29ed4b8/src/screen.html
+- http://airconsole.com/#http://rawgit.com/DavidLanderosAlcala/airconsole-project1/73b384547cb8c66a499201e3bc8419e34bd59e92/src/
