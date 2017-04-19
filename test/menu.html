@@ -115,45 +115,78 @@
     </head>
     <body>
     	<div class="chalk-menu-layer">
-    	    <div class="chalk-menu-container">
-    	    	<div class="chalk-menu-row">
-    	    	     <label class="chalk-menu-title"> Draw something </label>
-    	    	     <label class="chalk-menu-subtitle">level 1</label>
-    	    	</div>
-    	    	<div class="chalk-menu-row">
-    	    		<div class="chalk-level-button"> 1</div>
-    	    		<div class="chalk-level-button"> 2 </div>
-    	    		<div class="chalk-level-button"> 3</div>
-    	    		<div class="chalk-level-button"> 4 </div>
-    	    		<div class="chalk-level-button"> 5 </div>
-    	    		<div class="chalk-level-button"> 6 </div>
-    	    		<div class="chalk-level-button"> 7 </div>
-    	    		<div class="chalk-level-button"> 8 </div>
-    	    	</div>
-                <div class="chalk-menu-row">
-                	<div class="chalk-arrow-button"></div>
-                	<div class="chalk-arrow-button"></div>
-                </div>
-    	    </div>
     	</div>
     </body>
 
 
     <script>
-        (function(){
+        var LevelSelector = (function(){
 
-        var menu_container = document.querySelector(".chalk-menu-container");
-        var title          = document.querySelector(".chalk-menu-title");
-        var subtitle       = document.querySelector(".chalk-menu-subtitle");
-        var header         = document.querySelector("div.chalk-menu-row:nth-child(1)");
-        var body           = document.querySelector("div.chalk-menu-row:nth-child(2)");
-        var footer         = document.querySelector("div.chalk-menu-row:nth-child(3)");
-        var left_arrow     = document.querySelector("div.chalk-arrow-button:nth-child(1)");
-        var right_arrow     = document.querySelector("div.chalk-arrow-button:nth-child(2)");
-        var scrollpos = 0;
-        var buttons_count = 0;
+         var levels = [0,1,2,3,4,5];
+         var menu_container = null;
+         var title          = null;
+         var subtitle       = null;
+         var header         = null;
+         var body           = null;
+         var footer         = null;
+         var left_arrow     = null;
+         var right_arrow    = null;
+         var scrollpos      = 0;
+         var buttons_count  = 0;
+         var listeners = [];
+         var visible = false;
 
-        window.addEventListener("resize", resize);
+         function init()
+         {
+            var content =  "<div class='chalk-menu-container'>" +
+                           "    <div class='chalk-menu-row'>" +
+                           "         <label class='chalk-menu-title'> Draw something </label>" +
+                           "         <label class='chalk-menu-subtitle'>level 1</label>" +
+                           "    </div>" +
+                           "    <div class='chalk-menu-row'>";
+            for(var i = 0 ; i < levels.length; i++)
+            {
+                content += "<div onmouseover='LevelSelector.dispatch(\"preview\"," + i + ")'" +
+                           "onclick='LevelSelector.dispatch(\"selected\"," + i + ")' class='chalk-level-button'>" + (i+1) + "</div>";
+            }
+            content +=     "    </div>" +
+                           "    <div class='chalk-menu-row'>" +
+                           "        <div class='chalk-arrow-button'></div>" +
+                           "        <div class='chalk-arrow-button'></div>" +
+                           "    </div>" +
+                           "</div>";
+             document.querySelector(".chalk-menu-layer").innerHTML = content;
+             menu_container = document.querySelector(".chalk-menu-container");
+             title          = document.querySelector(".chalk-menu-title");
+             subtitle       = document.querySelector(".chalk-menu-subtitle");
+             header         = document.querySelector("div.chalk-menu-row:nth-child(1)");
+             body           = document.querySelector("div.chalk-menu-row:nth-child(2)");
+             footer         = document.querySelector("div.chalk-menu-row:nth-child(3)");
+             left_arrow     = document.querySelector("div.chalk-arrow-button:nth-child(1)");
+             right_arrow    = document.querySelector("div.chalk-arrow-button:nth-child(2)");
+             window.addEventListener("resize", resize);
+             left_arrow.addEventListener("click", function(e){
+                 e.preventDefault();
+                 rect = body.getBoundingClientRect();
+                 var button_height = rect.height * 0.4;
+                 scrollpos += button_height * 4;
+                 if(scrollpos > 0)
+                     scrollpos = 0;
+                 body.style.marginLeft = scrollpos + "px";            
+             });
+             right_arrow.addEventListener("click", function(e){
+                 e.preventDefault();
+                 rect = body.getBoundingClientRect();
+                 var button_height = rect.height * 0.4;
+                 scrollpos -= button_height * 4;
+                 var width_and_margin = button_height * 1.3;
+                 if(scrollpos < -width_and_margin * buttons_count)
+                     scrollpos = -width_and_margin * buttons_count;
+                 body.style.marginLeft = scrollpos + "px";
+             });
+             resize();
+         }
+
         function resize()
         {
         	/* adjust container */
@@ -189,29 +222,51 @@
             footer.style.lineHeight = rect.height + "px";
         }
 
-        left_arrow.addEventListener("click", function(e){
-        	e.preventDefault();
-            rect = body.getBoundingClientRect();
-            var button_height = rect.height * 0.4;
-            scrollpos += button_height * 4;
-            if(scrollpos > 0)
-            	scrollpos = 0;
-            body.style.marginLeft = scrollpos + "px";            
-        });
+        function getLevels()
+        {
+            return levels;
+        }
 
-        right_arrow.addEventListener("click", function(e){
-        	e.preventDefault();
-            rect = body.getBoundingClientRect();
-            var button_height = rect.height * 0.4;
-            scrollpos -= button_height * 4;
-            var width_and_margin = button_height * 1.3;
-            if(scrollpos < -width_and_margin * buttons_count)
-            	scrollpos = -width_and_margin * buttons_count;
-            body.style.marginLeft = scrollpos + "px";
-        });
+        function show()
+        {
+            visible = true;
+            menu_container.style.zIndex = 10;
+        }
 
-        resize();
+        function hide()
+        {
+            visible = false;
+            menu_container.style.zIndex = -10;
+        }
+
+        function isVisible()
+        {
+            return visible;
+        }
+
+        function on(type, callback)
+        {
+            if(!listeners[type])
+            {
+                listeners[type] = [];
+            }
+            listeners[type].push(callback);
+        }
+
+        function dispatch(event, arg)
+        {
+            console.log("El usuario ha :" + event + ", sobre el nivel: " + arg);
+        }
+
+        return { init      : init,
+                 getLevels : getLevels,
+                 on        : on,
+                 show      : show,
+                 hide      : hide,
+                 dispatch  : dispatch };
 
         })();
+
+        LevelSelector.init();
     </script>
 </html>
