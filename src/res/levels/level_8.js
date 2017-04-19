@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Level 0",
+    title       : "La grua",
     description : "Despata la coladera",
     bodies      : [
         {

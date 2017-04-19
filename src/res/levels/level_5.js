@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Pelota al vaso",
+    title       : "Encesta!",
     description : "Mete la pelota al vaso",
     bodies      : [
         {

@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Cruza el pozo",
+    title       : "El puente",
     description : "Haz cruzar la pelota",
     bodies      : [
         {

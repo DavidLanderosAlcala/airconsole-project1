@@ -74,6 +74,8 @@
              });
 
              resize();
+             title.innerHTML = levels[0].title;
+             subtitle.innerHTML = "Level 1";
          }
 
         function resize()

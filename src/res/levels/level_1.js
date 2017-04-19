@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Que no caiga",
+    title       : "Los pilares",
     description : "dibuja una linea por encima de los pilares",
     bodies      : [
         {

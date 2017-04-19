@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Level 7",
+    title       : "Cinta transportadora",
     description : "Sube la caja al pickup",
     bodies : [
         {

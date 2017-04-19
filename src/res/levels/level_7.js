@@ -1,8 +1,8 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Que no caiga",
-    description : "Haz que las pelotas se toquen",
+    title       : "Canicas",
+    description : "Haz que las canicas se toquen",
     bodies      : [
         {
             label : "towerA",

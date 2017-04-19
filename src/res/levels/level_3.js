@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Que no caiga",
+    title       : "Patea el balon",
     description : "Haz click en el punto indicado",
     bodies      : [
         {
