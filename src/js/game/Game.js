@@ -360,7 +360,7 @@ var Game = (function(){
               {
                   if(decomp.isSimple(drawing_data.current_polygon))
                   {
-                      closePath();
+                      closePath(true);
                       drawing_data.is_linto_locked = true;
                   }
               }
@@ -369,7 +369,7 @@ var Game = (function(){
       moveTo(pos);
   }
 
-  function closePath()
+  function closePath(forcePolygon)
   {
       var type = evalCurrentShape();
       console.log("Last evaluation: " + type);
@@ -381,7 +381,7 @@ var Game = (function(){
           return;
       }
 
-      if(type == "polygon")
+      if(type == "polygon" || forcePolygon)
       {
           closeAsPolygon();
           return;
