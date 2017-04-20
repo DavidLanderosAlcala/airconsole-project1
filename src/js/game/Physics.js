@@ -130,7 +130,8 @@ var Physics = (function(){
 
     function createBody(options)
     {
-    	  options.isSensor = options.isSensor || false;
+        options.massScale = options.massScale || 1;
+    	options.isSensor = options.isSensor || false;
         options.label = options.label || "Body";
         options.position = options.position || new Float32Array(2);
 
@@ -155,7 +156,7 @@ var Physics = (function(){
         }
         else
         {
-            config.mass = aux_convex.area * 0.001;
+            config.mass = aux_convex.area * 0.001 * options.massScale;
         }
 
         if(options.isKinematic)
@@ -343,6 +344,8 @@ var Physics = (function(){
             localPivotB: [options.pointB[0] / scale, options.pointB[1] / scale],
             collideConnected : false,
         });
+        //constraint.setStiffness(2000000);
+        //constraint.maxForce *= 3;
         world.addConstraint(constraint);
         return constraint;
     }

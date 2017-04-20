@@ -564,6 +564,9 @@ var Game = (function(){
               pointB : objects.tacks[tack_indices[i]].offsetB,
           });
 
+          console.log("contraint: ");
+          console.log(objects.tacks[tack_indices[i]].contraint);
+
           if(Physics.isStatic(objects.tacks[tack_indices[i]].bodyA))
           {
               static_connections++;
@@ -681,7 +684,7 @@ var Game = (function(){
 
   function createChainLink(pointA, pointB)
   {
-      var shape = Utils.rectFromPoints(pointA, pointB, 0.04 * Physics.getScale());
+      var shape = Utils.rectFromPoints(pointA, pointB, 0.05 * Physics.getScale());
       var centroid = [ (shape[0][0] + shape[1][0] + shape[2][0] + shape[3][0])/4,
                        (shape[0][1] + shape[1][1] + shape[2][1] + shape[3][1])/4 ];
       var point1 = [ pointA[0] - centroid[0], pointA[1] - centroid[1] ];
@@ -689,6 +692,7 @@ var Game = (function(){
       var body_handler = Physics.createBody({
           label    : "chainLink",
           vertices : shape,
+          massScale : 10,
       });
       
       return {
