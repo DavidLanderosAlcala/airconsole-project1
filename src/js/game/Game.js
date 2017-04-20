@@ -220,7 +220,7 @@ var Game = (function(){
       for(var i = 0; i < objects.chains.length; i++)
       {
           console.log("dibujando: objects.chains[" + i + "]");
-          for(var chl = 0; chl < objects.chains[i].chain_links.length; chl++)
+          for(var chl = 0; chl < objects.chains[i].chain_links.length-1; chl++)
           {
               context.save();
               var handler = objects.chains[i].chain_handler[chl];
@@ -231,8 +231,8 @@ var Game = (function(){
               context.translate(pos[0], pos[1]);
               context.rotate(Physics.getAngle(handler));
               context.translate(-centroid[0], -centroid[1]);
-              context.moveTo(link.vertices[0][0], link.vertices[0][1]);
-              context.lineTo(link.vertices[1][0], link.vertices[1][1]);
+              context.moveTo(objects.chains[i].vertices[chl][0], objects.chains[i].vertices[chl][1]);
+              context.lineTo(objects.chains[i].vertices[chl+1][0], objects.chains[i].vertices[chl+1][1]);
               context.stroke();
               context.restore();
           }
@@ -702,7 +702,6 @@ var Game = (function(){
           body_handler : body_handler,
           point1 : point1,
           point2 : point2,
-          vertices : [pointA, pointB],
       };
   }
 
