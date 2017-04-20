@@ -279,8 +279,7 @@ var Physics = (function(){
                 var pointB = new Float32Array(2);
                 pointB[0] = (options.vertices[i][0] + options.position[0]) / scale;
                 pointB[1] = (options.vertices[i][1] + options.position[1]) / scale;
-
-                var vertices = buildRect(pointA, pointB);
+                var vertices = Utils.rectFromPoints(pointA, pointB, 0.04);
                 decomp.makeCCW(vertices);
                 var c = new p2.Convex({vertices: vertices});
                 for(var j=0; j!==c.vertices.length; j++){
@@ -325,37 +324,6 @@ var Physics = (function(){
          */
          body.id = id_count++;
         return body;
-    }
-
-
-    /*
-     * do you want to improve this algo ?
-     * use this jsfiddle test:
-     *     https://jsfiddle.net/dka92bzb/11/
-     */
-    function buildRect(pointA, pointB)
-    {
-        var vector = new Float32Array(2);
-        vector[0] = pointB[0] - pointA[0];
-        vector[1] = pointB[1] - pointA[1];
-        var length = Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
-        var angle = Math.atan(vector[1] / vector[0]);
-        if( vector[0] < 0 )
-        	angle += Math.PI;
-        var s_angle = Math.sin(angle);
-        var c_angle = Math.cos(angle);
-        var half_height = 4 / scale;
-        var vertices = [
-            [ - half_height * s_angle + pointA[0],
-              half_height * c_angle + pointA[1] ],
-            [ (length  * c_angle) - (half_height * s_angle) + pointA[0],
-              (half_height * c_angle) + (length * s_angle) + pointA[1] ],
-            [ (length * c_angle) - (-half_height * s_angle) + pointA[0],
-              (-half_height * c_angle) + (length * s_angle) + pointA[1] ],
-            [ half_height * s_angle + pointA[0],
-              -half_height * c_angle + pointA[1]],            
-        ];
-        return vertices;
     }
 
     function createRectangle(options)
