@@ -24,6 +24,7 @@ var Game = (function(){
       objects = {
           shapes : [],
           tacks  : [],
+          chains : [],
       };
 
       level_data = {
@@ -75,6 +76,7 @@ var Game = (function(){
       // Reset some variables
       objects.shapes = [];
       objects.tacks  = [];
+      objects.chains  = [];
 
       level_data.hints = [];
 
@@ -207,6 +209,31 @@ var Game = (function(){
               context.restore();
           }
       }
+
+      /* Drawing chains */
+      context.save();
+      context.strokeStyle = ColorManager.getColorAt(0);
+      for(var i = 0; i < objects.chains.length; i++)
+      {
+          console.log("dibujando: objects.chains[" + i + "]");
+          for(var chl = 0; chl < objects.chains[i].chain_links.length; chl++)
+          {
+              context.save();
+              var handler = objects.chains[i].chain_handler[chl];
+              var link = objects.chains[i].chain_links[chl];
+              var pos = Physics.getPosition(handler);
+              var centroid = Physics.getCentroid(handler);
+              context.beginPath();
+              context.translate(pos[0], pos[1]);
+              context.rotate(Physics.getAngle(handler));
+              context.translate(-centroid[0], -centroid[1]);
+              context.moveTo(link.vertices[0][0], link.vertices[0][1]);
+              context.lineTo(link.vertices[1][0], link.vertices[1][1]);
+              context.stroke();
+              context.restore();
+          }
+      }
+      context.restore();
 
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
@@ -398,6 +425,7 @@ var Game = (function(){
     */
   function closePath(forcePolygon)
   {
+      var aux = drawing_data.current_polygon.slice();
       var type = evalCurrentShape();
       console.log("Last evaluation: " + type);
       console.log(JSON.stringify(drawing_data.current_polygon));
@@ -416,7 +444,8 @@ var Game = (function(){
 
       if(type == "wire")
       {
-          closeAsWire();
+          drawing_data.current_polygon = aux;
+          closeAsChain();
           return;
       }
   }
@@ -584,6 +613,56 @@ var Game = (function(){
       }
 
       drawing_data.clear();
+  }
+
+  /** @func closeAsChain
+    * @desc Creates a chain using the user's drawing
+    */
+  function closeAsChain()
+  {
+      var chain = {
+          vertices : drawing_data.current_polygon,
+          chain_handler : [],
+          chain_links   : [],
+      };
+      var  l = drawing_data.current_polygon.length;
+      for(var i = 1; i < l; i++)
+      {
+          var chainLink = createChainLink(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]);
+          chain.chain_handler.push(chainLink.body_handler);
+          if(chain.chain_handler.length > 1)
+          {
+              Physics.createRevoluteJoint({
+                  bodyA : chain.chain_handler[chain.chain_handler.length - 2],
+                  pointA : chain.chain_links[chain.chain_links.length-1].point2,
+                  bodyB : chain.chain_handler[chain.chain_handler.length - 1],
+                  pointB : chainLink.point1,
+              });
+          }
+          chain.chain_links.push(chainLink);
+      }
+      objects.chains.push(chain);
+      drawing_data.clear();
+  }
+
+  function createChainLink(pointA, pointB)
+  {
+      var shape = Utils.rectFromPoints(pointA, pointB, 0.04 * Physics.getScale());
+      var centroid = [ (shape[0][0] + shape[1][0] + shape[2][0] + shape[3][0])/4,
+                       (shape[0][1] + shape[1][1] + shape[2][1] + shape[3][1])/4 ];
+      var point1 = [ pointA[0] - centroid[0], pointA[1] - centroid[1] ];
+      var point2 = [ pointB[0] - centroid[0], pointB[1] - centroid[1] ];
+      var body_handler = Physics.createBody({
+          label    : "chainLink",
+          vertices : shape,
+      });
+      
+      return {
+          body_handler : body_handler,
+          point1 : point1,
+          point2 : point2,
+          vertices : shape,
+      };
   }
 
   /** @func tack
