@@ -725,6 +725,10 @@ var Game = (function(){
       return offset;
   }
 
+  /** @func removeTacksConnectedTo
+    * @desc removes all the tacks connected to a body
+    * @param body_id {Number} the body_id to be cleaned
+    */
   function removeTacksConnectedTo(body_id)
   {
       for(var i = objects.tacks.length-1; i >= 0; i--)
@@ -750,11 +754,18 @@ var Game = (function(){
       }
   }
 
+  /** @func changeTool
+    * @desc Selects the next tool (chalk, ereaser or tack)
+    */
   function changeTool()
   {
       PlayerCursor.changeTool();
   }
 
+  /** @func loadLevel
+    * @desc Loads and starts a level
+    * @param level_index {Number} The level to be loaded
+    */
   function loadLevel(level_index)
   {
       restartEngine();
@@ -849,11 +860,17 @@ var Game = (function(){
           level_data.setup_fnc(level_data.context);
   }
 
+  /** @func restartLevel
+    * @desc Restarts the current level
+    */
   function restartLevel()
   {
       loadLevel(level_data.id);
   }
 
+  /** @func itsInsideOf
+    * @desc This is a geofence algo http://alienryderflex.com/polygon/Diagram_1.gif
+    */
   function itsInsideOf(pos, polygon)
   {
       var sides = polygon.length - 1;
@@ -873,6 +890,9 @@ var Game = (function(){
       return pointStatus;
   }
 
+  /** @func prepareLevelShapes
+    * @desc Takes objects from p2.js space to canvas space
+    */
   function prepareLevelShapes(const_shape)
   {
       /* Fixme: improve this coping technique */
@@ -907,7 +927,10 @@ var Game = (function(){
       
       return shape;
   }
-
+  
+  /** @func getHints
+    * @desc returns the hints array from the current level
+    */
   function getHints()
   {
       return level_data.hints;

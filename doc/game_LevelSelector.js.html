@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game/LevelSelector.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game/LevelSelector.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
   * @module LevelSelector
   */
 var LevelSelector = (function(){
@@ -22,23 +50,23 @@ var LevelSelector = (function(){
            */
          function init()
          {
-            var content =  "<div class='chalk-menu-container'>" +
-                           "    <div class='chalk-menu-row'>" +
-                           "         <label class='chalk-menu-title'> Draw something </label>" +
-                           "         <label class='chalk-menu-subtitle'>level 1</label>" +
-                           "    </div>" +
-                           "    <div class='chalk-menu-row'>";
-            for(var i = 0 ; i < levels.length; i++)
+            var content =  "&lt;div class='chalk-menu-container'>" +
+                           "    &lt;div class='chalk-menu-row'>" +
+                           "         &lt;label class='chalk-menu-title'> Draw something &lt;/label>" +
+                           "         &lt;label class='chalk-menu-subtitle'>level 1&lt;/label>" +
+                           "    &lt;/div>" +
+                           "    &lt;div class='chalk-menu-row'>";
+            for(var i = 0 ; i &lt; levels.length; i++)
             {
-                content += "<div onmouseover='LevelSelector.dispatch(\"preview\"," + i + ")'" +
-                           "onclick='LevelSelector.dispatch(\"selected\"," + i + ")' class='chalk-level-button'>" + (i+1) + "</div>";
+                content += "&lt;div onmouseover='LevelSelector.dispatch(\"preview\"," + i + ")'" +
+                           "onclick='LevelSelector.dispatch(\"selected\"," + i + ")' class='chalk-level-button'>" + (i+1) + "&lt;/div>";
             }
-            content +=     "    </div>" +
-                           "    <div class='chalk-menu-row'>" +
-                           "        <div class='chalk-arrow-button'></div>" +
-                           "        <div class='chalk-arrow-button'></div>" +
-                           "    </div>" +
-                           "</div>";
+            content +=     "    &lt;/div>" +
+                           "    &lt;div class='chalk-menu-row'>" +
+                           "        &lt;div class='chalk-arrow-button'>&lt;/div>" +
+                           "        &lt;div class='chalk-arrow-button'>&lt;/div>" +
+                           "    &lt;/div>" +
+                           "&lt;/div>";
              document.querySelector(".chalk-menu-layer").innerHTML = content;
              menu_container = document.querySelector(".chalk-menu-container");
              title          = document.querySelector(".chalk-menu-title");
@@ -64,7 +92,7 @@ var LevelSelector = (function(){
                  var button_height = rect.height * 0.4;
                  scrollpos -= button_height * 4;
                  var width_and_margin = button_height * 1.3;
-                 if(scrollpos < -width_and_margin * buttons_count)
+                 if(scrollpos &lt; -width_and_margin * buttons_count)
                      scrollpos = -width_and_margin * buttons_count;
                  body.style.marginLeft = scrollpos + "px";
              });
@@ -104,7 +132,7 @@ var LevelSelector = (function(){
             var button_height = rect.height * 0.6;
             var buttons = document.querySelectorAll(".chalk-level-button");
             buttons_count = buttons.length;
-            for(var i = 0; i < buttons_count; i++)
+            for(var i = 0; i &lt; buttons_count; i++)
             {
                 buttons[i].style.height = button_height + "px";
                 buttons[i].style.lineHeight = (button_height*1.6) + "px";
@@ -165,7 +193,7 @@ var LevelSelector = (function(){
         {
             if(listeners[event])
             {
-                for(var i = 0; i < listeners[event].length; i++)
+                for(var i = 0; i &lt; listeners[event].length; i++)
                 {
                     listeners[event][i](arg);
                 }
@@ -180,3 +208,26 @@ var LevelSelector = (function(){
                  dispatch  : dispatch };
 
 })();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-ColorManager.html">ColorManager</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Game.html">Game</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-LevelSelector.html">LevelSelector</a></li><li><a href="module-PlayerCursor.html">PlayerCursor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="AirConsole.html">AirConsole</a></li><li><a href="Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="ConfigOptions.html">ConfigOptions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Apr 19 2017 17:34:16 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
