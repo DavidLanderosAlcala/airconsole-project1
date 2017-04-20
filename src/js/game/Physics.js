@@ -357,10 +357,7 @@ var Physics = (function(){
         for(var i = 0; i < bodies.length; i++)
         {
             removeContraintRelatedToBody(bodies[i]);
-            console.log("world.bodies.length = " + world.bodies.length);
-            console.log("deleting body: " + bodies[i].label);
             world.removeBody(bodies[i]);
-            console.log("world.bodies.length = " + world.bodies.length);
         }
     }
 

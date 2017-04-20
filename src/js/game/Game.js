@@ -11,6 +11,7 @@ var Game = (function(){
   var level_data;
   var listeners = [];
   var chainIdCount = 0;
+  var tackIdCount = 0;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -83,6 +84,7 @@ var Game = (function(){
       objects.tacks  = [];
       objects.chains  = [];
       chainIdCount = 0;
+      tackIdCount = 0;
 
       level_data.hints = [];
 
@@ -736,6 +738,7 @@ var Game = (function(){
           bodyB     : null,
           offsetB   : null,
           contraint : null,
+          tack_id   : tackIdCount++,
       };
 
       var _bodies = Physics.getBodiesAtPoint(cur_pos);
@@ -778,6 +781,17 @@ var Game = (function(){
           }
           tacks[i].contraint = null;
           tacks[i].deleted = true;
+
+          /* check if the tack is connected to a chain */
+          for(var ch = 0; ch < objects.chains.length; ch++)
+          {
+              if(!objects.chains[ch].deleted && objects.chains[ch].tackAIndex == tacks[i].tack_id || objects.chains[ch].tackBIndex == tacks[i].tack_id)
+              {
+                  /* Simulate that the user deleted a chainLink so the game deletes the complete chain accordingly */
+                  onChainLinkDeleted("chainLink" + ch);
+              }
+          }
+
           drawing_data.clear();
           return;
       }
