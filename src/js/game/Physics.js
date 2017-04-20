@@ -356,7 +356,22 @@ var Physics = (function(){
             bodies = [bodies];
         for(var i = 0; i < bodies.length; i++)
         {
+            removeContraintRelatedToBody(bodies[i]);
+            console.log("world.bodies.length = " + world.bodies.length);
+            console.log("deleting body: " + bodies[i].label);
             world.removeBody(bodies[i]);
+            console.log("world.bodies.length = " + world.bodies.length);
+        }
+    }
+
+    function removeContraintRelatedToBody(body)
+    {
+        for(var i = world.constraints.length -1; i >= 0; i--)
+        {
+            if(body.id == world.constraints[i].bodyA.id || body.id == world.constraints[i].bodyB.id)
+            {
+                removeConstraint(world.constraints[i]);
+            }
         }
     }
 

@@ -10,6 +10,7 @@ var Game = (function(){
   var drawing_data;
   var level_data;
   var listeners = [];
+  var chainIdCount = 0;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -81,6 +82,7 @@ var Game = (function(){
       objects.shapes = [];
       objects.tacks  = [];
       objects.chains  = [];
+      chainIdCount = 0;
 
       level_data.hints = [];
 
@@ -220,10 +222,10 @@ var Game = (function(){
       for(var i = 0; i < objects.chains.length; i++)
       {
           /* Drawing chains  */
-          console.log("dibujando: objects.chains[" + i + "]");
           for(var chl = 0; chl < objects.chains[i].chain_links.length-1; chl++)
           {
               context.save();
+              context.globalAlpha = objects.chains[i].deleted ? 0.1 : 1.0;
               var handler = objects.chains[i].chain_handler[chl];
               var link = objects.chains[i].chain_links[chl];
               var pos = Physics.getPosition(handler);
@@ -238,6 +240,7 @@ var Game = (function(){
               context.restore();
           }
           /* Drawing chains (ghost mode) */
+          context.save();
           context.moveTo(objects.chains[i].vertices[0][0], objects.chains[i].vertices[0][1]);
           for(var v = 1; v < objects.chains[i].vertices.length-1; v++)
           {
@@ -245,6 +248,7 @@ var Game = (function(){
           }
           context.globalAlpha = 0.1;
           context.stroke();
+          context.restore();
       }
       context.restore();
 
@@ -653,6 +657,8 @@ var Game = (function(){
           vertices : drawing_data.current_polygon,
           chain_handler : [],
           chain_links   : [],
+          tackAIndex    : -1,
+          tackBIndex    : -1,
       };
       var  l = drawing_data.current_polygon.length;
       for(var i = 1; i < l; i++)
@@ -690,6 +696,9 @@ var Game = (function(){
           }
           chain.chain_links.push(chainLink);
       }
+      chainIdCount++;
+      chain.tackAIndex = drawing_data.candidate_tack_index_A;
+      chain.tackBIndex = drawing_data.candidate_tack_index_B;
       objects.chains.push(chain);
       drawing_data.clear();
   }
@@ -702,7 +711,7 @@ var Game = (function(){
       var point1 = [ pointA[0] - centroid[0], pointA[1] - centroid[1] ];
       var point2 = [ pointB[0] - centroid[0], pointB[1] - centroid[1] ];
       var body_handler = Physics.createBody({
-          label    : "chainLink",
+          label    : "chainLink" + chainIdCount,
           vertices : shape,
           massScale : 10,
       });
@@ -779,12 +788,43 @@ var Game = (function(){
       l = _bodies.length;
       for(i = 0; i < l; i++)
       {
-          if( Physics.isSensor(_bodies[i]) || Physics.getLabel(_bodies[i]) != "Body")
+          var label = Physics.getLabel(_bodies[i]);
+          if( Physics.isSensor(_bodies[i]) || (label != "Body" && label.indexOf("chainLink") != 0) )
               continue;
-          removeBody(_bodies[i]);
+          if(label.indexOf("chainLink") == 0)
+          {
+              onChainLinkDeleted(label);
+          }
+          else
+          {
+              removeBody(_bodies[i]);
+          }
           break;
       }
       drawing_data.clear();
+  }
+
+  function onChainLinkDeleted(label)
+  {
+      var index = parseInt(label.replace("chainLink",""));
+
+      /* remove tacks connected to this chain */
+      Physics.removeConstraint(objects.tacks[objects.chains[index].tackAIndex].contraint);
+      objects.tacks[objects.chains[index].tackAIndex].contraint = null;
+      objects.tacks[objects.chains[index].tackAIndex].deleted = true;
+      Physics.removeConstraint(objects.tacks[objects.chains[index].tackBIndex].contraint);
+      objects.tacks[objects.chains[index].tackBIndex].contraint = null;
+      objects.tacks[objects.chains[index].tackBIndex].deleted = true;
+
+      objects.chains[index].deleted = true;
+      var bodies = Physics.getAllBodies();
+      for(var i = bodies.length-1; i >= 0; i--)
+      {
+          if(Physics.getLabel(bodies[i]) == label)
+          {
+              removeBody(bodies[i]);
+          }
+      }
   }
 
   /** @func findTacksAtPos
@@ -832,7 +872,7 @@ var Game = (function(){
     */
   function removeBody(body, isOutOfTheScreen)
   {
-      if(body.label != "Body")
+      if((body.label != "Body" && body.label.indexOf("chainLink") != 0))
         return;
       Physics.removeBody(body);
       removeTacksConnectedTo(body.id);
