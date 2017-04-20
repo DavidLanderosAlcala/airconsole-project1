@@ -42,10 +42,12 @@ var Game = (function(){
           current_polygon     : [],
           current_color_index : -1,
           is_linto_locked     : false,
+          candidate_tacks    : [],
           clear : function() {
               drawing_data.current_polygon = [];
               drawing_data.current_color_index = -1;
               drawing_data.is_linto_locked = false;
+              drawing_data.candidate_tacks = [];
           }
       };
 
@@ -237,7 +239,7 @@ var Game = (function(){
 
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
-      var tack_radius = (10 / 96) * Physics.getScale();
+      var tack_radius = (0.1) * Physics.getScale();
       for(var i = 0; i < objects.tacks.length; i++)
       {
           context.save();
@@ -444,9 +446,13 @@ var Game = (function(){
 
       if(type == "wire")
       {
+          closeAsWire();
+          return;
+      }
+      if(type == "chain")
+      {
           drawing_data.current_polygon = aux;
           closeAsChain();
-          return;
       }
   }
 
@@ -484,15 +490,23 @@ var Game = (function(){
           h2t_distance *= 0.5;
       }
 
+      var distance_cond = h2t_distance > Physics.getScale() * ConfigOptions.polygon_autoclose_distance * 3;
+      var insersection_cond = !decomp.isSimple(drawing_data.current_polygon);
 
-      if(h2t_distance > Physics.getScale() * ConfigOptions.polygon_autoclose_distance * 3)
+      if(distance_cond || insersection_cond)
       {
-          return "wire";
-      }
-
-      if(!decomp.isSimple(drawing_data.current_polygon))
-      {
-          return "wire";
+          var tacksA = findTacksAtPos(drawing_data.current_polygon[0]);
+          var tacksB = findTacksAtPos(drawing_data.current_polygon[drawing_data.current_polygon.length - 1]);
+          if(distance_cond && tacksA.length > 0 && tacksB.length > 0)
+          {
+              drawing_data.candidate_tacks[0] = tacksA[0];
+              drawing_data.candidate_tacks[1] = tacksB[0];
+              return "chain";
+          }
+          else
+          {
+              return "wire";
+          }
       }
 
       return "polygon";
@@ -630,6 +644,26 @@ var Game = (function(){
       {
           var chainLink = createChainLink(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]);
           chain.chain_handler.push(chainLink.body_handler);
+          if(i == 1)
+          {
+              var contraint = Physics.createRevoluteJoint({
+                  bodyA : drawing_data.candidate_tacks[0].bodyA,
+                  pointA : drawing_data.candidate_tacks[0].offsetA,
+                  bodyB : chain.chain_handler[chain.chain_handler.length - 1],
+                  pointB : chainLink.point1,
+              });
+              drawing_data.candidate_tacks[0].contraint = contraint;
+          }
+          else if(i == l-1)
+          {
+              var contraint = Physics.createRevoluteJoint({
+                  bodyA : drawing_data.candidate_tacks[1].bodyA,
+                  pointA : drawing_data.candidate_tacks[1].offsetA,
+                  bodyB : chain.chain_handler[chain.chain_handler.length - 1],
+                  pointB : chainLink.point2,
+              });
+              drawing_data.candidate_tacks[1].contraint = contraint;
+          }
           if(chain.chain_handler.length > 1)
           {
               Physics.createRevoluteJoint({
@@ -661,7 +695,7 @@ var Game = (function(){
           body_handler : body_handler,
           point1 : point1,
           point2 : point2,
-          vertices : shape,
+          vertices : [pointA, pointB],
       };
   }
 
@@ -707,32 +741,21 @@ var Game = (function(){
     */
   function erease()
   {
-      // obtener la posicion del cursor
       var cur_pos = PlayerCursor.getPosition();
+      var tacks =  findTacksAtPos(cur_pos);
 
-      // buscar tacks para elminarlas
-      var i, l = objects.tacks.length;
+      var i, l = tacks.length;
       for(i = 0 ; i < l; i ++)
       {
-          if(!objects.tacks[i].deleted && !objects.tacks[i].indelible)
+          // si se encuentra un tack, borrarla y terminar
+          if(tacks[i].contraint != null)
           {
-              var tack_pos = calcTackAbsPos(i)
-              var diff_x = cur_pos[0] - tack_pos[0];
-              var diff_y = cur_pos[1] - tack_pos[1];
-              var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
-              if(distance < 20)
-              {
-                 // si se encuentra un tack, borrarla y terminar
-                  if(objects.tacks[i].contraint != null)
-                  {
-                      Physics.removeConstraint(objects.tacks[i].contraint);
-                  }
-                  objects.tacks[i].contraint = null;
-                  objects.tacks[i].deleted = true;
-                  drawing_data.clear();
-                  return;
-              }
+              Physics.removeConstraint(tacks[i].contraint);
           }
+          tacks[i].contraint = null;
+          tacks[i].deleted = true;
+          drawing_data.clear();
+          return;
       }
 
       // si no se encuentra tack, eliminar una figura que se encuentre bajo el cursor
@@ -747,6 +770,31 @@ var Game = (function(){
           break;
       }
       drawing_data.clear();
+  }
+
+  /** @func findTacksAtPos
+    * @desc Returns an array containing the found tacks at "pos"
+    */
+  function findTacksAtPos(pos)
+  {
+      var found_tacks = [];
+      var tack_radio = 0.3 * Physics.getScale();
+      var i, l = objects.tacks.length;
+      for(i = 0 ; i < l; i ++)
+      {
+          if(!objects.tacks[i].deleted && !objects.tacks[i].indelible)
+          {
+              var tack_pos = calcTackAbsPos(i)
+              var diff_x = pos[0] - tack_pos[0];
+              var diff_y = pos[1] - tack_pos[1];
+              var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
+              if(distance < tack_radio)
+              {
+                  found_tacks.push(objects.tacks[i]);
+              }
+          }
+      }
+      return found_tacks;
   }
 
   /** @func removeBody
