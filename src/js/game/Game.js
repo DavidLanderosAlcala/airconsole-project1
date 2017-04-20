@@ -219,6 +219,7 @@ var Game = (function(){
       context.strokeStyle = ColorManager.getColorAt(0);
       for(var i = 0; i < objects.chains.length; i++)
       {
+          /* Drawing chains  */
           console.log("dibujando: objects.chains[" + i + "]");
           for(var chl = 0; chl < objects.chains[i].chain_links.length-1; chl++)
           {
@@ -236,6 +237,14 @@ var Game = (function(){
               context.stroke();
               context.restore();
           }
+          /* Drawing chains (ghost mode) */
+          context.moveTo(objects.chains[i].vertices[0][0], objects.chains[i].vertices[0][1]);
+          for(var v = 1; v < objects.chains[i].vertices.length-1; v++)
+          {
+              context.lineTo(objects.chains[i].vertices[v][0], objects.chains[i].vertices[v][1]);
+          }
+          context.globalAlpha = 0.1;
+          context.stroke();
       }
       context.restore();
 
