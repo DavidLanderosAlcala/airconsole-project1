@@ -29,6 +29,8 @@ var Controller = (function(){
         tools.push("tack");
     }
 
+    /** @func onTouchpadEvent
+      */
     function onTouchpadEvent(e)
     {
         var packet = {
@@ -40,6 +42,8 @@ var Controller = (function(){
         airconsole.message(AirConsole.SCREEN, packet2);
     }
 
+    /** @func onButtonEvent
+      */
     function onButtonEvent(e)
     {
         var key;
@@ -71,11 +75,18 @@ var Controller = (function(){
         else e.sender.className = e.sender.className.replace(" pressed","");
     }
 
+    /** @func onVibrateRequest
+      * @desc Called when the screen requests a vibration
+      */
     function onVibrateRequest(data)
     {
         vibrate(data);
     }
 
+    /** @func vibrate
+      * @desc cause a vibration pattern on the device
+      * @param pattern {array} yeap, the pattern...
+      */
     function vibrate(pattern)
     {
         if(Utils.isMobileNavigator())
@@ -84,6 +95,9 @@ var Controller = (function(){
         }
     }
 
+    /** @func changeTool
+      * @desc Selects the next tool
+      */
     function changeTool()
     {
         current_tool_index++;
@@ -95,6 +109,9 @@ var Controller = (function(){
         .dataset.tool = tools[current_tool_index];
     }
 
+    /** @func onRingRequest
+      * @desc Called when the screen requests a ring event
+      */
     function onRingRequest(data)
     {
         // TODO

@@ -1,15 +1,20 @@
 
-
+/**
+  * @module ColorManager
+  */
 var ColorManager = (function(){
 
   var context = null;
-  var patterns = [];
-  var urls = [
-      //"http://oi65.tinypic.com/2e1gbpc.jpg",
-      "./res/img/chalk_pattern.png",
-	];
-	var last_index = 0;
+   var patterns = [];
+   var urls = [
+       //"http://oi65.tinypic.com/2e1gbpc.jpg",
+       "./res/img/chalk_pattern.png",
+	 ];
+	 var last_index = 0;
 
+    /** @func init
+      * @desc Called from Game.init(...)
+      */
    function init(_context)
    {
        last_index = 0;
@@ -25,16 +30,26 @@ var ColorManager = (function(){
        }
    }
 
+    /** @func getColorAt
+      * @desc returns the color object
+      * @param index {integer} the index of the color or pattern
+      */
    function getColorAt(index)
    {
         return patterns[index];
    }
 
+    /** @func getRandomColorIndex
+      * @desc selects a random color and returns its index
+      */
    function getRandomColorIndex()
    {
        return Math.floor((Math.random() * urls.length));
    }
 
+    /** @func onImageLoaded
+      * @desc called when an image/pattern/color is loaded
+      */
    function onImageLoaded(img)
    {
         patterns.push(context.createPattern(img, "repeat"));

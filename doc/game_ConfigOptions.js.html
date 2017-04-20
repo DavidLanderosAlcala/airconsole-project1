@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/Touchpad.js</title>
+    <title>JSDoc: Source: game/ConfigOptions.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/Touchpad.js</h1>
+    <h1 class="page-title">Source: game/ConfigOptions.js</h1>
 
     
 
@@ -28,62 +28,16 @@
         <article>
             <pre class="prettyprint source linenums"><code>
 /**
-  * @Module Touchpad
+  * @namespace
+  * @property {Number}  min_vertex_distance         - The minimun distance between vertices
+  * @property {Number}  polygon_autoclose_distance  - The game closes a polygon if the distance between the head and the tail is &lt; polygon_autoclose_distance
+  * @property {Number}  min_vertices_per_polygon    - A polygon cannot be created with less than "min_vertices_per_polygon" vertices
   */
-var Touchpad = (function(){
-
-    var last_pos = null;
-    var onmove_callback = null;
-
-    /** @func surface
-      * @desc converts DOM elements into touchpad and installs an event listener
-      * @param selector {string} the CSS selector to hook the DOM elements
-      * @param callback {function} called for each event ocurred in the touchpad
-      */
-    function init(selector, callback)
-    {
-        onmove_callback = callback;
-        Touch.surface(selector, onTouchEvent);
-    }
-
-    function normalize(value)
-    {
-        var max = 100;
-        if(value > max) return 1.0;
-        if(value &lt; -max) return -1.0;
-        return value / max;
-    }
-
-    function onTouchEvent(e)
-    {
-        if(e.type == "touchend")
-        {
-            last_pos = null;
-            return;
-        }
-        if(last_pos == null)
-        {
-            last_pos = {
-                x : e.x,
-                y : e.y
-            };
-        }
-        else
-        {
-            var disp = {
-               x : (e.x - last_pos.x),
-               y : (e.y - last_pos.y)
-            };
-            disp.x = normalize(disp.x);
-            disp.y = normalize(disp.y);
-            onmove_callback(disp);
-            last_pos.x = e.x;
-            last_pos.y = e.y;
-        }
-    }
-    return { init : init };
-})();
-</code></pre>
+var ConfigOptions = {
+    min_vertex_distance        : 0.2,
+    polygon_autoclose_distance : 0.3,
+    min_vertices_per_polygon   : 5,
+}</code></pre>
         </article>
     </section>
 

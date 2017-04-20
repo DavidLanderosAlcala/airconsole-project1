@@ -84,6 +84,9 @@ var Screen = (function(){
         .innerHTML = text;
     }
 
+    /** @func requestFullscreen
+      * @desc requests fullscreen
+      */
     function requestFullscreen()
     {
         var el = document.documentElement,
@@ -95,6 +98,9 @@ var Screen = (function(){
         onResize();
     }
 
+    /** @func exitFullscreen
+      * @desc exits fullscreen
+      */
     function exitFullscreen()
     {
         document.exitFullscreen = document.exitFullscreen ||
@@ -104,6 +110,8 @@ var Screen = (function(){
         document.exitFullscreen();
     }
 
+    /** @func isInFullscreen
+      */
     function isInFullscreen()
     {
         return (window.fullScreen) ||
@@ -122,16 +130,25 @@ var Screen = (function(){
         height = rect.height;
     }
 
+    /** @func disableContextMenu
+      * @desc It disables the default context menu
+      */
     function disableContextMenu()
     {
         document.addEventListener('contextmenu', function(event){ event.preventDefault()});
     }
 
+    /** @func getWidth
+      * @desc Returns the current game width
+      */
     function getWidth()
     {
         return width;
     }
 
+    /** @func getHeight
+      * @desc Returns the current game height
+      */
     function getHeight()
     {
         return height;

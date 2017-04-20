@@ -38,56 +38,58 @@ var Screen = (function(){
      }
 
     var airconsole;
+    var width;
+    var height;
 
     /** @func init
       * @desc Called when the DOM is loaded
       */
     function init()
     {
-        airconsole = new AirConsole();
-        AirConsoleBus.init(airconsole);
-        DebugConsole.init(airconsole, true /* isScreen */);
-        AirConsoleBus.on("gamepadevent", function(e){
-            if(e.key == "touchpad")
-            {
-                cursor.x += e.value.x * 100;
-                cursor.y += e.value.y * 100;
-
-                if(cursor.x &lt; 0 ) cursor.x = 0;
-                if(cursor.y &lt; 0 ) cursor.y = 0;
-                if(cursor.x > 800 ) cursor.x = 800;
-                if(cursor.y > 600 ) cursor.y = 600;
-
-                CrayonPhysics.updateCursorPosition( cursor.x, cursor.y);
-
-                if(cursor.isPressed)
+        window.addEventListener("resize", onResize);
+        adjustToViewPort();
+        disableContextMenu();
+        if(Utils.isRunningOnAirConsole())
+        {
+            airconsole = new AirConsole();
+            AirConsoleBus.init(airconsole);
+            DebugConsole.init(airconsole, true /* isScreen */);
+            AirConsoleBus.on("gamepadevent", function(e) {
+                if(e.key == "touchpad")
                 {
-                  CrayonPhysics.onTouchEvent({
-                      type :  "touchmove",
-                      x : cursor.x,
-                      y : cursor.y
-                  });
+                    cursor.x += e.value.x * 100;
+                    cursor.y += e.value.y * 100;
+                    if(cursor.x &lt; 0 ) cursor.x = 0;
+                    if(cursor.y &lt; 0 ) cursor.y = 0;
+                    if(cursor.x > width ) cursor.x = width;
+                    if(cursor.y > height ) cursor.y = height;
+                    if(cursor.isPressed) { Game.lineTo( cursor ); }
+                    else { Game.moveTo( cursor ); }
                 }
-            }
-            else if(e.key == "pad_a") {
+                else if(e.key == "pad_a")
+                {
+                    cursor.isPressed = e.value == 1 ? true : false;
+                    if(!e.value) { Game.closePath(); }
+                }
+                else if(e.key == "pad_b")
+                {
+                    if(!e.value) { Game.erease(); }
+                }
+                else if(e.key == "pad_select")
+                {
+                    if(e.value == 0) { Game.changeTool(); }
+                }
+            });
+        }
 
-              cursor.isPressed = e.value == 1 ? true : false;
-
-              CrayonPhysics.onTouchEvent({
-                  type :  e.value == 1 ? "touchstart" : "touchend",
-                  x : cursor.x,
-                  y : cursor.y
-              });
-            }
+        Game.init({
+            canvas : document.querySelector("#main_canvas"),
+            width  : width,
+            height : height,
         });
 
-        CrayonPhysics.init({
-            canvas : document.querySelector("canvas"),
-            width  : 800,
-            height : 600,
-        });
+        setLogoVisibility(false);
 
-        setSubtitleText("");
     }
 
     /** @func setLogoVisibility
@@ -100,23 +102,103 @@ var Screen = (function(){
         .style.opacity = visible ? 1.0 : 0.0;
     }
 
-    /** @func setSubtitleText
-      * @desc It sets the subtitles
+    /** @func setTitleText
+      * @desc It sets the title
       * @param text {string} the text to be shown
       */
-    function setSubtitleText(text)
+    function setTitleText(text)
     {
-        document.getElementById("subtitles_label")
+        document.getElementById("title_label")
         .innerHTML = text;
     }
 
-    return { init : init,
+    /** @func requestFullscreen
+      * @desc requests fullscreen
+      */
+    function requestFullscreen()
+    {
+        var el = document.documentElement,
+          rfs = el.requestFullscreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullscreen;
+        rfs.call(el);
+        onResize();
+    }
+
+    /** @func exitFullscreen
+      * @desc exits fullscreen
+      */
+    function exitFullscreen()
+    {
+        document.exitFullscreen = document.exitFullscreen ||
+                                  document.mozCancelFullScreen ||
+                                  document.webkitExitFullscreen ||
+                                  document.msExitFullscreen;
+        document.exitFullscreen();
+    }
+
+    /** @func isInFullscreen
+      */
+    function isInFullscreen()
+    {
+        return (window.fullScreen) ||
+               (window.innerWidth == screen.width &amp;&amp;
+               window.innerHeight == screen.height);
+    }
+
+
+    function adjustToViewPort()
+    {
+        var canvas = document.querySelector("#main_canvas");
+        var rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        width = rect.width;
+        height = rect.height;
+    }
+
+    /** @func disableContextMenu
+      * @desc It disables the default context menu
+      */
+    function disableContextMenu()
+    {
+        document.addEventListener('contextmenu', function(event){ event.preventDefault()});
+    }
+
+    /** @func getWidth
+      * @desc Returns the current game width
+      */
+    function getWidth()
+    {
+        return width;
+    }
+
+    /** @func getHeight
+      * @desc Returns the current game height
+      */
+    function getHeight()
+    {
+        return height;
+    }
+
+    function onResize()
+    {
+        adjustToViewPort();
+        Game.restartLevel();
+    }
+
+    return { init              : init,
              setLogoVisibility : setLogoVisibility,
-             setSubtitleText : setSubtitleText };
+             setTitleText      : setTitleText,
+             getWidth          : getWidth,
+             getHeight         : getHeight,
+             isInFullscreen    : isInFullscreen,
+             exitFullscreen    : exitFullscreen,
+             requestFullscreen : requestFullscreen };
 
 })();
 
-Screen.init();
 </code></pre>
         </article>
     </section>
@@ -127,13 +209,13 @@ Screen.init();
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-PolyCompressor.html">PolyCompressor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-ColorManager.html">ColorManager</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Game.html">Game</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-PlayerCursor.html">PlayerCursor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="AirConsole.html">AirConsole</a></li><li><a href="Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="ConfigOptions.html">ConfigOptions</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Feb 16 2017 12:39:47 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Apr 19 2017 17:14:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

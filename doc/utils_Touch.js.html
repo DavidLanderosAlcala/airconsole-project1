@@ -67,6 +67,35 @@ var Touch = (function() {
         }
     }
 
+    /** @func checkbox
+      * @desc converts DOM elements into checkboxes and installs an event listener
+      * @param selector {string} the CSS selector to hook the DOM elements
+      * @param callback {function} called when the value changes
+      */
+    function checkbox(selector, callback)
+    {
+        var selection = document.querySelectorAll(selector);
+        for(var i = 0; i &lt; selection.length; i++)
+        {
+            selection[i].__checkbox_checked = selection[i].dataset.checked == "true" ? true : false;
+        }
+        button(selector, function(e){
+            if(!e.isPressed)
+            {
+                if(e.sender.__checkbox_checked == undefined)
+                {
+                    e.sender.__checkbox_checked = true;
+                    callback({ sender: e.sender, checked : true});
+                }
+                else
+                {
+                    e.sender.__checkbox_checked = !e.sender.__checkbox_checked;
+                    callback({ sender: e.sender, checked : e.sender.__checkbox_checked});
+                }
+            }
+        });
+    }
+
     function hookAllEventsForButton(element, callback)
     {
         var event = {
@@ -91,16 +120,22 @@ var Touch = (function() {
         else
         {
             element.addEventListener("mousedown", function(e) {
+                event.button = e.button;
                 event.isPressed = true;
                 callback(event);
             });
             element.addEventListener("mouseup", function(e) {
+                event.button = e.button;
                 event.isPressed = false;
                 callback(event);
             });
             element.addEventListener("mouseleave", function(e) {
-                event.isPressed = false;
-                callback(event);
+                if(event.isPressed)
+                {
+                    event.button = e.button;
+                    event.isPressed = false;
+                    callback(event);
+                }
             });
         }
     }
@@ -154,6 +189,7 @@ var Touch = (function() {
                 var coords = validateCoords(element, e.clientX, e.clientY);
                 event.x = coords.x;
                 event.y = coords.y;
+                event.button = e.button;
                 callback(event);
             });
             element.addEventListener("mouseup", function(e) {
@@ -163,6 +199,7 @@ var Touch = (function() {
                 var coords = validateCoords(element, e.clientX, e.clientY);
                 event.x = coords.x;
                 event.y = coords.y;
+                event.button = e.button;
                 callback(event);
             });
             element.addEventListener("mouseleave", function(e) {
@@ -174,6 +211,7 @@ var Touch = (function() {
                     var coords = validateCoords(element, e.clientX, e.clientY);
                     event.x = coords.x;
                     event.y = coords.y;
+                    event.button = e.button;
                     callback(event);
                 }
             });
@@ -185,6 +223,7 @@ var Touch = (function() {
                     var coords = validateCoords(element, e.clientX, e.clientY);
                     event.x = coords.x;
                     event.y = coords.y;
+                    event.button = e.button;
                     callback(event);
                 }
             });
@@ -213,8 +252,9 @@ var Touch = (function() {
         return { x : x, y : y };
     }
 
-	return { button  : button,
-	         surface : surface };
+	return { button   : button,
+	         surface  : surface,
+             checkbox : checkbox };
 })();
 </code></pre>
         </article>
@@ -226,13 +266,13 @@ var Touch = (function() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-PolyCompressor.html">PolyCompressor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="Sprite.html">Sprite</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-ColorManager.html">ColorManager</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Game.html">Game</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-PlayerCursor.html">PlayerCursor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="AirConsole.html">AirConsole</a></li><li><a href="Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="ConfigOptions.html">ConfigOptions</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Feb 16 2017 12:39:47 GMT-0800 (Pacific Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Apr 19 2017 17:14:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

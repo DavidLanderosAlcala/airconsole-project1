@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game/Game.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game/Game.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
   * @module Game
   */
 var Game = (function(){
@@ -91,7 +119,7 @@ var Game = (function(){
   {
       removeLostBodies();
       Physics.update();
-      if(!level_data.game_over && level_data.update_fnc != null)
+      if(!level_data.game_over &amp;&amp; level_data.update_fnc != null)
       {
           level_data.game_over = level_data.update_fnc(level_data.context);
           if(level_data.game_over)
@@ -139,7 +167,7 @@ var Game = (function(){
           context.strokeStyle = ColorManager.getColorAt(drawing_data.current_color_index);
           context.beginPath();
           context.moveTo(drawing_data.current_polygon[0][0], drawing_data.current_polygon[0][1]);
-          for(var i = 0; i < drawing_data.current_polygon.length; i++)
+          for(var i = 0; i &lt; drawing_data.current_polygon.length; i++)
           {
               context.lineTo(drawing_data.current_polygon[i][0], drawing_data.current_polygon[i][1]);
           }
@@ -149,7 +177,7 @@ var Game = (function(){
 
       /* Drawing polygons */
       var i, l = objects.shapes.length;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
           if(objects.shapes[i].isSensor)
           {
@@ -169,7 +197,7 @@ var Game = (function(){
                   context.beginPath();
                   if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
                       context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
-                      for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
+                      for(var j = 1; j &lt; objects.shapes[i].vertices.length; j++) {
                           context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
                       }
                       if(objects.shapes[i].type == "polygon")
@@ -196,7 +224,7 @@ var Game = (function(){
               context.save();
                   context.beginPath();
                   context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
-                  for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
+                  for(var j = 1; j &lt; objects.shapes[i].vertices.length; j++) {
                       context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
                   }
 
@@ -211,7 +239,7 @@ var Game = (function(){
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
       var tack_radius = (10 / 96) * Physics.getScale();
-      for(var i = 0; i < objects.tacks.length; i++)
+      for(var i = 0; i &lt; objects.tacks.length; i++)
       {
           context.save();
           context.beginPath();
@@ -225,7 +253,7 @@ var Game = (function(){
 
       /* Drawing level.hints (ghost mode) */
       var i, l = level_data.hints.length;
-      for(var i = 0; i < l; i++)
+      for(var i = 0; i &lt; l; i++)
       {
           context.save();
             context.translate(level_data.hints[i].position[0], level_data.hints[i].position[1]);
@@ -234,7 +262,7 @@ var Game = (function(){
             if(l2 > 1)
             {
                 context.moveTo(level_data.hints[i].vertices[0][0], level_data.hints[i].vertices[0][1]);
-                for(j = 0; j < l2; j++)
+                for(j = 0; j &lt; l2; j++)
                 {
                     context.lineTo(level_data.hints[i].vertices[j][0], level_data.hints[i].vertices[j][1]);
                 }
@@ -296,7 +324,7 @@ var Game = (function(){
       {
         drawing_data.clear();
       }
-      if(e.button == 2 && e.type == "touchstart")
+      if(e.button == 2 &amp;&amp; e.type == "touchstart")
       {
           erease();
           return;
@@ -318,7 +346,7 @@ var Game = (function(){
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length < 2))
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length &lt; 2))
           {
               if(e.button != 2)
               {
@@ -361,7 +389,7 @@ var Game = (function(){
           if(drawing_data.current_polygon.length > 0){
             var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
             var distance = Math.sqrt((new_pos[0] - old_pos[0]) * (new_pos[0] - old_pos[0]) + (new_pos[1] - old_pos[1]) * (new_pos[1] - old_pos[1]));
-            if(distance < ConfigOptions.min_vertex_distance * Physics.getScale())
+            if(distance &lt; ConfigOptions.min_vertex_distance * Physics.getScale())
             {
               return; 
             }
@@ -379,7 +407,7 @@ var Game = (function(){
               vec[0] = tail[0] - head[0];
               vec[1] = tail[1] - head[1];
               distance = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
-              if(distance < (Physics.getScale() * ConfigOptions.polygon_autoclose_distance))
+              if(distance &lt; (Physics.getScale() * ConfigOptions.polygon_autoclose_distance))
               {
                   if(decomp.isSimple(drawing_data.current_polygon))
                   {
@@ -426,7 +454,7 @@ var Game = (function(){
     */
   function evalCurrentShape()
   {
-      if(drawing_data.current_polygon.length < ConfigOptions.min_vertices_per_polygon)
+      if(drawing_data.current_polygon.length &lt; ConfigOptions.min_vertices_per_polygon)
       {
           return "invalid";
       }
@@ -439,7 +467,7 @@ var Game = (function(){
 
       var h2t_distance = Math.sqrt(h2t_vector[0] * h2t_vector[0] + h2t_vector[1] * h2t_vector[1]);
       var h2t_angle = Math.atan( h2t_vector[1] / h2t_vector[0] );
-      if(h2t_vector[0] < 0)
+      if(h2t_vector[0] &lt; 0)
         h2t_angle += Math.PI;
 
       var tail_vector = new Float32Array(2);
@@ -447,10 +475,10 @@ var Game = (function(){
       tail_vector[1] = drawing_data.current_polygon[drawing_data.current_polygon.length-1][1] - drawing_data.current_polygon[drawing_data.current_polygon.length-3][1];
 
       var tail_angle = Math.atan(tail_vector[1] / tail_vector[0] );
-      if(tail_vector[0] < 0)
+      if(tail_vector[0] &lt; 0)
         tail_angle += Math.PI;
 
-      if(Math.abs(tail_angle - h2t_angle) <= 0.7)
+      if(Math.abs(tail_angle - h2t_angle) &lt;= 0.7)
       {
           h2t_distance *= 0.5;
       }
@@ -488,9 +516,9 @@ var Game = (function(){
       var group = null;
       var tack_indices = [];
       var i, l = objects.tacks.length;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
-          if(objects.tacks[i].bodyB == null && !objects.tacks[i].deleted)
+          if(objects.tacks[i].bodyB == null &amp;&amp; !objects.tacks[i].deleted)
           {
               if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
@@ -509,7 +537,7 @@ var Game = (function(){
 
       l = tack_indices.length;
       var static_connections = 0;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
           objects.tacks[tack_indices[i]].bodyB = body;
           objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
@@ -543,9 +571,9 @@ var Game = (function(){
       }
       var tack_indices = [];
       var i, l = objects.tacks.length;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
-          if(objects.tacks[i].bodyB == null && !objects.tacks[i].deleted)
+          if(objects.tacks[i].bodyB == null &amp;&amp; !objects.tacks[i].deleted)
           {
               if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
               {
@@ -564,7 +592,7 @@ var Game = (function(){
 
       l = tack_indices.length;
       var static_connections = 0;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
           objects.tacks[tack_indices[i]].bodyB = body;
           objects.tacks[tack_indices[i]].offsetB = calcTackOffset(calcTackAbsPos(tack_indices[i]), body);
@@ -603,7 +631,7 @@ var Game = (function(){
 
       var _bodies = Physics.getBodiesAtPoint(cur_pos);
       
-      for(var i = 0; i < _bodies.length; i++)
+      for(var i = 0; i &lt; _bodies.length; i++)
       {
           if(!Physics.isSensor(_bodies[i]))
           {
@@ -628,20 +656,21 @@ var Game = (function(){
     */
   function erease()
   {
+      /* AQUI VOY */
       // obtener la posicion del cursor
       var cur_pos = PlayerCursor.getPosition();
 
       // buscar tacks para elminarlas
       var i, l = objects.tacks.length;
-      for(i = 0 ; i < l; i ++)
+      for(i = 0 ; i &lt; l; i ++)
       {
-          if(!objects.tacks[i].deleted && !objects.tacks[i].indelible)
+          if(!objects.tacks[i].deleted &amp;&amp; !objects.tacks[i].indelible)
           {
               var tack_pos = calcTackAbsPos(i)
               var diff_x = cur_pos[0] - tack_pos[0];
               var diff_y = cur_pos[1] - tack_pos[1];
               var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
-              if(distance < 20)
+              if(distance &lt; 20)
               {
                  // si se encuentra un tack, borrarla y terminar
                   if(objects.tacks[i].contraint != null)
@@ -660,7 +689,7 @@ var Game = (function(){
       var _bodies = Physics.getBodiesAtPoint(cur_pos);
 
       l = _bodies.length;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
           if( Physics.isSensor(_bodies[i]) || Physics.getLabel(_bodies[i]) != "Body")
               continue;
@@ -681,7 +710,7 @@ var Game = (function(){
       Physics.removeBody(body);
       removeTacksConnectedTo(body.id);
       var i, l = objects.shapes.length;
-      for(i = 0; i < l; i++)
+      for(i = 0; i &lt; l; i++)
       {
           if(body == objects.shapes[i].body)
           {
@@ -740,7 +769,7 @@ var Game = (function(){
                    objects.tacks[i].contraint = null;
                    objects.tacks[i].deleted = true;
               }
-              if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
+              if(objects.tacks[i].bodyB != null &amp;&amp;  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
               {
                    Physics.removeConstraint(objects.tacks[i].contraint);
                    objects.tacks[i].contraint = null;
@@ -768,15 +797,15 @@ var Game = (function(){
       level.tacks = level.tacks || [];
       level_data.hints = [];
       level_data.tacks = [];
-      for(var i = 0; i < level.hints.length;i++)
+      for(var i = 0; i &lt; level.hints.length;i++)
       {
           level_data.hints.push(prepareLevelShapes(level.hints[i]));
       }
-      for(var i = 0; i < level.tacks.length;i++)
+      for(var i = 0; i &lt; level.tacks.length;i++)
       {
           level_data.tacks.push(prepareLevelShapes(level.tacks[i]));
       }
-      for(var i = 0; i < level.bodies.length; i++)
+      for(var i = 0; i &lt; level.bodies.length; i++)
       {
           var type = level.bodies[i].type == "circle" ? "circle" : "polygon";
           var scaledBody = prepareLevelShapes(level.bodies[i]);
@@ -817,7 +846,7 @@ var Game = (function(){
           _bodies.push(body);
       }
 
-      for(var i = 0; i < level_data.tacks.length; i++)
+      for(var i = 0; i &lt; level_data.tacks.length; i++)
       {
           /* Create level tacks */
           var bodyA = Physics.getBodyByLabel(level_data.tacks[i].bodyA);
@@ -859,11 +888,11 @@ var Game = (function(){
       var sides = polygon.length - 1;
       var j = sides - 1;
       var pointStatus = false;
-      for (var i = 0; i < sides; i++)
+      for (var i = 0; i &lt; sides; i++)
       {
-          if (polygon[i][1] < pos[1] && polygon[j][1] >= pos[1] || polygon[j][1] < pos[1] && polygon[i][1] >= pos[1])
+          if (polygon[i][1] &lt; pos[1] &amp;&amp; polygon[j][1] >= pos[1] || polygon[j][1] &lt; pos[1] &amp;&amp; polygon[i][1] >= pos[1])
           {
-              if (polygon[i][0] + (pos[1] - polygon[i][1]) /  (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) < pos[0])
+              if (polygon[i][0] + (pos[1] - polygon[i][1]) /  (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) &lt; pos[0])
               {
                   pointStatus = !pointStatus ;                        
               }
@@ -887,7 +916,7 @@ var Game = (function(){
       if(shape.vertices)
       {
           var v, l = shape.vertices.length;
-          for(v = 0; v < l; v++)
+          for(v = 0; v &lt; l; v++)
           {
               shape.vertices[v][0] *= Physics.getScale();
               shape.vertices[v][1] *= Physics.getScale();
@@ -927,7 +956,7 @@ var Game = (function(){
       var callbacks = listeners["addTack"];
       if(callbacks)
       {
-          for(var i = 0; i < callbacks.length; i++)
+          for(var i = 0; i &lt; callbacks.length; i++)
           {
                callbacks[i]();
           }
@@ -939,7 +968,7 @@ var Game = (function(){
       var callbacks = listeners["connectTack"];
       if(callbacks)
       {
-          for(var i = 0; i < callbacks.length; i++)
+          for(var i = 0; i &lt; callbacks.length; i++)
           {
                callbacks[i](event);
           }
@@ -965,3 +994,26 @@ var Game = (function(){
             on            : on,
             DrawEvilShape : DrawEvilShape };
 })();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AirConsoleBus.html">AirConsoleBus</a></li><li><a href="module-ColorManager.html">ColorManager</a></li><li><a href="module-Controller.html">Controller</a></li><li><a href="module-DebugConsole.html">DebugConsole</a></li><li><a href="module-Game.html">Game</a></li><li><a href="module-GamepadEventCompressor.html">GamepadEventCompressor</a></li><li><a href="module-PlayerCursor.html">PlayerCursor</a></li><li><a href="module-Screen.html">Screen</a></li><li><a href="module-Touch.html">Touch</a></li><li><a href="module-Touchpad.html">Touchpad</a></li></ul><h3>Classes</h3><ul><li><a href="AirConsole.html">AirConsole</a></li><li><a href="Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="ConfigOptions.html">ConfigOptions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Apr 19 2017 17:14:24 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
