@@ -224,7 +224,7 @@ var Game = (function(){
       for(var i = 0; i < objects.chains.length; i++)
       {
           /* Drawing chains  */
-          for(var chl = 0; chl < objects.chains[i].chain_links.length-1; chl++)
+          for(var chl = 0; chl < objects.chains[i].chain_links.length; chl++)
           {
               context.save();
               context.globalAlpha = objects.chains[i].deleted ? 0.1 : 1.0;
