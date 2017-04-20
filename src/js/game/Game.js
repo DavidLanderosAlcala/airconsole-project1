@@ -42,12 +42,14 @@ var Game = (function(){
           current_polygon     : [],
           current_color_index : -1,
           is_linto_locked     : false,
-          candidate_tacks    : [],
+          candidate_tack_index_A : 0,
+          candidate_tack_index_B : 0,
           clear : function() {
               drawing_data.current_polygon = [];
               drawing_data.current_color_index = -1;
               drawing_data.is_linto_locked = false;
-              drawing_data.candidate_tacks = [];
+              drawing_data.candidate_tack_index_A = 0;
+              drawing_data.candidate_tack_index_B = 0;
           }
       };
 
@@ -495,12 +497,13 @@ var Game = (function(){
 
       if(distance_cond || insersection_cond)
       {
-          var tacksA = findTacksAtPos(drawing_data.current_polygon[0]);
-          var tacksB = findTacksAtPos(drawing_data.current_polygon[drawing_data.current_polygon.length - 1]);
-          if(distance_cond && tacksA.length > 0 && tacksB.length > 0)
+          var searchOptions = { returnIndices : true, filterConnectedTacks : true };
+          var tacksAIndices = findTacksAtPos(drawing_data.current_polygon[0], searchOptions);
+          var tacksBIndices = findTacksAtPos(drawing_data.current_polygon[drawing_data.current_polygon.length - 1], searchOptions);
+          if(distance_cond && tacksAIndices.length > 0 && tacksBIndices.length > 0)
           {
-              drawing_data.candidate_tacks[0] = tacksA[0];
-              drawing_data.candidate_tacks[1] = tacksB[0];
+              drawing_data.candidate_tack_index_A = tacksAIndices[0];
+              drawing_data.candidate_tack_index_B = tacksBIndices[0];
               return "chain";
           }
           else
@@ -650,22 +653,22 @@ var Game = (function(){
           if(i == 1)
           {
               var contraint = Physics.createRevoluteJoint({
-                  bodyA : drawing_data.candidate_tacks[0].bodyA,
-                  pointA : drawing_data.candidate_tacks[0].offsetA,
+                  bodyA : objects.tacks[drawing_data.candidate_tack_index_A].bodyA,
+                  pointA : objects.tacks[drawing_data.candidate_tack_index_A].offsetA,
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point1,
               });
-              drawing_data.candidate_tacks[0].contraint = contraint;
+              objects.tacks[drawing_data.candidate_tack_index_A].contraint = contraint;
           }
           else if(i == l-1)
           {
               var contraint = Physics.createRevoluteJoint({
-                  bodyA : drawing_data.candidate_tacks[1].bodyA,
-                  pointA : drawing_data.candidate_tacks[1].offsetA,
+                  bodyA : objects.tacks[drawing_data.candidate_tack_index_B].bodyA,
+                  pointA : objects.tacks[drawing_data.candidate_tack_index_B].offsetA,
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point2,
               });
-              drawing_data.candidate_tacks[1].contraint = contraint;
+              objects.tacks[drawing_data.candidate_tack_index_B].contraint = contraint;
           }
           if(chain.chain_handler.length > 1)
           {
@@ -779,8 +782,12 @@ var Game = (function(){
   /** @func findTacksAtPos
     * @desc Returns an array containing the found tacks at "pos"
     */
-  function findTacksAtPos(pos)
+  function findTacksAtPos(pos,  options)
   {
+      options = options || {};
+      options.returnIndices = options.returnIndices || false;
+      options.filterConnectedTacks = options.returnIndices || false;
+
       var found_tacks = [];
       var tack_radio = 0.3 * Physics.getScale();
       var i, l = objects.tacks.length;
@@ -788,13 +795,23 @@ var Game = (function(){
       {
           if(!objects.tacks[i].deleted && !objects.tacks[i].indelible)
           {
-              var tack_pos = calcTackAbsPos(i)
-              var diff_x = pos[0] - tack_pos[0];
-              var diff_y = pos[1] - tack_pos[1];
-              var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
-              if(distance < tack_radio)
+              if( !options.filterConnectedTacks  || objects.tacks[i].contraint == null )
               {
-                  found_tacks.push(objects.tacks[i]);
+                  var tack_pos = calcTackAbsPos(i)
+                  var diff_x = pos[0] - tack_pos[0];
+                  var diff_y = pos[1] - tack_pos[1];
+                  var distance = Math.sqrt((diff_x * diff_x) + (diff_y * diff_y));
+                  if(distance < tack_radio)
+                  {
+                      if(options.returnIndices)
+                      {
+                          found_tacks.push(i);
+                      }
+                      else
+                      {
+                          found_tacks.push(objects.tacks[i]);
+                      }
+                  }
               }
           }
       }
