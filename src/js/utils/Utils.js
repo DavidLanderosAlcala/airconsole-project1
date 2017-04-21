@@ -60,9 +60,11 @@ var Utils = (function(){
         return vertices;
     }
 
-    /* 
-     * Improve this algo here https://jsfiddle.net/oyj6uh5n/2/
-     * */
+    /*
+     * do you want to improve this algo ?
+     * use this jsfiddle test:
+     *    https://jsfiddle.net/oyj6uh5n/2/
+     */
     function normalizePolyLine(poly, distance)
     {
         var newpoly = [];
