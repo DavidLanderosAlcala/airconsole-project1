@@ -232,7 +232,7 @@ var Physics = (function(){
         }
         else
         {
-            config.mass = 3;//circle.area * 0.001;
+            config.mass = circle.area * 10;
         }
         body = new p2.Body(config);
         body.addShape(circle);
