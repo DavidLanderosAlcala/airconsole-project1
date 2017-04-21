@@ -675,6 +675,7 @@ var Game = (function(){
                   pointB : chainLink.point1,
               });
               objects.tacks[drawing_data.candidate_tack_index_A].contraint = contraint;
+              objects.tacks[drawing_data.candidate_tack_index_A].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
           }
           else if(i == l-1)
           {
@@ -685,6 +686,7 @@ var Game = (function(){
                   pointB : chainLink.point2,
               });
               objects.tacks[drawing_data.candidate_tack_index_B].contraint = contraint;
+              objects.tacks[drawing_data.candidate_tack_index_B].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
           }
           if(chain.chain_handler.length > 1)
           {
