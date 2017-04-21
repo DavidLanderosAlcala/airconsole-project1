@@ -89,7 +89,7 @@ var Physics = (function(){
         timestamp = newtimestamp;
         if(elapsedtime > 500)
             elapsedtime = 500;
-        world.step(elapsedtime/1000);
+        world.step(((elapsedtime/1000))/1.5);
         var new_fps = 1 / (elapsedtime/1000)|0;
         if(new_fps != fps)
         {

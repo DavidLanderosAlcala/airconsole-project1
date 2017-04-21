@@ -653,7 +653,8 @@ var Game = (function(){
     */
   function closeAsChain()
   {
-      drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.4 * Physics.getScale());
+      decomp.removeCollinearPoints(drawing_data.current_polygon, 0.3);
+      drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.3 * Physics.getScale());
       var chain = {
           vertices : drawing_data.current_polygon,
           chain_handler : [],

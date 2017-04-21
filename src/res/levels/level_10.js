@@ -100,6 +100,7 @@ LevelSelector.getLevels().push({
     setup : function(context)
     {
     	context.game_over = false;     
+        Physics.getBodyByLabel("obstacle").mass *= 2.0;
     },
 
     update : function(context)
