@@ -444,7 +444,6 @@ var Game = (function(){
     */
   function closePath(forcePolygon)
   {
-      var aux = drawing_data.current_polygon.slice();
       var type = evalCurrentShape();
       console.log("Last evaluation: " + type);
       console.log(JSON.stringify(drawing_data.current_polygon));
@@ -468,7 +467,6 @@ var Game = (function(){
       }
       if(type == "chain")
       {
-          drawing_data.current_polygon = aux;
           closeAsChain();
       }
   }
@@ -655,6 +653,7 @@ var Game = (function(){
     */
   function closeAsChain()
   {
+      drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.4 * Physics.getScale());
       var chain = {
           vertices : drawing_data.current_polygon,
           chain_handler : [],

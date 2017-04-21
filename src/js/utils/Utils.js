@@ -60,8 +60,31 @@ var Utils = (function(){
         return vertices;
     }
 
+    /* 
+     * Improve this algo here https://jsfiddle.net/oyj6uh5n/2/
+     * */
+    function normalizePolyLine(poly, distance)
+    {
+        var newpoly = [];
+        for(var i = 0 ; i < poly.length-1; i++)
+        {
+            var vec = [poly[i+1][0] - poly[i][0], poly[i+1][1] - poly[i][1] ];
+            var length = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
+            var segments = parseInt(length/distance);
+            var step_x = vec[0] / segments;
+            var step_y = vec[1] / segments;
+            for(var j = 0; j < segments; j++)
+            {
+                newpoly.push([poly[i][0] + (step_x * j), poly[i][1] + (step_y * j)]);
+            }
+        }
+        newpoly.push([poly[poly.length-1][0], poly[poly.length-1][1]]);
+        return newpoly;
+    }
+
 	return { isMobileNavigator : isMobileNavigator,
              isRunningOnAirConsole : isRunningOnAirConsole,
-             rectFromPoints : rectFromPoints };
+             rectFromPoints : rectFromPoints,
+             normalizePolyLine : normalizePolyLine };
 
 })();
