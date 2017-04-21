@@ -79,7 +79,18 @@ LevelSelector.getLevels().push({
                 [ -9.60, 0.40 ],
                 [ -0.70, 0.40 ]
             ]
-        }
+        },
+        {
+            label    : "gear",
+            type     : "circle",
+            radio    : 0.8,
+            isStatic : false,
+            position : [5.05,7.7],
+        },
+    ],
+
+    tacks : [
+        { bodyA: "pieceB", bodyB : "gear", position: [5.05,7.7]  }
     ],
 
     setup : function(context, engine)

@@ -653,7 +653,7 @@ var Game = (function(){
     */
   function closeAsChain()
   {
-      drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.5 * Physics.getScale());
+      drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.4 * Physics.getScale());
       var chain = {
           vertices : drawing_data.current_polygon,
           chain_handler : [],
@@ -708,7 +708,7 @@ var Game = (function(){
 
   function createChainLink(pointA, pointB)
   {
-      var shape = Utils.rectFromPoints(pointA, pointB, 0.05 * Physics.getScale());
+      var shape = Utils.rectFromPoints(pointA, pointB, 0.08 * Physics.getScale());
       var centroid = [ (shape[0][0] + shape[1][0] + shape[2][0] + shape[3][0])/4,
                        (shape[0][1] + shape[1][1] + shape[2][1] + shape[3][1])/4 ];
       var point1 = [ pointA[0] - centroid[0], pointA[1] - centroid[1] ];
@@ -716,7 +716,7 @@ var Game = (function(){
       var body_handler = Physics.createBody({
           label    : "chainLink" + chainIdCount,
           vertices : shape,
-          massScale : 10,
+          massScale : 5,
       });
       
       return {

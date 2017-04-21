@@ -223,18 +223,18 @@ var Physics = (function(){
         options.position = options.position || new Float32Array(2);
         var body = null;
         var config = { position : [options.position[0] / scale, options.position[1] / scale] };
+        var circle = new p2.Circle({
+            radius  : options.radio / scale,
+        });
         if(options.isStatic)
         {
             config.mass = 0; // static
         }
         else
         {
-            config.mass = 1; // non-static
+            config.mass = 3;//circle.area * 0.001;
         }
         body = new p2.Body(config);
-        var circle = new p2.Circle({
-            radius  : options.radio / scale,
-        });
         body.addShape(circle);
         world.addBody(body);
 
