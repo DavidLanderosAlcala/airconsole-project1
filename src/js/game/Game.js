@@ -12,6 +12,7 @@ var Game = (function(){
   var listeners = [];
   var chainIdCount = 0;
   var tackIdCount = 0;
+  var collisionGroupCount = 1;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -85,6 +86,7 @@ var Game = (function(){
       objects.chains  = [];
       chainIdCount = 0;
       tackIdCount = 0;
+      collisionGroupCount = 0;
 
       level_data.hints = [];
 
@@ -653,6 +655,9 @@ var Game = (function(){
     */
   function closeAsChain()
   {
+      var groupA = collisionGroupCount++;
+      var groupB = collisionGroupCount++;
+
       decomp.removeCollinearPoints(drawing_data.current_polygon, 0.3);
       drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.3 * Physics.getScale());
       var chain = {
@@ -675,6 +680,12 @@ var Game = (function(){
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point1,
               });
+
+              /* collision group stuff */
+              Physics.addCollisionGroup(objects.tacks[drawing_data.candidate_tack_index_A].bodyA, groupA);
+              Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupA);
+              Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupB);
+
               objects.tacks[drawing_data.candidate_tack_index_A].contraint = contraint;
               objects.tacks[drawing_data.candidate_tack_index_A].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
           }
@@ -686,6 +697,12 @@ var Game = (function(){
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point2,
               });
+
+              /* collision group stuff */
+              Physics.addCollisionGroup(objects.tacks[drawing_data.candidate_tack_index_B].bodyA, groupB);
+              Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupA);
+              Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupB);
+
               objects.tacks[drawing_data.candidate_tack_index_B].contraint = contraint;
               objects.tacks[drawing_data.candidate_tack_index_B].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
           }
@@ -697,6 +714,10 @@ var Game = (function(){
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point1,
               });
+
+              /* collision group stuff */
+              Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupA);
+              Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupB);
           }
           chain.chain_links.push(chainLink);
       }
@@ -1186,7 +1207,7 @@ var Game = (function(){
       //drawing_data.current_polygon = [];
       //closePath();
   }
-  
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
