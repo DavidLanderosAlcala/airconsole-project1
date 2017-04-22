@@ -23,10 +23,10 @@ var Physics = (function(){
         world.gravity = [0,10];
         world.setGlobalStiffness(1e6);
         world.setGlobalRelaxation ( 10 );
-        world.solver.iterations = 10;
+        world.solver.iterations = 5;
         //world.solver.tolerance = 0.01;
         world.islandSplit = true;
-        world.solver.frictionIterations = 5;
+        world.solver.frictionIterations = 3;
         listeners = [];
         console.log(world);
 
@@ -89,7 +89,7 @@ var Physics = (function(){
         timestamp = newtimestamp;
         if(elapsedtime > 500)
             elapsedtime = 500;
-        world.step(((elapsedtime/1000))/1.5);
+        world.step(((elapsedtime/1000))/1.6);
         var new_fps = 1 / (elapsedtime/1000)|0;
         if(new_fps != fps)
         {
