@@ -456,6 +456,36 @@ var Physics = (function(){
         return null;
     }
 
+    function addCollisionGroup(body_handler, group)
+    {
+        var s, sl = body_handler.shapes.length;
+        for(s = 0; s < sl; s++)
+        {
+            body_handler.shapes[s].collisionGroup = 0;
+            body_handler.shapes[s].collisionGroups = body_handler.shapes[0].collisionGroups || [];
+            body_handler.shapes[s].collisionGroups.push(group);
+        }
+    }
+
+    function removeCollisionGroup(body_handler, group)
+    {
+        var s, sl = body_handler.shapes.length;
+        for(s = 0; s < sl; s++)
+        {
+            if(body_handler.shapes[s].collisionGroups)
+            {
+                for(var i = body_handler.shapes[s].collisionGroups.length - 1; i >=0; i--)
+                {
+                    if(body_handler.shapes[s].collisionGroups[i] == group)
+                    {
+                        body_handler.shapes[s].collisionGroups.splice(i,1);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     return { init            : init,
     	       clear           : clear,
              getPosition     : getPosition,
@@ -483,6 +513,8 @@ var Physics = (function(){
              clearForces     : clearForces,
              getScale        : getScale,
              getBodyByLabel  : getBodyByLabel,
-             setAngle        : setAngle };
+             setAngle        : setAngle,
+             addCollisionGroup : addCollisionGroup,
+             removeCollisionGroup : removeCollisionGroup };
 
 })();
