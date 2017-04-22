@@ -87,6 +87,6 @@ var Utils = (function(){
 	return { isMobileNavigator : isMobileNavigator,
              isRunningOnAirConsole : isRunningOnAirConsole,
              rectFromPoints : rectFromPoints,
-             normalizePolyLine : normalizePolyLine };
+             normalizePolyLine : normalizePolyLine,};
 
 })();

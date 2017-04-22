@@ -100,6 +100,12 @@ LevelSelector.getLevels().push({
     setup : function(context)
     {
     	context.game_over = false;     
+        var obstacle = Physics.getBodyByLabel("obstacle");
+        var ball = Physics.getBodyByLabel("ball");
+
+        console.log("ball:");
+        console.log(ball);
+
         Physics.getBodyByLabel("obstacle").mass *= 2.0;
     },
 
@@ -109,3 +115,4 @@ LevelSelector.getLevels().push({
     }
 
 });
+

@@ -1186,7 +1186,7 @@ var Game = (function(){
       //drawing_data.current_polygon = [];
       //closePath();
   }
-
+  
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,

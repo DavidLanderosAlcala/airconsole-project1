@@ -280,7 +280,7 @@ var Physics = (function(){
                 var pointB = new Float32Array(2);
                 pointB[0] = (options.vertices[i][0] + options.position[0]) / scale;
                 pointB[1] = (options.vertices[i][1] + options.position[1]) / scale;
-                var vertices = Utils.rectFromPoints(pointA, pointB, 0.04);
+                var vertices = Utils.rectFromPoints(pointA, pointB, 0.05);
                 decomp.makeCCW(vertices);
                 var c = new p2.Convex({vertices: vertices});
                 for(var j=0; j!==c.vertices.length; j++){
