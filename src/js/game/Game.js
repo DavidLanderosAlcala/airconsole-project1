@@ -954,7 +954,7 @@ var Game = (function(){
     */
   function removeTacksConnectedTo(body_id)
   {
-      for(var i = objects.tacks.length-1; i >= 0 && objects.tacks.length != 0; i--)
+      for(var i = objects.tacks.length-1; i >= 0 && i < objects.tacks.length; i--)
       {
           if( Physics.getId(objects.tacks[i].bodyA) == body_id)
           {
