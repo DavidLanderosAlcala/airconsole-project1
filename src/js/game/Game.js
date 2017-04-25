@@ -139,7 +139,7 @@ var Game = (function(){
     */
   function render()
   {
-      context.lineWidth = 0.1 * Physics.getScale();
+      context.lineWidth = 0.09 * Physics.getScale();
 
       /* Clearing the screen */
       context.clearRect(0,0, canvas.width, canvas.height);

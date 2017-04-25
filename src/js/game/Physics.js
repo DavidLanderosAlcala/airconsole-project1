@@ -26,7 +26,7 @@ var Physics = (function(){
         world.solver.iterations = 5;
         //world.solver.tolerance = 0.01;
         world.islandSplit = true;
-        world.solver.frictionIterations = 3;
+        world.solver.frictionIterations = 5;
         listeners = [];
 
        //var app = new p2.WebGLRenderer(function(){
@@ -88,7 +88,7 @@ var Physics = (function(){
         timestamp = newtimestamp;
         if(elapsedtime > 500)
             elapsedtime = 500;
-        world.step(((elapsedtime/1000))/1.6);
+        world.step(((elapsedtime/1000))/1.7);
         var new_fps = 1 / (elapsedtime/1000)|0;
         if(new_fps != fps)
         {
