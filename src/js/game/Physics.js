@@ -14,12 +14,12 @@ var Physics = (function(){
     function init()
     {
         scale = (Screen.getWidth() / world_width)|0;
-    	  console.log("P2.js Implementation");
-    	  if(world == null)
-    	  {
-              world = new p2.World();
-    	  }
-    	  world.clear();
+    	console.log("P2.js Implementation");
+    	if(world == null)
+    	{
+            world = new p2.World();
+    	}
+    	world.clear();
         world.gravity = [0,10];
         world.setGlobalStiffness(1e6);
         world.setGlobalRelaxation ( 10 );
@@ -28,7 +28,6 @@ var Physics = (function(){
         world.islandSplit = true;
         world.solver.frictionIterations = 3;
         listeners = [];
-        console.log(world);
 
        //var app = new p2.WebGLRenderer(function(){
        //     this.setWorld(world);
@@ -189,8 +188,6 @@ var Physics = (function(){
         	}
         }
         world.addBody(body);
-        console.log("last object: ");
-        console.log(body);
 
         /*
          * Add centroid
@@ -295,8 +292,6 @@ var Physics = (function(){
             body.aabbNeedsUpdate = true;
         }
         catch(e){
-          // only add body when all shapes were succesfully created
-          console.log("Error al crear alambre: ");
           console.log(e);
           return undefined;
         }
@@ -304,11 +299,7 @@ var Physics = (function(){
         {
             return undefined;
         }
-        console.log("position of the last wire: ");
-        console.log(body.position);
         world.addBody(body);
-        console.log("last object: ");
-        console.log(body);
         
         /*
          * Add label property
@@ -435,7 +426,6 @@ var Physics = (function(){
         body_handler.velocity[0] = 0;
         body_handler.velocity[1] = 0;
         body_handler.angularVelocity = 0;
-        console.log(body_handler);
     }
 
     function getScale()
