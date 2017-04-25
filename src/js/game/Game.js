@@ -19,6 +19,7 @@ var Game = (function(){
     */
   function init(options)
   {
+      DirtyLayer.init();
       MenuManager.init();
       canvas = options.canvas;
       canvas.width = window.innerWidth;
@@ -78,6 +79,9 @@ var Game = (function(){
   {
       // remove all objects.shapes
       Physics.clear();
+      DirtyLayer.clear();
+      drawing_data.clear();
+
       listeners = [];
 
       // Reset some variables
@@ -89,8 +93,6 @@ var Game = (function(){
       collisionGroupCount = 0;
 
       level_data.hints = [];
-
-      drawing_data.clear();
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -171,53 +173,35 @@ var Game = (function(){
           context.fillStyle = ColorManager.getColorAt(objects.shapes[i].color_index);
           /* Drawing polygons */
           context.save();
-              context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
-              if(!objects.shapes[i].isOutOfTheScreen)
-              {
-                  var position = Physics.getPosition(objects.shapes[i].body);
-                  context.translate(position[0], position[1]);
-                  context.rotate(Physics.getAngle(objects.shapes[i].body));
-                  context.translate(-objects.shapes[i].centroid[0], -objects.shapes[i].centroid[1]);
-                  context.beginPath();
-                  if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
-                      context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
-                      for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
-                          context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
-                      }
-                      if(objects.shapes[i].type == "polygon")
-                          context.closePath();
-                  }
-                  else if(objects.shapes[i].type == "circle" ) {
-                      context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
-                  }
-                  if(objects.shapes[i].type == "wire")
-                  {
-                      context.stroke();
-                  }
-                  else
-                  {
-                      context.globalAlpha = objects.shapes[i].deleted ? 0.05 : 0.2;
-                      context.fill();
-                      context.globalAlpha = objects.shapes[i].deleted ? 0.1 : 1.0;
-                      context.stroke(); 
-                  }
+          context.globalAlpha = 1.0;
+          var position = Physics.getPosition(objects.shapes[i].body);
+          context.translate(position[0], position[1]);
+          context.rotate(Physics.getAngle(objects.shapes[i].body));
+          context.translate(-objects.shapes[i].centroid[0], -objects.shapes[i].centroid[1]);
+          context.beginPath();
+          if(objects.shapes[i].type == "polygon" || objects.shapes[i].type == "wire" ) {
+              context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
+              for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
+                  context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
               }
-          context.restore();
-          /* Drawing polygons (ghost mode) */
-          if( Physics.getLabel( objects.shapes[i].body) == "Body" ) {
-              context.save();
-                  context.beginPath();
-                  context.moveTo(objects.shapes[i].vertices[0][0], objects.shapes[i].vertices[0][1]);
-                  for(var j = 1; j < objects.shapes[i].vertices.length; j++) {
-                      context.lineTo(objects.shapes[i].vertices[j][0], objects.shapes[i].vertices[j][1]);
-                  }
-
-                  if(objects.shapes[i].type == "polygon")
-                      context.closePath();
-                  context.globalAlpha = 0.1;
-                  context.stroke();
-              context.restore();
+              if(objects.shapes[i].type == "polygon")
+                  context.closePath();
           }
+          else if(objects.shapes[i].type == "circle" ) {
+              context.arc(0,0, objects.shapes[i].radio, 0, Math.PI * 2);
+          }
+          if(objects.shapes[i].type == "wire")
+          {
+              context.stroke();
+          }
+          else
+          {
+              context.globalAlpha = 0.2;
+              context.fill();
+              context.globalAlpha = 1.0;
+              context.stroke(); 
+          }
+          context.restore();
       }
 
       /* Drawing chains */
@@ -243,16 +227,6 @@ var Game = (function(){
               context.stroke();
               context.restore();
           }
-          /* Drawing chains (ghost mode) */
-          context.save();
-          context.moveTo(objects.chains[i].vertices[0][0], objects.chains[i].vertices[0][1]);
-          for(var v = 1; v < objects.chains[i].vertices.length-1; v++)
-          {
-              context.lineTo(objects.chains[i].vertices[v][0], objects.chains[i].vertices[v][1]);
-          }
-          context.globalAlpha = 0.1;
-          context.stroke();
-          context.restore();
       }
       context.restore();
 
@@ -266,7 +240,7 @@ var Game = (function(){
           var pos = calcTackAbsPos(i);
           context.translate(pos[0],pos[1]);
           context.arc(0, 0, tack_radius, 0, Math.PI * 2);
-          context.globalAlpha = objects.tacks[i].deleted ? 0.1 : 1.0;
+          context.globalAlpha = 1.0;
           context.stroke();
           context.restore();
       }
@@ -591,6 +565,7 @@ var Game = (function(){
           }
           onTackConnected();
       }
+      addCurrentDrawingToDirtyLayer();
       drawing_data.clear();
   }
 
@@ -646,7 +621,7 @@ var Game = (function(){
           }
           onTackConnected();
       }
-
+      addCurrentDrawingToDirtyLayer();
       drawing_data.clear();
   }
 
@@ -725,7 +700,19 @@ var Game = (function(){
       chain.tackAIndex = drawing_data.candidate_tack_index_A;
       chain.tackBIndex = drawing_data.candidate_tack_index_B;
       objects.chains.push(chain);
+      addCurrentDrawingToDirtyLayer();
       drawing_data.clear();
+  }
+
+  function addCurrentDrawingToDirtyLayer()
+  {
+      DirtyLayer.addShape({
+          vertices : drawing_data.current_polygon,
+          position : [0, 0],
+          angle : 0,
+          centroid : [0, 0],
+          type : "wire",
+      });
   }
 
   function createChainLink(pointA, pointB)
@@ -792,30 +779,34 @@ var Game = (function(){
   function erease()
   {
       var cur_pos = PlayerCursor.getPosition();
-      var tacks =  findTacksAtPos(cur_pos);
+      var tacks_indices =  findTacksAtPos(cur_pos, { returnIndices : true} );
 
-      var i, l = tacks.length;
-      for(i = 0 ; i < l; i ++)
+      var i;
+      for(i = tacks_indices.length-1 ; i >=0; i--)
       {
+          var tack = objects.tacks[tacks_indices[i]];
+
           // si se encuentra un tack, borrarla y terminar
-          if(tacks[i].contraint != null)
+          if(tack.contraint != null)
           {
-              Physics.removeConstraint(tacks[i].contraint);
+              Physics.removeConstraint(tack.contraint);
           }
-          tacks[i].contraint = null;
-          tacks[i].deleted = true;
+          tack.contraint = null;
+          tack.deleted = true;
 
           /* check if the tack is connected to a chain */
           for(var ch = 0; ch < objects.chains.length; ch++)
           {
-              if(!objects.chains[ch].deleted && objects.chains[ch].tackAIndex == tacks[i].tack_id || objects.chains[ch].tackBIndex == tacks[i].tack_id)
+              if(objects.chains[ch].tackAIndex == tack.tack_id || objects.chains[ch].tackBIndex == tack.tack_id)
               {
                   /* Simulate that the user deleted a chainLink so the game deletes the complete chain accordingly */
                   onChainLinkDeleted("chainLink" + ch);
+                  break;
               }
           }
 
           drawing_data.clear();
+          objects.tacks.splice(tacks_indices[i],1);
           return;
       }
 
@@ -871,10 +862,10 @@ var Game = (function(){
   {
       options = options || {};
       options.returnIndices = options.returnIndices || false;
-      options.filterConnectedTacks = options.returnIndices || false;
+      options.filterConnectedTacks = options.filterConnectedTacks || false;
 
       var found_tacks = [];
-      var tack_radio = 0.3 * Physics.getScale();
+      var tack_radio = 0.5 * Physics.getScale();
       var i, l = objects.tacks.length;
       for(i = 0 ; i < l; i ++)
       {
@@ -907,19 +898,25 @@ var Game = (function(){
     * @desc removes a body from the world
     * @param body {object} the body_handler to be deleted
     */
-  function removeBody(body, isOutOfTheScreen)
+  function removeBody(body)
   {
       if((body.label != "Body" && body.label.indexOf("chainLink") != 0))
         return;
       Physics.removeBody(body);
       removeTacksConnectedTo(body.id);
-      var i, l = objects.shapes.length;
-      for(i = 0; i < l; i++)
+
+      if(body.label.indexOf("chainLink") == 0)
+          return;
+
+      for(i = objects.shapes.length-1; i >= 0; i--)
       {
           if(body == objects.shapes[i].body)
           {
-              objects.shapes[i].isOutOfTheScreen = isOutOfTheScreen;
-              objects.shapes[i].deleted = true;
+              objects.shapes[i].fill = true;
+              objects.shapes[i].position = Physics.getPosition(objects.shapes[i].body);
+              objects.shapes[i].angle = Physics.getAngle(objects.shapes[i].body);
+              DirtyLayer.addShape(objects.shapes[i]);
+              objects.shapes.splice(i,1);
               return;
           }
       }      
@@ -966,23 +963,20 @@ var Game = (function(){
   {
       for(var i = objects.tacks.length-1; i >= 0; i--)
       {
-          if(!objects.tacks[i].deleted)
+          if( Physics.getId(objects.tacks[i].bodyA) == body_id)
           {
-              if( Physics.getId(objects.tacks[i].bodyA) == body_id)
-              {
-                   if(objects.tacks[i].contraint != null)
-                   {
-                       Physics.removeConstraint(objects.tacks[i].contraint);
-                   }
-                   objects.tacks[i].contraint = null;
-                   objects.tacks[i].deleted = true;
-              }
-              if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
-              {
+               if(objects.tacks[i].contraint != null)
+               {
                    Physics.removeConstraint(objects.tacks[i].contraint);
-                   objects.tacks[i].contraint = null;
-                   objects.tacks[i].deleted = true;
-              }
+               }
+               objects.tacks[i].contraint = null;
+               objects.tacks.splice(i,1);
+          }
+          if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
+          {
+               Physics.removeConstraint(objects.tacks[i].contraint);
+               objects.tacks[i].contraint = null;
+               objects.tacks.splice(i,1);
           }
       }
   }

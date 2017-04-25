@@ -9,4 +9,5 @@ var ConfigOptions = {
     min_vertex_distance        : 0.2,
     polygon_autoclose_distance : 0.3,
     min_vertices_per_polygon   : 5,
+    use_dirty_layer            : true,
 }
