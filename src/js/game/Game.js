@@ -837,12 +837,19 @@ var Game = (function(){
       var index = parseInt(label.replace("chainLink",""));
 
       /* remove tacks connected to this chain */
-      Physics.removeConstraint(objects.tacks[objects.chains[index].tackAIndex].contraint);
-      objects.tacks[objects.chains[index].tackAIndex].contraint = null;
-      objects.tacks[objects.chains[index].tackAIndex].deleted = true;
-      Physics.removeConstraint(objects.tacks[objects.chains[index].tackBIndex].contraint);
-      objects.tacks[objects.chains[index].tackBIndex].contraint = null;
-      objects.tacks[objects.chains[index].tackBIndex].deleted = true;
+      if(objects.tacks[objects.chains[index].tackAIndex])
+      {
+          Physics.removeConstraint(objects.tacks[objects.chains[index].tackAIndex].contraint);
+          objects.tacks[objects.chains[index].tackAIndex].contraint = null;
+          objects.tacks.splice(objects.chains[index].tackAIndex,1);
+      }
+
+      if(objects.tacks[objects.chains[index].tackBIndex])
+      {
+          Physics.removeConstraint(objects.tacks[objects.chains[index].tackBIndex].contraint);
+          objects.tacks[objects.chains[index].tackBIndex].contraint = null;
+          objects.tacks.splice(objects.chains[index].tackBIndex,1);
+      }
 
       objects.chains[index].deleted = true;
       var bodies = Physics.getAllBodies();
@@ -865,7 +872,7 @@ var Game = (function(){
       options.filterConnectedTacks = options.filterConnectedTacks || false;
 
       var found_tacks = [];
-      var tack_radio = 0.5 * Physics.getScale();
+      var tack_radio = 0.3 * Physics.getScale();
       var i, l = objects.tacks.length;
       for(i = 0 ; i < l; i ++)
       {
@@ -972,7 +979,7 @@ var Game = (function(){
                objects.tacks[i].contraint = null;
                objects.tacks.splice(i,1);
           }
-          if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
+          else if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
           {
                Physics.removeConstraint(objects.tacks[i].contraint);
                objects.tacks[i].contraint = null;
