@@ -1,34 +1,154 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "La ban",
-    description : "????",
+    title       : "Barranco",
+    description : "Dibuja un puente, YA!!",
     bodies : [
         {
             label : "origin",
             isStatic : true,
-            position : [ -5.0, 1.0 ],
+            position : [ -8.0, 2.0 ],
             vertices : [
-                [-7.2, 0.8 ],
-                [-7.2, -1.6 ],
-                [3.2, -1.6 ],
-                [3.2, 0.8 ]
+                [ -5.7, -3.7 ],
+                [ -5.7, 0.3 ],
+                [ -2.3, 0.2 ],
+                [ -1.7, 0.1 ],
+                [ -1, 0.2 ],
+                [ -0.6, 0.1 ],
+                [ -0.2, 0 ],
+                [ 0.3, 0 ],
+                [ 0.7, 0.1 ],
+                [ 1, 0.2 ],
+                [ 1.6, 0.2 ],
+                [ 2.4, 0.3 ],
+                [ 2.6, 0 ],
+                [ 3.1, -0.1 ],
+                [ 3.4, 0 ],
+                [ 4, -0.2 ],
+                [ 4.5, -0.3 ],
+                [ 4.7, -0.7 ],
+                [ 4.8, -1.5 ],
+                [ 4.9, -2 ],
+                [ 4.8, -2.4 ],
+                [ 4.8, -2.6 ],
+                [ 4.6, -3.1 ],
+                [ 4.3, -3.7 ]
             ],
         },
         {
             label : "destiny",
             isStatic : true,
-            position : [ 7.0, 2.0 ],
+            position : [ 7.0, 3.0 ],
             vertices : [
-                [-1.6, 3.8 ],
-                [-1.6, -3.2 ],
-                [1.6, -3.2 ],
-                [1.6, 3.8 ]
-            ]
+    [
+        -1.6,
+        -4.8
+    ],
+    [
+        -1.5,
+        -3.7
+    ],
+    [
+        -1.5,
+        -2.9
+    ],
+    [
+        -1.7,
+        -2.1
+    ],
+    [
+        -1.3,
+        -1.5
+    ],
+    [
+        -1.4,
+        -0.4
+    ],
+    [
+        -1.4,
+        0
+    ],
+    [
+        -1.5,
+        0.7
+    ],
+    [
+        -1.5,
+        1.6
+    ],
+    [
+        -0.7,
+        1.9
+    ],
+    [
+        -0.3,
+        2.3
+    ],
+    [
+        0.3,
+        2.3
+    ],
+    [
+        1.1,
+        2.2
+    ],
+    [
+        1.6,
+        2
+    ],
+    [
+        2.6,
+        2.1
+    ],
+    [
+        3.5,
+        2.1
+    ],
+    [
+        4.1,
+        2.1
+    ],
+    [
+        4.5,
+        2.1
+    ],
+    [
+        5,
+        2.1
+    ],
+    [
+        5.9,
+        2.1
+    ],
+    [
+        7.2,
+        2.4
+    ],
+    [
+        7.7,
+        2.4
+    ],
+    [
+        8.1,
+        2.2
+    ],
+    [
+        9,
+        2.1
+    ],
+    [
+        10,
+        2
+    ],
+    [
+        10.1,
+        -4.8
+    ]
+]
         },
         {
             label : "ban",
-            position : [-8.3, 7],
+            position : [-12.3, 5],
             isStatic : false,
             vertices : [
                 [ -1.5, 0.8 ],
@@ -42,7 +162,7 @@ LevelSelector.getLevels().push({
         {
             label : "wheel1",
             isStatic : false,
-            position : [-9, 6.2],
+            position : [-13, 4.2],
             vertices : [
                 [ -0.15, -0.47 ],
                 [ -0.07, -0.39 ],
@@ -93,7 +213,7 @@ LevelSelector.getLevels().push({
         {
             label : "wheel2",
             isStatic : false,
-            position : [-7, 6.2],
+            position : [-11, 4.2],
             vertices : [
                 [ -0.15, -0.47 ],
                 [ -0.07, -0.39 ],
@@ -144,21 +264,25 @@ LevelSelector.getLevels().push({
     ],
 
     tacks : [
-        { bodyA : "ban", bodyB : "wheel1", position : [-9, 6.2] },
-        { bodyA : "ban", bodyB : "wheel2", position : [ -7, 6.2] }
+        { bodyA : "ban", bodyB : "wheel1", position : [-13, 4.2] },
+        { bodyA : "ban", bodyB : "wheel2", position : [ -11, 4.2] }
     ],
 
     setup : function(context)
     {
+        context.velocity = 1.0;
     	context.game_over = false;
         context.wheel1 = Physics.getBodyByLabel("wheel1");
         context.wheel2 = Physics.getBodyByLabel("wheel2");
+        Physics.on("addBody", function(){
+            context.velocity = 3.0;
+        });
     },
 
     update : function(context)
     {
-        context.wheel1.angularVelocity = 2.0;
-        context.wheel2.angularVelocity = 2.0;
+        context.wheel1.angularVelocity = context.velocity;
+        context.wheel2.angularVelocity = context.velocity;
         return context.game_over;
     }
 
