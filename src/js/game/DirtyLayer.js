@@ -45,6 +45,8 @@ var DirtyLayer = (function(){
         }
 
         context.save();
+        var camera = Game.getCamera();
+        context.translate(-camera[0], -camera[1]);
         context.translate(shape.position[0], shape.position[1]);
         context.rotate(shape.angle);
         context.translate(-shape.centroid[0], -shape.centroid[1]);

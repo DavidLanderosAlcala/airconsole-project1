@@ -128,6 +128,7 @@ var Screen = (function(){
         canvas.height = rect.height;
         width = rect.width;
         height = rect.height;
+        Game.adjustToViewPort();
     }
 
     /** @func disableContextMenu

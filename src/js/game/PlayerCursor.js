@@ -34,6 +34,8 @@ var PlayerCursor = (function() {
 
     function getPosition()
     {
+        position[0] += Game.getCamera()[0];
+        position[1] += Game.getCamera()[1];
         return position;
     }
 

@@ -3,6 +3,7 @@
   */
 var Game = (function(){
 
+  var camera = [0,0];
   var canvas;
   var context;
   var canvas_rect;
@@ -144,6 +145,7 @@ var Game = (function(){
       /* Clearing the screen */
       context.clearRect(0,0, canvas.width, canvas.height);
       context.save();
+      context.translate(-camera[0], -camera[1]);
 
       /* Drawing the current polygon */
       context.save();
@@ -372,6 +374,8 @@ var Game = (function(){
     */
   function lineTo(pos)
   {
+      pos[0] += camera[0]
+      pos[1] += camera[1];
       if(drawing_data.is_linto_locked)
       {
           return;
@@ -858,7 +862,7 @@ var Game = (function(){
       options.returnIndex = options.returnIndex || false;
       options.filterConnectedTacks = options.filterConnectedTacks || false;
 
-      var tack_radio = 0.3 * Physics.getScale();
+      var tack_radio = 0.4 * Physics.getScale();
       var i, l = objects.tacks.length;
       for(i = 0 ; i < l; i ++)
       {
@@ -1124,8 +1128,8 @@ var Game = (function(){
       shape.position[1] *= Physics.getScale();
 
       shape.position[1] = -shape.position[1];
-      shape.position[0] += Screen.getWidth()>>1;
-      shape.position[1] += Screen.getHeight();
+      //shape.position[0] += Screen.getWidth()>>1;
+      //shape.position[1] += Screen.getHeight();
       if(shape.vertices)
       {
           var v, l = shape.vertices.length;
@@ -1221,6 +1225,17 @@ var Game = (function(){
       //drawing_data.current_polygon = [];
       //closePath();
   }
+  
+  function adjustToViewPort()
+  {
+     camera[0] = -Screen.getWidth()>>1;
+     camera[1] = -Screen.getHeight();
+  }
+  
+  function getCamera()
+  {
+      return camera;
+  }
 
   return {  init          : init,
             moveTo        : moveTo,
@@ -1233,5 +1248,7 @@ var Game = (function(){
             restartLevel  : restartLevel,
             getHints      : getHints,
             on            : on,
-            DrawEvilShape : DrawEvilShape };
+            DrawEvilShape : DrawEvilShape,
+            adjustToViewPort : adjustToViewPort,
+            getCamera        : getCamera };
 })();
