@@ -13,7 +13,13 @@ var Physics = (function(){
 
     function init()
     {
-        scale = (Screen.getWidth() / world_width)|0;
+        var w = Screen.getWidth();
+        var h = Screen.getHeight();
+        if(h < w)
+        {
+            w = h * 1.618;
+        }
+        scale = (w / world_width)|0;
     	console.log("P2.js Implementation");
     	if(world == null)
     	{
