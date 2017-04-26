@@ -5,67 +5,30 @@ LevelSelector.getLevels().push({
     description : "????",
     bodies : [
         {
-            label : "ground",
+            label : "origin",
             isStatic : true,
-            position : [ 1.0, 4.0 ],
+            position : [ -5.0, 1.0 ],
             vertices : [
-                [ -10.3,  -5.5 ],
-                [ -10.3,  -2.5 ],
-                [ -8.6,  -2.5 ],
-                [ -8.2,  -3.1 ],
-                [ -7.8,  -3.4 ],
-                [ -7.3,  -3.3 ],
-                [ -6.8,  -3 ],
-                [ -6.2,  -3 ],
-                [ -5.6,  -2.7 ],
-                [ -5.6,  -2.5 ],
-                [ -5.4,  -2.1 ],
-                [ -5.1,  -1.8 ],
-                [ -4.7,  -1.5 ],
-                [ -4.3,  -1.5 ],
-                [ -4.1,  -1.2 ],
-                [ -4.1,  -0.8 ],
-                [ -4.1,  -0.6 ],
-                [ -4.1,  -0.5 ],
-                [ -3.7,  -0.1 ],
-                [ -3.4,  0 ],
-                [ -2.9,  0 ],
-                [ -2.4,  -0.4 ],
-                [ -1.9,  -0.7 ],
-                [ -1.3,  -1.3 ],
-                [ -1,  -2 ],
-                [ -1,  -2.7 ],
-                [ -0.7,  -3 ],
-                [ -0.7,  -2.7 ],
-                [ -0.7,  -2.5 ],
-                [ -0.9,  -1.7 ],
-                [ -0.9,  -1.3 ],
-                [ -0.9,  -0.9 ],
-                [ -0.9,  -0.6 ],
-                [ -1.1,  -0.3 ],
-                [ -1.3,  -0.1 ],
-                [ -1.3,  0.2 ],
-                [ -1.1,  0.5 ],
-                [ -0.9,  0.6 ],
-                [ -0.6,  0.9 ],
-                [ -0.5,  1.1 ],
-                [ -0.2,  1.4 ],
-                [ 0.1,  1.2 ],
-                [ 0.2,  1.1 ],
-                [ 0.5,  1.3 ],
-                [ 0.7,  1.5 ],
-                [ 0.8,  2 ],
-                [ 0.9,  2.1 ],
-                [ 1.3,  2.3 ],
-                [ 1.6,  2.3 ],
-                [ 4.3,  2.3 ],
-                [ 10.2,  2.3 ],
-                [ 10.2,  -5.5 ]
+                [-7.2, 0.8 ],
+                [-7.2, -1.6 ],
+                [3.2, -1.6 ],
+                [3.2, 0.8 ]
             ],
         },
         {
+            label : "destiny",
+            isStatic : true,
+            position : [ 7.0, 2.0 ],
+            vertices : [
+                [-1.6, 3.8 ],
+                [-1.6, -3.2 ],
+                [1.6, -3.2 ],
+                [1.6, 3.8 ]
+            ]
+        },
+        {
             label : "ban",
-            position : [-5.3, 7],
+            position : [-8.3, 7],
             isStatic : false,
             vertices : [
                 [ -1.5, 0.8 ],
@@ -79,7 +42,7 @@ LevelSelector.getLevels().push({
         {
             label : "wheel1",
             isStatic : false,
-            position : [-6, 6.2],
+            position : [-9, 6.2],
             vertices : [
                 [ -0.15, -0.47 ],
                 [ -0.07, -0.39 ],
@@ -130,7 +93,7 @@ LevelSelector.getLevels().push({
         {
             label : "wheel2",
             isStatic : false,
-            position : [-4, 6.2],
+            position : [-7, 6.2],
             vertices : [
                 [ -0.15, -0.47 ],
                 [ -0.07, -0.39 ],
@@ -181,8 +144,8 @@ LevelSelector.getLevels().push({
     ],
 
     tacks : [
-        { bodyA : "ban", bodyB : "wheel1", position : [-6, 6.2] },
-        { bodyA : "ban", bodyB : "wheel2", position : [ -4, 6.2] }
+        { bodyA : "ban", bodyB : "wheel1", position : [-9, 6.2] },
+        { bodyA : "ban", bodyB : "wheel2", position : [ -7, 6.2] }
     ],
 
     setup : function(context)
@@ -194,8 +157,8 @@ LevelSelector.getLevels().push({
 
     update : function(context)
     {
-        context.wheel1.angularVelocity = 3.0;
-        context.wheel2.angularVelocity = 3.0;
+        context.wheel1.angularVelocity = 2.0;
+        context.wheel2.angularVelocity = 2.0;
         return context.game_over;
     }
 
