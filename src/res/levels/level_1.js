@@ -41,13 +41,12 @@ LevelSelector.getLevels().push({
 
     hints: [
         {
+            line : "dotted",
             label : "simple line",
             position : [ 0, 6 ],
             vertices: [
                 [ -3, 0 ],
                 [  3, 0 ],
-                [  3, 0.01 ],
-                [ -3, 0.01 ],
             ],
         }
     ],
@@ -72,7 +71,7 @@ LevelSelector.getLevels().push({
         {
             // si rock lleva mas de 3 segundos sin caer,
             // el jugador ha ganado
-            if(new Date().getTime() - context.time > 3000)
+            if(new Date().getTime() - context.time > 5000)
             {
                 Screen.setTitleText("Bien hecho ;)");
             	return true;

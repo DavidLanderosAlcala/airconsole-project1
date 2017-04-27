@@ -247,6 +247,9 @@ var Game = (function(){
       }
 
       /* Drawing level.hints (ghost mode) */
+      var segments = 0.25 * Physics.getScale();
+      lineDash = [segments, segments];
+
       var i, l = level_data.hints.length;
       for(var i = 0; i < l; i++)
       {
@@ -262,6 +265,8 @@ var Game = (function(){
                     context.lineTo(level_data.hints[i].vertices[j][0], level_data.hints[i].vertices[j][1]);
                 }
                 context.globalAlpha = level_data.hints[i].opacity;
+                if(level_data.hints[i].line == "dotted")
+                    context.setLineDash(lineDash);
                 context.stroke();
             }
           context.restore();
@@ -1003,11 +1008,17 @@ var Game = (function(){
       var _bodies = [];
       level.hints = level.hints || [];
       level.tacks = level.tacks || [];
+      level.decorations = level.decorations || [];
       level_data.hints = [];
+      level_data.decorations = [];
       level_data.tacks = [];
       for(var i = 0; i < level.hints.length;i++)
       {
-          level_data.hints.push(prepareLevelShapes(level.hints[i]));
+          level_data.hints.push(prepareLevelShapes(level.hints[i], "hint"));
+      }
+      for(var i = 0; i < level.decorations.length;i++)
+      {
+          level_data.decorations.push(prepareLevelShapes(level.decorations[i], "decoration"));
       }
       for(var i = 0; i < level.tacks.length;i++)
       {
@@ -1081,6 +1092,21 @@ var Game = (function(){
       level_data.description = level.description;
       level_data.setup_fnc   = level.setup;
 
+      /* Draw level decorations on the dirty layer
+       */
+
+      for(var i = 0; i < level_data.decorations.length; i++)
+      {
+          DirtyLayer.addShape({
+              position : level_data.decorations[i].position,
+              vertices : level_data.decorations[i].vertices,
+              centroid : [0,0],
+              angle    : 0,
+              type     : "wire",
+              opacity  : level_data.decorations[i].opacity,
+          });
+      }
+
       Screen.setTitleText(level.description);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context);
@@ -1119,7 +1145,7 @@ var Game = (function(){
   /** @func prepareLevelShapes
     * @desc Takes objects from p2.js space to canvas space
     */
-  function prepareLevelShapes(const_shape)
+  function prepareLevelShapes(const_shape, type)
   {
       /* Fixme: improve this coping technique */
       var shape = JSON.parse(JSON.stringify(const_shape));
@@ -1146,9 +1172,15 @@ var Game = (function(){
           shape.radio *= Physics.getScale();
       }
       
-      if(shape.opacity != 0.0)
+      if(type == "hint" || type == "decoration")
       {
-          shape.opacity = shape.opacity || 0.1;
+          if(shape.opacity != 0.0)
+              shape.opacity = shape.opacity || 0.5;
+      }
+
+      if(type == "hint")
+      {
+          shape.line = shape.line || "dotted";
       }
       
       return shape;
@@ -1219,12 +1251,6 @@ var Game = (function(){
           }
       }
   }
-
-  function DrawEvilShape(shape)
-  {
-      //drawing_data.current_polygon = [];
-      //closePath();
-  }
   
   function adjustToViewPort()
   {
@@ -1248,7 +1274,6 @@ var Game = (function(){
             restartLevel  : restartLevel,
             getHints      : getHints,
             on            : on,
-            DrawEvilShape : DrawEvilShape,
             adjustToViewPort : adjustToViewPort,
             getCamera        : getCamera };
 })();

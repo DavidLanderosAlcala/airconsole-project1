@@ -44,6 +44,8 @@ var DirtyLayer = (function(){
         	return;
         }
 
+        shape.opacity = shape.opacity || 0.1;
+
         context.save();
         var camera = Game.getCamera();
         context.translate(-camera[0], -camera[1]);
@@ -69,6 +71,7 @@ var DirtyLayer = (function(){
                     context.globalAlpha = 0.1;
                 }
             }
+            context.globalAlpha = shape.opacity;
             context.stroke();
         }
         else // circle
