@@ -47,7 +47,7 @@ label#title_label {
 	top         : 5%;
 	margin      : 0px 0 0 -320px;
 	text-align  : center;
-	font-size   : 50px;
+	font-size   : 5vh;
 	opacity     : 0.9;
 	cursor: url(../res/img/chalk.gif), pointer;
 }
