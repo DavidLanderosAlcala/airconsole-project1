@@ -1,7 +1,7 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "La ban",
+    title       : "La van",
     description : "Haz que las pelotas se toquen",
     bodies : [
         {
@@ -14,7 +14,7 @@ LevelSelector.getLevels().push({
                         [ 20.0,  0.0 ]],
         },
         {
-            label : "ban",
+            label : "van",
             position : [-0.3, 3],
             isStatic : false,
             vertices : [
@@ -57,8 +57,8 @@ LevelSelector.getLevels().push({
     ],
 
     tacks : [
-        { bodyA : "ban", bodyB : "wheel1", position : [-1, 2.2] },
-        { bodyA : "ban", bodyB : "wheel2", position : [ 1, 2.2] }
+        { bodyA : "van", bodyB : "wheel1", position : [-1, 2.2] },
+        { bodyA : "van", bodyB : "wheel2", position : [ 1, 2.2] }
     ],
 
     setup : function(context)
