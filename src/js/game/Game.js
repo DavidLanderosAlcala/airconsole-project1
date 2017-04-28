@@ -12,8 +12,8 @@ var Game = (function(){
   var level_data;
   var listeners = [];
   var chainIdCount = 0;
-  //var tackIdCount = 0;
   var collisionGroupCount = 1;
+  var tackFrameCount = 0;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -234,6 +234,12 @@ var Game = (function(){
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
       var tack_radius = (0.1) * Physics.getScale();
+      tackFrameCount++;
+      if(tackFrameCount > 10)
+        tack_radius *= 1.3;
+      if(tackFrameCount > 20)
+        tackFrameCount = 0;
+
       for(var i = 0; i < objects.tacks.length; i++)
       {
           context.save();
