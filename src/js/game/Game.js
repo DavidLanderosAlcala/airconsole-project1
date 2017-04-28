@@ -978,15 +978,23 @@ var Game = (function(){
                    Physics.removeConstraint(objects.tacks[i].contraint);
                }
                objects.tacks[i].contraint = null;
-               onTackRemoved(i);
-               objects.tacks.splice(i,1);
+               objects.tacks[i].bodyB = null;
+               if(!objects.tacks[i].indelible)
+               {
+                   onTackRemoved(i);
+                   objects.tacks.splice(i,1);
+               }
           }
           else if(objects.tacks[i].bodyB != null &&  Physics.getId(objects.tacks[i].bodyB) ==  body_id)
           {
                Physics.removeConstraint(objects.tacks[i].contraint);
                objects.tacks[i].contraint = null;
-               onTackRemoved(i);
-               objects.tacks.splice(i,1);
+               objects.tacks[i].bodyB = null;
+               if(!objects.tacks[i].indelible)
+               {
+                   onTackRemoved(i);
+                   objects.tacks.splice(i,1);
+               }
           }
       }
   }
