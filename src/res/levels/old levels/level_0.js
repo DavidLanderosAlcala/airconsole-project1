@@ -13,6 +13,32 @@ LevelSelector.getLevels().push({
                         [ 20.0,  1.0 ],
                         [ 20.0,  0.0 ]],
         },
+        {
+            label : "shape1",
+            isStatic : false,
+            position : [0,2],
+            vertices : [
+               [ -0.7, 0.7 ],
+               [ -0.7, -0.9 ],
+               [ 0, -0.9 ],
+               [ 0, 0.7 ]
+            ]
+        },
+        {
+            label : "circle",
+            type : "circle",
+            radio : 0.5,
+            position: [-3, 3],
+        },
+        {
+            label : "triangle",
+            position : [3, 2],
+            vertices : [
+                [ -0.8, -0.8 ],
+                [ -0.8, 0.8 ],
+                [ 2.4, -0.8 ]
+            ]
+        }
     ],
 
     setup : function(context)

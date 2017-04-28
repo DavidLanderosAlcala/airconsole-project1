@@ -1,83 +1,65 @@
 
 LevelSelector.getLevels().push({
 
-    title       : "Los pilares",
-    description : "dibuja una linea por encima de los pilares",
-    bodies      : [
+    title       : "Mi primer dibujo",
+    description : "Dibuja una figura cualquiera",
+    bodies : [
         {
-            label : "towerA",
+            label : "ground",
             isStatic : true,
-            position : [ -2, 1 ],
-            vertices: [
-                [ 0.0, 4 ],
-                [ 0.0, 0 ],
-                [ 0.5, 0 ],
-                [ 0.5, 4 ],
-            ],
+            position : [ 0.0, 0.0 ],
+            vertices : [[ -20.0, 0.0 ],
+                        [ -20.0, 1.0 ],
+                        [ 20.0,  1.0 ],
+                        [ 20.0,  0.0 ]],
         },
         {
-            label : "towerB",
-            isStatic : true,
-            position : [ 2, 1 ],
-            vertices: [
-                [ 0.0, 4 ],
-                [ 0.0, 0 ],
-                [ 0.5, 0 ],
-                [ 0.5, 4 ],
-            ],
-        },
-        {
-            label : "rock",
+            label : "shape1",
             isStatic : false,
-            position : [ 0, 10 ],
-            vertices: [
-                [ -0.25,  0.25 ],
-                [ -0.25, -0.25 ],
-                [  0.25, -0.25 ],
-                [  0.25,  0.25 ],
-            ],
+            position : [0,2],
+            vertices : [
+               [ -0.7, 0.7 ],
+               [ -0.7, -0.9 ],
+               [ 0, -0.9 ],
+               [ 0, 0.7 ]
+            ]
         },
-    ],
-
-    hints: [
         {
-            line : "dotted",
-            label : "simple line",
-            position : [ 0, 6 ],
-            vertices: [
-                [ -3, 0 ],
-                [  3, 0 ],
-            ],
+            label : "circle",
+            type : "circle",
+            radio : 0.5,
+            position: [-3, 3],
+        },
+        {
+            label : "triangle",
+            position : [3, 2],
+            vertices : [
+                [ -0.8, -0.8 ],
+                [ -0.8, 0.8 ],
+                [ 2.4, -0.8 ]
+            ]
         }
     ],
 
     setup : function(context)
     {
-    	context.time = new Date().getTime();
-        context.rock = Physics.getBodyByLabel("rock");
+	    // agregamos una variable al contexto del nivel
+    	context.game_over = false;
+
+        Physics.on("addBody", function(){
+            Screen.setTitleText("Buen trabajo!, ahora intenta borrarla con click derecho");
+        });
+
+        Physics.on("removeBody", function(){
+            Screen.setTitleText("Excelente!");
+            context.game_over = true;
+        });        
     },
 
     update : function(context)
     {
-	    // si rock ha salido de la pantalla
-        if( Physics.getPosition(context.rock)[1] >= Screen.getHeight())
-        {
-        	// la regresamos a su posicion inicial
-            Physics.setVelocity(context.rock, new Float32Array(2));
-            Physics.setPosition(context.rock, [ Screen.getWidth()/2, 0 ]);
-            context.time = new Date().getTime();
-        }
-        else
-        {
-            // si rock lleva mas de 3 segundos sin caer,
-            // el jugador ha ganado
-            if(new Date().getTime() - context.time > 5000)
-            {
-                Screen.setTitleText("Bien hecho ;)");
-            	return true;
-            }
-        }
-        return false;
+	    // retornamos el estado actual del nivel
+        return context.game_over;
     }
 
 });
