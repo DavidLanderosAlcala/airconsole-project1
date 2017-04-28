@@ -1081,16 +1081,19 @@ var Game = (function(){
               bodyA     : bodyA,
               offsetA   : calcTackOffset(pos, bodyA),
               bodyB     : bodyB,
-              offsetB   : calcTackOffset(pos, bodyB),
+              offsetB   : bodyB ? calcTackOffset(pos, bodyB) : null,
               contraint : null,
               indelible  : true,
           };
-          tack.contraint = Physics.createRevoluteJoint({
-              bodyA  : tack.bodyA,
-              pointA : tack.offsetA,
-              bodyB  : tack.bodyB,
-              pointB : tack.offsetB,
-          });
+          if(bodyB)
+          {
+              tack.contraint = Physics.createRevoluteJoint({
+                  bodyA  : tack.bodyA,
+                  pointA : tack.offsetA,
+                  bodyB  : tack.bodyB,
+                  pointB : tack.offsetB,
+              });
+          }
           objects.tacks.push(tack);
       }
 
