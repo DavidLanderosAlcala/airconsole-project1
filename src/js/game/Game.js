@@ -70,7 +70,22 @@ var Game = (function(){
       window.addEventListener("keydown", onKeyDown);
       window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(update);
-      LevelSelector.show();
+
+
+      var urlParser = document.createElement("a");
+      urlParser.href = window.location.href;
+      if(urlParser.search.indexOf("?loadLevel=") == 0)
+      {
+          var encoded_level = urlParser.search.replace("?loadLevel=","");
+          var decoded_leve = atob(encoded_level);
+          eval(decoded_leve);
+          loadLevel(LevelSelector.getLevels().length -1);
+          LevelSelector.hide();
+      }
+      else
+      {
+          LevelSelector.show();
+      }
   }
 
   /** @func restartEngine
