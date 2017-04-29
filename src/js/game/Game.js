@@ -76,10 +76,12 @@ var Game = (function(){
       urlParser.href = window.location.href;
       if(urlParser.search.indexOf("?loadLevel=") == 0)
       {
-          var encoded_level = urlParser.search.replace("?loadLevel=","");
-          var decoded_leve = atob(encoded_level);
-          eval(decoded_leve);
-          loadLevel(LevelSelector.getLevels().length -1);
+          setTimeout(function(){
+              var encoded_level = urlParser.search.replace("?loadLevel=","");
+              var decoded_leve = atob(encoded_level);
+              eval(decoded_leve);
+              loadLevel(LevelSelector.getLevels().length -1);
+          }, 500);
           LevelSelector.hide();
       }
       else
