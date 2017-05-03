@@ -71,13 +71,11 @@ var Game = (function(){
       window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(update);
 
-
-      var urlParser = document.createElement("a");
-      urlParser.href = window.location.href;
-      if(urlParser.search.indexOf("?loadLevel=") == 0)
+      if(window.location.href.indexOf("#") > 0)
       {
           setTimeout(function(){
-              var encoded_level = urlParser.search.replace("?loadLevel=","");
+
+              var encoded_level = window.location.href.split("#")[1];
               var decoded_leve = atob(encoded_level);
               eval(decoded_leve);
               loadLevel(LevelSelector.getLevels().length -1);
