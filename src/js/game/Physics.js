@@ -10,6 +10,10 @@ var Physics = (function(){
     var timestamp = 0;
     var fps = 0;
     var title_bar = document.getElementsByTagName("title")[0];
+    var newtimestamp = 0;
+    var elapsedtime = 0;
+    var new_fps = 0;
+
 
     function init()
     {
@@ -89,13 +93,15 @@ var Physics = (function(){
 
     function update()
     {
-        var newtimestamp = new Date().getTime();
-        var elapsedtime = newtimestamp - timestamp;
+        newtimestamp = new Date().getTime();
+        elapsedtime = newtimestamp - timestamp;
         timestamp = newtimestamp;
-        if(elapsedtime > 500)
-            elapsedtime = 500;
-        world.step(((elapsedtime/1000))/1.7);
-        var new_fps = 1 / (elapsedtime/1000)|0;
+        /*
+         * if(elapsedtime > 500)
+         *    elapsedtime = 500;
+         */
+        world.step(elapsedtime/1700);
+        new_fps = 1000 / elapsedtime;
         if(new_fps != fps)
         {
             fps = new_fps;
