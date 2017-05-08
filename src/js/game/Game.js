@@ -948,20 +948,15 @@ var Game = (function(){
   function calcTackAbsPos(index)
   {
       var tack = objects.tacks[index];
+      var body_pos = Physics.getPosition(tack.bodyA);
       var scaled_offsetA = tack.offsetA;
+      var r = Physics.getAngle(tack.bodyA);
       var x = scaled_offsetA[0];
       var y = scaled_offsetA[1];
-      var r = Physics.getAngle(tack.bodyA);
-
-      // 2D Rotation 
-      var pos = new Float32Array(2);
-      pos[0] = (x  * Math.cos(r)) - (y * Math.sin(r)); 
-      pos[1] = (y * Math.cos(r)) + (x * Math.sin(r));
-      
-      var body_pos = Physics.getPosition(tack.bodyA);
-      pos[0] += body_pos[0];
-      pos[1] += body_pos[1];
-      return pos;
+      var cos_r = Math.cos(r);
+      var sin_r = Math.sin(r);
+      return [ (x  * cos_r) - (y * sin_r) + body_pos[0] ,
+               (y * cos_r) + (x * sin_r) + body_pos[1] ];
   }
 
   function calcTackOffset(pos, body)
