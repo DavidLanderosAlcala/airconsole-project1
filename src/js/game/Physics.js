@@ -146,10 +146,13 @@ var Physics = (function(){
         options.label = options.label || "Body";
         options.position = options.position || new Float32Array(2);
 
+        /*
+         * Build a compatible array from the game polygon
+         */
         var poly = [], l = options.vertices.length;
         for(var i = 0; i < l; i++)
         {
-            poly.push(options.vertices[i].slice());
+            poly.push([options.vertices[i][0]/scale, options.vertices[i][1]/scale]);
         }
         
         decomp.makeCCW(poly);
@@ -176,14 +179,6 @@ var Physics = (function(){
         }
         
         body = new p2.Body(config);
-        /*
-         * Build a compatible array from the game polygon
-         */
-        for(var i = 0; i < poly.length; i++)
-        {
-            poly[i][0] /= scale;
-            poly[i][1] /= scale;
-        }
         try
         {
             body.fromPolygon(poly);
@@ -241,7 +236,7 @@ var Physics = (function(){
         }
         else
         {
-            config.mass = circle.area * 10;
+            config.mass = circle.area * 0.001;
         }
         body = new p2.Body(config);
         body.addShape(circle);
