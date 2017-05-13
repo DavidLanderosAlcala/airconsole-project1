@@ -17,7 +17,6 @@ var DirtyLayer = (function(){
             pattern = context.createPattern(img, "repeat");
             configureContext();
         };
-        window.addEventListener("resize", adjustToViewPort);
         adjustToViewPort();
 	}
 
@@ -93,7 +92,8 @@ var DirtyLayer = (function(){
         context.clearRect(0,0, canvas.width, canvas.height);
 	}
 
-	return { init      : init,
-	         addShape  : addShape,
-	         clear     : clear };
+	return { init             : init,
+	         addShape         : addShape,
+	         clear            : clear,
+             adjustToViewPort : adjustToViewPort };
 })();
