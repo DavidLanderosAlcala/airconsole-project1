@@ -166,14 +166,10 @@ span.level_button
 .hudbutton {
     position: absolute;
     display: inline-block;
-    width: 10vh;
-    height: 10vh;
+    width: 5vh;
+    height: 5vh;
     background-size: 100% 100%;
-}
-
-.hudbutton : hover
-{
-    border: 3px solid white;
+    animation: pulse 1s infinite;
 }
 
 .restart-button {
@@ -183,13 +179,13 @@ span.level_button
 }
 
 .levels-button {
-    top : 14vh;
+    top : 9vh;
     left: 2vh;
     background-image: url("../res/img/open-level-selector.png");
 }
 
 .settings-button {
-    top : 26vh;
+    top : 16vh;
     left: 2vh;
     background-image: url("../res/img/settings.png");
 }
@@ -199,7 +195,18 @@ div[data-visible="false"]
     z-index: -1;
 }
 
-#debug_render
-{
-    //alpha : 0.2;
+
+@keyframes pulse {
+  0% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(-4deg);
+  }
+  51% {
+    transform: rotate(4deg);
+  }
+  100% {
+    transform: rotate(4deg);
+  }
 }
