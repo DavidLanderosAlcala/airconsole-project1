@@ -163,6 +163,42 @@ span.level_button
 }
 
 
+.hudbutton {
+    position: absolute;
+    display: inline-block;
+    width: 10vh;
+    height: 10vh;
+    background-size: 100% 100%;
+}
+
+.hudbutton : hover
+{
+    border: 3px solid white;
+}
+
+.restart-button {
+    top : 2vh;
+    left: 2vh;
+    background-image: url("../res/img/restart-level.png");
+}
+
+.levels-button {
+    top : 14vh;
+    left: 2vh;
+    background-image: url("../res/img/open-level-selector.png");
+}
+
+.settings-button {
+    top : 26vh;
+    left: 2vh;
+    background-image: url("../res/img/settings.png");
+}
+
+div[data-visible="false"]
+{
+    z-index: -1;
+}
+
 #debug_render
 {
     //alpha : 0.2;
