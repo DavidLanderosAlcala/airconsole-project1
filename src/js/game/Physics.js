@@ -269,7 +269,7 @@ var Physics = (function(){
         }
         else
         {
-            config.mass = 1; // non-static
+            config.mass = 0.001; // non-static
         }
         body = new p2.Body(config);
         var cm = p2.vec2.create();
