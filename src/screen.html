@@ -6,17 +6,19 @@
         <title>Screen</title>
     </head>
     <body>
+
     	<div class="main_container" >
             <canvas id="main_canvas"> </canvas>
             <canvas id="dirty_layer"> </canvas>
             <label id="title_label"> </label>
             <img src="./res/img/logo.png" class="main_logo" id="main_logo"/>            
             <div id="debug_render" style="position: fixed; left:0; top:0px;"></div>
+        </div>
+        <div class="chalk-menu-layer"></div>
+
         <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
         <div onclick="LevelSelector.show();" class="levels-button hudbutton" data-visible="true"> </div>
         <div class="settings-button hudbutton" data-visible="true"> </div>
-        </div>
-        <div class="chalk-menu-layer"></div>
         <!--<span id="player_cursor"></span> -->
         <!--<script src="./js/libs/airconsole/airconsole-1.4.0.js"></script>-->
         <!--<script src="./js/framework/AirConsoleBus.js"></script>-->
