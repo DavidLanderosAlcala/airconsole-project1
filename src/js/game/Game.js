@@ -457,6 +457,8 @@ var Game = (function(){
           return;
       }
 
+      addCurrentDrawingToDirtyLayer();
+
       if(type == "polygon" || forcePolygon)
       {
           closeAsPolygon();
@@ -589,7 +591,6 @@ var Game = (function(){
           }
           onTackConnected(i);
       }
-      addCurrentDrawingToDirtyLayer();
       drawing_data.clear();
   }
 
@@ -645,7 +646,6 @@ var Game = (function(){
           }
           onTackConnected();
       }
-      addCurrentDrawingToDirtyLayer();
       drawing_data.clear();
   }
 
@@ -656,7 +656,6 @@ var Game = (function(){
   {
       var groupA = collisionGroupCount++;
       var groupB = collisionGroupCount++;
-
       decomp.removeCollinearPoints(drawing_data.current_polygon, 0.3);
       drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.3 * Physics.getScale());
       var chain = {
@@ -725,7 +724,6 @@ var Game = (function(){
       chain.tackAIndex = drawing_data.candidate_tack_index_A;
       chain.tackBIndex = drawing_data.candidate_tack_index_B;
       objects.chains.push(chain);
-      addCurrentDrawingToDirtyLayer();
       drawing_data.clear();
   }
 
@@ -1121,7 +1119,7 @@ var Game = (function(){
 
       /* Draw level decorations on the dirty layer
        */
-
+      DirtyLayer.adjustToViewPort();
       for(var i = 0; i < level_data.decorations.length; i++)
       {
           DirtyLayer.addShape({
