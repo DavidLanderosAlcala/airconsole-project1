@@ -63,7 +63,7 @@
         }
         div.chalk-level-button
         {
-        	background-image: url("./../res/img/level_1_thumbnail.png");
+        	background-image: url("./../res/img/locked-level.png");
         	background-size: 50% 50%;
         	background-position: 50% 20%;
         	background-repeat: no-repeat;
