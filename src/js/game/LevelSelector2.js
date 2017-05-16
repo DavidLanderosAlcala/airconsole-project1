@@ -66,7 +66,7 @@ var LevelSelector = (function(){
 		var unlocked = "true";
 		if(level_index > 0)
 			unlocked = "false";
-        var html =  '<div onmouseover="LevelSelector.dispatch(\'preview\',' + level_index + ')" ' +
+        var html =  '<div onmouseenter="LevelSelector.dispatch(\'preview\',' + level_index + ')" ' +
                     ' onclick="LevelSelector.dispatch(\'selected\',' + level_index + ')" class="level-launcher" data-unlocked="' + unlocked + '">\r\n' +
             	    '	<div class="level-number"> ' + (level_index + 1) + ' </div>\r\n' +
             	    '	<div class="level-stars-container">\r\n' +
