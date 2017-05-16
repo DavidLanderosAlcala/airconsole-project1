@@ -1134,6 +1134,7 @@ var Game = (function(){
       }
 
       Screen.setSubtitleText(level.description);
+      Screen.setTitleText(level.title);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context);
   }

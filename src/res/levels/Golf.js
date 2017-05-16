@@ -97,9 +97,11 @@ LevelSelector.getLevels().push({
         context.spawner = Physics.getPosition(context.ball);
         context.ball.mass *= 0.7;
         Physics.on("beginContact", function(e) {
-            var a = Physics.getLabel(e.bodyA);
-            var b = Physics.getLabel(e.bodyB);
-            if (b == "sensor" && a == "ball") {
+            var a = Physics.getLabel(e.bodyA)[0];
+            var b = Physics.getLabel(e.bodyB)[0];
+            if (b == 's' || a == 's') // sensor
+                if (b == 'b' || a == 'b') // ball
+            {
                 Screen.setSubtitleText("Buen trabajo!");
                 context.gameover = true;
             }
