@@ -60,8 +60,8 @@ var LevelSelector = (function(){
 
 	function GenLevelLauncherHTML(level_index)
 	{
-		var filled1 = "false";
-		var filled2 = "false";
+		var filled1 = "true";
+		var filled2 = "true";
 		var filled3 = "false";
 		var unlocked = "true";
 		if(level_index > 0)
