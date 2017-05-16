@@ -637,14 +637,14 @@ LevelSelector.getLevels().push({
         context.wheel2 = Physics.getBodyByLabel("wheel2");
         Physics.on("addBody", function() {
             context.velocity = 10;
-            Screen.setTitleText("Vamos a probarlo!");
+            Screen.setSubtitleText("Vamos a probarlo!");
         });
         Physics.on("beginContact", function(event) {
             var bodyA = Physics.getLabel(event.bodyA);
             var bodyB = Physics.getLabel(event.bodyB);
             if (bodyA == "sensor" || bodyB == "sensor") {
                 if (bodyA == "jeep" || bodyB == "jeep") {
-                    Screen.setTitleText("Bien hecho!");
+                    Screen.setSubtitleText("Bien hecho!");
                     context.velocity = -20;
                     context.gameover = true;
                     ConfigOptions.min_vertex_distance = 0.2;

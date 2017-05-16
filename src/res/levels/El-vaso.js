@@ -77,7 +77,7 @@ LevelSelector.getLevels().push({
             var b = Physics.getLabel(event.bodyB);
             if (a == "sensor" || b == "sensor") {
                 if (a == "ball" || b == "ball") {
-                    Screen.setTitleText("Bien hecho!");
+                    Screen.setSubtitleText("Bien hecho!");
                     context.gameover = true;
                 }
             }

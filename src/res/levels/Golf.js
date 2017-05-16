@@ -100,7 +100,7 @@ LevelSelector.getLevels().push({
             var a = Physics.getLabel(e.bodyA);
             var b = Physics.getLabel(e.bodyB);
             if (b == "sensor" && a == "ball") {
-                Screen.setTitleText("Buen trabajo!");
+                Screen.setSubtitleText("Buen trabajo!");
                 context.gameover = true;
             }
         });

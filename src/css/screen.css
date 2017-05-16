@@ -67,6 +67,7 @@ label#title_label {
 	opacity     : 1;
 	cursor: url(../res/img/chalk.gif), pointer;
 }
+
 label#subtitle_label {
     font-family : chalk;
     color       : white;

@@ -494,7 +494,7 @@ LevelSelector.getLevels().push({
             if (Physics.getLabel(e.bodyA) == "sensor") {
                 if (Physics.getLabel(e.bodyB) == "ball") {
                     context.gameover = true;
-                    Screen.setTitleText("Excelente!");
+                    Screen.setSubtitleText("Excelente!");
                 }
             }
         });
