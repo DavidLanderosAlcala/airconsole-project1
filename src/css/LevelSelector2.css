@@ -20,13 +20,14 @@
                 height: 50vh;
                 margin-left: -66vh;
                 margin-top: -25vh;
-                border: 1vh solid transparent;
-                border-image-source: url("../res/img/chalk_pattern.png");
-                border-image-repeat: repeat;
-                border-image-slice: 30;
-                border-radius: 10px;
-                background-image : url("../res/img/background.jpg");
-                background-size  : 100% 100%;
+                background-color: rgba(0, 0, 0, 0.4);
+                //border: 1vh solid transparent;
+                //border-image-source: url("../res/img/chalk_pattern.png");
+                //border-image-repeat: repeat;
+                //border-image-slice: 30;
+                border-radius: 5vh;
+                //background-image : url("../res/img/background.jpg");
+                //background-size  : 100% 100%;
             }
 
             .level-launcher:hover
@@ -36,6 +37,7 @@
 
             .level-launcher
             {
+                opacity: 1;
             	//float: left;
             	display: inline-block;            	
             	margin-right: 1vh;

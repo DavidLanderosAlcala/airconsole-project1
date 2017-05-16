@@ -28,11 +28,12 @@ var LevelSelector = (function(){
 
         on("preview", function(level_index){
         	Screen.setTitleText(levels[level_index].title);
+        	Game.loadLevel(level_index);
         });
 
         on("selected", function(level_index){
            hide();
-           Game.loadLevel(level_index);
+           //Game.loadLevel(level_index);
         });
 	}
 
@@ -41,7 +42,7 @@ var LevelSelector = (function(){
 		 Screen.setTitleText("Level selector");
 		 visible = true;
          container.style.zIndex = 11;
-         container.style.opacity = 1;
+         //container.style.opacity = 1;
          container.style.pointerEvents = 'auto'; 
 	}
 
@@ -49,7 +50,7 @@ var LevelSelector = (function(){
 	{
 		visible = false;
         container.style.zIndex = -11;
-        container.style.opacity = 0;
+        //container.style.opacity = 0;
         container.style.pointerEvents = 'none';
 	}
 
