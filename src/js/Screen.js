@@ -84,6 +84,16 @@ var Screen = (function(){
         .innerHTML = text;
     }
 
+    /** @func setSubtitleText
+      * @desc It sets the Subtitle
+      * @param text {string} the text to be shown
+      */
+    function setSubtitleText(text)
+    {
+        document.getElementById("subtitle_label")
+        .innerHTML = text;
+    }
+
     /** @func requestFullscreen
       * @desc requests fullscreen
       */
@@ -164,6 +174,7 @@ var Screen = (function(){
     return { init              : init,
              setLogoVisibility : setLogoVisibility,
              setTitleText      : setTitleText,
+             setSubtitleText   : setSubtitleText,
              getWidth          : getWidth,
              getHeight         : getHeight,
              isInFullscreen    : isInFullscreen,

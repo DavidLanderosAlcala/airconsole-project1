@@ -51,10 +51,10 @@ LevelSelector.getLevels().push({
         /* your code goes here */
         context.gameover = false;
         Physics.on("addBody", function() {
-            Screen.setTitleText("perfecto! ahora intenta borrarla con click derecho");
+            Screen.setSubtitleText("perfecto! ahora intenta borrarla con click derecho");
         });
         Physics.on("removeBody", function() {
-            Screen.setTitleText("Buen trabajo");
+            Screen.setSubtitleText("Buen trabajo");
             context.gameover = true;
         });
     },

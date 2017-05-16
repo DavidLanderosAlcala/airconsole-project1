@@ -3,6 +3,22 @@
     font-family : chalk;
     src : url(../res/fonts/chalk.ttf);
 }
+@font-face {
+    font-family : chalk2;
+    src : url(../res/fonts/chalk2.ttf);
+}
+@font-face {
+    font-family : chalk3;
+    src : url(../res/fonts/chalk3.ttf);
+}
+@font-face {
+    font-family : chalk4;
+    src : url(../res/fonts/chalk4.ttf);
+}
+@font-face {
+    font-family : chalk5;
+    src : url(../res/fonts/chalk5.ttf);
+}
 body,html {
 
 	margin: 0;
@@ -39,7 +55,7 @@ img.main_logo {
 }
 
 label#title_label {
-	font-family : chalk;
+	font-family : chalk3;
 	color       : white;
     position    : absolute;
 	width       : 640px;
@@ -47,9 +63,22 @@ label#title_label {
 	top         : 5%;
 	margin      : 0px 0 0 -320px;
 	text-align  : center;
-	font-size   : 5vh;
-	opacity     : 0.9;
+	font-size   : 6vh;
+	opacity     : 1;
 	cursor: url(../res/img/chalk.gif), pointer;
+}
+label#subtitle_label {
+    font-family : chalk;
+    color       : white;
+    position    : absolute;
+    width       : 640px;
+    left        : 50%;
+    top         : 12%;
+    margin      : 0px 0 0 -320px;
+    text-align  : center;
+    font-size   : 3vh;
+    opacity     : 1;
+    cursor: url(../res/img/chalk.gif), pointer;
 }
 
 .menu_layer

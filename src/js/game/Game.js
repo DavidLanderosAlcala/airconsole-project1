@@ -1132,7 +1132,7 @@ var Game = (function(){
           });
       }
 
-      Screen.setTitleText(level.description);
+      Screen.setSubtitleText(level.description);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context);
   }
