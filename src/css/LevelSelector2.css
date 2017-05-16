@@ -1,0 +1,112 @@
+
+            body,html
+            {
+            	margin: 0;
+            	padding: 0;
+            	user-select: none;
+            	background-size: 100%;
+            	background-image: url("../res/img/background.jpg");
+
+            }
+
+            #level-selector-container
+            {
+            	padding: 5vh;
+            	text-align: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 120vh;
+                height: 50vh;
+                margin-left: -66vh;
+                margin-top: -25vh;
+                border: 1vh solid transparent;
+                border-image-source: url("../res/img/chalk_pattern.png");
+                border-image-repeat: repeat;
+                border-image-slice: 30;
+                border-radius: 10px;
+                background-image : url("../res/img/background.jpg");
+                background-size  : 100% 100%;
+            }
+
+            .level-launcher:hover
+            {
+            	transform: scale(1.2);
+            }
+
+            .level-launcher
+            {
+            	//float: left;
+            	display: inline-block;            	
+            	margin-right: 2vh;
+            	margin-left:  2vh;
+            	margin-top:  2vh;
+            	text-align: center;
+            	padding: 0;
+            	width: 11vh;
+            	height: 11vh;
+            	border-radius: 3vh;
+                border: 0.6vh solid transparent;
+                border-image-source: url("../res/img/chalk_pattern.png");
+                border-image-repeat: repeat;
+                border-image-slice: 30;
+            }
+
+            .level-launcher[data-unlocked="false"]
+            {
+                background-size: 100% 100%;
+                background-image: url("../res/img/locked-level.png");
+            }
+
+            .level-launcher[data-unlocked="false"] > div
+            {
+            	opacity: 0;
+            }
+
+            .level-number
+            {
+            	font-size: 5vh;
+            	font-family : chalk;
+            	color: white;
+            	margin: 0;
+            	padding: 0;
+                display: inline-block;
+                width: 100%;
+                line-height: 7vh;
+                height: 70%;
+                vertical-align: top;
+            }
+
+            .level-stars-container
+            {
+            	padding: 0;
+            	margin: 0;
+                display: inline-block;
+                width: 100%;
+                height: 30%;
+                vertical-align: top;
+            }
+
+            .level-star
+            {
+            	display: inline-block;
+            	margin-top: 0.25vh;
+            	width:  2.5vh;
+            	height: 2.5vh;
+            	background-size: 100% 100%;
+            }
+
+            .level-star:nth-child(2)
+            {
+            	position: relative;
+            	top: -1vh;
+            }
+
+            .level-star[data-filled="true"]
+            {
+            	background-image: url("../res/img/rate-button-filled.png");
+            }
+            .level-star[data-filled="false"]
+            {
+            	background-image: url("../res/img/rate-button-empty.png");
+            }
