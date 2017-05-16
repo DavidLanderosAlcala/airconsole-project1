@@ -249,7 +249,8 @@ var Game = (function(){
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
       var tack_radius = (0.1) * Physics.getScale();
-      tackFrameCount++;
+      if(!LevelSelector.isVisible())
+          tackFrameCount++;
       if(tackFrameCount > 10)
         tack_radius *= 1.3;
       if(tackFrameCount > 20)

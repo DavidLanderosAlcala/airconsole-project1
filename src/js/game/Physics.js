@@ -96,11 +96,13 @@ var Physics = (function(){
         newtimestamp = new Date().getTime();
         elapsedtime = newtimestamp - timestamp;
         timestamp = newtimestamp;
-        /*
-         * if(elapsedtime > 500)
-         *    elapsedtime = 500;
-         */
-        world.step(elapsedtime/1700);
+        
+        if(elapsedtime > 20)
+            elapsedtime = 20;
+
+        if(!LevelSelector.isVisible())
+            world.step(elapsedtime/1700);
+        
         new_fps = 1000 / elapsedtime;
         if(new_fps != fps)
         {
