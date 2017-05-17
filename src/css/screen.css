@@ -23,6 +23,25 @@
     font-family : chalk5;
     src : url(../res/fonts/chalk5.ttf);
 }
+
+@font-face {
+    font-family : chalk6;
+    src : url(../res/fonts/FFF_Tusj.ttf);
+}
+@font-face {
+    font-family : chalk7;
+    src : url(../res/fonts/KGSecondChancesSketch.ttf);
+}
+@font-face {
+    font-family : chalk8;
+    src : url(../res/fonts/KGTenThousandReasons.ttf);
+}
+@font-face {
+    font-family : chalk9;
+    src : url(../res/fonts/whateverittakes.ttf);
+}
+
+
 body,html {
 
 	margin: 0;
