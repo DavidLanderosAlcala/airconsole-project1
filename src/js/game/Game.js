@@ -848,7 +848,7 @@ var Game = (function(){
   {
       var cur_pos = PlayerCursor.getPosition();
       var tack_index =  findTackAtPos(cur_pos, { returnIndex : true} );
-      if(tack_index != undefined)
+      if(tack_index != undefined && !objects.tacks[tack_index].indelible)
       {
           var tack = objects.tacks[tack_index];
           if(objects.tacks[tack_index].contraint != null)
@@ -936,7 +936,7 @@ var Game = (function(){
       var i, l = objects.tacks.length;
       for(i = 0 ; i < l; i ++)
       {
-          if(!objects.tacks[i].deleted && !objects.tacks[i].indelible)
+          if(!objects.tacks[i].deleted)// && !objects.tacks[i].indelible)
           {
               if( !options.filterConnectedTacks  || objects.tacks[i].contraint == null )
               {
