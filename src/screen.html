@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="./css/screen.css">
         <link rel="stylesheet" href="./css/LevelSelector2.css">
         <link rel="stylesheet" href="./css/RateThisGame.css">
+        <link rel="stylesheet" href="./css/LevelCompletedScreen.css">
         <title>Screen</title>
     </head>
     <body>
@@ -28,6 +29,20 @@
             <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
             <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
             <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
+        </div>
+
+        <div id="level-complete-dialog" data-state="0">
+            <div class="level-complete-row">
+                Level Completed
+            </div>
+            <div class="level-complete-row">
+                <span class="level-complete-star"></span>
+                <span class="level-complete-star"></span>
+                <span class="level-complete-star"></span>
+            </div>
+            <div class="level-complete-row">
+                <span id="level-complete-continue"> continue <span>
+            </div>
         </div>
         <!--<span id="player_cursor"></span> -->
         <!--<script src="./js/libs/airconsole/airconsole-1.4.0.js"></script>-->
@@ -62,6 +77,7 @@
         <script src="./js/game/Game.js"></script>
         <script src="./js/Screen.js"></script>
         <script src="./js/game/RateThisGame.js"></script>
+        <script src="./js/game/LevelCompletedScreen.js"></script>
         <script>
             Screen.init();
         </script>

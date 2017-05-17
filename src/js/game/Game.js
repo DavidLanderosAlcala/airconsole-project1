@@ -128,8 +128,9 @@ var Game = (function(){
           if(level_data.game_over)
           {
               setTimeout(function(){
-                LevelSelector.show();
-              }, 1000);
+                //LevelSelector.show();
+                LevelCompleteScreen.showScreen(1);
+              }, 800);
           }
       }
       render();

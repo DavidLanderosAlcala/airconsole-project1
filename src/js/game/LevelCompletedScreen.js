@@ -6,7 +6,7 @@ var LevelCompleteScreen = (function(){
   {
       document.querySelector("#level-complete-continue").addEventListener("click", function(){
           hide();
-          //LevelSelector.show();
+          LevelSelector.show();
       });
   }
 
@@ -53,7 +53,3 @@ var LevelCompleteScreen = (function(){
 })();
 
 LevelCompleteScreen.init();
-
-setTimeout(function(){
-  LevelCompleteScreen.showScreen(1);
-},1000);

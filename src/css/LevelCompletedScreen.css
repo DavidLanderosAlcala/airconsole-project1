@@ -23,7 +23,7 @@ body, head
   top: 50%;
   margin-left: -50vh;
   margin-top: -30vh;
-  background-color : rgba(0,0,0,0.5);
+  background-color : rgba(0,0,0,0.7);
   width: 100vh;
   height: 60vh;
   transition: 0.2s all ease-in;
