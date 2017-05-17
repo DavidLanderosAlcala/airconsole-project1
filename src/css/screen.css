@@ -81,10 +81,10 @@ label#title_label {
 	font-family : chalk7;
 	color       : white;
     position    : absolute;
-	width       : 640px;
+	width       : 200vh;
 	left        : 50%;
 	top         : 5%;
-	margin      : 0px 0 0 -320px;
+	margin      : 0 0 0 -100vh;
 	text-align  : center;
 	font-size   : 6vh;
 	opacity     : 1;
@@ -96,14 +96,15 @@ label#subtitle_label {
     font-weight: bold;
     color       : white;
     position    : absolute;
-    width       : 640px;
+    width       : 200vh;
     left        : 50%;
     top         : 12%;
-    margin      : 0px 0 0 -320px;
+    margin      : 0 0 0 -100vh;
     text-align  : center;
     font-size   : 4vh;
     opacity     : 1;
     cursor: url(../res/img/chalk.gif), pointer;
+    letter-spacing: 5px;
 }
 
 .menu_layer
