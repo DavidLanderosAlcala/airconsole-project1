@@ -41,10 +41,10 @@ var LevelCompleteScreen = (function(){
   {
       document.querySelector("#level-complete-dialog").dataset.state = "0";
       var stars = document.querySelectorAll(".level-complete-star");
-      for(var i = 0; i < starscount; i++)
+      for(var i = 0; i < stars.length; i++)
       {
           stars[i].dataset.filled = "false";
-          stars[i].dataset.state = "1";
+          stars[i].dataset.state = "0";
       }
   }
 
