@@ -1,0 +1,114 @@
+@font-face {
+    font-family : chalk7;
+    src : url(../res/fonts/KGSecondChancesSketch.ttf);
+}
+@font-face {
+    font-family : chalk;
+    src : url(../res/fonts/chalk.ttf);
+}
+body, head
+{
+    border: 0; padding: 0;
+    background-size: 100%;
+    background-image: url("../res/img/background.jpg");
+}
+#level-complete-dialog
+{
+  color: white;
+  z-index: -1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50vh;
+  margin-top: -30vh;
+  background-color : rgba(0,0,0,0.5);
+  width: 100vh;
+  height: 60vh;
+  transition: 0.2s all ease-in;
+  transform: scale(0.01);
+  opacity : 0;
+  border-radius: 10vh;
+}
+
+#level-complete-dialog[data-state="1"]
+{
+  opacity : 1;
+  z-index: 10;
+  transform: scale(1);
+}
+
+.level-complete-row
+{
+    text-align: center;
+    line-height: 12vh;
+    //border-top: 1px solid black;
+}
+.level-complete-row
+{
+    font-family: chalk7;
+    font-size: 5vh;
+    height: 20%;
+}
+.level-complete-row:nth-child(3)
+{
+    font-family: chalk;
+    font-size: 2vh;
+}
+.level-complete-row:nth-child(2)
+{
+    height: 60%;
+}
+
+.level-complete-star
+{
+  margin-top: 3vh;
+  //border: 1px solid black;
+  display:  inline-block;
+  width:  25vh;
+  height: 25vh;
+  margin-left: 2vh;
+  margin-right: 2vh;
+  transition: 0.2s all ease-in;
+  transform: scale(0.01);
+  opacity: 0;
+  background-image: url("../res/img/empty-star.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.level-complete-star:nth-child(2)
+{
+    position: relative;
+    top : -2vh;
+    width:  30vh;
+    height: 30vh; 
+}
+
+.level-complete-star[data-state="1"]
+{
+  transform: scale(1);
+  opacity: 1;
+}
+.level-complete-star[data-state="2"]
+{
+  animation: dance 1s infinite;
+  opacity: 1;
+}
+.level-complete-star[data-filled="true"]
+{
+  //background-color: black;
+  background-image: url("../res/img/filled-star.png");
+}
+@keyframes dance {
+  0% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  51% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(3deg);
+  }
+}
