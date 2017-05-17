@@ -14,6 +14,7 @@ var Game = (function(){
   var chainIdCount = 0;
   var collisionGroupCount = 1;
   var tackFrameCount = 0;
+  var candidateTacksForNewWire = [];
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -423,6 +424,29 @@ var Game = (function(){
             drawing_data.current_color_index = ColorManager.getRandomColorIndex();
           }     
           drawing_data.current_polygon.push(new_pos);
+
+          /* Fix for tacks-wire relation
+           *****************************************************************/
+          var cur_pos = PlayerCursor.getPosition();
+          var tack_index =  findTackAtPos(cur_pos, { filterConnectedTacks: true, returnIndex : true} );
+          if(tack_index != undefined)
+          {
+              var shouldBePushed = true;
+              for( var k = 0; k < candidateTacksForNewWire.length; k++)
+              {
+                if(candidateTacksForNewWire[k] == tack_index)
+                {
+                  shouldBePushed = false;
+                  break;
+                }
+              }
+              if(shouldBePushed)
+              {
+                  candidateTacksForNewWire.push(tack_index);
+              }
+          }
+          /******************************************************************/
+
           if(drawing_data.current_polygon.length > 20)
           {
               var tail = drawing_data.current_polygon[drawing_data.current_polygon.length -1];
@@ -463,17 +487,20 @@ var Game = (function(){
       if(type == "polygon" || forcePolygon)
       {
           closeAsPolygon();
+          candidateTacksForNewWire = [];
           return;
       }
 
       if(type == "wire")
       {
           closeAsWire();
+          candidateTacksForNewWire = [];
           return;
       }
       if(type == "chain")
       {
           closeAsChain();
+          candidateTacksForNewWire = [];
       }
   }
 
@@ -623,6 +650,8 @@ var Game = (function(){
           return;
       }
       var tack_indices = [];
+      var tack_indices = candidateTacksForNewWire;
+
       var i, l = objects.tacks.length;
       for(i = 0; i < l; i++)
       {
