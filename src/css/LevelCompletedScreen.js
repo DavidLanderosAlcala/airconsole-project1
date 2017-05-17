@@ -34,7 +34,7 @@ var LevelCompleteScreen = (function(){
         {
             document.querySelector(".level-complete-star:nth-child(" + (count-1) + ")").dataset.state = "2";
         }
-      },500);
+      },300);
   }
 
   function hide()
