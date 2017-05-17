@@ -39,7 +39,6 @@ var LevelSelector = (function(){
 
 	function show()
 	{
-		 Screen.setTitleText("Level selector");
 		 visible = true;
          container.style.zIndex = 11;
          //container.style.opacity = 1;
