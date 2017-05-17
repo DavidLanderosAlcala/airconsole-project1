@@ -68,8 +68,13 @@ var LevelSelector = (function(){
 		var filled2 = "true";
 		var filled3 = "false";
 		var unlocked = "true";
-		if(level_index > 0)
+		if(level_index > 3)
 			unlocked = "false";
+        if(level_index  == 3)
+        {
+            filled1 = "false";
+            filled2 = "false";
+        }
         var html =  '<div onmouseenter="LevelSelector.dispatch(\'preview\',' + level_index + ')" ' +
                     ' onclick="LevelSelector.dispatch(\'selected\',' + level_index + ')" class="level-launcher" data-unlocked="' + unlocked + '">\r\n' +
             	    '	<div class="level-number"> ' + (level_index + 1) + ' </div>\r\n' +
