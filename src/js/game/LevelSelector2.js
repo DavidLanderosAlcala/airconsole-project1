@@ -23,6 +23,7 @@ var LevelSelector = (function(){
         }
         container = document.createElement("div");
         container.id = "level-selector-container";
+        container.style.marginTop = "-150vh";
         document.body.appendChild(container);
         container.innerHTML = levelsHTML;
 
@@ -35,22 +36,25 @@ var LevelSelector = (function(){
            hide();
            //Game.loadLevel(level_index);
         });
+        //show();
 	}
 
 	function show()
 	{
 		 visible = true;
-         container.style.zIndex = 11;
+         //container.style.zIndex = 11;
          //container.style.opacity = 1;
          container.style.pointerEvents = 'auto'; 
+         container.style.marginTop = "-25vh";
 	}
 
 	function hide()
 	{
 		visible = false;
-        container.style.zIndex = -11;
+        //container.style.zIndex = -11;
         //container.style.opacity = 0;
         container.style.pointerEvents = 'none';
+        container.style.marginTop = "-150vh";
 	}
 
 	function getLevels()
