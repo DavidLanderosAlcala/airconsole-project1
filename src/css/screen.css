@@ -93,6 +93,7 @@ label#title_label {
 
 label#subtitle_label {
     font-family : chalk2;
+    font-weight: bold;
     color       : white;
     position    : absolute;
     width       : 640px;

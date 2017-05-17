@@ -71,6 +71,7 @@
             .level-number
             {
             	font-size: 5vh;
+                font-weight: bold;
             	font-family : chalk2;
             	color: white;
             	margin: 0;
