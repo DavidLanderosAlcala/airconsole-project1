@@ -1,0 +1,36 @@
+body, html
+{
+	padding: 0;
+	margin: 0;
+	background-color: black;
+}
+
+.rate-this-game
+{
+	color: white;
+	user-select : none;
+	text-align: center;
+	position: absolute;
+	right: 2vh;
+	top: 2vh;
+	display: inline-block;
+	width: 20vh;
+	height: 6vh;
+	overflow: hidden;
+	//border: 1px solid white;
+}
+
+.rate-this-game-star
+{
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-image: url("../res/img/rate-button-empty.png");
+	display: inline-block;
+	width: 15%;
+	height: 90%;
+}
+
+.rate-this-game-star[data-filled="true"]
+{
+    background-image: url("../res/img/rate-button-filled.png");	
+}

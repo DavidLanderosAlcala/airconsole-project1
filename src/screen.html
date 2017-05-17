@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="./css/screen.css">
         <link rel="stylesheet" href="./css/LevelSelector2.css">
+        <link rel="stylesheet" href="./css/RateThisGame.css">
         <title>Screen</title>
     </head>
     <body>
@@ -20,6 +21,14 @@
         <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
         <div onclick="LevelSelector.show();" class="levels-button hudbutton" data-visible="true"> </div>
         <div class="settings-button hudbutton" data-visible="true"> </div>
+
+        <div class="rate-this-game">
+            <span class="rate-this-game-star" data-starno="1" data-filled="false"></span>
+            <span class="rate-this-game-star" data-starno="2" data-filled="false"></span>
+            <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
+            <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
+            <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
+        </div>
         <!--<span id="player_cursor"></span> -->
         <!--<script src="./js/libs/airconsole/airconsole-1.4.0.js"></script>-->
         <!--<script src="./js/framework/AirConsoleBus.js"></script>-->
@@ -52,6 +61,7 @@
         <script src="./js/game/DirtyLayer.js"></script>
         <script src="./js/game/Game.js"></script>
         <script src="./js/Screen.js"></script>
+        <script src="./js/game/RateThisGame.js"></script>
         <script>
             Screen.init();
         </script>
