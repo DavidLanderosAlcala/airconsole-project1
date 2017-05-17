@@ -81,7 +81,7 @@ label#subtitle_label {
     top         : 12%;
     margin      : 0px 0 0 -320px;
     text-align  : center;
-    font-size   : 3vh;
+    font-size   : 4vh;
     opacity     : 1;
     cursor: url(../res/img/chalk.gif), pointer;
 }
