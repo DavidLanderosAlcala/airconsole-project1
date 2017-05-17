@@ -4,6 +4,10 @@
     src : url(../res/fonts/chalk.ttf);
 }
 @font-face {
+    font-family : chalk1;
+    src : url(../res/fonts/chalk.ttf);
+}
+@font-face {
     font-family : chalk2;
     src : url(../res/fonts/chalk2.ttf);
 }

@@ -1290,6 +1290,12 @@ var Game = (function(){
       return camera;
   }
 
+  function setFonts(title, subtitle)
+  {
+      document.querySelector("#title_label").style.fontFamily = "chalk" + title;
+      document.querySelector("#subtitle_label").style.fontFamily = "chalk" + subtitle;
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -1302,5 +1308,6 @@ var Game = (function(){
             getHints      : getHints,
             on            : on,
             adjustToViewPort : adjustToViewPort,
-            getCamera        : getCamera };
+            getCamera        : getCamera,
+            setFonts         : setFonts };
 })();
