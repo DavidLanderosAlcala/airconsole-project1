@@ -78,7 +78,7 @@ body, head
   transition: 0.2s all ease-in;
   transform: scale(0.01);
   opacity: 0;
-  background-image: url("../res/img/empty-star2.png");
+  background-image: url("../res/img/empty-star3.png");
   background-size: 100%;
   background-repeat: no-repeat;
 }
@@ -103,7 +103,7 @@ body, head
 .level-complete-star[data-filled="true"]
 {
   //background-color: black;
-  background-image: url("../res/img/filled-star2.png");
+  background-image: url("../res/img/filled-star3.png");
 }
 @keyframes dance {
   0% {
