@@ -54,13 +54,13 @@
                 //border-image-repeat: repeat;
                 //border-image-slice: 30;
                 background-size: 100%;
-                background-image : url("../res/img/level-launcher-border.png");
+                background-image : url("../res/img/level-launcher-border2.png");
             }
 
             .level-launcher[data-unlocked="false"]
             {
                 background-size: 100% 100%;
-                background-image: url("../res/img/locked-level.png");
+                background-image: url("../res/img/locked-level2.png");
             }
 
             .level-launcher[data-unlocked="false"] > div
