@@ -51,12 +51,17 @@ body, head
 }
 .level-complete-row:nth-child(3)
 {
-    font-family: chalk;
     font-size: 2vh;
+    font-family: chalk7;
 }
 .level-complete-row:nth-child(2)
 {
     height: 60%;
+}
+
+#level-complete-continue:hover
+{
+    font-size: 3vh;
 }
 
 .level-complete-star

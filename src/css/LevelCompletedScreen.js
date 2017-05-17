@@ -2,6 +2,14 @@
 
 var LevelCompleteScreen = (function(){
 
+  function init()
+  {
+      document.querySelector("#level-complete-continue").addEventListener("click", function(){
+          hide();
+          //LevelSelector.show();
+      });
+  }
+
   function showScreen(starscount)
   {
       document.querySelector("#level-complete-dialog").dataset.state = "1";
@@ -29,10 +37,23 @@ var LevelCompleteScreen = (function(){
       },500);
   }
 
-  return { showScreen : showScreen };
+  function hide()
+  {
+      document.querySelector("#level-complete-dialog").dataset.state = "0";
+      var stars = document.querySelectorAll(".level-complete-star");
+      for(var i = 0; i < starscount; i++)
+      {
+          stars[i].dataset.filled = "false";
+          stars[i].dataset.state = "1";
+      }
+  }
+
+  return { init       : init,
+           showScreen : showScreen };
 })();
 
+LevelCompleteScreen.init();
 
 setTimeout(function(){
-  LevelCompleteScreen.showScreen(2);
+  LevelCompleteScreen.showScreen(1);
 },1000);
