@@ -482,12 +482,28 @@ var Game = (function(){
     */
   function evalCurrentShape()
   {
-      if(drawing_data.current_polygon.length < ConfigOptions.min_vertices_per_polygon)
+      var  l = drawing_data.current_polygon.length;
+      if(l < ConfigOptions.min_vertices_per_polygon)
       {
           return "invalid";
       }
 
+      var first_vertex = drawing_data.current_polygon[0];
+      var last_vertex = drawing_data.current_polygon[l-1];
       decomp.removeCollinearPoints(drawing_data.current_polygon, 0.25);
+
+      /* The first vertex must be restored */
+      if(first_vertex[0] != drawing_data.current_polygon[0][0] || first_vertex[1] != drawing_data.current_polygon[0][1])
+      {
+          drawing_data.current_polygon.splice(0,0,first_vertex);
+      }
+
+      /* The last vertex must be restored */
+      l = drawing_data.current_polygon.length;
+      if(last_vertex[0] != drawing_data.current_polygon[l-1][0] || last_vertex[1] != drawing_data.current_polygon[l-1][1])
+      {
+          drawing_data.current_polygon.push(last_vertex);
+      }
 
       var h2t_vector = new Float32Array(2);
       h2t_vector[0] = drawing_data.current_polygon[0][0] - drawing_data.current_polygon[drawing_data.current_polygon.length-1][0];
