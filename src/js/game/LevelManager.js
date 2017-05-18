@@ -24,14 +24,20 @@ var LevelManager = (function(){
         document.body.appendChild(container);
         container.innerHTML = levelsHTML;
 
-        on("preview", function(level_index){
-        	Screen.setTitleText(levels[level_index].title);
-        	Game.loadLevel(level_index);
+        on("preview", function(level_index) {
+          if(level_metadata[level_index].unlocked)
+          {
+        	    Screen.setTitleText(levels[level_index].title);
+        	    Game.loadLevel(level_index);
+          }
         });
 
         on("selected", function(level_index){
-           hide();
-           //Game.loadLevel(level_index);
+            if(level_metadata[level_index].unlocked)
+            {
+                hide();
+                //Game.loadLevel(level_index);
+            }
         });
         loadSave();
 	}
