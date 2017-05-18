@@ -25,16 +25,16 @@ var LevelManager = (function(){
         container.innerHTML = levelsHTML;
 
         on("preview", function(level_index) {
-          if(level_metadata[level_index].unlocked)
-          {
-        	    Screen.setTitleText(levels[level_index].title);
-        	    Game.loadLevel(level_index);
-          }
-          else
-          {
-              Screen.setTitleText("Locked level");
-              Screen.setSubtitleText("You need to complete previous levels");
-          }
+            if(level_metadata[level_index].unlocked)
+            {
+                Screen.setTitleText(levels[level_index].title);
+                Game.loadLevel(level_index);
+            }
+            else
+            {
+                Screen.setTitleText("Locked level");
+                Screen.setSubtitleText("You need to complete previous levels");
+            }
         });
 
         on("selected", function(level_index){
