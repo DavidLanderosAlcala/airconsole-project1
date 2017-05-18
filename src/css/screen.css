@@ -253,7 +253,7 @@ span.level_button
     background-image: url("../res/img/settings.png");
 }
 
-div[data-visible="false"]
+.hudbutton[data-visible="false"]
 {
     z-index: -1;
 }
