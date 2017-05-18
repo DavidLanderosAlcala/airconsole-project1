@@ -130,20 +130,22 @@ var LevelManager = (function(){
 
     function setLevelStars(index, stars)
     {
-        level_metadata[index].stars = stars;
-
-        var star_elements = document.querySelectorAll("#level" + index + " > .level-stars-container > .level-star");
-        for(var i = 0; i < 3; i++)
+        if(index < level_metadata.length)
         {
-            if(i < stars){
-               star_elements[i].dataset.filled = "true";
+            level_metadata[index].stars = stars;
+            var star_elements = document.querySelectorAll("#level" + index + " > .level-stars-container > .level-star");
+            for(var i = 0; i < 3; i++)
+            {
+                if(i < stars){
+                   star_elements[i].dataset.filled = "true";
+                }
+                else {
+                  star_elements[i].dataset.filled = "false";
+                }
             }
-            else {
-              star_elements[i].dataset.filled = "false";
-            }
+            checkForAchievement();
+            save();
         }
-        checkForAchievement();
-        save();
     }
 
     function checkForAchievement()
