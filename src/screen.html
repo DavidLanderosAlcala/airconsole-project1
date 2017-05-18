@@ -16,21 +16,28 @@
             <label id="title_label"> </label>
             <label id="subtitle_label"> </label>
             <img src="./res/img/logo.png" class="main_logo" id="main_logo"/>            
-            <div id="debug_render" style="position: fixed; left:0; top:0px;"></div>
+            <!-- <div id="debug_render" style="position: fixed; left:0; top:0px;"></div> -->
+            <div class="rate-this-game">
+                <span class="rate-this-game-star" data-starno="1" data-filled="false"></span>
+                <span class="rate-this-game-star" data-starno="2" data-filled="false"></span>
+                <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
+                <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
+                <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
+            </div>
+            <div id="achievement-dialog" data-visible="false">
+                <div class="achivement-column"></div>
+                <div class="achivement-column">
+                    <div id="achievement-header">Achievement unlocked</div>
+                    <hr>
+                    <div id="achievement-text">blah blah blah</div>
+                </div>
+            </div>
+            
+            <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
+            <div onclick="LevelManager.show();" class="levels-button hudbutton" data-visible="true"> </div>
+            <div class="settings-button hudbutton" data-visible="true"> </div>
         </div>
         <div class="chalk-menu-layer"></div>
-
-        <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
-        <div onclick="LevelManager.show();" class="levels-button hudbutton" data-visible="true"> </div>
-        <div class="settings-button hudbutton" data-visible="true"> </div>
-
-        <div class="rate-this-game">
-            <span class="rate-this-game-star" data-starno="1" data-filled="false"></span>
-            <span class="rate-this-game-star" data-starno="2" data-filled="false"></span>
-            <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
-            <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
-            <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
-        </div>
 
         <div id="level-complete-dialog" data-state="0">
             <div class="level-complete-row">
@@ -43,15 +50,6 @@
             </div>
             <div class="level-complete-row">
                 <span id="level-complete-continue"> continue <span>
-            </div>
-        </div>
-
-        <div id="achievement-dialog" data-visible="false">
-            <div class="achivement-column"></div>
-            <div class="achivement-column">
-                <div id="achievement-header">Achievement unlocked</div>
-                <hr>
-                <div id="achievement-text">blah blah blah</div>
             </div>
         </div>
 
