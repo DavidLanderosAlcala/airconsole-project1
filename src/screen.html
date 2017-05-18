@@ -1,95 +1,79 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="./css/screen.css">
-        <link rel="stylesheet" href="./css/LevelManager.css">
-        <link rel="stylesheet" href="./css/RateThisGame.css">
-        <link rel="stylesheet" href="./css/LevelCompletedScreen.css">
-        <link rel="stylesheet" href="./css/AchievementManager.css">
-        <title>Screen</title>
-    </head>
-    <body>
-
-    	<div class="main_container" >
-            <canvas id="main_canvas"> </canvas>
-            <canvas id="dirty_layer"> </canvas>
-            <label id="title_label"> </label>
-            <label id="subtitle_label"> </label>
-            <img src="./res/img/logo.png" class="main_logo" id="main_logo"/>            
-            <!-- <div id="debug_render" style="position: fixed; left:0; top:0px;"></div> -->
-            <div class="rate-this-game">
-                <span class="rate-this-game-star" data-starno="1" data-filled="false"></span>
-                <span class="rate-this-game-star" data-starno="2" data-filled="false"></span>
-                <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
-                <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
-                <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
-            </div>
-            <div id="achievement-dialog" data-visible="false">
-                <div class="achivement-column"></div>
-                <div class="achivement-column">
-                    <div id="achievement-header">Achievement unlocked</div>
-                    <hr>
-                    <div id="achievement-text">blah blah blah</div>
-                </div>
-            </div>
-            
-            <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
-            <div onclick="LevelManager.show();" class="levels-button hudbutton" data-visible="true"> </div>
-            <div class="settings-button hudbutton" data-visible="true"> </div>
+  <head>
+    <link rel="stylesheet" href="./css/screen.css">
+    <link rel="stylesheet" href="./css/LevelManager.css">
+    <link rel="stylesheet" href="./css/RateThisGame.css">
+    <link rel="stylesheet" href="./css/LevelCompletedScreen.css">
+    <link rel="stylesheet" href="./css/AchievementManager.css">
+    <title>Screen</title>
+  </head>
+  <body>
+    <div class="main_container" >
+      <canvas id="main_canvas"> </canvas>
+      <canvas id="dirty_layer"> </canvas>
+      <label id="title_label"> </label>
+      <label id="subtitle_label"> </label>           
+      <div class="rate-this-game">
+        <span class="rate-this-game-star" data-starno="1" data-filled="false"></span>
+        <span class="rate-this-game-star" data-starno="2" data-filled="false"></span>
+        <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
+        <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
+        <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
+      </div>
+      <div id="achievement-dialog" data-visible="false">
+        <div class="achivement-column"></div>
+        <div class="achivement-column">
+          <div id="achievement-header">Achievement unlocked</div>
+          <hr>
+          <div id="achievement-text">blah blah blah</div>
         </div>
-        <div class="chalk-menu-layer"></div>
-
-        <div id="level-complete-dialog" data-state="0">
-            <div class="level-complete-row">
-                Level Completed
-            </div>
-            <div class="level-complete-row">
-                <span class="level-complete-star"></span>
-                <span class="level-complete-star"></span>
-                <span class="level-complete-star"></span>
-            </div>
-            <div class="level-complete-row">
-                <span id="level-complete-continue"> continue <span>
-            </div>
-        </div>
-
-        <!-- <div id="board-border"><div> -->
-        <!--<span id="player_cursor"></span> -->
-        <!--<script src="./js/libs/airconsole/airconsole-1.4.0.js"></script>-->
-        <!--<script src="./js/framework/AirConsoleBus.js"></script>-->
-        <!--<script src="./js/framework/DebugConsole.js"></script> -->
-        <script src="./js/utils/Utils.js"></script>
-        <script src="./js/utils/GamepadEventCompressor.js"></script>
-        <script src="./js/libs/poly-decomp/decomp.min.js"></script>
-        <script src="./js/libs/p2/p2plugins.js"></script>
-        <script src="./js/libs/p2/p2.js"></script>
-        <script src="./js/utils/Touch.js"></script>
-        <script src="./js/game/ColorManager.js"></script>
-        <script src="./js/game/PlayerCursor.js"></script>
-        <script src="./js/game/MenuSettings.js"></script>
-        <script src="./js/game/LevelManager.js"></script>
-        <script src="./res/levels/Mi-primer dibujo.js"></script>
-        <script src="./res/levels/Los-abismos.js"></script>
-        <script src="./res/levels/El-puente.js"></script>
-        <script src="./res/levels/El-vaso.js"></script>
-        <script src="./res/levels/Golf.js"></script>
-        <script src="./res/levels/Extraccion.js"></script>
-        <!-- <script src="./res/levels/level_8.js"></script> -->
-        <!-- <script src="./res/levels/level_9.js"></script> -->
-        <!-- <script src="./res/levels/level_10.js"></script> -->
-        <!-- <script src="./res/levels/level_11.js"></script> -->
-        <!-- <script src="./res/levels/level_12.js"></script> -->
-        <script src="./js/game/MenuManager.js"></script>
-        <script src="./js/game/ConfigOptions.js"></script>
-        <script src="./js/game/Physics.js"></script>
-        <script src="./js/game/DirtyLayer.js"></script>
-        <script src="./js/game/Game.js"></script>
-        <script src="./js/Screen.js"></script>
-        <script src="./js/game/RateThisGame.js"></script>
-        <script src="./js/game/LevelCompletedScreen.js"></script>
-        <script src="./js/game/AchievementManager.js"></script>
-        <script>
-            Screen.init();
-        </script>
-    </body>
+      </div>
+      <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
+      <div onclick="LevelManager.show();" class="levels-button hudbutton" data-visible="true"> </div>
+      <div class="settings-button hudbutton" data-visible="true"> </div>
+    </div>
+    <div class="chalk-menu-layer"></div>
+    <div id="level-complete-dialog" data-state="0">
+      <div class="level-complete-row">
+        Level Completed
+      </div>
+      <div class="level-complete-row">
+        <span class="level-complete-star"></span>
+        <span class="level-complete-star"></span>
+        <span class="level-complete-star"></span>
+      </div>
+      <div class="level-complete-row">
+        <span id="level-complete-continue"> continue <span>
+      </div>
+    </div>
+    <script src="./js/utils/Utils.js"></script>
+    <script src="./js/utils/GamepadEventCompressor.js"></script>
+    <script src="./js/libs/poly-decomp/decomp.min.js"></script>
+    <script src="./js/libs/p2/p2plugins.js"></script>
+    <script src="./js/libs/p2/p2.js"></script>
+    <script src="./js/utils/Touch.js"></script>
+    <script src="./js/game/ColorManager.js"></script>
+    <script src="./js/game/PlayerCursor.js"></script>
+    <script src="./js/game/MenuSettings.js"></script>
+    <script src="./js/game/LevelManager.js"></script>
+    <script src="./res/levels/Mi-primer dibujo.js"></script>
+    <script src="./res/levels/Los-abismos.js"></script>
+    <script src="./res/levels/El-puente.js"></script>
+    <script src="./res/levels/El-vaso.js"></script>
+    <script src="./res/levels/Golf.js"></script>
+    <script src="./res/levels/Extraccion.js"></script>
+    <script src="./js/game/MenuManager.js"></script>
+    <script src="./js/game/ConfigOptions.js"></script>
+    <script src="./js/game/Physics.js"></script>
+    <script src="./js/game/DirtyLayer.js"></script>
+    <script src="./js/game/Game.js"></script>
+    <script src="./js/Screen.js"></script>
+    <script src="./js/game/RateThisGame.js"></script>
+    <script src="./js/game/LevelCompletedScreen.js"></script>
+    <script src="./js/game/AchievementManager.js"></script>
+    <script>
+      Screen.init();
+    </script>
+  </body>
 </html>

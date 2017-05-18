@@ -60,19 +60,19 @@ var Screen = (function(){
             height : height,
         });
 
-        setLogoVisibility(false);
+        //setLogoVisibility(false);
 
     }
 
-    /** @func setLogoVisibility
-      * @desc show/hide the logo using a CSS3 transition
-      * @param visible {boolean} send true for show the logo or false to hide it
-      */
-    function setLogoVisibility(visible)
-    {
-        document.getElementById("main_logo")
-        .style.opacity = visible ? 1.0 : 0.0;
-    }
+    ///** @func setLogoVisibility
+    //  * @desc show/hide the logo using a CSS3 transition
+    //  * @param visible {boolean} send true for show the logo or false to hide it
+    //  */
+    //function setLogoVisibility(visible)
+    //{
+    //    document.getElementById("main_logo")
+    //    .style.opacity = visible ? 1.0 : 0.0;
+    //}
 
     /** @func setTitleText
       * @desc It sets the title
@@ -172,7 +172,6 @@ var Screen = (function(){
     }
 
     return { init              : init,
-             setLogoVisibility : setLogoVisibility,
              setTitleText      : setTitleText,
              setSubtitleText   : setSubtitleText,
              getWidth          : getWidth,
