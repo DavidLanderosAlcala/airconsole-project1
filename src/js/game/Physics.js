@@ -175,6 +175,13 @@ var Physics = (function(){
             config.mass = aux_convex.area * 0.001 * options.massScale;
         }
 
+        if(config.mass > 0.07)
+        {
+            setTimeout(function(){
+                AchievementManager.unlock("A massive rock");
+            }, 1000);
+        }
+
         if(options.isKinematic)
         {
             config.type = p2.Body.KINEMATIC;
