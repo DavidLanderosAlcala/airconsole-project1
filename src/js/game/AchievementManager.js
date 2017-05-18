@@ -10,7 +10,7 @@ var AchievementManager = (function(){
     function unlock(achievementName)
     {
         document.querySelector("#achievement-dialog").dataset.visible = "true";
-        document.querySelector(".achivement-column:nth-child(2)").innerHTML = achievementName;
+        document.querySelector("#achievement-text").innerHTML = achievementName;
         
         setTimeout(function(){
         	document.querySelector("#achievement-dialog").dataset.visible = "false";

@@ -8,7 +8,7 @@
 	font-weight: bold;
 	position: absolute;
 	right : 3%;
-	top : 15%;
+	top : 50%;
 	display: inline-block;
 	width: 50vh;
 	height: 15vh;
@@ -16,6 +16,7 @@
 	background-color: rgba(0,0,0,0.7);
 	overflow: hidden;
 	margin-right: -100vh;
+	margin-top: -7.5vh;
 	transition: 0.3s all ease-in;
 }
 
@@ -45,6 +46,19 @@
 
 .achivement-column:nth-child(2)
 {
-	line-height: 15vh;
 	width: 60%;
+}
+
+#achievement-header
+{
+	font-family: chalk8;
+	margin-top: 3vh;
+	font-size: 1.5vh;
+}
+
+#achievement-text
+{
+	font-family: chalk8;
+	margin-top: 1vh;
+	font-size: 2vh;
 }
