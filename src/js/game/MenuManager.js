@@ -8,12 +8,12 @@ var MenuManager = (function(){
 	{
 	    menu_layer = document.querySelector(".menu_layer");
 	    MenuSettings.init(menu_layer);
-	    LevelSelector.init(menu_layer);
+	    LevelManager.init(menu_layer);
 	}
 
-	function showLevelSelector()
+	function showLevelManager()
 	{
-        LevelSelector.show();
+        LevelManager.show();
 	}
 
 	function showSettings()
@@ -34,6 +34,6 @@ var MenuManager = (function(){
 
 	return { init              : init,
 		     showSettings      : showSettings,
-		     showLevelSelector : showLevelSelector,
+		     showLevelManager  : showLevelManager,
 	         hideAll           : hideAll };
 })();

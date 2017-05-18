@@ -1,18 +1,14 @@
 
-/*
-     Game.loadLevel(level_index);
-*/
-
 /**
-  * @module LevelSelector
+  * @module LevelManager
   */
-var LevelSelector = (function(){
+var LevelManager = (function(){
 
 	var levels = [];
 	var level_metadata = [];
 	var container = null;
 	var listeners = [];
-    var visible = false;
+  var visible = false;
 
 	function init()
 	{
@@ -75,8 +71,8 @@ var LevelSelector = (function(){
             filled1 = "false";
             filled2 = "false";
         }
-        var html =  '<div onmouseenter="LevelSelector.dispatch(\'preview\',' + level_index + ')" ' +
-                    ' onclick="LevelSelector.dispatch(\'selected\',' + level_index + ')" class="level-launcher" data-unlocked="' + unlocked + '">\r\n' +
+        var html =  '<div onmouseenter="LevelManager.dispatch(\'preview\',' + level_index + ')" ' +
+                    ' onclick="LevelManager.dispatch(\'selected\',' + level_index + ')" class="level-launcher" data-unlocked="' + unlocked + '">\r\n' +
             	    '	<div class="level-number"> ' + (level_index + 1) + ' </div>\r\n' +
             	    '	<div class="level-stars-container">\r\n' +
             	    '		<span class="level-star" data-filled="' + filled1 + '"></span>\r\n' +
@@ -112,6 +108,16 @@ var LevelSelector = (function(){
                 listeners[event][i](arg);
             }
         }
+    }
+
+    function save()
+    {
+
+    }
+
+    function restore()
+    {
+
     }
 
     return { init        : init,

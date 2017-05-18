@@ -1,4 +1,4 @@
-LevelSelector.getLevels().push({
+LevelManager.getLevels().push({
     title: 'Mi primer dibujo',
     description: 'Dibuja una figura cualquiera',
     bodies: [{

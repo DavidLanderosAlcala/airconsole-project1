@@ -100,7 +100,7 @@ var Physics = (function(){
         if(elapsedtime > 20)
             elapsedtime = 20;
 
-        if(!LevelSelector.isVisible())
+        if(!LevelManager.isVisible())
             world.step(elapsedtime/1700);
         
         new_fps = 1000 / elapsedtime;

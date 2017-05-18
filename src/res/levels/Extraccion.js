@@ -1,4 +1,4 @@
-LevelSelector.getLevels().push({
+LevelManager.getLevels().push({
     title: 'Extraccion',
     description: 'Saca la pelota del hoyo',
     bodies: [{

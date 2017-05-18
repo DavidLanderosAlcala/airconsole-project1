@@ -6,7 +6,7 @@ var LevelCompleteScreen = (function(){
   {
       document.querySelector("#level-complete-continue").addEventListener("click", function(){
           hide();
-          LevelSelector.show();
+          LevelManager.show();
       });
   }
 

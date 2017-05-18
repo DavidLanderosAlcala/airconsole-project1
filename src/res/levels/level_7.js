@@ -1,4 +1,4 @@
-LevelSelector.getLevels().push({
+LevelManager.getLevels().push({
     title: 'Todo terreno',
     description: 'Dibuja un puente',
     bodies: [{

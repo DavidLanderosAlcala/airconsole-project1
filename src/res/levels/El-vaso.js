@@ -1,4 +1,4 @@
-LevelSelector.getLevels().push({
+LevelManager.getLevels().push({
     title: 'El vaso',
     description: 'Saca la pelota del vaso',
     bodies: [{

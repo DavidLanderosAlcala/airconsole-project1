@@ -79,13 +79,13 @@ var Game = (function(){
               var encoded_level = window.location.href.split("#")[1];
               var decoded_leve = atob(encoded_level);
               eval(decoded_leve);
-              loadLevel(LevelSelector.getLevels().length -1);
+              loadLevel(LevelManager.getLevels().length -1);
           }, 500);
-          LevelSelector.hide();
+          LevelManager.hide();
       }
       else
       {
-          LevelSelector.show();
+          LevelManager.show();
       }
   }
 
@@ -256,7 +256,7 @@ var Game = (function(){
       /* Drawing objects.tacks */
       context.strokeStyle = ColorManager.getColorAt(0);
       var tack_radius = (0.1) * Physics.getScale();
-      if(!LevelSelector.isVisible())
+      if(!LevelManager.isVisible())
           tackFrameCount++;
       if(tackFrameCount > 10)
         tack_radius *= 1.3;
@@ -324,13 +324,13 @@ var Game = (function(){
       }
       if(e.keyCode == 76) // L key
       {
-          if(LevelSelector.isVisible())
+          if(LevelManager.isVisible())
           {
-              LevelSelector.hide();
+              LevelManager.hide();
           }
           else
           {
-              LevelSelector.show();
+              LevelManager.show();
           }
       }
       if(e.keyCode == 84) // T key
@@ -1077,7 +1077,7 @@ var Game = (function(){
       level_data.game_status = false;
       level_data.context = {};
       level_data.id = level_index;
-      var level = LevelSelector.getLevels()[level_index];
+      var level = LevelManager.getLevels()[level_index];
       level_data.update_fnc = level.update;
       var _bodies = [];
       level.hints = level.hints || [];

@@ -1,4 +1,4 @@
-LevelSelector.getLevels().push({
+LevelManager.getLevels().push({
     title: 'Los abismos',
     description: 'Lleva la pelota al hoyo derecho',
     bodies: [{
