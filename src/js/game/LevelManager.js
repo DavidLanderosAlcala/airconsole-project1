@@ -30,6 +30,11 @@ var LevelManager = (function(){
         	    Screen.setTitleText(levels[level_index].title);
         	    Game.loadLevel(level_index);
           }
+          else
+          {
+              Screen.setTitleText("Locked level");
+              Screen.setSubtitleText("You need to complete previous levels");
+          }
         });
 
         on("selected", function(level_index){
