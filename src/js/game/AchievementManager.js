@@ -9,6 +9,7 @@ var AchievementManager = (function(){
     /* Achievement declaration
      */
     achievements["massive-rock"] = { message : "A Massive rock", unlocked : false };
+    achievements["all-stars"] = { message : "Earn all stars", unlocked : false };
 
     function unlock(achievementName)
     {

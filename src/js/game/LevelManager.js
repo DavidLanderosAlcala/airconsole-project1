@@ -4,6 +4,7 @@
   */
 var LevelManager = (function(){
 
+  const saveName = "progress";
 	var levels = [];
 	var level_metadata = [];
 	var container = null;
@@ -32,7 +33,7 @@ var LevelManager = (function(){
            hide();
            //Game.loadLevel(level_index);
         });
-        //show();
+        loadSave();
 	}
 
 	function show()
@@ -60,24 +61,13 @@ var LevelManager = (function(){
 
 	function GenLevelLauncherHTML(level_index)
 	{
-		var filled1 = "true";
-		var filled2 = "true";
-		var filled3 = "false";
-		var unlocked = "true";
-		if(level_index > 3)
-			unlocked = "false";
-        if(level_index  == 3)
-        {
-            filled1 = "false";
-            filled2 = "false";
-        }
-        var html =  '<div onmouseenter="LevelManager.dispatch(\'preview\',' + level_index + ')" ' +
-                    ' onclick="LevelManager.dispatch(\'selected\',' + level_index + ')" class="level-launcher" data-unlocked="' + unlocked + '">\r\n' +
+        var html =  '<div id="level' + level_index + '" onmouseenter="LevelManager.dispatch(\'preview\',' + level_index + ')" ' +
+                    ' onclick="LevelManager.dispatch(\'selected\',' + level_index + ')" class="level-launcher" data-unlocked="false">\r\n' +
             	    '	<div class="level-number"> ' + (level_index + 1) + ' </div>\r\n' +
             	    '	<div class="level-stars-container">\r\n' +
-            	    '		<span class="level-star" data-filled="' + filled1 + '"></span>\r\n' +
-            	    '		<span class="level-star" data-filled="' + filled2 + '"></span>\r\n' +
-            	    '		<span class="level-star" data-filled="' + filled3 + '"></span>\r\n' +
+            	    '		<span class="level-star" data-filled="false"></span>\r\n' +
+            	    '		<span class="level-star" data-filled="false"></span>\r\n' +
+            	    '		<span class="level-star" data-filled="false"></span>\r\n' +
             	    '	</div>\r\n' +
             	    '</div>\r\n';
         return html;
@@ -115,9 +105,56 @@ var LevelManager = (function(){
 
     }
 
-    function restore()
+    function loadSave()
     {
+        if(localStorage.getItem(saveName) == undefined)
+        {
+            for(var i = 0; i < levels.length; i++)
+            {
+                level_metadata.push({stars:0, unlocked : false});
+            }
+            unlockLevel(0);
+        }
+    }
 
+    function setLevelStars(index, stars)
+    {
+        level_metadata[index].stars = stars;
+
+        var star_elements = document.querySelectorAll("#level" + index + " > .level-stars-container > .level-star");
+        for(var i = 0; i < 3; i++)
+        {
+            if(i < stars){
+               star_elements[i].dataset.filled = "true";
+            }
+            else {
+              star_elements[i].dataset.filled = "false";
+            }
+        }
+        checkForAchievement();
+        save();
+    }
+
+    function checkForAchievement()
+    {
+        for(var i = 0; i < level_metadata.length; i++)
+        {
+            if(level_metadata[i].stars < 3)
+            {
+                return;
+            }
+        }
+        AchievementManager.unlock("all-stars");
+    }
+
+    function unlockLevel(index)
+    {
+        if(index < level_metadata.length)
+        {
+            level_metadata[index].unlocked = true;
+            document.querySelector("#level" + index).dataset.unlocked = "true";
+            save();
+        }
     }
 
     return { init        : init,
@@ -126,6 +163,9 @@ var LevelManager = (function(){
              hide        : hide,
              isVisible   : isVisible,
              on          : on,
-             dispatch    : dispatch
-    };
+             dispatch    : dispatch,
+             save        : save,
+             loadSave    : loadSave,
+             setLevelStars : setLevelStars,
+             unlockLevel : unlockLevel, };
 })();

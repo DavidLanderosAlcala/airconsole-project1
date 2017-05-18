@@ -133,6 +133,8 @@ var Game = (function(){
 
           if(level_data.game_status > 0)
           {
+              LevelManager.setLevelStars(level_data.id, level_data.game_status);
+              LevelManager.unlockLevel(level_data.id + 1);
               setTimeout(function(){
                 LevelCompleteScreen.showScreen(level_data.game_status);
               }, 800);
