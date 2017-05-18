@@ -28,6 +28,46 @@ var Physics = (function(){
     	if(world == null)
     	{
             world = new p2.World();
+            world.on("beginContact", function(event){
+                var callbacks = listeners["beginContact"];
+                if(callbacks)
+                {
+                    for(var i = 0; i < callbacks.length; i++)
+                    {
+                         callbacks[i](event);
+                    }
+                }
+            });
+            world.on("endContact",function(event){
+                var callbacks = listeners["endContact"];
+                if(callbacks)
+                {
+                    for(var i = 0; i < callbacks.length; i++)
+                    {
+                         callbacks[i](event);
+                    }
+                }
+            });
+            world.on("addBody",function(event){
+                var callbacks = listeners["addBody"];
+                if(callbacks)
+                {
+                    for(var i = 0; i < callbacks.length; i++)
+                    {
+                         callbacks[i](event);
+                    }
+                }
+            });
+            world.on("removeBody",function(event){
+                var callbacks = listeners["removeBody"];
+                if(callbacks)
+                {
+                    for(var i = 0; i < callbacks.length; i++)
+                    {
+                         callbacks[i](event);
+                    }
+                }
+            });
     	}
     	world.clear();
         world.gravity = [0,10];
@@ -44,50 +84,6 @@ var Physics = (function(){
        //     this.setState(p2.Renderer.DRAWPOLYGON);
        //     this.frame(0, 1, 6, 8);
        //});
-
-       world.on("beginContact", function(event){
-           var callbacks = listeners["beginContact"];
-           if(callbacks)
-           {
-               for(var i = 0; i < callbacks.length; i++)
-               {
-                    callbacks[i](event);
-               }
-           }
-       });
-
-       world.on("endContact",function(event){
-           var callbacks = listeners["endContact"];
-           if(callbacks)
-           {
-               for(var i = 0; i < callbacks.length; i++)
-               {
-                    callbacks[i](event);
-               }
-           }
-       });
-
-       world.on("addBody",function(event){
-           var callbacks = listeners["addBody"];
-           if(callbacks)
-           {
-               for(var i = 0; i < callbacks.length; i++)
-               {
-                    callbacks[i](event);
-               }
-           }
-       });
-
-       world.on("removeBody",function(event){
-           var callbacks = listeners["removeBody"];
-           if(callbacks)
-           {
-               for(var i = 0; i < callbacks.length; i++)
-               {
-                    callbacks[i](event);
-               }
-           }
-       });
 
     }
 
