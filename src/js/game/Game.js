@@ -35,7 +35,7 @@ var Game = (function(){
 
       level_data = {
           id          : 0,
-          game_over   : false,
+          game_status : false,
           update_fnc  : null,
           setup_fnc   : null,
           title       : "",
@@ -122,14 +122,19 @@ var Game = (function(){
   {
       removeLostBodies();
       Physics.update();
-      if(!level_data.game_over && level_data.update_fnc != null)
+      if(!level_data.game_status && level_data.update_fnc != null)
       {
-          level_data.game_over = level_data.update_fnc(level_data.context);
-          if(level_data.game_over)
+          level_data.game_status = level_data.update_fnc(level_data.context);
+
+          if(level_data.game_status === true)
+          {
+              level_data.game_status = 3;
+          }
+
+          if(level_data.game_status > 0)
           {
               setTimeout(function(){
-                //LevelSelector.show();
-                LevelCompleteScreen.showScreen(1);
+                LevelCompleteScreen.showScreen(level_data.game_status);
               }, 800);
           }
       }
@@ -1069,7 +1074,7 @@ var Game = (function(){
   function loadLevel(level_index)
   {
       restartEngine();
-      level_data.game_over = false;
+      level_data.game_status = false;
       level_data.context = {};
       level_data.id = level_index;
       var level = LevelSelector.getLevels()[level_index];

@@ -178,7 +178,7 @@ var Physics = (function(){
         if(config.mass > 0.07)
         {
             setTimeout(function(){
-                AchievementManager.unlock("A massive rock");
+                AchievementManager.unlock("massive-rock");
             }, 1000);
         }
 

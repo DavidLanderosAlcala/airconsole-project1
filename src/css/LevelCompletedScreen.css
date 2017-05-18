@@ -1,17 +1,3 @@
-@font-face {
-    font-family : chalk7;
-    src : url(../res/fonts/KGSecondChancesSketch.ttf);
-}
-@font-face {
-    font-family : chalk;
-    src : url(../res/fonts/chalk.ttf);
-}
-body, head
-{
-    border: 0; padding: 0;
-    background-size: 100%;
-    background-image: url("../res/img/background.jpg");
-}
 #level-complete-dialog
 {
   //cursor: none;

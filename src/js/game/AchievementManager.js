@@ -2,21 +2,37 @@
 
 var AchievementManager = (function(){
 
-    function init()
-    {
+    var notification = document.querySelector("#achievement-dialog");
+    var content = document.querySelector("#achievement-text");
+    var achievements = { };
 
-    }
+    /* Achievement declaration
+     */
+    achievements["massive-rock"] = { message : "A Massive rock", unlocked : false };
 
     function unlock(achievementName)
     {
-        document.querySelector("#achievement-dialog").dataset.visible = "true";
-        document.querySelector("#achievement-text").innerHTML = achievementName;
-        
-        setTimeout(function(){
-        	document.querySelector("#achievement-dialog").dataset.visible = "false";
-        }, 4000);
+        if(!achievements[achievementName].unlocked)
+        {
+            achievements[achievementName].unlocked = true;
+            notification.dataset.visible = "true";
+            content.innerHTML = achievements[achievementName].message;
+            
+            setTimeout(function(){
+            	notification.dataset.visible = "false";
+            }, 4000);
+        }
     }
 
-	return { init   : init,
-	         unlock : unlock };
+    function save()
+    {
+        
+    }
+
+    function restore()
+    {
+        
+    }
+
+	return { unlock : unlock };
 })();
