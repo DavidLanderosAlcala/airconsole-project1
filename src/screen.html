@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="./css/LevelSelector2.css">
         <link rel="stylesheet" href="./css/RateThisGame.css">
         <link rel="stylesheet" href="./css/LevelCompletedScreen.css">
+        <link rel="stylesheet" href="./css/AchievementManager.css">
         <title>Screen</title>
     </head>
     <body>
@@ -44,6 +45,11 @@
                 <span id="level-complete-continue"> continue <span>
             </div>
         </div>
+
+        <div id="achievement-dialog" data-visible="false">
+            <div class="achivement-column"></div>
+            <div class="achivement-column"> blah blah blah </div>
+        </div>
         <!--<span id="player_cursor"></span> -->
         <!--<script src="./js/libs/airconsole/airconsole-1.4.0.js"></script>-->
         <!--<script src="./js/framework/AirConsoleBus.js"></script>-->
@@ -78,6 +84,7 @@
         <script src="./js/Screen.js"></script>
         <script src="./js/game/RateThisGame.js"></script>
         <script src="./js/game/LevelCompletedScreen.js"></script>
+        <script src="./js/game/AchievementManager.js"></script>
         <script>
             Screen.init();
         </script>
