@@ -5,10 +5,10 @@
 var LevelManager = (function(){
 
   const saveName = "progress";
-	var levels = [];
-	var level_metadata = [];
-	var container = null;
-	var listeners = [];
+  var levels = [];
+  var levelMetadata = [];
+  var container = null;
+  var listeners = [];
   var visible = false;
 
 	function init()
@@ -25,7 +25,7 @@ var LevelManager = (function(){
         container.innerHTML = levelsHTML;
 
         on("preview", function(level_index) {
-            if(level_metadata[level_index].unlocked)
+            if(levelMetadata[level_index].unlocked)
             {
                 Screen.setTitleText(levels[level_index].title);
                 Game.loadLevel(level_index);
@@ -38,7 +38,7 @@ var LevelManager = (function(){
         });
 
         on("selected", function(level_index){
-            if(level_metadata[level_index].unlocked)
+            if(levelMetadata[level_index].unlocked)
             {
                 hide();
                 //Game.loadLevel(level_index);
@@ -124,21 +124,23 @@ var LevelManager = (function(){
         {
             for(var i = 0; i < levels.length; i++)
             {
-                level_metadata.push({stars:0, unlocked : false});
+                levelMetadata.push({stars:0, unlocked : false});
             }
             unlockLevel(0);
         }
     }
 
-    function setLevelStars(index, stars)
+    function updateLevelStars(index, stars)
     {
-        if(index < level_metadata.length)
+        if(index < levelMetadata.length)
         {
-            level_metadata[index].stars = stars;
+            levelMetadata[index].stars &= stars;
+            var stars_count getEarnedStarsCount(index);
+            
             var star_elements = document.querySelectorAll("#level" + index + " > .level-stars-container > .level-star");
             for(var i = 0; i < 3; i++)
             {
-                if(i < stars){
+                if(i < stars_count){
                    star_elements[i].dataset.filled = "true";
                 }
                 else {
@@ -152,9 +154,9 @@ var LevelManager = (function(){
 
     function checkForAchievement()
     {
-        for(var i = 0; i < level_metadata.length; i++)
+        for(var i = 0; i < levelMetadata.length; i++)
         {
-            if(level_metadata[i].stars < 3)
+            if(levelMetadata[i].stars < 3)
             {
                 return;
             }
@@ -164,12 +166,44 @@ var LevelManager = (function(){
 
     function unlockLevel(index)
     {
-        if(index < level_metadata.length)
+        if(index < levelMetadata.length)
         {
-            level_metadata[index].unlocked = true;
+            levelMetadata[index].unlocked = true;
             document.querySelector("#level" + index).dataset.unlocked = "true";
             save();
         }
+    }
+
+    function getEarnedStarsCount(level_index)
+    {
+        var count = 0;
+        var bitFlag = levelMetadata[levelMetadata].stars;
+        if(bitFlag & (1<<0) ) count++;
+        if(bitFlag & (1<<1) ) count++;
+        if(bitFlag & (1<<2) ) count++;
+        return count;
+    }
+
+    function getEarnedStarsDesc(level_index)
+    {
+        var res = 0;
+        var bitFlag = levelMetadata[levelMetadata].stars;
+        var descriptions = levelMetadata[levelMetadata].descriptions;
+        if(bitFlag & (1<<0) ) res.push(descriptions[0]);
+        if(bitFlag & (1<<1) ) res.push(descriptions[1]);
+        if(bitFlag & (1<<2) ) res.push(descriptions[2]);
+        return res;
+    }
+
+    function getMissingStarsDesc(level_index)
+    {
+        var res = 0;
+        var bitFlag = levelMetadata[levelMetadata].stars;
+        var descriptions = levelMetadata[levelMetadata].descriptions;
+        if(bitFlag & (1<<0) == 0) res.push(descriptions[0]);
+        if(bitFlag & (1<<1) == 0) res.push(descriptions[1]);
+        if(bitFlag & (1<<2) == 0) res.push(descriptions[2]);
+        return res;
     }
 
     return { init        : init,
@@ -181,6 +215,9 @@ var LevelManager = (function(){
              dispatch    : dispatch,
              save        : save,
              loadSave    : loadSave,
-             setLevelStars : setLevelStars,
-             unlockLevel : unlockLevel, };
+             updateLevelStars : updateLevelStars,
+             unlockLevel : unlockLevel,
+             getEarnedStarsCount : getEarnedStarsCount,
+             getEarnedStarsDesc  : getEarnedStarsDesc,
+             getMissingStarsDesc : getMissingStarsDesc };
 })();

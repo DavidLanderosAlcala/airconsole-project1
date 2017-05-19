@@ -36,7 +36,7 @@ var Game = (function(){
 
       level_data = {
           id          : 0,
-          game_status : false,
+          earned_stars : 0,
           update_fnc  : null,
           setup_fnc   : null,
           title       : "",
@@ -125,26 +125,21 @@ var Game = (function(){
   {
       removeLostBodies();
       Physics.update();
-      if(!level_data.game_status && level_data.update_fnc != null)
+      if(level_data.earned_stars == 0 && level_data.update_fnc != null)
       {
-          level_data.game_status = level_data.update_fnc(level_data.context);
+          level_data.earned_stars = level_data.update_fnc(level_data.context);
 
-          if(level_data.game_status === true)
+          if(level_data.earned_stars > 0)
           {
-              level_data.game_status = 3;
-          }
-
-          if(level_data.game_status > 0)
-          {
-              LevelManager.setLevelStars(level_data.id, level_data.game_status);
+              LevelManager.updateLevelStars(level_data.id, level_data.earned_stars);
               LevelManager.unlockLevel(level_data.id + 1);
               setTimeout(function(){
-                LevelCompleteScreen.showScreen(level_data.game_status);
+                LevelCompleteScreen.showScreen(LevelManager.getEarnedStarsCount(level_data.id));
               }, 800);
           }
       }
       render();
-      if(level_data.game_status < 1)
+      if(level_data.earned_stars == 0)
           hudTimerText.innerHTML = getElapsedTime_str();
       window.requestAnimationFrame(update);
   }
@@ -1081,7 +1076,7 @@ var Game = (function(){
   function loadLevel(level_index)
   {
       restartEngine();
-      level_data.game_status = false;
+      level_data.earned_stars = 0;
       level_data.context = {};
       level_data.id = level_index;
       var level = LevelManager.getLevels()[level_index];
@@ -1173,8 +1168,9 @@ var Game = (function(){
       }
 
       level_data.title       = level.title;
-      level_data.description = level.description;
+      level_data.descriptions = level.descriptions;
       level_data.setup_fnc   = level.setup;
+      level_data.show_timer       = level.show_timer;
 
       /* Draw level decorations on the dirty layer
        */
@@ -1191,11 +1187,32 @@ var Game = (function(){
           });
       }
 
-      Screen.setSubtitleText(level.description);
+      Screen.setSubtitleText(level.descriptions[0]);
       Screen.setTitleText(level.title);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context);
       level_data.start_time = new Date().getTime();
+
+      if(level_data.show_timer)
+      {
+          document.querySelector("#hud-timer-text").style.opacity = 1;
+          document.querySelector("#hud-timer-icon").style.opacity = 1;
+      }
+      else
+      {
+          document.querySelector("#hud-timer-text").style.opacity = 0;
+          document.querySelector("#hud-timer-icon").style.opacity = 0;
+      }
+
+      var earnedStarts = LevelManager.getEarnedStarsCount(level_index);
+      var starElems = document.querySelectorAll(".hud-star-icon");
+      var sortedDescriptions = LevelManager.getEarnedStartsDesc(level_index)
+                               .concat(LevelManager.getMissingStartsDesc(level_index));
+      for(var i = 0; i < starElems.length; i++)
+      {
+          starElems[i].style.dataset.filled = i < earnedStarts ? "true" : "false";
+          starElems[i].style.dataset.desc = sortedDescriptions[i];
+      }
   }
 
   /** @func restartLevel
