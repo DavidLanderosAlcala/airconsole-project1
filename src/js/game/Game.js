@@ -144,7 +144,8 @@ var Game = (function(){
           }
       }
       render();
-      hudTimerText.innerHTML = getElapsedTime_str();
+      if(level_data.game_status < 1)
+          hudTimerText.innerHTML = getElapsedTime_str();
       window.requestAnimationFrame(update);
   }
 
