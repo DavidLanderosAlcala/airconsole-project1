@@ -1212,7 +1212,7 @@ var Game = (function(){
 
       var earnedStarts = LevelManager.getEarnedStarsCount(level_index);
       var starElems = document.querySelectorAll(".hud-star-icon");
-      var sortedDescriptions = LevelManager.getEarnedStartsDesc(level_index)
+      var sortedDescriptions = LevelManager.getEarnedStasDesc(level_index)
                                .concat(LevelManager.getMissingStartsDesc(level_index));
       for(var i = 0; i < starElems.length; i++)
       {
