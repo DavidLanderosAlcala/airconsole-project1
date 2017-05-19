@@ -186,7 +186,7 @@ var LevelManager = (function(){
 
     function getEarnedStarsDesc(level_index)
     {
-        var res = 0;
+        var res = [];
         var bitFlag = levelMetadata[level_index].stars;
         var descriptions = levels[level_index].descriptions;
         if(bitFlag & (1<<0) ) res.push(descriptions[0]);
@@ -197,7 +197,7 @@ var LevelManager = (function(){
 
     function getMissingStarsDesc(level_index)
     {
-        var res = 0;
+        var res = [];
         var bitFlag = levelMetadata[level_index].stars;
         var descriptions = levels[level_index].descriptions;
         if(bitFlag & (1<<0) == 0) res.push(descriptions[0]);
