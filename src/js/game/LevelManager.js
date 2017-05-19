@@ -49,6 +49,9 @@ var LevelManager = (function(){
 
 	function show()
 	{
+        document.querySelector("#hud-bar").style.opacity = 0;
+        document.querySelector("#title_label").style.opacity = 1;
+        document.querySelector("#subtitle_label").style.opacity = 1;
 		 visible = true;
          //container.style.zIndex = 11;
          //container.style.opacity = 1;
@@ -58,6 +61,9 @@ var LevelManager = (function(){
 
 	function hide()
 	{
+        document.querySelector("#hud-bar").style.opacity = 1;
+        document.querySelector("#title_label").style.opacity = 0.3;
+        document.querySelector("#subtitle_label").style.opacity = 0.3;
 		visible = false;
         //container.style.zIndex = -11;
         //container.style.opacity = 0;

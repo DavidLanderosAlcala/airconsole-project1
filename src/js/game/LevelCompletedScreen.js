@@ -12,6 +12,8 @@ var LevelCompleteScreen = (function(){
 
   function showScreen(starscount)
   {
+      document.querySelector("#title_label").style.opacity = 0;
+      document.querySelector("#subtitle_label").style.opacity = 0;
       document.querySelector("#level-complete-dialog").dataset.state = "1";
       var stars = document.querySelectorAll(".level-complete-star");
       for(var i = 0; i < starscount; i++)
