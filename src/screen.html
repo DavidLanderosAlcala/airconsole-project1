@@ -3,9 +3,9 @@
   <head>
     <link rel="stylesheet" href="./css/screen.css">
     <link rel="stylesheet" href="./css/LevelManager.css">
-    <link rel="stylesheet" href="./css/RateThisGame.css">
     <link rel="stylesheet" href="./css/LevelCompletedScreen.css">
     <link rel="stylesheet" href="./css/AchievementManager.css">
+    <link rel="stylesheet" href="./css/HUD.css">
     <title>Screen</title>
   </head>
   <body>
@@ -14,13 +14,6 @@
       <canvas id="dirty_layer"> </canvas>
       <label id="title_label"> </label>
       <label id="subtitle_label"> </label>           
-      <div class="rate-this-game">
-        <span class="rate-this-game-star" data-starno="1" data-filled="false"></span>
-        <span class="rate-this-game-star" data-starno="2" data-filled="false"></span>
-        <span class="rate-this-game-star" data-starno="3" data-filled="false"></span>
-        <span class="rate-this-game-star" data-starno="4" data-filled="false"></span>
-        <span class="rate-this-game-star" data-starno="5" data-filled="false"></span>
-      </div>
       <div id="achievement-dialog" data-visible="false">
         <div class="achivement-column"></div>
         <div class="achivement-column">
@@ -69,7 +62,6 @@
     <script src="./js/game/DirtyLayer.js"></script>
     <script src="./js/game/Game.js"></script>
     <script src="./js/Screen.js"></script>
-    <script src="./js/game/RateThisGame.js"></script>
     <script src="./js/game/LevelCompletedScreen.js"></script>
     <script src="./js/game/AchievementManager.js"></script>
     <script>
