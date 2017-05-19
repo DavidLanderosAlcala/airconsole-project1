@@ -12,6 +12,25 @@
     <div class="main_container" >
       <canvas id="main_canvas"> </canvas>
       <canvas id="dirty_layer"> </canvas>
+      <div id="hud-bar">
+        <div class="hud-bar-group">
+          <div class="hud-item"  id="hud-home-button" onclick="LevelManager.show();"></div>
+          <div class="hud-item"  id="hud-restart-button" onclick="Game.restartLevel();"></div>
+        </div>
+        <div class="hud-bar-group">
+          <div class="hud-item" id="hud-help-button" ></div>
+          <div class="hud-item"></div>
+          <div class="hud-item hud-star-icon" data-filled="false"></div>
+          <div class="hud-item hud-star-icon" data-filled="true"></div>
+          <div class="hud-item hud-star-icon" data-filled="true"></div>
+          <div class="hud-item"></div>
+          <div class="hud-item"></div>
+          <div class="hud-item hud-noscale">05:56</div>
+          <div class="hud-item hud-noscale" id="hud-timer-icon" >
+              <div class="hud-timer-hand"></div>
+          </div>
+        </div>
+      </div>
       <label id="title_label"> </label>
       <label id="subtitle_label"> </label>           
       <div id="achievement-dialog" data-visible="false">
@@ -22,9 +41,6 @@
           <div id="achievement-text">blah blah blah</div>
         </div>
       </div>
-      <div onclick="Game.restartLevel();" class="restart-button hudbutton" data-visible="true"> </div>
-      <div onclick="LevelManager.show();" class="levels-button hudbutton" data-visible="true"> </div>
-      <div class="settings-button hudbutton" data-visible="true"> </div>
     </div>
     <div class="chalk-menu-layer"></div>
     <div id="level-complete-dialog" data-state="0">

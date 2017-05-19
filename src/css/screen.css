@@ -83,7 +83,7 @@ label#title_label {
     position    : absolute;
 	width       : 200vh;
 	left        : 50%;
-	top         : 5%;
+	top         : 8vh;
 	margin      : 0 0 0 -100vh;
 	text-align  : center;
 	font-size   : 6vh;
@@ -98,7 +98,7 @@ label#subtitle_label {
     position    : absolute;
     width       : 200vh;
     left        : 50%;
-    top         : 12%;
+    top         : 15vh;
     margin      : 0 0 0 -100vh;
     text-align  : center;
     font-size   : 4vh;
@@ -166,43 +166,6 @@ span.checkbox[data-checked=true]
     background-image : url("../res/img/checkbox_checked.png");
 }
 
-#player_cursor
-{
-	pointer-events : none;
-	z-index  : 10;
-    position : absolute;
-}
-
-#player_cursor[data-tool="chalk"]
-{
-    background-image : url("../res/img/chalk.png");
-    background-size: 45px 63px;
-    width    : 45px;
-    height   : 63px;
-    margin-left: -5px;
-    margin-top: -5px;
-}
-
-#player_cursor[data-tool="ereaser"]
-{
-    background-image : url("../res/img/ereaser.png");
-    background-size: 100px 100px;
-    width    : 100px;
-    height   : 100px;
-    margin-left: -20px;
-    margin-top: -20px;
-}
-
-#player_cursor[data-tool="tack"]
-{
-    background-image : url("../res/img/tack.png");
-    background-size: 50px 50px;
-    width    : 50px;
-    height   : 50px;
-    margin-left: -5px;
-    margin-top: -45px;	
-}
-
 span.level_button
 {
 	margin-top: 10px;
@@ -216,48 +179,6 @@ span.level_button
     border-image-repeat: repeat;
     border-image-slice: 30;
 }
-
-
-.hudbutton {
-    position: absolute;
-    display: inline-block;
-    width: 5vh;
-    height: 5vh;
-    background-size: 100% 100%;
-    animation: pulse 1s infinite;
-    z-index: 10;
-}
-
-.hudbutton:hover {
-    width: 7vh;
-    height: 7vh;
-    margin-left: -1vh;
-    margin-top: -1vh;
-}
-
-.restart-button {
-    top : 2vh;
-    left: 2vh;
-    background-image: url("../res/img/restart-level2.png");
-}
-
-.levels-button {
-    top : 9vh;
-    left: 2vh;
-    background-image: url("../res/img/open-level-selector.png");
-}
-
-.settings-button {
-    top : 16vh;
-    left: 2vh;
-    background-image: url("../res/img/settings.png");
-}
-
-.hudbutton[data-visible="false"]
-{
-    z-index: -1;
-}
-
 
 @keyframes pulse {
   0% {
