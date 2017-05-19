@@ -177,7 +177,7 @@ var LevelManager = (function(){
     function getEarnedStarsCount(level_index)
     {
         var count = 0;
-        var bitFlag = levelMetadata[levelMetadata].stars;
+        var bitFlag = levelMetadata[level_index].stars;
         if(bitFlag & (1<<0) ) count++;
         if(bitFlag & (1<<1) ) count++;
         if(bitFlag & (1<<2) ) count++;
@@ -187,8 +187,8 @@ var LevelManager = (function(){
     function getEarnedStarsDesc(level_index)
     {
         var res = 0;
-        var bitFlag = levelMetadata[levelMetadata].stars;
-        var descriptions = levelMetadata[levelMetadata].descriptions;
+        var bitFlag = levelMetadata[level_index].stars;
+        var descriptions = levels[level_index].descriptions;
         if(bitFlag & (1<<0) ) res.push(descriptions[0]);
         if(bitFlag & (1<<1) ) res.push(descriptions[1]);
         if(bitFlag & (1<<2) ) res.push(descriptions[2]);
@@ -198,8 +198,8 @@ var LevelManager = (function(){
     function getMissingStarsDesc(level_index)
     {
         var res = 0;
-        var bitFlag = levelMetadata[levelMetadata].stars;
-        var descriptions = levelMetadata[levelMetadata].descriptions;
+        var bitFlag = levelMetadata[level_index].stars;
+        var descriptions = levels[level_index].descriptions;
         if(bitFlag & (1<<0) == 0) res.push(descriptions[0]);
         if(bitFlag & (1<<1) == 0) res.push(descriptions[1]);
         if(bitFlag & (1<<2) == 0) res.push(descriptions[2]);
