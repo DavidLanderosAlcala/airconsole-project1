@@ -15,6 +15,7 @@ var Game = (function(){
   var collisionGroupCount = 1;
   var tackFrameCount = 0;
   var candidateTacksForNewWire = [];
+  var hudTimerText = null;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -42,6 +43,7 @@ var Game = (function(){
           description : "",
           context     : { },
           hints       : [],
+          start_time  : 0,
       };
 
       drawing_data = {
@@ -87,6 +89,7 @@ var Game = (function(){
       {
           LevelManager.show();
       }
+      hudTimerText = document.querySelector("#hud-timer-text");
   }
 
   /** @func restartEngine
@@ -141,6 +144,7 @@ var Game = (function(){
           }
       }
       render();
+      hudTimerText.innerHTML = getElapsedTime_str();
       window.requestAnimationFrame(update);
   }
 
@@ -1190,6 +1194,7 @@ var Game = (function(){
       Screen.setTitleText(level.title);
       if(level_data.setup_fnc != undefined)
           level_data.setup_fnc(level_data.context);
+      level_data.start_time = new Date().getTime();
   }
 
   /** @func restartLevel
@@ -1347,6 +1352,17 @@ var Game = (function(){
   {
       document.querySelector("#title_label").style.fontFamily = "chalk" + title;
       document.querySelector("#subtitle_label").style.fontFamily = "chalk" + subtitle;
+  }
+
+  function getElapsedTime_str()
+  {
+      var elapsedTime = new Date().getTime() - level_data.start_time;
+      var elapsedSeconds = elapsedTime / 1000;
+      var minutes = parseInt(elapsedSeconds / 60);
+      var seconds = parseInt(elapsedSeconds % 60);
+      if(minutes < 9) minutes = "0" + minutes;
+      if(seconds < 9) seconds = "0" + seconds;
+      return minutes + ":" + seconds;
   }
 
   return {  init          : init,
