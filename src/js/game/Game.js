@@ -22,6 +22,15 @@ var Game = (function(){
     */
   function init(options)
   {
+      var runInTesterMode = false;
+      if(window.location.href.indexOf("#") > 0)
+      {
+          runInTesterMode = true;
+          var encoded_level = window.location.href.split("#")[1];
+          var decoded_leve = atob(encoded_level);
+          eval(decoded_leve);
+      }
+
       DirtyLayer.init();
       MenuManager.init();
       canvas = options.canvas;
@@ -74,21 +83,18 @@ var Game = (function(){
       window.addEventListener("keyup", onKeyUp);
       window.requestAnimationFrame(update);
 
-      if(window.location.href.indexOf("#") > 0)
+      if(runInTesterMode)
       {
-          setTimeout(function(){
-
-              var encoded_level = window.location.href.split("#")[1];
-              var decoded_leve = atob(encoded_level);
-              eval(decoded_leve);
-              loadLevel(LevelManager.getLevels().length -1);
-          }, 500);
+          /* Execute the last level (which was included from the URL) */
+          var testingLevel = LevelManager.getLevels().length -1;
+          setTimeout(function() { loadLevel(testingLevel); }, 500);
           LevelManager.hide();
       }
       else
       {
           LevelManager.show();
       }
+
       hudTimerText = document.querySelector("#hud-timer-text");
   }
 
