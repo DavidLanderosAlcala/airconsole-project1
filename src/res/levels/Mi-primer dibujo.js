@@ -1,6 +1,7 @@
 LevelManager.getLevels().push({
     title: 'Mi primer dibujo',
-    description: 'Dibuja una figura cualquiera',
+    descriptions: ["Dibuja una figura cualquiera", "Que caiga sobre el circulo", "Que caiga sobre el triangulo"],
+    show_timer: false,
     bodies: [{
         "label": "untitled-shape",
         "type": "circle",
@@ -49,18 +50,18 @@ LevelManager.getLevels().push({
     decorations: [],
     setup: function(context) {
         /* your code goes here */
-        context.gameover = false;
+        context.earnedStars = 0;
         Physics.on("addBody", function() {
             Screen.setSubtitleText("perfecto! ahora intenta borrarla con click derecho");
         });
         Physics.on("removeBody", function() {
             Screen.setSubtitleText("Buen trabajo");
-            context.gameover = true;
+            context.earnedStars = 7;
         });
     },
     update: function(context) {
         /* your code goes here */
-        return context.gameover;
+        return context.earnedStars;
     },
 });
 
