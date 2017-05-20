@@ -134,7 +134,7 @@ var LevelManager = (function(){
     {
         if(index < levelMetadata.length)
         {
-            levelMetadata[index].stars &= stars;
+            levelMetadata[index].stars |= stars;
             var stars_count = getEarnedStarsCount(index);
 
             var star_elements = document.querySelectorAll("#level" + index + " > .level-stars-container > .level-star");
