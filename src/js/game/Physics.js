@@ -13,6 +13,8 @@ var Physics = (function(){
     var newtimestamp = 0;
     var elapsedtime = 0;
     var new_fps = 0;
+    var filteredListenersForBeginContact = [];
+    var filteredListenersForEndContact = [];
 
 
     function init()
@@ -28,46 +30,10 @@ var Physics = (function(){
     	if(world == null)
     	{
             world = new p2.World();
-            world.on("beginContact", function(event){
-                var callbacks = listeners["beginContact"];
-                if(callbacks)
-                {
-                    for(var i = 0; i < callbacks.length; i++)
-                    {
-                         callbacks[i](event);
-                    }
-                }
-            });
-            world.on("endContact",function(event){
-                var callbacks = listeners["endContact"];
-                if(callbacks)
-                {
-                    for(var i = 0; i < callbacks.length; i++)
-                    {
-                         callbacks[i](event);
-                    }
-                }
-            });
-            world.on("addBody",function(event){
-                var callbacks = listeners["addBody"];
-                if(callbacks)
-                {
-                    for(var i = 0; i < callbacks.length; i++)
-                    {
-                         callbacks[i](event);
-                    }
-                }
-            });
-            world.on("removeBody",function(event){
-                var callbacks = listeners["removeBody"];
-                if(callbacks)
-                {
-                    for(var i = 0; i < callbacks.length; i++)
-                    {
-                         callbacks[i](event);
-                    }
-                }
-            });
+            world.on("beginContact", onBeginContact);
+            world.on("endContact", onEndContact);
+            world.on("addBody", onAddBody );
+            world.on("removeBody", onRemoveBody);
     	}
     	world.clear();
         world.gravity = [0,10];
@@ -77,7 +43,10 @@ var Physics = (function(){
         //world.solver.tolerance = 0.01;
         world.islandSplit = true;
         world.solver.frictionIterations = 5;
+
         listeners = [];
+        filteredListenersForBeginContact = [];
+        filteredListenersForEndContact = [];
 
        //var app = new p2.WebGLRenderer(function(){
        //     this.setWorld(world);
@@ -107,13 +76,107 @@ var Physics = (function(){
         }
     }
 
-    function on(type, callback)
+    function on(type, arg1, arg2, arg3)
     {
-        if(!listeners[type])
+        if(type == "beginContactBetween")
         {
-            listeners[type] = [];
+            filteredListenersForBeginContact.push({
+                body1 : arg1,
+                body2 : arg2,
+                callback : arg3,
+            });
         }
-        listeners[type].push(callback);
+        else if(type == "endContactBetween")
+        {
+            filteredListenersForEndContact.push({
+                body1 : arg1,
+                body2 : arg2,
+                callback : arg3,
+            });
+        }   
+        else
+        {
+            // So arg1 is the callback;
+            if(!listeners[type])
+            {
+                listeners[type] = [];
+            }
+            listeners[type].push(arg1);
+        }
+    }
+
+    function onBeginContact(event)
+    {
+         /* It calls targered listeners */
+         for(var i = 0; i < filteredListenersForBeginContact.length; i++)
+         {
+             if(event.bodyA.label == filteredListenersForBeginContact[i].body1 || event.bodyB.label == filteredListenersForBeginContact[i].body1)
+             {
+                 if(event.bodyA.label == filteredListenersForBeginContact[i].body2 || event.bodyB.label == filteredListenersForBeginContact[i].body2)
+                 {
+                     filteredListenersForBeginContact[i].callback(event);
+                 }
+             }
+         }
+
+        /* Then it calls normal listeners */
+         var callbacks = listeners["beginContact"];
+         if(callbacks)
+         {
+             for(var i = 0; i < callbacks.length; i++)
+             {
+                  callbacks[i](event);
+             }
+         }
+    }
+
+    function onEndContact(event)
+    {
+         /* It calls targered listeners */
+         for(var i = 0; i < filteredListenersForEndContact.length; i++)
+         {
+             if(event.bodyA.label == filteredListenersForEndContact[i].body1 || event.bodyB.label == filteredListenersForEndContact[i].body1)
+             {
+                 if(event.bodyA.label == filteredListenersForEndContact[i].body2 || event.bodyB.label == filteredListenersForEndContact[i].body2)
+                 {
+                     filteredListenersForEndContact[i].callback(event);
+                 }
+             }
+         }
+
+         /* Then it calls normal listeners */
+         var callbacks = listeners["endContact"];
+         if(callbacks)
+         {
+             for(var i = 0; i < callbacks.length; i++)
+             {
+                  callbacks[i](event);
+             }
+         }
+    }
+
+    function onAddBody(event)
+    {
+         var callbacks = listeners["addBody"];
+         if(callbacks)
+         {
+             for(var i = 0; i < callbacks.length; i++)
+             {
+                  callbacks[i](event);
+             }
+         }
+    }
+
+    function onRemoveBody(event)
+    {
+         var callbacks = listeners["removeBody"];
+         if(callbacks)
+         {
+             for(var i = 0; i < callbacks.length; i++)
+             {
+                  callbacks[i](event);
+             }
+         }
     }
 
     function clear()
@@ -489,7 +552,7 @@ var Physics = (function(){
     }
 
     return { init            : init,
-    	       clear           : clear,
+    	     clear           : clear,
              getPosition     : getPosition,
              getAngle        : getAngle,
              getLabel        : getLabel,
@@ -518,5 +581,7 @@ var Physics = (function(){
              setAngle        : setAngle,
              addCollisionGroup : addCollisionGroup,
              removeCollisionGroup : removeCollisionGroup };
-
 })();
+
+/* Define an alias name for the Physics module */
+var Phy = Physics;

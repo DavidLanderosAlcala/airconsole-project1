@@ -3,7 +3,7 @@ LevelManager.getLevels().push({
     descriptions: ["Dibuja una figura cualquiera", "Que caiga sobre el circulo", "Que caiga sobre el triangulo"],
     show_timer: false,
     bodies: [{
-        "label": "untitled-shape",
+        "label": "circle",
         "type": "circle",
         "position": [-5.86, 3.039999999999999],
         "isStatic": false,
@@ -34,7 +34,7 @@ LevelManager.getLevels().push({
             [-2.3171809626575053, 2.2038431575486612]
         ]
     }, {
-        "label": "untitled-shape",
+        "label": "triangle",
         "type": "polygon",
         "position": [0, 0],
         "isStatic": false,
@@ -51,17 +51,28 @@ LevelManager.getLevels().push({
     setup: function(context) {
         /* your code goes here */
         context.earnedStars = 0;
-        Physics.on("addBody", function() {
+        context.statuscode = 0;
+        Phy.on("addBody", function() {
             Screen.setSubtitleText("perfecto! ahora intenta borrarla con click derecho");
         });
-        Physics.on("removeBody", function() {
+
+        Phy.on("beginContactBetween", "triangle", "Body", function(){
+            context.earnedStars |= SECOND_STAR;
+        });
+
+        Phy.on("beginContactBetween", "circle", "Body", function(){
+            context.earnedStars |= THIRD_STAR;
+        });
+
+        Phy.on("removeBody", function() {
             Screen.setSubtitleText("Buen trabajo");
-            context.earnedStars = 7;
+            context.earnedStars |= FIRST_STAR;
+            context.statuscode = context.earnedStars;
         });
     },
     update: function(context) {
         /* your code goes here */
-        return context.earnedStars;
+        return context.statuscode;
     },
 });
 

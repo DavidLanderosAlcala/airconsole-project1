@@ -1,4 +1,11 @@
 
+
+/* Global constants
+ */
+const FIRST_STAR  = (1<<0);
+const SECOND_STAR = (1<<1);
+const THIRD_STAR  = (1<<2);
+
 /**
   * @module LevelManager
   */
