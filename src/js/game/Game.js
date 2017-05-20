@@ -1216,8 +1216,8 @@ var Game = (function(){
                                .concat(LevelManager.getMissingStarsDesc(level_index));
       for(var i = 0; i < starElems.length; i++)
       {
-          starElems[i].style.dataset.filled = i < earnedStarts ? "true" : "false";
-          starElems[i].style.dataset.desc = sortedDescriptions[i];
+          starElems[i].dataset.filled = i < earnedStarts ? "true" : "false";
+          starElems[i].dataset.desc = sortedDescriptions[i];
       }
   }
 
