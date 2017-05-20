@@ -1,3 +1,7 @@
+
+var skipFrames = false;
+var shouldSkipCurrentFrame = false;
+
 /**
   * @module Game
   */
@@ -170,6 +174,11 @@ var Game = (function(){
     */
   function render()
   {
+  	  if(skipFrames)
+  	  {
+  	  	  shouldSkipCurrentFrame = !shouldSkipCurrentFrame;
+  	  	  if(shouldSkipCurrentFrame) return;
+  	  }
       context.lineWidth = 0.09 * Physics.getScale();
 
       /* Clearing the screen */
@@ -360,6 +369,7 @@ var Game = (function(){
       if(e.type == "touchstart")
       {
         drawing_data.clear();
+        skipFrames = true;
       }
       if(e.button == 2 && e.type == "touchstart")
       {
@@ -398,6 +408,7 @@ var Game = (function(){
           {
               closePath();
           }
+          skipFrames = false;
       }
   }
 

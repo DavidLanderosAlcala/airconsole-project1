@@ -9,6 +9,7 @@ var Physics = (function(){
     var id_count = 0;
     var timestamp = 0;
     var fps = 0;
+    var fps_aux = 0;
     var title_bar = document.getElementsByTagName("title")[0];
     var newtimestamp = 0;
     var elapsedtime = 0;
@@ -72,7 +73,12 @@ var Physics = (function(){
         if(new_fps != fps)
         {
             fps = new_fps;
-            title_bar.innerHTML = "fps: " + fps;
+            fps_aux++;
+            if(fps_aux == 60)
+            {
+                title_bar.innerHTML = "fps: " + fps;
+                fps_aux = 0;
+            }
         }
     }
 
