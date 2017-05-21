@@ -57,6 +57,8 @@ var Game = (function(){
           context     : { },
           hints       : [],
           start_time  : 0,
+          respawnable_bodies : [],
+          spawners    : [],
       };
 
       drawing_data = {
@@ -123,6 +125,8 @@ var Game = (function(){
       collisionGroupCount = 0;
 
       level_data.hints = [];
+      level_data.respawnable_bodies = [];
+      level_data.spawners = [];
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -133,7 +137,7 @@ var Game = (function(){
     */
   function update()
   {
-      removeLostBodies();
+      preprocessBodies();
       Physics.update();
       if(level_data.earned_stars == 0 && level_data.update_fnc != null)
       {
@@ -154,15 +158,27 @@ var Game = (function(){
       window.requestAnimationFrame(update);
   }
 
-  /** @func removeLostBodies
-    * @desc Removes objects from the world if they are off the screen, called from Update
+  /** @func preprocessBodies
+    * @desc Removes objects from the world if they are off the screen
+    *       respawn objects if needed; called from Update
     */
-  function removeLostBodies()
+  function preprocessBodies()
   {
       var bodies = Physics.getAllBodies();
-      for(var i = bodies.length -1 ; i >= 0; i--)
+      var i;
+
+      for(i = 0; i < level_data.respawnable_bodies.length; i++)
       {
-          if(Physics.getPosition(bodies[i])[1] > Screen.getHeight() + 500 )
+          if(Physics.getPosition(level_data.respawnable_bodies[i])[1] > 100)
+          {
+              Physics.setPosition(level_data.respawnable_bodies[i], level_data.spawners[i]);
+              Physics.clearForces(level_data.respawnable_bodies[i]);
+          }
+      }
+
+      for(i = bodies.length -1 ; i >= 0; i--)
+      {        
+          if(Physics.getPosition(bodies[i])[1] > Screen.getHeight())
           {
               removeBody(bodies[i], true);
           }
@@ -1155,6 +1171,11 @@ var Game = (function(){
               centroid    : centroid,
               color_index : ColorManager.getRandomColorIndex(),
           });
+          if(level.bodies[i].respawn)
+          {
+              level_data.respawnable_bodies.push(body);
+              level_data.spawners.push(Physics.getPosition(body));
+          }
           _bodies.push(body);
       }
 
