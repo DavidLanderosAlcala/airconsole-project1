@@ -173,7 +173,9 @@ var Screen = (function(){
 
     return { init              : init,
              setTitleText      : setTitleText,
+             setTitle          : setTitleText,
              setSubtitleText   : setSubtitleText,
+             setSubtitle       : setSubtitleText,
              getWidth          : getWidth,
              getHeight         : getHeight,
              isInFullscreen    : isInFullscreen,
