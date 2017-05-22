@@ -59,6 +59,7 @@ var Game = (function(){
           start_time  : 0,
           respawnable_bodies : [],
           spawners    : [],
+          drawn_objects_count : 0,
       };
 
       drawing_data = {
@@ -102,6 +103,10 @@ var Game = (function(){
       }
 
       hudTimerText = document.querySelector("#hud-timer-text");
+
+      Physics.on("AddBody", function(){
+          level_data.drawn_objects_count++;
+      });
   }
 
   /** @func restartEngine
@@ -127,6 +132,7 @@ var Game = (function(){
       level_data.hints = [];
       level_data.respawnable_bodies = [];
       level_data.spawners = [];
+      level_data.drawn_objects_count = 0;
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -1251,6 +1257,7 @@ var Game = (function(){
           starElems[i].dataset.filled = (earnedStarts--) > 0 ? "true" : "false";
           starElems[i].dataset.desc = sortedDescriptions[i];
       }
+      level_data.drawn_objects_count = 0;
   }
 
   /** @func restartLevel
@@ -1426,6 +1433,11 @@ var Game = (function(){
       return (new Date().getTime() - level_data.start_time)/1000;
   }
 
+  function getDrawnObjectsCount()
+  {
+      return level_data.drawn_objects_count;
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -1440,5 +1452,6 @@ var Game = (function(){
             adjustToViewPort : adjustToViewPort,
             getCamera        : getCamera,
             getTime          : getTime,
-            setFonts         : setFonts };
+            setFonts         : setFonts,
+            getDrawnObjectsCount : getDrawnObjectsCount };
 })();
