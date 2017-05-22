@@ -103,10 +103,6 @@ var Game = (function(){
       }
 
       hudTimerText = document.querySelector("#hud-timer-text");
-
-      Physics.on("AddBody", function(){
-          level_data.drawn_objects_count++;
-      });
   }
 
   /** @func restartEngine
@@ -1258,6 +1254,9 @@ var Game = (function(){
           starElems[i].dataset.desc = sortedDescriptions[i];
       }
       level_data.drawn_objects_count = 0;
+      Physics.on("AddBody", function(){
+          level_data.drawn_objects_count++;
+      });
   }
 
   /** @func restartLevel
