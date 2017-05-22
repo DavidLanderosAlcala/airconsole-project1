@@ -1,7 +1,7 @@
 LevelManager.getLevels().push({
     title: 'El tunel',
-    descriptions: ["Lleva la pelota a la bandera", "Utilizando solo 1 dibujo", "En menos de 40 segundos"],
-    show_timer: false,
+    descriptions: ["Lleva la pelota a la bandera", "Utilizando solo 1 dibujo", "En menos de 20 segundos"],
+    show_timer: true,
     bodies: [{
         "label": "ball",
         "type": "circle",
@@ -72,6 +72,9 @@ LevelManager.getLevels().push({
             ctx.statuscode = FIRST_STAR;
             if (ctx.bodiesCount == 1) {
                 ctx.statuscode |= SECOND_STAR;
+            }
+            if (Game.getTime() < 20) {
+                ctx.statuscode |= THIRD_STAR;
             }
         });
     },
