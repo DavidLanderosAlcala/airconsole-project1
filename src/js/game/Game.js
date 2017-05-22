@@ -1254,7 +1254,7 @@ var Game = (function(){
           starElems[i].dataset.desc = sortedDescriptions[i];
       }
       level_data.drawn_objects_count = 0;
-      Physics.on("AddBody", function(){
+      Physics.on("addBody", function(){
           level_data.drawn_objects_count++;
       });
   }
