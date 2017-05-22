@@ -4,7 +4,7 @@ Los niveles se programan mediante 2 funciones vitales:
  + setup
    - Se ejecuta solo una vez al iniciar el nivel
    - No tiene valor de retorno
-  - recibe un objeto "contexto" como unico parametro
+   - recibe un objeto "contexto" como unico parametro
  + update
    - Se ejecuta "infinitamente" por frame hasta que el nivel se termina
    - su valor de retorno es un bitflag de 3 bits que representan las 3 estrellas
