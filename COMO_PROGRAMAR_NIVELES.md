@@ -10,7 +10,7 @@ Los niveles se programan mediante 2 funciones vitales:
    - su valor de retorno es un bitflag de 3 bits que representan las 3 estrellas
    - recibe un objeto "contexto" como unico parametro
 
-###### Cuando se termina el nivel ?
+##### Cuando se termina el nivel ?
 cuando la funcion update retorna algo distinto de 0 (es decir al menos 1 de 3 bits prendidos)
 y obviamente las estrellas ganadas son aquellas cuyo bit esta prendido.
 
