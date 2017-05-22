@@ -1,14 +1,14 @@
 ### Como programar niveles ( from zero to hero )
 
 Los niveles se programan mediante 2 funciones vitales:
- + setup (ctx)
-  - Se ejecuta solo una vez al iniciar el nivel
-  - No tiene valor de retorno
+ + setup
+   - Se ejecuta solo una vez al iniciar el nivel
+   - No tiene valor de retorno
   - recibe un objeto "contexto" como unico parametro
- + update (ctx)
-  - Se ejecuta "infinitamente" por frame hasta que el nivel se termina
-  - su valor de retorno es un bitflag de 3 bits que representan las 3 estrellas
-  - recibe un objeto "contexto" como unico parametro
+ + update
+   - Se ejecuta "infinitamente" por frame hasta que el nivel se termina
+   - su valor de retorno es un bitflag de 3 bits que representan las 3 estrellas
+   - recibe un objeto "contexto" como unico parametro
 
 ###### Cuando se termina el nivel ?
 cuando la funcion update retorna algo distinto de 0 (es decir al menos 1 de 3 bits prendidos)
