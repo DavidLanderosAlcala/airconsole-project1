@@ -1246,9 +1246,9 @@ var Game = (function(){
       var starElems = document.querySelectorAll(".hud-star-icon");
       var sortedDescriptions = LevelManager.getEarnedStarsDesc(level_index)
                                .concat(LevelManager.getMissingStarsDesc(level_index));
-      for(var i = 0; i < starElems.length; i++)
+      for(var i = starElems.length-1; i >=0; i--)
       {
-          starElems[i].dataset.filled = i < earnedStarts ? "true" : "false";
+          starElems[i].dataset.filled = (earnedStarts--) > 0 ? "true" : "false";
           starElems[i].dataset.desc = sortedDescriptions[i];
       }
   }
