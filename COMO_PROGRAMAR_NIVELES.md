@@ -1,11 +1,11 @@
-###### Como programar niveles ( from zero to hero )
+### Como programar niveles ( from zero to hero )
 
-Los niveles se constituyen de 2 funciones vitales:
- - setup (ctx)
+Los niveles se programan mediante 2 funciones vitales:
+ + setup (ctx)
   - Se ejecuta solo una vez al iniciar el nivel
   - No tiene valor de retorno
   - recibe un objeto "contexto" como unico parametro
- - update (ctx)
+ + update (ctx)
   - Se ejecuta "infinitamente" por frame hasta que el nivel se termina
   - su valor de retorno es un bitflag de 3 bits que representan las 3 estrellas
   - recibe un objeto "contexto" como unico parametro
@@ -64,18 +64,20 @@ En el juego hay 2 emisores de eventos que se pueden utilizar en la programacion 
 
 Los eventos que emiten son:
 
- - Game
-  - addTack (cuando el jugador agrega una tachuela)
-  - connectTack (cuando el jugador dibuja un objeto sobre una tachuela)
-  - removeTack (cuando el jugador borra una tachuela)
-
-- Physics
-  - addBody (cuando el jugador agrega un dibujo)
-  - removeBody (cuando el jugador borra un dibujo)
-  - beginContact (cuando ocurre un contacto entre 2 objetos)
-  - endContact (cuando termina un contacto entre 2 objetos)
-  - beginContactBetween (cuando ocurre un contacto entre 2 objetos espesificos)
-  - endContactBetween (cuando termina un contacto entre 2 objetos espesificos)
+| Eventos de Game    |  Desc.                                                   |
+|--------------------|:--------------------------------------------------------:|
+| addTack            |  cuando el jugador agrega una tachuela                   |
+| connectTack        |  cuando el jugador dibuja un objeto sobre una tachuela   |
+| removeTack         |  cuando el jugador borra una tachuela                    |
+  
+| Eventos de Physics  |  Desc.                                                   |
+|---------------------|:--------------------------------------------------------:|
+| addBody             |  cuando el jugador agrega un dibujo                      |
+| removeBody          |  cuando el jugador borra un dibujo                       |
+| beginContact        |  cuando ocurre un contacto entre 2 objetos               |
+| endContact          |  cuando termina un contacto entre 2 objetos              |
+| beginContactBetween |  cuando ocurre un contacto entre 2 objetos espesificos   |
+| endContactBetween   |  cuando termina un contacto entre 2 objetos espesificos  |
 
 ##### Ejemplos
 
@@ -83,8 +85,10 @@ Los eventos que emiten son:
 
 ```javascript
 function setup(ctx) {
+
    ctx.haBorrado = false;
    ctx.bitflag = 0;
+   
    Phy.on("removeBody", function(){
        ctx.haBorrado = true;
    });
