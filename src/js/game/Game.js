@@ -1421,6 +1421,11 @@ var Game = (function(){
       return minutes + ":" + seconds;
   }
 
+  function getTime()
+  {
+      return (new Date().getTime() - level_data.start_time)/1000;
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -1434,5 +1439,6 @@ var Game = (function(){
             on            : on,
             adjustToViewPort : adjustToViewPort,
             getCamera        : getCamera,
+            getTime          : getTime,
             setFonts         : setFonts };
 })();
