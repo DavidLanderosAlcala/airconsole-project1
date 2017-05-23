@@ -110,9 +110,9 @@
 
             .level-star[data-filled="true"]
             {
-            	background-image: url("../res/img/filled-star2.png");
+            	background-image: url("../res/img/filled-star3.png");
             }
             .level-star[data-filled="false"]
             {
-            	background-image: url("../res/img/empty-star2.png");
+            	background-image: url("../res/img/empty-star3.png");
             }

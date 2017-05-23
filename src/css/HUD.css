@@ -100,12 +100,12 @@
 
 .hud-star-icon
 {
-	background-image: url("../res/img/empty-star2.png");	
+	background-image: url("../res/img/empty-star3.png");	
 }
 
 .hud-star-icon[data-filled="true"]
 {
-	background-image: url("../res/img/filled-star2.png");
+	background-image: url("../res/img/filled-star3.png");
 }
 
 #hud-timer-icon
