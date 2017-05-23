@@ -8,7 +8,7 @@ LevelManager.getLevels().push({
         "position": [-5.29, 5.339999999999999],
         "isStatic": false,
         "isSensor": false,
-        "respawn": false,
+        "respawn": true,
         "radio": 0.4259259259259261
     }, {
         "label": "ball2",
@@ -16,7 +16,7 @@ LevelManager.getLevels().push({
         "position": [5.41, 5.209999999999999],
         "isStatic": false,
         "isSensor": false,
-        "respawn": false,
+        "respawn": true,
         "radio": 0.4259259259259261
     }, {
         "label": "untitled-shape",
