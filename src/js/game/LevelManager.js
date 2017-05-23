@@ -216,6 +216,11 @@ var LevelManager = (function(){
         return res;
     }
 
+    function getLevelStars(level_index)
+    {
+        return levelMetadata[level_index].stars;
+    }
+
     return { init        : init,
              getLevels   : getLevels,
              show        : show,
@@ -226,6 +231,7 @@ var LevelManager = (function(){
              save        : save,
              loadSave    : loadSave,
              updateLevelStars : updateLevelStars,
+             getLevelStars : getLevelStars,
              unlockLevel : unlockLevel,
              getEarnedStarsCount : getEarnedStarsCount,
              getEarnedStarsDesc  : getEarnedStarsDesc,

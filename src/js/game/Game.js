@@ -107,9 +107,7 @@ var Game = (function(){
 
   function showTooltip(star_index)
   {
-     var sortedDescriptions = LevelManager.getEarnedStarsDesc(level_data.id)
-                              .concat(LevelManager.getMissingStarsDesc(level_data.id));
-     document.querySelector("#tooltip").innerHTML = sortedDescriptions[star_index];
+     document.querySelector("#tooltip").innerHTML = level_data.descriptions[star_index];
   }
 
   function hideTooltip()
@@ -204,11 +202,11 @@ var Game = (function(){
     */
   function render()
   {
-  	  if(skipFrames)
-  	  {
-  	  	  shouldSkipCurrentFrame = !shouldSkipCurrentFrame;
-  	  	  if(shouldSkipCurrentFrame) return;
-  	  }
+  	  // if(skipFrames)
+  	  // {
+  	  // 	  shouldSkipCurrentFrame = !shouldSkipCurrentFrame;
+  	  // 	  if(shouldSkipCurrentFrame) return;
+  	  // }
       context.lineWidth = 0.09 * Physics.getScale();
 
       /* Clearing the screen */
@@ -1256,12 +1254,13 @@ var Game = (function(){
           document.querySelector("#hud-timer-icon").style.opacity = 0;
       }
 
-      var earnedStarts = LevelManager.getEarnedStarsCount(level_index);
+      var bitflag = LevelManager.getLevelStars(level_index);
       var starElems = document.querySelectorAll(".hud-star-icon");
-      for(var i = starElems.length-1; i >=0; i--)
-      {
-          starElems[i].dataset.filled = (earnedStarts--) > 0 ? "true" : "false";
-      }
+
+      starElems[0].dataset.filled = (bitflag & THIRD_STAR) ? "true" : "false";
+      starElems[1].dataset.filled = (bitflag & SECOND_STAR) ? "true" : "false";
+      starElems[2].dataset.filled = (bitflag & FIRST_STAR) ? "true" : "false";
+
       level_data.drawn_objects_count = 0;
       Physics.on("addBody", function(){
           level_data.drawn_objects_count++;
