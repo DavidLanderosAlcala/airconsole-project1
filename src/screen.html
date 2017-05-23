@@ -12,6 +12,9 @@
     <div class="main_container" >
       <canvas id="main_canvas"> </canvas>
       <canvas id="dirty_layer"> </canvas>
+      <div id="tooltip">
+          
+      </div>
       <div id="hud-bar">
         <div class="hud-bar-group">
           <div class="hud-item"  id="hud-home-button" onclick="LevelManager.show();"></div>
@@ -20,9 +23,9 @@
         <div class="hud-bar-group">
           <div class="hud-item" id="hud-help-button" ></div>
           <div class="hud-item"></div>
-          <div class="hud-item hud-star-icon" data-filled="false"></div>
-          <div class="hud-item hud-star-icon" data-filled="false"></div>
-          <div class="hud-item hud-star-icon" data-filled="false"></div>
+          <div class="hud-item hud-star-icon" data-filled="false" onmouseover="Game.showTooltip(2);" onmouseleave="Game.hideTooltip();"></div>
+          <div class="hud-item hud-star-icon" data-filled="false" onmouseover="Game.showTooltip(1);" onmouseleave="Game.hideTooltip();"></div>
+          <div class="hud-item hud-star-icon" data-filled="false" onmouseover="Game.showTooltip(0);" onmouseleave="Game.hideTooltip();"></div>
           <div class="hud-item"></div>
           <div class="hud-item"></div>
           <div class="hud-item hud-noscale" id="hud-timer-text" style="opacity:0">05:56</div>

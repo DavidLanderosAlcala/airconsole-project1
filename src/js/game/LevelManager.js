@@ -207,9 +207,12 @@ var LevelManager = (function(){
         var res = [];
         var bitFlag = levelMetadata[level_index].stars;
         var descriptions = levels[level_index].descriptions;
-        if(bitFlag & (1<<0) == 0) res.push(descriptions[0]);
-        if(bitFlag & (1<<1) == 0) res.push(descriptions[1]);
-        if(bitFlag & (1<<2) == 0) res.push(descriptions[2]);
+        if((bitFlag & (1<<0)) === 0)
+            res.push(descriptions[0]);
+        if((bitFlag & (1<<1)) === 0)
+            res.push(descriptions[1]);
+        if((bitFlag & (1<<2)) === 0)
+            res.push(descriptions[2]);
         return res;
     }
 

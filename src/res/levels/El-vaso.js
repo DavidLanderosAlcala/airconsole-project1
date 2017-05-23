@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
     title: 'El vaso',
-    descriptions: ["Saca la pelota del vaso", "Utilizando solo 1 dibujo", "En menos de 60 segundos"],
+    descriptions: ["Saca la pelota del vaso", "Sin borrar ninguna pieza", "En menos de 60 segundos"],
     show_timer: true,
     bodies: [{
         "label": "ball",

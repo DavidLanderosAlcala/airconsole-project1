@@ -105,6 +105,18 @@ var Game = (function(){
       hudTimerText = document.querySelector("#hud-timer-text");
   }
 
+  function showTooltip(star_index)
+  {
+     var sortedDescriptions = LevelManager.getEarnedStarsDesc(level_data.id)
+                              .concat(LevelManager.getMissingStarsDesc(level_data.id));
+     document.querySelector("#tooltip").innerHTML = sortedDescriptions[star_index];
+  }
+
+  function hideTooltip()
+  {
+      document.querySelector("#tooltip").innerHTML = "";
+  }
+
   /** @func restartEngine
     * @desc Destroys everything and clears the blackboard
     */
@@ -1246,12 +1258,9 @@ var Game = (function(){
 
       var earnedStarts = LevelManager.getEarnedStarsCount(level_index);
       var starElems = document.querySelectorAll(".hud-star-icon");
-      var sortedDescriptions = LevelManager.getEarnedStarsDesc(level_index)
-                               .concat(LevelManager.getMissingStarsDesc(level_index));
       for(var i = starElems.length-1; i >=0; i--)
       {
           starElems[i].dataset.filled = (earnedStarts--) > 0 ? "true" : "false";
-          starElems[i].dataset.desc = sortedDescriptions[i];
       }
       level_data.drawn_objects_count = 0;
       Physics.on("addBody", function(){
@@ -1452,5 +1461,7 @@ var Game = (function(){
             getCamera        : getCamera,
             getTime          : getTime,
             setFonts         : setFonts,
-            getDrawnObjectsCount : getDrawnObjectsCount };
+            getDrawnObjectsCount : getDrawnObjectsCount,
+            showTooltip          : showTooltip,
+            hideTooltip          : hideTooltip, };
 })();
