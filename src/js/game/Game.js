@@ -165,8 +165,10 @@ var Game = (function(){
           }
       }
       render();
-      if(level_data.earned_stars == 0)
+      if(level_data.earned_stars == 0 && getDrawnObjectsCount() > 0)
+      {
           hudTimerText.innerHTML = getElapsedTime_str();
+      }
       window.requestAnimationFrame(update);
   }
 
@@ -1262,8 +1264,15 @@ var Game = (function(){
       starElems[2].dataset.filled = (bitflag & FIRST_STAR) ? "true" : "false";
 
       level_data.drawn_objects_count = 0;
+      hudTimerText.innerHTML = "00:00";
+      document.querySelector(".hud-timer-hand").dataset.rotate = "false";
       Physics.on("addBody", function(){
           level_data.drawn_objects_count++;
+          if(level_data.drawn_objects_count == 1)
+          {
+              level_data.start_time = new Date().getTime();
+              document.querySelector(".hud-timer-hand").dataset.rotate = "true";
+          }
       });
   }
 
