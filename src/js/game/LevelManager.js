@@ -181,6 +181,14 @@ var LevelManager = (function(){
         }
     }
 
+    function unlockAllLevels()
+    {
+        for(var i = 0; i < levels.length; i++)
+        {
+            unlockLevel(i);
+        }
+    }
+
     function getEarnedStarsCount(level_index)
     {
         var count = 0;
@@ -235,5 +243,6 @@ var LevelManager = (function(){
              unlockLevel : unlockLevel,
              getEarnedStarsCount : getEarnedStarsCount,
              getEarnedStarsDesc  : getEarnedStarsDesc,
-             getMissingStarsDesc : getMissingStarsDesc };
+             getMissingStarsDesc : getMissingStarsDesc,
+             unlockAllLevels     : unlockAllLevels };
 })();
