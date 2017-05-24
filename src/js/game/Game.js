@@ -161,6 +161,7 @@ var Game = (function(){
               LevelManager.unlockLevel(level_data.id + 1);
               setTimeout(function(){
                 LevelCompleteScreen.showScreen(LevelManager.getEarnedStarsCount(level_data.id));
+                document.querySelector(".hud-timer-hand").dataset.rotate = "false";
               }, 800);
           }
       }
