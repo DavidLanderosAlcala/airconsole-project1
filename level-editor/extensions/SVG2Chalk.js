@@ -285,7 +285,18 @@ var SVG2Chalk = (function(){
                 return;
             }
         }
-        array.push(item);
+        // calculamos la distancia entre le ultimo punto y el nuevo.
+        if(array.length == 0)
+        {
+            array.push(item);
+        }
+        else
+        {
+            var x = array[array.length-1][0] - item[0];
+            var y = array[array.length-1][1] - item[1];
+            if( Math.sqrt(x*x + y*y) > 0.1 )
+                array.push(item);
+        }
     }
 
     function replaceAll(str, find, replace)
@@ -321,7 +332,10 @@ var SVG2Chalk = (function(){
             y = scaleIt(svgDAttribute[i + 1]);
             insert(poly, [ x , y ]);
         }
-
+        console.log("Polygono antes de la compresion:");
+        console.log(poly);
+        console.log("Polygono despues de la compresion:");
+        decomp.removeCollinearPoints(poly, 0.25);
         console.log(poly);
         return poly;
     }
