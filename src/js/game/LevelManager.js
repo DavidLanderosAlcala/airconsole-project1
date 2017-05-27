@@ -163,7 +163,7 @@ var LevelManager = (function(){
     {
         for(var i = 0; i < levelMetadata.length; i++)
         {
-            if(levelMetadata[i].stars < 3)
+            if(levelMetadata[i].stars != 7)
             {
                 return;
             }
