@@ -75,11 +75,12 @@ Los eventos que emiten son:
 | addTack            |  cuando el jugador agrega una tachuela                   |
 | connectTack        |  cuando el jugador dibuja un objeto sobre una tachuela   |
 | removeTack         |  cuando el jugador borra una tachuela                    |
-  
+| deleteDrawing      |  cuando el jugador borra un dibujo propio                |
+
 | Eventos de Physics  |  Desc.                                                   |
 |---------------------|:--------------------------------------------------------:|
-| addBody             |  cuando el jugador agrega un dibujo                      |
-| removeBody          |  cuando el jugador borra un dibujo                       |
+| addBody             |  cuando se agrega un dibujo al mundo                     |
+| removeBody          |  cuando se remueve un dibujo del mundo                   |
 | beginContact        |  cuando ocurre un contacto entre 2 objetos               |
 | endContact          |  cuando termina un contacto entre 2 objetos              |
 | beginContactBetween |  cuando ocurre un contacto entre 2 objetos espesificos   |
@@ -94,7 +95,7 @@ function setup(ctx) {
 
    ctx.haBorrado = false;
    ctx.bitflag = 0;
-   
+
    Phy.on("removeBody", function(){
        ctx.haBorrado = true;
    });
