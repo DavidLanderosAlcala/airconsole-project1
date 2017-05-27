@@ -934,6 +934,7 @@ var Game = (function(){
           else
           {
               removeBody(_bodies[i]);
+              onDrawingDeleted();
           }
           break;
       }
@@ -1371,6 +1372,18 @@ var Game = (function(){
   function onTackAdded()
   {
       var callbacks = listeners["addTack"];
+      if(callbacks)
+      {
+          for(var i = 0; i < callbacks.length; i++)
+          {
+               callbacks[i]();
+          }
+      }
+  }
+
+  function onDrawingDeleted()
+  {
+      var callbacks = listeners["deleteDrawing"];
       if(callbacks)
       {
           for(var i = 0; i < callbacks.length; i++)
