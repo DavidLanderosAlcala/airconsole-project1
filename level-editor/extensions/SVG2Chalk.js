@@ -294,7 +294,7 @@ var SVG2Chalk = (function(){
         {
             var x = array[array.length-1][0] - item[0];
             var y = array[array.length-1][1] - item[1];
-            if( Math.sqrt(x*x + y*y) > 0.1 )
+            if( Math.sqrt(x*x + y*y) > 0.05 )
                 array.push(item);
         }
     }
