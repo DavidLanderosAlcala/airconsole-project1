@@ -107,12 +107,16 @@ var Game = (function(){
 
   function showTooltip(star_index)
   {
-     document.querySelector("#tooltip").innerHTML = level_data.descriptions[star_index];
+     var tt = document.querySelector("#tooltip");
+     tt.innerHTML = level_data.descriptions[star_index];
+     tt.style.zIndex = 10;
   }
 
   function hideTooltip()
   {
-      document.querySelector("#tooltip").innerHTML = "";
+     var tt = document.querySelector("#tooltip");
+     tt.innerHTML = "";
+     tt.style.zIndex = -10;
   }
 
   /** @func restartEngine
