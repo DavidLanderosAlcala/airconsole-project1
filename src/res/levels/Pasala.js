@@ -1,9 +1,9 @@
 LevelManager.getLevels().push({
     title: 'Pasala',
-    descriptions: ["Dummy description 1", "Dummy description 2", "Dummy description 3"],
+    descriptions: ["vacia las pelotas de un vaso al otro", "No permitas que el vaso izquierdo se caiga", "Las 3 pelotas deben llegar al vaso derecho"],
     show_timer: false,
     bodies: [{
-        "label": "untitled-shape",
+        "label": "ball3",
         "type": "circle",
         "position": [-6.18, 7.249999999999999],
         "isStatic": false,
@@ -11,7 +11,7 @@ LevelManager.getLevels().push({
         "respawn": false,
         "radio": 0.21538469628331483
     }, {
-        "label": "untitled-shape",
+        "label": "ball2",
         "type": "circle",
         "position": [-6.029999999999999, 7.819999999999999],
         "isStatic": false,
@@ -19,7 +19,7 @@ LevelManager.getLevels().push({
         "respawn": false,
         "radio": 0.21538469628331483
     }, {
-        "label": "untitled-shape",
+        "label": "ball1",
         "type": "circle",
         "position": [-6.109999999999999, 8.45],
         "isStatic": false,
@@ -53,7 +53,7 @@ LevelManager.getLevels().push({
             [6.34615716165251, 3.903075685501097]
         ]
     }, {
-        "label": "glass",
+        "label": "glass1",
         "type": "polygon",
         "position": [0, 0],
         "isStatic": false,
@@ -70,7 +70,7 @@ LevelManager.getLevels().push({
             [-6.499122844703972, 7.190938278744521]
         ]
     }, {
-        "label": "glass",
+        "label": "glass2",
         "type": "polygon",
         "position": [0, 0],
         "isStatic": false,
@@ -99,16 +99,69 @@ LevelManager.getLevels().push({
             [0.9923087310791026, -0.22000223636627325],
             [0.17692382812500007, -0.22000223636627325]
         ]
+    }, {
+        "label": "sensor",
+        "type": "polygon",
+        "position": [0, 0],
+        "isStatic": true,
+        "isSensor": true,
+        "respawn": false,
+        "vertices": [
+            [6.882663762491777, 6.785976312857971],
+            [7.913088789617021, 6.9707480274326405],
+            [8.198108566265674, 5.381264963098502],
+            [7.167683539140427, 5.196493248523833]
+        ]
     }],
     tacks: [],
     hints: [],
     decorations: [],
     setup: function(ctx) {
-        /* your code goes here */
-        ctx.statuscode = 0;
+
+        const BALL1 = (1 << 0);
+        const BALL2 = (1 << 1);
+        const BALL3 = (1 << 2);
+
+        ctx.glass1 = Phy.getBodyByLabel("glass1");
+        ctx.glass2 = Phy.getBodyByLabel("glass2");
+        ctx.sensor = Phy.getBodyByLabel("sensor");
+
+        ctx.ballsbitflag = 0;
+        ctx.balltime = 0;
+        ctx.glass1IsStillAlive = true;
+
+        Phy.on("beginContactBetween", "sensor", "ball1", function() {
+            ctx.ballsbitflag |= BALL1;
+            ctx.balltime = Game.getTime();
+        });
+        Phy.on("beginContactBetween", "sensor", "ball2", function() {
+            ctx.ballsbitflag |= BALL2;
+            ctx.balltime = Game.getTime();
+        });
+        Phy.on("beginContactBetween", "sensor", "ball3", function() {
+            ctx.ballsbitflag |= BALL3;
+            ctx.balltime = Game.getTime();
+        });
+
+        ctx.bitflag = 0;
     },
     update: function(ctx) {
-        /* your code goes here */
-        return ctx.statuscode;
+
+        if (ctx.ballsbitflag !== 0) {
+            if ((Game.getTime() - ctx.balltime) > 2) {
+                ctx.bitflag = FIRST_STAR;
+
+                if (Phy.getPosition(ctx.glass1)[1] <= 0)
+                    ctx.bitflag |= SECOND_STAR;
+
+                if (ctx.ballsbitflag == 7)
+                    ctx.bitflag |= THIRD_STAR;
+            }
+        }
+
+        Phy.setPosition(ctx.sensor, Phy.getPosition(ctx.glass2));
+        Phy.setAngle(ctx.sensor, Phy.getAngle(ctx.glass2));
+
+        return ctx.bitflag;
     },
 });
