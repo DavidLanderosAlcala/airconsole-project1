@@ -30,7 +30,7 @@ var Game = (function(){
           runInTesterMode = true;
           var encodedLvl = window.location.href.split("#")[1];
           var decodedLvl = atob(encodedLvl);
-          eval(decodedLevel);
+          eval(decodedLvl);
       }
 
       DirtyLayer.init();
