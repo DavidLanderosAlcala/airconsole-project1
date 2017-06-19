@@ -1266,6 +1266,7 @@ var Game = (function(){
       hudTimerTextElem.innerHTML = "00:00";
       document.querySelector(".hud-timer-hand").dataset.rotate = "false";
       Physics.on("addBody", function(){
+          ChalkProgressBar.setValue(0.8);
           levelData.drawnObjectsCount++;
           if(levelData.drawnObjectsCount == 1)
           {
@@ -1273,6 +1274,7 @@ var Game = (function(){
               document.querySelector(".hud-timer-hand").dataset.rotate = "true";
           }
       });
+      ChalkProgressBar.setValue(1.0);
   }
 
   /** @func restartLevel

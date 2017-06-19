@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="./css/LevelCompletedScreen.css">
     <link rel="stylesheet" href="./css/AchievementManager.css">
     <link rel="stylesheet" href="./css/HUD.css">
+    <link rel="stylesheet" href="./css/ChalkProgressBar.css">
     <title>Screen</title>
   </head>
   <body>
@@ -17,6 +18,11 @@
         <div class="hud-bar-group">
           <div class="hud-item"  id="hud-home-button" onclick="LevelManager.show();"></div>
           <div class="hud-item"  id="hud-restart-button" onclick="Game.restartLevel();"></div>
+
+          <div class="hud-item hud-noscale chalk-progressbar" id="chalk-progressbar-border">
+              <div class="chalk-progressbar" id="chalk-progressbar"></div>
+          </div>
+
         </div>
         <div class="hud-bar-group">
           <div class="hud-item" id="hud-help-button" ></div>
@@ -91,6 +97,7 @@
     <script src="./js/Screen.js"></script>
     <script src="./js/game/LevelCompletedScreen.js"></script>
     <script src="./js/game/AchievementManager.js"></script>
+    <script src="./js/game/ChalkProgressBar.js"></script>
     <script>
       Screen.init();
     </script>
