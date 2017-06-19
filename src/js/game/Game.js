@@ -1,6 +1,4 @@
 
-var skipFrames = false;
-var shouldSkipCurrentFrame = false;
 
 /**
   * @module Game
@@ -10,16 +8,16 @@ var Game = (function(){
   var camera = [0,0];
   var canvas;
   var context;
-  var canvas_rect;
+  var canvasRect;
   var objects;
-  var drawing_data;
-  var level_data;
+  var drawingData;
+  var levelData;
   var listeners = [];
   var chainIdCount = 0;
   var collisionGroupCount = 1;
   var tackFrameCount = 0;
   var candidateTacksForNewWire = [];
-  var hudTimerText = null;
+  var hudTimerTextElem = null;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -30,9 +28,9 @@ var Game = (function(){
       if(window.location.href.indexOf("#") > 0)
       {
           runInTesterMode = true;
-          var encoded_level = window.location.href.split("#")[1];
-          var decoded_leve = atob(encoded_level);
-          eval(decoded_leve);
+          var encodedLvl = window.location.href.split("#")[1];
+          var decodedLvl = atob(encodedLvl);
+          eval(decodedLvl);
       }
 
       DirtyLayer.init();
@@ -47,37 +45,37 @@ var Game = (function(){
           chains : [],
       };
 
-      level_data = {
+      levelData = {
           id          : 0,
-          earned_stars : 0,
-          update_fnc  : null,
-          setup_fnc   : null,
+          earnedStars : 0,
+          updateFnc  : null,
+          setupFnc   : null,
           title       : "",
           description : "",
           context     : { },
           hints       : [],
-          start_time  : 0,
-          respawnable_bodies : [],
+          startTime  : 0,
+          respawnableBodies : [],
           spawners    : [],
-          drawn_objects_count : 0,
+          drawnObjectsCount : 0,
       };
 
-      drawing_data = {
-          current_polygon     : [],
-          current_color_index : -1,
-          is_linto_locked     : false,
-          candidate_tack_index_A : 0,
-          candidate_tack_index_B : 0,
+      drawingData = {
+          currentPolygon     : [],
+          currentColorIndex : -1,
+          isLineToLocked     : false,
+          candidateTackIndexA : 0,
+          candidateTackIndexB : 0,
           clear : function() {
-              drawing_data.current_polygon = [];
-              drawing_data.current_color_index = -1;
-              drawing_data.is_linto_locked = false;
-              drawing_data.candidate_tack_index_A = 0;
-              drawing_data.candidate_tack_index_B = 0;
+              drawingData.currentPolygon = [];
+              drawingData.currentColorIndex = -1;
+              drawingData.isLineToLocked = false;
+              drawingData.candidateTackIndexA = 0;
+              drawingData.candidateTackIndexB = 0;
           }
       };
 
-      canvas_rect = canvas.getBoundingClientRect();
+      canvasRect = canvas.getBoundingClientRect();
       context = canvas.getContext("2d");
       ColorManager.init(context);
       PlayerCursor.init({ canvas : canvas, context : context });
@@ -102,17 +100,21 @@ var Game = (function(){
           LevelManager.show();
       }
 
-      hudTimerText = document.querySelector("#hud-timer-text");
+      hudTimerTextElem = document.querySelector("#hud-timer-text");
   }
 
   function showTooltip(star_index)
   {
-     document.querySelector("#tooltip").innerHTML = level_data.descriptions[star_index];
+     var tt = document.querySelector("#tooltip");
+     tt.innerHTML = levelData.descriptions[star_index];
+     tt.style.zIndex = 10;
   }
 
   function hideTooltip()
   {
-      document.querySelector("#tooltip").innerHTML = "";
+     var tt = document.querySelector("#tooltip");
+     tt.innerHTML = "";
+     tt.style.zIndex = -10;
   }
 
   /** @func restartEngine
@@ -123,7 +125,7 @@ var Game = (function(){
       // remove all objects.shapes
       Physics.clear();
       DirtyLayer.clear();
-      drawing_data.clear();
+      drawingData.clear();
 
       listeners = [];
 
@@ -135,10 +137,10 @@ var Game = (function(){
       tackIdCount = 0;
       collisionGroupCount = 0;
 
-      level_data.hints = [];
-      level_data.respawnable_bodies = [];
-      level_data.spawners = [];
-      level_data.drawn_objects_count = 0;
+      levelData.hints = [];
+      levelData.respawnableBodies = [];
+      levelData.spawners = [];
+      levelData.drawnObjectsCount = 0;
 
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -151,26 +153,24 @@ var Game = (function(){
   {
       preprocessBodies();
       Physics.update();
-      if(level_data.earned_stars == 0 && level_data.update_fnc != null)
+      if(levelData.earnedStars == 0 && levelData.updateFnc != null)
       {
-          level_data.earned_stars = level_data.update_fnc(level_data.context);
+          levelData.earnedStars = levelData.updateFnc(levelData.context);
 
-          if(level_data.earned_stars > 0)
+          if(levelData.earnedStars > 0)
           {
-              LevelManager.updateLevelStars(level_data.id, level_data.earned_stars);
-              LevelManager.unlockLevel(level_data.id + 1);
+              LevelManager.updateLevelStars(levelData.id, levelData.earnedStars);
+              LevelManager.unlockLevel(levelData.id + 1);
               setTimeout(function(){
-                LevelCompleteScreen.showScreen(LevelManager.getEarnedStarsCount(level_data.id));
+                LevelCompleteScreen.showScreen(LevelManager.getEarnedStarsCount(levelData.id));
+                document.querySelector(".hud-timer-hand").dataset.rotate = "false";
               }, 800);
           }
       }
       render();
-      if(level_data.earned_stars == 0 && Game.getDrawnObjectsCount() > 0)
-          hudTimerText.innerHTML = getElapsedTime_str();
-      else
+      if(levelData.earnedStars == 0 && getDrawnObjectsCount() > 0)
       {
-          level_data.start_time = new Date().getTime();
-          hudTimerText.innerHTML = "00:00";
+          hudTimerTextElem.innerHTML = getElapsedTime_str();
       }
       window.requestAnimationFrame(update);
   }
@@ -184,12 +184,12 @@ var Game = (function(){
       var bodies = Physics.getAllBodies();
       var i;
 
-      for(i = 0; i < level_data.respawnable_bodies.length; i++)
+      for(i = 0; i < levelData.respawnableBodies.length; i++)
       {
-          if(Physics.getPosition(level_data.respawnable_bodies[i])[1] > 100)
+          if(Physics.getPosition(levelData.respawnableBodies[i])[1] > 100)
           {
-              Physics.setPosition(level_data.respawnable_bodies[i], level_data.spawners[i]);
-              Physics.clearForces(level_data.respawnable_bodies[i]);
+              Physics.setPosition(levelData.respawnableBodies[i], levelData.spawners[i]);
+              Physics.clearForces(levelData.respawnableBodies[i]);
           }
       }
 
@@ -207,11 +207,6 @@ var Game = (function(){
     */
   function render()
   {
-  	  // if(skipFrames)
-  	  // {
-  	  // 	  shouldSkipCurrentFrame = !shouldSkipCurrentFrame;
-  	  // 	  if(shouldSkipCurrentFrame) return;
-  	  // }
       context.lineWidth = 0.09 * Physics.getScale();
 
       /* Clearing the screen */
@@ -221,14 +216,14 @@ var Game = (function(){
 
       /* Drawing the current polygon */
       context.save();
-      if(drawing_data.current_polygon.length > 1)
+      if(drawingData.currentPolygon.length > 1)
       {
-          context.strokeStyle = ColorManager.getColorAt(drawing_data.current_color_index);
+          context.strokeStyle = ColorManager.getColorAt(drawingData.currentColorIndex);
           context.beginPath();
-          context.moveTo(drawing_data.current_polygon[0][0], drawing_data.current_polygon[0][1]);
-          for(var i = 0; i < drawing_data.current_polygon.length; i++)
+          context.moveTo(drawingData.currentPolygon[0][0], drawingData.currentPolygon[0][1]);
+          for(var i = 0; i < drawingData.currentPolygon.length; i++)
           {
-              context.lineTo(drawing_data.current_polygon[i][0], drawing_data.current_polygon[i][1]);
+              context.lineTo(drawingData.currentPolygon[i][0], drawingData.currentPolygon[i][1]);
           }
           context.stroke();
       }
@@ -329,22 +324,22 @@ var Game = (function(){
       var segments = 0.25 * Physics.getScale();
       lineDash = [segments, segments];
 
-      var i, l = level_data.hints.length;
+      var i, l = levelData.hints.length;
       for(var i = 0; i < l; i++)
       {
           context.save();
-            context.translate(level_data.hints[i].position[0], level_data.hints[i].position[1]);
+            context.translate(levelData.hints[i].position[0], levelData.hints[i].position[1]);
             context.beginPath();
-            var j, l2 = level_data.hints[i].vertices.length;
+            var j, l2 = levelData.hints[i].vertices.length;
             if(l2 > 1)
             {
-                context.moveTo(level_data.hints[i].vertices[0][0], level_data.hints[i].vertices[0][1]);
+                context.moveTo(levelData.hints[i].vertices[0][0], levelData.hints[i].vertices[0][1]);
                 for(j = 0; j < l2; j++)
                 {
-                    context.lineTo(level_data.hints[i].vertices[j][0], level_data.hints[i].vertices[j][1]);
+                    context.lineTo(levelData.hints[i].vertices[j][0], levelData.hints[i].vertices[j][1]);
                 }
-                context.globalAlpha = level_data.hints[i].opacity;
-                if(level_data.hints[i].line == "dotted")
+                context.globalAlpha = levelData.hints[i].opacity;
+                if(levelData.hints[i].line == "dotted")
                     context.setLineDash(lineDash);
                 context.stroke();
             }
@@ -392,8 +387,8 @@ var Game = (function(){
   function onMouseMove(e)
   {
       var pos = new Float32Array(2);
-      pos[0] = e.clientX - canvas_rect.left;
-      pos[1] = e.clientY - canvas_rect.top;
+      pos[0] = e.clientX - canvasRect.left;
+      pos[1] = e.clientY - canvasRect.top;
       moveTo(pos);
   }
 
@@ -401,7 +396,7 @@ var Game = (function(){
   {
       if(e.type == "touchstart")
       {
-        drawing_data.clear();
+        drawingData.clear();
         skipFrames = true;
       }
       if(e.button == 2 && e.type == "touchstart")
@@ -426,15 +421,15 @@ var Game = (function(){
           {
               erease();
           }
-          if(PlayerCursor.getCurrentToolName() == "tack" || (drawing_data.current_polygon.length < 2))
+          if(PlayerCursor.getCurrentToolName() == "tack" || (drawingData.currentPolygon.length < 2))
           {
               if(e.button != 2)
               {
-                  if(!drawing_data.is_linto_locked)
+                  if(!drawingData.isLineToLocked)
                   {
                       tack();
                   }
-                  drawing_data.clear();
+                  drawingData.clear();
               }
           }
           else
@@ -462,29 +457,29 @@ var Game = (function(){
   {
       pos[0] += camera[0]
       pos[1] += camera[1];
-      if(drawing_data.is_linto_locked)
+      if(drawingData.isLineToLocked)
       {
           return;
       }
       if(PlayerCursor.getCurrentToolName() == "chalk")
       {
           var new_pos = pos.slice();
-          if(drawing_data.current_polygon.length > 0){
-            var old_pos = drawing_data.current_polygon[drawing_data.current_polygon.length - 1];
+          if(drawingData.currentPolygon.length > 0){
+            var old_pos = drawingData.currentPolygon[drawingData.currentPolygon.length - 1];
             var distance = Math.sqrt((new_pos[0] - old_pos[0]) * (new_pos[0] - old_pos[0]) + (new_pos[1] - old_pos[1]) * (new_pos[1] - old_pos[1]));
             if(distance < ConfigOptions.min_vertex_distance * Physics.getScale())
             {
               return; 
             }
           }
-          if(drawing_data.current_color_index == -1)
+          if(drawingData.currentColorIndex == -1)
           {
-            drawing_data.current_color_index = ColorManager.getRandomColorIndex();
+            drawingData.currentColorIndex = ColorManager.getRandomColorIndex();
           }     
-          drawing_data.current_polygon.push(new_pos);
+          drawingData.currentPolygon.push(new_pos);
 
           /* Fix for tacks-wire relation
-           *****************************************************************/
+           */
           var cur_pos = PlayerCursor.getPosition();
           var tack_index =  findTackAtPos(cur_pos, { filterConnectedTacks: true, returnIndex : true} );
           if(tack_index != undefined)
@@ -503,22 +498,22 @@ var Game = (function(){
                   candidateTacksForNewWire.push(tack_index);
               }
           }
-          /******************************************************************/
+          /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-          if(drawing_data.current_polygon.length > 20)
+          if(drawingData.currentPolygon.length > 20)
           {
-              var tail = drawing_data.current_polygon[drawing_data.current_polygon.length -1];
-              var head = drawing_data.current_polygon[0];
+              var tail = drawingData.currentPolygon[drawingData.currentPolygon.length -1];
+              var head = drawingData.currentPolygon[0];
               var vec = new Float32Array(2);
               vec[0] = tail[0] - head[0];
               vec[1] = tail[1] - head[1];
               distance = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
               if(distance < (Physics.getScale() * ConfigOptions.polygon_autoclose_distance))
               {
-                  if(decomp.isSimple(drawing_data.current_polygon))
+                  if(decomp.isSimple(drawingData.currentPolygon))
                   {
                       closePath(true);
-                      drawing_data.is_linto_locked = true;
+                      drawingData.isLineToLocked = true;
                   }
               }
           }
@@ -536,7 +531,7 @@ var Game = (function(){
 
       if(type == "invalid")
       {
-          drawing_data.clear();
+          drawingData.clear();
           return;
       }
 
@@ -567,32 +562,32 @@ var Game = (function(){
     */
   function evalCurrentShape()
   {
-      var  l = drawing_data.current_polygon.length;
+      var  l = drawingData.currentPolygon.length;
       if(l < ConfigOptions.min_vertices_per_polygon)
       {
           return "invalid";
       }
 
-      var first_vertex = drawing_data.current_polygon[0];
-      var last_vertex = drawing_data.current_polygon[l-1];
-      decomp.removeCollinearPoints(drawing_data.current_polygon, 0.25);
+      var first_vertex = drawingData.currentPolygon[0];
+      var last_vertex = drawingData.currentPolygon[l-1];
+      decomp.removeCollinearPoints(drawingData.currentPolygon, 0.25);
 
       /* The first vertex must be restored */
-      if(first_vertex[0] != drawing_data.current_polygon[0][0] || first_vertex[1] != drawing_data.current_polygon[0][1])
+      if(first_vertex[0] != drawingData.currentPolygon[0][0] || first_vertex[1] != drawingData.currentPolygon[0][1])
       {
-          drawing_data.current_polygon.splice(0,0,first_vertex);
+          drawingData.currentPolygon.splice(0,0,first_vertex);
       }
 
       /* The last vertex must be restored */
-      l = drawing_data.current_polygon.length;
-      if(last_vertex[0] != drawing_data.current_polygon[l-1][0] || last_vertex[1] != drawing_data.current_polygon[l-1][1])
+      l = drawingData.currentPolygon.length;
+      if(last_vertex[0] != drawingData.currentPolygon[l-1][0] || last_vertex[1] != drawingData.currentPolygon[l-1][1])
       {
-          drawing_data.current_polygon.push(last_vertex);
+          drawingData.currentPolygon.push(last_vertex);
       }
 
       var h2t_vector = new Float32Array(2);
-      h2t_vector[0] = drawing_data.current_polygon[0][0] - drawing_data.current_polygon[drawing_data.current_polygon.length-1][0];
-      h2t_vector[1] = drawing_data.current_polygon[0][1] - drawing_data.current_polygon[drawing_data.current_polygon.length-1][1];
+      h2t_vector[0] = drawingData.currentPolygon[0][0] - drawingData.currentPolygon[drawingData.currentPolygon.length-1][0];
+      h2t_vector[1] = drawingData.currentPolygon[0][1] - drawingData.currentPolygon[drawingData.currentPolygon.length-1][1];
 
       var h2t_distance = Math.sqrt(h2t_vector[0] * h2t_vector[0] + h2t_vector[1] * h2t_vector[1]);
       var h2t_angle = Math.atan( h2t_vector[1] / h2t_vector[0] );
@@ -600,8 +595,8 @@ var Game = (function(){
         h2t_angle += Math.PI;
 
       var tail_vector = new Float32Array(2);
-      tail_vector[0] = drawing_data.current_polygon[drawing_data.current_polygon.length-1][0] - drawing_data.current_polygon[drawing_data.current_polygon.length-3][0];
-      tail_vector[1] = drawing_data.current_polygon[drawing_data.current_polygon.length-1][1] - drawing_data.current_polygon[drawing_data.current_polygon.length-3][1];
+      tail_vector[0] = drawingData.currentPolygon[drawingData.currentPolygon.length-1][0] - drawingData.currentPolygon[drawingData.currentPolygon.length-3][0];
+      tail_vector[1] = drawingData.currentPolygon[drawingData.currentPolygon.length-1][1] - drawingData.currentPolygon[drawingData.currentPolygon.length-3][1];
 
       var tail_angle = Math.atan(tail_vector[1] / tail_vector[0] );
       if(tail_vector[0] < 0)
@@ -613,17 +608,17 @@ var Game = (function(){
       }
 
       var distance_cond = h2t_distance > Physics.getScale() * ConfigOptions.polygon_autoclose_distance * 3;
-      var insersection_cond = !decomp.isSimple(drawing_data.current_polygon);
+      var insersection_cond = !decomp.isSimple(drawingData.currentPolygon);
 
       if(distance_cond || insersection_cond)
       {
           var searchOptions = { returnIndex : true, filterConnectedTacks : true };
-          var indexA = findTackAtPos(drawing_data.current_polygon[0], searchOptions);
-          var indexB = findTackAtPos(drawing_data.current_polygon[drawing_data.current_polygon.length - 1], searchOptions);
+          var indexA = findTackAtPos(drawingData.currentPolygon[0], searchOptions);
+          var indexB = findTackAtPos(drawingData.currentPolygon[drawingData.currentPolygon.length - 1], searchOptions);
           if(distance_cond && indexA != undefined && indexB != undefined)
           {
-              drawing_data.candidate_tack_index_A = indexA;
-              drawing_data.candidate_tack_index_B = indexB;
+              drawingData.candidateTackIndexA = indexA;
+              drawingData.candidateTackIndexB = indexB;
               return "chain";
           }
           else
@@ -644,11 +639,11 @@ var Game = (function(){
 
       body = Physics.createBody({
           position : new Float32Array(2),
-          vertices : drawing_data.current_polygon,
+          vertices : drawingData.currentPolygon,
       });
 
       if(body == undefined) {
-          drawing_data.clear();
+          drawingData.clear();
           return;
       };
       var group = null;
@@ -658,7 +653,7 @@ var Game = (function(){
       {
           if(objects.tacks[i].bodyB == null && !objects.tacks[i].deleted)
           {
-              if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+              if(itsInsideOf(calcTackAbsPos(i), drawingData.currentPolygon ))
               {
                   tack_indices.push(i);
               }
@@ -668,9 +663,9 @@ var Game = (function(){
       objects.shapes.push({
           body : body,
           type : "polygon",
-          vertices : drawing_data.current_polygon,
+          vertices : drawingData.currentPolygon,
           centroid: Physics.getCentroid(body),
-          color_index : drawing_data.current_color_index,
+          color_index : drawingData.currentColorIndex,
       });
 
       l = tack_indices.length;
@@ -693,7 +688,7 @@ var Game = (function(){
           }
           onTackConnected(i);
       }
-      drawing_data.clear();
+      drawingData.clear();
   }
 
   /** @func closeAsWire
@@ -701,10 +696,10 @@ var Game = (function(){
     */
   function closeAsWire()
   {
-      var body = Physics.createWire({vertices:drawing_data.current_polygon});
+      var body = Physics.createWire({vertices:drawingData.currentPolygon});
       if(body == undefined)
       {
-          drawing_data.clear();
+          drawingData.clear();
           return;
       }
       var tack_indices = [];
@@ -715,7 +710,7 @@ var Game = (function(){
       {
           if(objects.tacks[i].bodyB == null && !objects.tacks[i].deleted)
           {
-              if(itsInsideOf(calcTackAbsPos(i), drawing_data.current_polygon ))
+              if(itsInsideOf(calcTackAbsPos(i), drawingData.currentPolygon ))
               {
                   tack_indices.push(i);
               }
@@ -725,9 +720,9 @@ var Game = (function(){
       objects.shapes.push({
           body : body,
           type : "wire",
-          vertices : drawing_data.current_polygon,
+          vertices : drawingData.currentPolygon,
           centroid : Physics.getCentroid(body),
-          color_index : drawing_data.current_color_index,
+          color_index : drawingData.currentColorIndex,
       });
 
       l = tack_indices.length;
@@ -750,7 +745,7 @@ var Game = (function(){
           }
           onTackConnected();
       }
-      drawing_data.clear();
+      drawingData.clear();
   }
 
   /** @func closeAsChain
@@ -760,54 +755,54 @@ var Game = (function(){
   {
       var groupA = collisionGroupCount++;
       var groupB = collisionGroupCount++;
-      decomp.removeCollinearPoints(drawing_data.current_polygon, 0.3);
-      drawing_data.current_polygon = Utils.normalizePolyLine(drawing_data.current_polygon, 0.3 * Physics.getScale());
+      decomp.removeCollinearPoints(drawingData.currentPolygon, 0.3);
+      drawingData.currentPolygon = Utils.normalizePolyLine(drawingData.currentPolygon, 0.3 * Physics.getScale());
       var chain = {
-          vertices : drawing_data.current_polygon,
+          vertices : drawingData.currentPolygon,
           chain_handler : [],
           chain_links   : [],
           tackAIndex    : -1,
           tackBIndex    : -1,
           label         :  "chainLink" + chainIdCount,
       };
-      var  l = drawing_data.current_polygon.length;
+      var  l = drawingData.currentPolygon.length;
       for(var i = 1; i < l; i++)
       {
-          var chainLink = createChainLink(drawing_data.current_polygon[i-1], drawing_data.current_polygon[i]);
+          var chainLink = createChainLink(drawingData.currentPolygon[i-1], drawingData.currentPolygon[i]);
           chain.chain_handler.push(chainLink.body_handler);
           if(i == 1)
           {
               var contraint = Physics.createRevoluteJoint({
-                  bodyA : objects.tacks[drawing_data.candidate_tack_index_A].bodyA,
-                  pointA : objects.tacks[drawing_data.candidate_tack_index_A].offsetA,
+                  bodyA : objects.tacks[drawingData.candidateTackIndexA].bodyA,
+                  pointA : objects.tacks[drawingData.candidateTackIndexA].offsetA,
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point1,
               });
 
               /* collision group stuff */
-              Physics.addCollisionGroup(objects.tacks[drawing_data.candidate_tack_index_A].bodyA, groupA);
+              Physics.addCollisionGroup(objects.tacks[drawingData.candidateTackIndexA].bodyA, groupA);
               Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupA);
               Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupB);
 
-              objects.tacks[drawing_data.candidate_tack_index_A].contraint = contraint;
-              objects.tacks[drawing_data.candidate_tack_index_A].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
+              objects.tacks[drawingData.candidateTackIndexA].contraint = contraint;
+              objects.tacks[drawingData.candidateTackIndexA].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
           }
           else if(i == l-1)
           {
               var contraint = Physics.createRevoluteJoint({
-                  bodyA : objects.tacks[drawing_data.candidate_tack_index_B].bodyA,
-                  pointA : objects.tacks[drawing_data.candidate_tack_index_B].offsetA,
+                  bodyA : objects.tacks[drawingData.candidateTackIndexB].bodyA,
+                  pointA : objects.tacks[drawingData.candidateTackIndexB].offsetA,
                   bodyB : chain.chain_handler[chain.chain_handler.length - 1],
                   pointB : chainLink.point2,
               });
 
               /* collision group stuff */
-              Physics.addCollisionGroup(objects.tacks[drawing_data.candidate_tack_index_B].bodyA, groupB);
+              Physics.addCollisionGroup(objects.tacks[drawingData.candidateTackIndexB].bodyA, groupB);
               Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupA);
               Physics.addCollisionGroup(chain.chain_handler[chain.chain_handler.length - 1], groupB);
 
-              objects.tacks[drawing_data.candidate_tack_index_B].contraint = contraint;
-              objects.tacks[drawing_data.candidate_tack_index_B].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
+              objects.tacks[drawingData.candidateTackIndexB].contraint = contraint;
+              objects.tacks[drawingData.candidateTackIndexB].bodyB = chain.chain_handler[chain.chain_handler.length - 1];
           }
           if(chain.chain_handler.length > 1)
           {
@@ -825,16 +820,16 @@ var Game = (function(){
           chain.chain_links.push(chainLink);
       }
       chainIdCount++;
-      chain.tackAIndex = drawing_data.candidate_tack_index_A;
-      chain.tackBIndex = drawing_data.candidate_tack_index_B;
+      chain.tackAIndex = drawingData.candidateTackIndexA;
+      chain.tackBIndex = drawingData.candidateTackIndexB;
       objects.chains.push(chain);
-      drawing_data.clear();
+      drawingData.clear();
   }
 
   function addCurrentDrawingToDirtyLayer()
   {
       DirtyLayer.addShape({
-          vertices : drawing_data.current_polygon,
+          vertices : drawingData.currentPolygon,
           position : [0, 0],
           angle : 0,
           centroid : [0, 0],
@@ -916,7 +911,7 @@ var Game = (function(){
           objects.tacks[tack_index].contraint = null;
           onTackRemoved(tack_index);
           objects.tacks.splice(tack_index,1);
-          drawing_data.clear();
+          drawingData.clear();
           return;
       }
 
@@ -936,10 +931,11 @@ var Game = (function(){
           else
           {
               removeBody(_bodies[i]);
+              onDrawingDeleted();
           }
           break;
       }
-      drawing_data.clear();
+      drawingData.clear();
   }
 
   function onChainLinkDeleted(label)
@@ -1126,29 +1122,29 @@ var Game = (function(){
   function loadLevel(level_index)
   {
       restartEngine();
-      level_data.earned_stars = 0;
-      level_data.context = {};
-      level_data.id = level_index;
+      levelData.earnedStars = 0;
+      levelData.context = {};
+      levelData.id = level_index;
       var level = LevelManager.getLevels()[level_index];
-      level_data.update_fnc = level.update;
+      levelData.updateFnc = level.update;
       var _bodies = [];
       level.hints = level.hints || [];
       level.tacks = level.tacks || [];
       level.decorations = level.decorations || [];
-      level_data.hints = [];
-      level_data.decorations = [];
-      level_data.tacks = [];
+      levelData.hints = [];
+      levelData.decorations = [];
+      levelData.tacks = [];
       for(var i = 0; i < level.hints.length;i++)
       {
-          level_data.hints.push(prepareLevelShapes(level.hints[i], "hint"));
+          levelData.hints.push(prepareLevelShapes(level.hints[i], "hint"));
       }
       for(var i = 0; i < level.decorations.length;i++)
       {
-          level_data.decorations.push(prepareLevelShapes(level.decorations[i], "decoration"));
+          levelData.decorations.push(prepareLevelShapes(level.decorations[i], "decoration"));
       }
       for(var i = 0; i < level.tacks.length;i++)
       {
-          level_data.tacks.push(prepareLevelShapes(level.tacks[i]));
+          levelData.tacks.push(prepareLevelShapes(level.tacks[i]));
       }
       for(var i = 0; i < level.bodies.length; i++)
       {
@@ -1190,18 +1186,18 @@ var Game = (function(){
           });
           if(level.bodies[i].respawn)
           {
-              level_data.respawnable_bodies.push(body);
-              level_data.spawners.push(Physics.getPosition(body));
+              levelData.respawnableBodies.push(body);
+              levelData.spawners.push(Physics.getPosition(body));
           }
           _bodies.push(body);
       }
 
-      for(var i = 0; i < level_data.tacks.length; i++)
+      for(var i = 0; i < levelData.tacks.length; i++)
       {
           /* Create level tacks */
-          var bodyA = Physics.getBodyByLabel(level_data.tacks[i].bodyA);
-          var bodyB = Physics.getBodyByLabel(level_data.tacks[i].bodyB);
-          var pos = level_data.tacks[i].position;
+          var bodyA = Physics.getBodyByLabel(levelData.tacks[i].bodyA);
+          var bodyB = Physics.getBodyByLabel(levelData.tacks[i].bodyB);
+          var pos = levelData.tacks[i].position;
           var tack = {
               bodyA     : bodyA,
               offsetA   : calcTackOffset(pos, bodyA),
@@ -1222,33 +1218,33 @@ var Game = (function(){
           objects.tacks.push(tack);
       }
 
-      level_data.title       = level.title;
-      level_data.descriptions = level.descriptions;
-      level_data.setup_fnc   = level.setup;
-      level_data.show_timer       = level.show_timer;
+      levelData.title       = level.title;
+      levelData.descriptions = level.descriptions;
+      levelData.setupFnc   = level.setup;
+      levelData.show_timer       = level.show_timer;
 
       /* Draw level decorations on the dirty layer
        */
       DirtyLayer.adjustToViewPort();
-      for(var i = 0; i < level_data.decorations.length; i++)
+      for(var i = 0; i < levelData.decorations.length; i++)
       {
           DirtyLayer.addShape({
-              position : level_data.decorations[i].position,
-              vertices : level_data.decorations[i].vertices,
+              position : levelData.decorations[i].position,
+              vertices : levelData.decorations[i].vertices,
               centroid : [0,0],
               angle    : 0,
               type     : "wire",
-              opacity  : level_data.decorations[i].opacity,
+              opacity  : levelData.decorations[i].opacity,
           });
       }
 
       Screen.setSubtitleText(level.descriptions[0]);
       Screen.setTitleText(level.title);
-      if(level_data.setup_fnc != undefined)
-          level_data.setup_fnc(level_data.context);
-      level_data.start_time = new Date().getTime();
+      if(levelData.setupFnc != undefined)
+          levelData.setupFnc(levelData.context);
+      levelData.startTime = new Date().getTime();
 
-      if(level_data.show_timer)
+      if(levelData.show_timer)
       {
           document.querySelector("#hud-timer-text").style.opacity = 1;
           document.querySelector("#hud-timer-icon").style.opacity = 1;
@@ -1266,9 +1262,16 @@ var Game = (function(){
       starElems[1].dataset.filled = (bitflag & SECOND_STAR) ? "true" : "false";
       starElems[2].dataset.filled = (bitflag & FIRST_STAR) ? "true" : "false";
 
-      level_data.drawn_objects_count = 0;
+      levelData.drawnObjectsCount = 0;
+      hudTimerTextElem.innerHTML = "00:00";
+      document.querySelector(".hud-timer-hand").dataset.rotate = "false";
       Physics.on("addBody", function(){
-          level_data.drawn_objects_count++;
+          levelData.drawnObjectsCount++;
+          if(levelData.drawnObjectsCount == 1)
+          {
+              levelData.startTime = new Date().getTime();
+              document.querySelector(".hud-timer-hand").dataset.rotate = "true";
+          }
       });
   }
 
@@ -1277,7 +1280,7 @@ var Game = (function(){
     */
   function restartLevel()
   {
-      loadLevel(level_data.id);
+      loadLevel(levelData.id);
   }
 
   /** @func itsInsideOf
@@ -1351,7 +1354,7 @@ var Game = (function(){
     */
   function getHints()
   {
-      return level_data.hints;
+      return levelData.hints;
   }
 
   function on(type, callback)
@@ -1366,6 +1369,18 @@ var Game = (function(){
   function onTackAdded()
   {
       var callbacks = listeners["addTack"];
+      if(callbacks)
+      {
+          for(var i = 0; i < callbacks.length; i++)
+          {
+               callbacks[i]();
+          }
+      }
+  }
+
+  function onDrawingDeleted()
+  {
+      var callbacks = listeners["deleteDrawing"];
       if(callbacks)
       {
           for(var i = 0; i < callbacks.length; i++)
@@ -1431,7 +1446,7 @@ var Game = (function(){
 
   function getElapsedTime_str()
   {
-      var elapsedTime = new Date().getTime() - level_data.start_time;
+      var elapsedTime = new Date().getTime() - levelData.startTime;
       var elapsedSeconds = elapsedTime / 1000;
       var minutes = parseInt(elapsedSeconds / 60);
       var seconds = parseInt(elapsedSeconds % 60);
@@ -1442,12 +1457,12 @@ var Game = (function(){
 
   function getTime()
   {
-      return (new Date().getTime() - level_data.start_time)/1000;
+      return (new Date().getTime() - levelData.startTime)/1000;
   }
 
   function getDrawnObjectsCount()
   {
-      return level_data.drawn_objects_count;
+      return levelData.drawnObjectsCount;
   }
 
   return {  init          : init,

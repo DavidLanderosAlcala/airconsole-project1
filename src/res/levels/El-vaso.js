@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
     title: 'El vaso',
-    descriptions: ["Saca la pelota del vaso", "Sin borrar ninguna pieza", "En menos de 60 segundos"],
+    descriptions: ["Saca la pelota del vaso", "Con solo 1 dibujo", "En menos de 60 segundos"],
     show_timer: true,
     bodies: [{
         "label": "ball",
@@ -72,6 +72,7 @@ LevelManager.getLevels().push({
             [6.205768935158229, 7.571367269037534],
             [0.05548704371581792, 7.563317159147096]
         ],
+        "line": null,
         "opacity": "0.2"
     }],
     decorations: [],
@@ -80,16 +81,11 @@ LevelManager.getLevels().push({
         ctx.bitflag = 0;
         ctx.glass = Phy.getBodyByLabel("glass");
         ctx.sensor = Phy.getBodyByLabel("sensor");
-        ctx.deletionFlag = false;
-
-        Phy.on("removeBody", function() {
-            ctx.deletionFlag = true;
-        });
 
         Phy.on("endContactBetween", "sensor", "ball", function() {
             Screen.setSubtitle("Bien hecho!");
             ctx.bitflag = FIRST_STAR;
-            if (ctx.deletionFlag === false) {
+            if (Game.getDrawnObjectsCount() == 1) {
                 ctx.bitflag |= SECOND_STAR;
             }
             if (Game.getTime() < 60) {

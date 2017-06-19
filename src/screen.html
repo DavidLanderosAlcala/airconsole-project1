@@ -12,7 +12,7 @@
     <div class="main_container" >
       <canvas id="main_canvas"> </canvas>
       <canvas id="dirty_layer"> </canvas>
-      <div id="tooltip"></div>
+      <div id="tooltip" style="z-index: -10"></div>
       <div id="hud-bar">
         <div class="hud-bar-group">
           <div class="hud-item"  id="hud-home-button" onclick="LevelManager.show();"></div>
@@ -28,7 +28,7 @@
           <div class="hud-item"></div>
           <div class="hud-item hud-noscale" id="hud-timer-text" style="opacity:0">05:56</div>
           <div class="hud-item hud-noscale" id="hud-timer-icon" style="opacity:0">
-              <div class="hud-timer-hand"></div>
+              <div class="hud-timer-hand" data-rotate="true"></div>
           </div>
         </div>
       </div>
@@ -80,6 +80,9 @@
     <!-- the following levels are not part of the tutorial -->
     <script src="./res/levels/Es-posible-.js"></script>
     <script src="./res/levels/Las-canicas.js"></script>
+    <script src="./res/levels/Encesta.js"></script>
+    <script src="./res/levels/Todo-terreno.js"></script>
+    <script src="./res/levels/Pasala.js"></script>
     <script src="./js/game/MenuManager.js"></script>
     <script src="./js/game/ConfigOptions.js"></script>
     <script src="./js/game/Physics.js"></script>

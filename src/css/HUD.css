@@ -123,6 +123,10 @@
 	height : 0.5vh;
 	background-size: 100%;
 	background-image: url("../res/img/timer-hand.png");
+}
+
+.hud-timer-hand[data-rotate="true"]
+{
 	animation: timer-hand-rotation 1s infinite;
 	animation-timing-function: linear;
 }
