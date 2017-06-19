@@ -1,0 +1,21 @@
+
+.chalk-progressbar
+{
+	display: : inline-block;
+	width: 300px;
+	height: 25px;
+	background-size: 300px 25px;
+	background-repeat: no-repeat;
+}
+
+#chalk-progressbar-border
+{
+	//background-image: url(../res/img/chalk-progressbar-border.png);
+}
+
+#chalk-progressbar
+{
+	background-image: url(../res/img/chalk-progressbar.png);
+	transition: all 1s linear;
+	background-position: -0px 0px;
+}

@@ -165,8 +165,13 @@ var Game = (function(){
           }
       }
       render();
-      if(level_data.earned_stars == 0)
+      if(level_data.earned_stars == 0 && Game.getDrawnObjectsCount() > 0)
           hudTimerText.innerHTML = getElapsedTime_str();
+      else
+      {
+          level_data.start_time = new Date().getTime();
+          hudTimerText.innerHTML = "00:00";
+      }
       window.requestAnimationFrame(update);
   }
 

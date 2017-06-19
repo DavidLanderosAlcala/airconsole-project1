@@ -1,0 +1,28 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <style>
+         body,html
+         {
+         	padding: 0px;
+         	border: 0px;
+         	background-image: url(../res/img/background.jpg);
+         	background-size: 100%;
+         }
+        </style>
+        <link rel="stylesheet" href="ChalkProgressBar.css">
+    </head>
+    <body>
+
+    <div class="chalk-progressbar" id="chalk-progressbar-border">
+        <div class="chalk-progressbar" id="chalk-progressbar"></div>
+    </div>
+
+    <script>
+    setTimeout(function(){
+    	document.querySelector("#chalk-progressbar").style.backgroundPosition = "-100px 0px";
+    }, 500);
+    </script>
+
+    </body>
+</html>
