@@ -1239,7 +1239,8 @@ var Game = (function(){
       }
 
       Screen.setSubtitleText(level.descriptions[0]);
-      Screen.setTitleText(level.title);
+      //Screen.setTitleText(level.title);
+      Screen.setTitleText("");
       if(levelData.setupFnc != undefined)
           levelData.setupFnc(levelData.context);
       levelData.startTime = new Date().getTime();

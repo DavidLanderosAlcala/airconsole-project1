@@ -12,6 +12,7 @@ var Screen = (function(){
     var airconsole;
     var width;
     var height;
+    var subtitle_interval = null;
 
     /** @func init
       * @desc Called when the DOM is loaded
@@ -88,10 +89,31 @@ var Screen = (function(){
       * @desc It sets the Subtitle
       * @param text {string} the text to be shown
       */
-    function setSubtitleText(text)
+    function setSubtitleText(text, preventAnimation)
     {
-        document.getElementById("subtitle_label")
-        .innerHTML = text;
+        var elem = document.getElementById("subtitle_label");
+        if(subtitle_interval != null)
+        {
+            clearInterval(subtitle_interval);
+            subtitle_interval = null;
+            elem.innerHTML = "";
+        }
+        if(preventAnimation)
+        {
+            elem.innerHTML = text;
+        }
+        else
+        {
+            var current_length = 0;
+            subtitle_interval = setInterval(function(){
+                elem.innerHTML = text.substring(0, current_length++);
+                if(current_length > text.length)
+                {
+                    clearInterval(subtitle_interval);
+                    subtitle_interval = null;
+                }
+            }, 50);
+        }
     }
 
     /** @func requestFullscreen

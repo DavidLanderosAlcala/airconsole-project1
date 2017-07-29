@@ -94,7 +94,7 @@ label#title_label {
 label#subtitle_label {
     font-family : chalk2;
     font-weight: bold;
-    color       : white;
+    color       : #FACC2E;
     position    : absolute;
     width       : 200vh;
     left        : 50%;

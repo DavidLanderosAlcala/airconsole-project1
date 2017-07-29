@@ -35,12 +35,13 @@ var LevelManager = (function(){
             if(levelMetadata[level_index].unlocked)
             {
                 Screen.setTitleText(levels[level_index].title);
-                Game.loadLevel(level_index);
+                Screen.setSubtitleText("");
+                //Game.loadLevel(level_index);
             }
             else
             {
                 Screen.setTitleText("Locked level");
-                Screen.setSubtitleText("You need to complete previous levels");
+                Screen.setSubtitleText("You need to complete previous levels", true /* prevent animation */ );
             }
         });
 
@@ -48,7 +49,7 @@ var LevelManager = (function(){
             if(levelMetadata[level_index].unlocked)
             {
                 hide();
-                //Game.loadLevel(level_index);
+                Game.loadLevel(level_index);
             }
         });
         loadSave();
