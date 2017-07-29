@@ -9,6 +9,8 @@ var ColorManager = (function(){
    var urls = [
        //"http://oi65.tinypic.com/2e1gbpc.jpg",
        "./res/img/chalk_pattern.png",
+       "./res/img/chalk_pattern2.png",
+       "./res/img/chalk_pattern3.png",
 	 ];
 	 var last_index = 0;
 
