@@ -18,6 +18,8 @@ var Game = (function(){
   var tackFrameCount = 0;
   var candidateTacksForNewWire = [];
   var hudTimerTextElem = null;
+  var allowUserToDraw = true;
+  var waitTimeToDraw = 1000; /* miliseconds */
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -394,6 +396,11 @@ var Game = (function(){
 
   function onTouchEvent(e)
   {
+      if(!allowUserToDraw)
+      {
+          return;
+      }
+
       if(e.type == "touchstart")
       {
         drawingData.clear();
@@ -1276,6 +1283,10 @@ var Game = (function(){
           }
       });
       ChalkProgressBar.setValue(1.0);
+      allowUserToDraw = false;
+      setTimeout(function(){
+        allowUserToDraw = true;
+      }, waitTimeToDraw); /* miliseconds */
   }
 
   /** @func restartLevel
