@@ -1,6 +1,8 @@
 ### Game (HEAD rev)
 https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/src/screen.html
 
+<img src="http://image.ibb.co/iKtaoS/chalk.png">
+
 ### Level editor (HEAD rev)
 https://rawgit.com/DavidLanderosAlcala/airconsole-project1/engine-migration/level-editor/index.html
 
