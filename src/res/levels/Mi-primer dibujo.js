@@ -66,7 +66,7 @@ LevelManager.getLevels().push({
         });
 
         Phy.on("removeBody", function() {
-            Screen.setSubtitle("Buen trabajo");
+            Screen.setSubtitle("well done!");
             ctx.bitflag = FIRST_STAR | SECOND_STAR;
             if (ctx.shapeHasBeenTouched) {
                 ctx.bitflag |= THIRD_STAR;
