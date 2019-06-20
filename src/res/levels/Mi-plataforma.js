@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Mi plataforma',
-    descriptions: ["Coloca 2 pines para impedir la rotacion", "Dibuja una plataforma sujeta de ambos pines", "Impide que al caja siga cayendo"],
+    title: 'Static platform ',
+    descriptions: ["Create 2 tacks to prevent rotation", "draw a platform around the 2 tacks", "It should prevent the box from falling"],
     show_timer: false,
     bodies: [{
         "label": "untitled-shape",
@@ -702,7 +702,7 @@ LevelManager.getLevels().push({
         Game.on("addTack", function() {
             ctx.tackCount++;
             if (ctx.tackCount == 2) {
-                Screen.setSubtitle("ahora dibuja una plataforma sujeta a ambos pines");
+                Screen.setSubtitle("Now draw a platform around them");
                 for (var i = 0; i < ctx.hints.length; i++)
                     ctx.hints[i].opacity = 0.0;
                 ctx.hints[ctx.hints.length - 1].opacity = 0.6;
@@ -715,7 +715,7 @@ LevelManager.getLevels().push({
         });
 
         Phy.on("beginContactBetween", "box", "Body", function() {
-            Screen.setSubtitle("bien hecho!");
+            Screen.setSubtitle("well done!");
             if (ctx.connectedTacks == 2) {
                 ctx.bitflag = FIRST_STAR | SECOND_STAR | THIRD_STAR;
             }

@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Las canicas',
-    descriptions: ["Haz que las canicas se toquen", "En menos de 30 segundos", "Utilizando solo 1 dibujo"],
+    title: 'Two rocks',
+    descriptions: ["Make the balls touch each other", "Try it in less than 30 sec", "Use a single shape"],
     show_timer: true,
     bodies: [{
         "label": "ball1",

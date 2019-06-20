@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Los abismos',
-    descriptions: ["Lleva la pelota al hoyo derecho", "Con solo 1 dibujo", "Sin borrar dibujos"],
+    title: 'Abyss',
+    descriptions: ["make the ball fall into the right abyss", "Use a single shape", "Do not erease anything"],
     show_timer: false,
     bodies: [{
         "label": "ball",

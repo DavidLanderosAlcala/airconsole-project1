@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Mi primer dibujo',
-    descriptions: ["Dibuja una figura cualquiera", "Borra dicha figura", "Golpea alguna de las figuras existentes"],
+    title: 'My first drawing',
+    descriptions: ["Draw any shape", "Erase it", "Hit some of the existing shapes"],
     show_timer: false,
     bodies: [{
         "label": "shape",
@@ -62,7 +62,7 @@ LevelManager.getLevels().push({
         });
 
         Phy.on("addBody", function() {
-            Screen.setSubtitle("perfecto! ahora borrala con click derecho");
+            Screen.setSubtitle("easy right? now erase it by right-clicking it");
         });
 
         Phy.on("removeBody", function() {

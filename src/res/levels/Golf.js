@@ -111,7 +111,7 @@ LevelManager.getLevels().push({
         });
 
         Phy.on("beginContactBetween", "sensor", "ball", function() {
-            Screen.setSubtitle("Buen trabajo!");
+            Screen.setSubtitle("Awesome!");
             ctx.bitflag = FIRST_STAR;
             if (ctx.tackCondition) {
                 ctx.bitflag |= SECOND_STAR;

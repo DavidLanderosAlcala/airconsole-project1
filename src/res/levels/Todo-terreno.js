@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Todo terreno',
-    descriptions: ["Dibuja un puente que ayude a cruzar al jeep", "Utiliza solo 1 figura", "El Jeep debe cruzar en menos de 30 segundos"],
+    title: 'all terrain',
+    descriptions: ["Draw a bridge so the jeep can pass", "Use a single shape", "The Jeep have to pass in less than 30 sec"],
     show_timer: true,
     bodies: [{
         "label": "untitled-shape",
@@ -773,11 +773,11 @@ LevelManager.getLevels().push({
         ctx.wheel2 = Phy.getBodyByLabel("wheel2");
         ctx.velocity = 0;
         Phy.on("addBody", function() {
-            Screen.setSubtitle("Vamos a probarlo");
+            Screen.setSubtitle("Lets give it a try!");
             ctx.velocity = 10;
         });
         Phy.on("beginContactBetween", "sensor", "jeep", function() {
-            Screen.setSubtitle("Bien hecho!");
+            Screen.setSubtitle("Nice one!");
             ctx.bitflag = FIRST_STAR;
             if (Game.getDrawnObjectsCount() == 1) {
                 ctx.bitflag |= SECOND_STAR;

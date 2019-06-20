@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Pasala',
-    descriptions: ["vacia las pelotas de un vaso al otro", "No permitas que el vaso izquierdo se caiga", "Las 3 pelotas deben llegar al vaso derecho"],
+    title: 'Catapult',
+    descriptions: ["take the balls into the right cup", "do not leave the left cup fall", "All of them have to enter the right cup"],
     show_timer: false,
     bodies: [{
         "label": "ball3",

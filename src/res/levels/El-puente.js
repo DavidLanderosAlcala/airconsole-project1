@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
     title: 'The bridge',
-    descriptions: ["Draw a bridge so the jeep is able to cross to the oder side", "Use only a sigle shape", "the jeep should arrive in less than 30 sec"],
+    descriptions: ["Draw a bridge so the jeep is able to cross to the other side", "Use only a sigle shape", "the jeep should arrive in less than 30 sec"],
     show_timer: true,
     bodies: [{
         "label": "untitled-shape",
