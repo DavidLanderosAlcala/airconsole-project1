@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Es posible?',
-    descriptions: ["Lleva la pelota a la bandera", "Usa 1 o mas ejes de rotacion", "Utilizando solo 1 dibujo"],
+    title: 'Is it possible?',
+    descriptions: ["make the ball reach the flag", "Use a single tack", "Use a single shape"],
     show_timer: false,
     bodies: [{
         "label": "ball",

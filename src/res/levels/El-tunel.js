@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'El tunel',
-    descriptions: ["Lleva la pelota a la bandera", "Utilizando solo 1 dibujo", "En menos de 20 segundos"],
+    title: 'The tunnel',
+    descriptions: ["make the ball reach the flag", "Use only a single shape", "try it in less than 20 sec"],
     show_timer: true,
     bodies: [{
         "label": "ball",

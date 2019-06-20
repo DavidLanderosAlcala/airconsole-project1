@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Extraccion',
-    descriptions: ["Saca la pelota del hoyo", "Utilizando el eje de rotacion", "Utilizando solo 1 dibujo"],
+    title: 'Extraction',
+    descriptions: ["Take the ball out of the hole", "Use a single tack", "Use a single shape"],
     show_timer: false,
     bodies: [{
         "label": "ball",
@@ -83,7 +83,7 @@ LevelManager.getLevels().push({
         });
 
         Phy.on("endContactBetween", "sensor", "ball", function() {
-            Screen.setSubtitle("Excelente!");
+            Screen.setSubtitle("Great!");
             ctx.bitflag = FIRST_STAR;
             if (ctx.tackCondition) {
                 ctx.bitflag |= SECOND_STAR;

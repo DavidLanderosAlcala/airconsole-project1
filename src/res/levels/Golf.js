@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
     title: 'Golf',
-    descriptions: ["Lleva la pelota al vaso", "Utilizando el eje de rotacion", "No mas de 1 dibujo"],
+    descriptions: ["Take the ball into the cup", "Use a single tack", "Use a single shape"],
     show_timer: false,
     bodies: [{
         "label": "ball",

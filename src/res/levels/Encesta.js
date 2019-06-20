@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'Encesta',
-    descriptions: ["Lleva la pelota al vaso", "Utiliza solo 2 dibujos", "En menos de 30 segundos"],
+    title: 'Basketball',
+    descriptions: ["take the ball into the cup", "Use only a single shape", "try it in less than 30 sec"],
     show_timer: true,
     bodies: [{
         "label": "ball",

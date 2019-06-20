@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
-    title: 'El vaso',
-    descriptions: ["Saca la pelota del vaso", "Con solo 1 dibujo", "En menos de 60 segundos"],
+    title: 'The cup',
+    descriptions: ["Take the ball out of the cup", "Use only a single shape", "try it in less than 60 sec"],
     show_timer: true,
     bodies: [{
         "label": "ball",
@@ -83,7 +83,7 @@ LevelManager.getLevels().push({
         ctx.sensor = Phy.getBodyByLabel("sensor");
 
         Phy.on("endContactBetween", "sensor", "ball", function() {
-            Screen.setSubtitle("Bien hecho!");
+            Screen.setSubtitle("Nice one!");
             ctx.bitflag = FIRST_STAR;
             if (Game.getDrawnObjectsCount() == 1) {
                 ctx.bitflag |= SECOND_STAR;

@@ -1,6 +1,6 @@
 LevelManager.getLevels().push({
     title: 'Jenga',
-    descriptions: ["Crea un eje de rotacion", "Dibuja una figura sobre el eje de rotacion", "Golpea la torre de jenga"],
+    descriptions: ["Create a tack", "Draw a shape around the tack", "Hit the tower"],
     show_timer: false,
     bodies: [{
         "label": "untitled-shape",
@@ -1151,12 +1151,12 @@ LevelManager.getLevels().push({
                 hints[i].opacity = 0;
             }
             hints[hints.length - 1].opacity = 0.5;
-            Screen.setSubtitle("Bien!, ahora dibuja una figura al rededor");
+            Screen.setSubtitle("Great! now draw a shape around it");
         });
 
         Game.on("connectTack", function() {
             setTimeout(function() {
-                Screen.setSubtitle("Buen trabajo!");
+                Screen.setSubtitle("great work!");
                 ctx.statuscode = FIRST_STAR | SECOND_STAR | THIRD_STAR;
             }, 2000);
         });
