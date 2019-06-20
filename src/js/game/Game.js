@@ -20,6 +20,7 @@ var Game = (function(){
   var hudTimerTextElem = null;
   var allowUserToDraw = true;
   var waitTimeToDraw = 1000; /* miliseconds */
+  var shouldShowHints = false;
 
   /** @func init
     * @desc Called from Screen.init(...)
@@ -110,6 +111,13 @@ var Game = (function(){
      var tt = document.querySelector("#tooltip");
      tt.innerHTML = levelData.descriptions[star_index];
      tt.style.zIndex = 10;
+  }
+
+  function showTooltipWithText(message)
+  {
+    var tt = document.querySelector("#tooltip");
+    tt.innerHTML = message;
+    tt.style.zIndex = 10;
   }
 
   function hideTooltip()
@@ -323,29 +331,31 @@ var Game = (function(){
       }
 
       /* Drawing level.hints (ghost mode) */
-      var segments = 0.25 * Physics.getScale();
-      lineDash = [segments, segments];
-
-      var i, l = levelData.hints.length;
-      for(var i = 0; i < l; i++)
-      {
-          context.save();
-            context.translate(levelData.hints[i].position[0], levelData.hints[i].position[1]);
-            context.beginPath();
-            var j, l2 = levelData.hints[i].vertices.length;
-            if(l2 > 1)
-            {
-                context.moveTo(levelData.hints[i].vertices[0][0], levelData.hints[i].vertices[0][1]);
-                for(j = 0; j < l2; j++)
+      if(shouldShowHints) {
+          var segments = 0.25 * Physics.getScale();
+          lineDash = [segments, segments];
+    
+          var i, l = levelData.hints.length;
+          for(var i = 0; i < l; i++)
+          {
+              context.save();
+                context.translate(levelData.hints[i].position[0], levelData.hints[i].position[1]);
+                context.beginPath();
+                var j, l2 = levelData.hints[i].vertices.length;
+                if(l2 > 1)
                 {
-                    context.lineTo(levelData.hints[i].vertices[j][0], levelData.hints[i].vertices[j][1]);
+                    context.moveTo(levelData.hints[i].vertices[0][0], levelData.hints[i].vertices[0][1]);
+                    for(j = 0; j < l2; j++)
+                    {
+                        context.lineTo(levelData.hints[i].vertices[j][0], levelData.hints[i].vertices[j][1]);
+                    }
+                    context.globalAlpha = levelData.hints[i].opacity;
+                    if(levelData.hints[i].line == "dotted")
+                        context.setLineDash(lineDash);
+                    context.stroke();
                 }
-                context.globalAlpha = levelData.hints[i].opacity;
-                if(levelData.hints[i].line == "dotted")
-                    context.setLineDash(lineDash);
-                context.stroke();
-            }
-          context.restore();
+              context.restore();
+          }
       }
 
       context.restore();
@@ -1128,6 +1138,7 @@ var Game = (function(){
     */
   function loadLevel(level_index)
   {
+      shouldShowHints = false;
       restartEngine();
       levelData.earnedStars = 0;
       levelData.context = {};
@@ -1479,6 +1490,11 @@ var Game = (function(){
       return levelData.drawnObjectsCount;
   }
 
+  function showHints()
+  {
+      shouldShowHints = true;
+  }
+
   return {  init          : init,
             moveTo        : moveTo,
             lineTo        : lineTo,
@@ -1491,10 +1507,12 @@ var Game = (function(){
             getHints      : getHints,
             on            : on,
             adjustToViewPort : adjustToViewPort,
-            getCamera        : getCamera,
-            getTime          : getTime,
-            setFonts         : setFonts,
+            getCamera     : getCamera,
+            getTime       : getTime,
+            setFonts      : setFonts,
             getDrawnObjectsCount : getDrawnObjectsCount,
-            showTooltip          : showTooltip,
-            hideTooltip          : hideTooltip, };
+            showTooltip   : showTooltip,
+            showTooltipWithText : showTooltipWithText,
+            hideTooltip   : hideTooltip,
+            showHints     : showHints };
 })();
