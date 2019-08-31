@@ -1,4 +1,4 @@
-# Magic chalk
+# Magical chalk
 > a web-based game that involves drawing and physics
 
 <p align="center">
