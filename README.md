@@ -26,6 +26,6 @@ This project uses:
 ## License
 MIT
 
-## Contributors:
+## Contributors
 Omar Arredondo <hapu.x2@gmail.com>  
 David Landeros <dh.landeros08@gmail.com>
