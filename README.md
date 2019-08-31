@@ -8,7 +8,8 @@
 </p>
 
 ## Inspiration
-we wanted to bring crayon physics to the web so we made this game (you can learn more about crayon physics here: http://www.crayonphysics.com/)
+we wanted to bring crayon physics to the web so we made this game  
+(you can learn more about crayon physics here: http://www.crayonphysics.com/)
 
 ## Level editor
 we forked an SVG editor and convert it to our magic-chalk level editor, the result is here:
