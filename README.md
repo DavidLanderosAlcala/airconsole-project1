@@ -8,7 +8,7 @@ we forked an SVG editor and convert it to our magic-chalk level editor, the resu
 https://github.com/DavidLanderosAlcala/level-editor-for-magical-chalk
 
 ## Inspiration
-we wanted to bring crayon physics to the web so we made this game (http://www.crayonphysics.com/)
+we wanted to bring crayon physics to the web so we made this game (you can learn more about crayon physics here: http://www.crayonphysics.com/)
 
 ## Credits
 This project uses:
