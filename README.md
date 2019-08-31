@@ -1,7 +1,9 @@
-### Game (HEAD rev)
+# Magic chalk
+> a web-based game that involves drawing and physics
+
 https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/src/screen.html
 
-<img src="http://image.ibb.co/iKtaoS/chalk.png">
+<p align="center"><img width="500" src="https://user-images.githubusercontent.com/5791055/64068915-35685700-cbf4-11e9-9ba9-76d81ede9c54.gif"></p>
 
 ### Level editor (HEAD rev)
 https://rawgit.com/DavidLanderosAlcala/airconsole-project1/engine-migration/level-editor/index.html
