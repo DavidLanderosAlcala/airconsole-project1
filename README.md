@@ -6,7 +6,7 @@ https://rawgithub.com/DavidLanderosAlcala/airconsole-project1/engine-migration/s
 <p align="center"><img width="500" src="https://user-images.githubusercontent.com/5791055/64068915-35685700-cbf4-11e9-9ba9-76d81ede9c54.gif"></p>
 
 ## Level editor
-- we forked a SVG editor and converted it to our magic-chalk level editor
+we forked a SVG editor and converted it to our magic-chalk level editor, the result is here:
 https://github.com/DavidLanderosAlcala/level-editor-for-magical-chalk
 
 ## Inspiration
