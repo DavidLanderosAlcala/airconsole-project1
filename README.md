@@ -20,8 +20,8 @@ the game is playable from [here](https://rawgithub.com/DavidLanderosAlcala/airco
 
 ## Credits
 This project uses:
-- p2 (JavaScript 2D physics library) https://github.com/schteppe/p2.js
-- poly-decomp (Library for decomposing a 2D polygon into convex pieces) https://github.com/schteppe/poly-decomp.js/
+- [p2](https://github.com/schteppe/p2.js) - JavaScript 2D physics library
+- [poly-decomp](https://github.com/schteppe/poly-decomp.js/) - Decompose 2D polygons into convex pieces
 
 ## License
 MIT
